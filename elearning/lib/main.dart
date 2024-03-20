@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -19,28 +18,6 @@ class ElearningApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: DashboardScreen(),
-=======
-// lib/main.dart
-import 'package:elearning/ui/download/download.dart';
-import 'package:elearning/ui/mylearning/ml_popup.dart';
-import 'package:elearning/ui/q&a_page/questionandanswer.dart';
-import 'package:flutter/material.dart';
-import 'ui/login_page/login_page.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Moodle Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: QuestionAnswersPage(), // Call the LoginPage widget
->>>>>>> Stashed changes
     );
   }
 
@@ -53,8 +30,6 @@ class MyApp extends StatelessWidget {
 // import 'package:flutter/material.dart';
 
 
-<<<<<<< Updated upstream
-=======
 // void main() {
 //   runApp(MyApp());
 // }
@@ -80,4 +55,3 @@ class MyApp extends StatelessWidget {
 //   );
 // }
 // }
->>>>>>> Stashed changes
