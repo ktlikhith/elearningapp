@@ -108,64 +108,57 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget buildSection(String title, String number, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: Stack(
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color,
-              ),
-              child: Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 20,
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+            ),
+            child: Icon(
+              Icons.search,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          SizedBox(width: 10), // Adjust spacing between icon and number
+          Container(
+            padding: EdgeInsets.all(4.0),
+            child: Text(
+              number,
+              style: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.all(4.0),
-              child: Text(
-                number,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+          SizedBox(width: 10), // Adjust spacing between number and title
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 40),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                ),
-              ),
-            ],
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
 
 
