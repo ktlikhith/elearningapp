@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:elearning/ui/Gamification/gameappbar.dart';
+import 'gameappbar.dart';
 
 class SpinWheel extends StatefulWidget {
   @override
@@ -40,19 +40,25 @@ class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMix
         child: Container(
           width: 200, // Adjust size as needed
           height: 200, // Adjust size as needed
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              'SPIN',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.blue, width: 5), // Optional border
+                  ),
+                ),
               ),
-            ),
+              Positioned.fill(
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/spin wheel image.png', // Replace with your actual spin wheel image path
+                    fit: BoxFit.contain, // Fit the image inside without cropping
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

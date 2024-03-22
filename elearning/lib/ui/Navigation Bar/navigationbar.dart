@@ -1,4 +1,5 @@
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,7 +33,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
             IconButton(
               icon: FaIcon(FontAwesomeIcons.trophy),
               onPressed: () {
-                print("Pressed");
+                Navigator.of(context).pushNamed(RouterManger.Gamification);
               },
             ),
             EllipsisMenuItems(),
