@@ -35,19 +35,19 @@ Widget buildContinueLearningSection() {
                 // Add functionality to play the video
               },
             ),
+            // Positioned(
+            //   top: 16.0,
+            //   left: 16.0,
+            //   child: IconButton(
+            //     icon: Icon(Icons.arrow_back),
+            //     onPressed: () {
+            //       // Add functionality for the back button
+            //     },
+            //   ),
+            // ),
             Positioned(
-              top: 16.0,
-              left: 16.0,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  // Add functionality for the back button
-                },
-              ),
-            ),
-            Positioned(
-              top: 16.0,
-              right: 16.0,
+              top: 5.0,
+              right: 5.0,
               child: IconButton(
                 icon: Icon(Icons.more_vert),
                 onPressed: () {

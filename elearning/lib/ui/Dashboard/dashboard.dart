@@ -8,13 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Menu Button Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DashboardPage(),
-    );
+    return 
+      
+       DashboardPage();
+    
   }
 }
 
