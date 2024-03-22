@@ -64,6 +64,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/img1.jpeg
+    - assets/images/spin wheel image.png
 
 
   # The following line ensures that the Material Icons font is

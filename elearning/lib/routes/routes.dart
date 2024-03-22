@@ -1,4 +1,5 @@
 import 'package:elearning/ui/Dashboard/dashboard.dart';
+import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
@@ -14,6 +15,7 @@ class RouterManger{
   static const String myprofile ='/ui/Profile/profile.dart';
   static const String Askexpert='/ui/Q&A_page/questionandanswer.dart';
   static const String downloads='/ui/Download/download.dart';
+  static const String Gamification='ui/Gamification/gameappbar.dart';
 
 
   static Route<dynamic> generateRoute(RouteSettings settings){
@@ -52,7 +54,10 @@ class RouterManger{
       return MaterialPageRoute(
         builder:(context) => DownloadPage()
       ,);
-
+      case Gamification:
+      return MaterialPageRoute(
+        builder:(context) => GamificationPage()
+      ,);
       default:
       throw FormatException("Page Not found!!!");
     }
