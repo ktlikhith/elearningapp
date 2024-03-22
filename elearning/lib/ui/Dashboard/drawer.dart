@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class DrawerContent extends StatelessWidget {
@@ -31,30 +32,24 @@ class DrawerContent extends StatelessWidget {
             leading: Icon(Icons.person), // Icon for "My Profile" list item
             title: Text('My Profile'),
             onTap: () {
-              // Handle drawer item 1 tap
+               Navigator.of(context).pushNamed(RouterManger.myprofile);
             },
           ),
           ListTile(
             leading: Icon(Icons.question_answer), // Icon for "Ask Experts" list item
             title: Text('Ask Experts'),
             onTap: () {
-              // Handle drawer item 2 tap
+              Navigator.of(context).pushNamed(RouterManger.Askexpert);
             },
           ),
           ListTile(
             leading: Icon(Icons.file_download), // Icon for "Downloads" list item
             title: Text('Downloads'),
             onTap: () {
-              // Handle drawer item 1 tap
+             Navigator.of(context).pushNamed(RouterManger.downloads);
             },
           ),
-          ListTile(
-            leading: Icon(Icons.group), // Icon for "Social Feeds" list item
-            title: Text('Social Feeds'),
-            onTap: () {
-              // Handle drawer item 1 tap
-            },
-          ),
+          
           ListTile(
             leading: Icon(Icons.report), // Icon for "Report" list item
             title: Text('Report'),

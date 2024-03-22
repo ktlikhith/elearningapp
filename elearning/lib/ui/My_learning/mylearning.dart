@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 class MyLearningApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyLearningPage(),
-    );
+    return 
+       MyLearningPage();
+    
   }
 }
 
@@ -63,7 +63,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
             : null,
       ),
       body: SingleChildScrollView(
-       child: MyLearningAppBody()
+       child:MyLearningAppBody()
         ),
     );
   }

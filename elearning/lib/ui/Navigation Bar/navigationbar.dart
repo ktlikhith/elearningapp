@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,19 +14,19 @@ class BottomNavigationBarWidget extends StatelessWidget {
             IconButton(
               icon: FaIcon(FontAwesomeIcons.house),
               onPressed: () {
-                print("Pressed");
+                Navigator.of(context).pushNamed(RouterManger.homescreen);
               },
             ),
             IconButton(
               icon: FaIcon(FontAwesomeIcons.graduationCap),
               onPressed: () {
-                print("Pressed");
+                Navigator.of(context).pushNamed(RouterManger.mylearning);
               },
             ),
             IconButton(
               icon: FaIcon(FontAwesomeIcons.bookOpen),
               onPressed: () {
-                print("Pressed");
+                Navigator.of(context).pushNamed(RouterManger.livesession);
               },
             ),
             IconButton(
@@ -54,7 +55,7 @@ class EllipsisMenuItems extends StatelessWidget {
             leading: FaIcon(FontAwesomeIcons.download),
             title: Text('Download'),
             onTap: () {
-              // Handle download tap
+             Navigator.of(context).pushNamed(RouterManger.downloads);
             },
           ),
         ),
