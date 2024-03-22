@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ProfileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ProfilePage(),
-    );
+    return  ProfilePage();
+    
   }
 }
 
@@ -31,6 +27,12 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Profile'),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushNamed(RouterManger.homescreen);
+          },
+        ),
       ),
       body: Container(
         color: Colors.grey[200], // Grey background color

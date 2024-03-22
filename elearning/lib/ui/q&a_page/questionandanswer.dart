@@ -1,5 +1,13 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 
+// class ProfileApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return  ProfilePage();
+    
+//   }
+// }
 class QuestionAnswersPage extends StatefulWidget {
   @override
   _QuestionAnswersPageState createState() => _QuestionAnswersPageState();
@@ -12,12 +20,12 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            // Add functionality for the menu icon here
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.menu),
+        //   onPressed: () {
+        //     // Add functionality for the menu icon here
+        //   },
+        // ),
         title: Text(
           "Question and Answers",
           style: TextStyle(
@@ -25,6 +33,12 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushNamed(RouterManger.homescreen);
+          },
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -124,8 +138,4 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: QuestionAnswersPage(),
-  ));
-}
+

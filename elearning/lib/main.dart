@@ -1,7 +1,9 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
+import 'package:elearning/ui/Login_page/login_page.dart';
 import 'package:flutter/material.dart';
-import 'ui/Dashboard/dashboard.dart';
+import 'package:elearning/ui/Dashboard/dashboard.dart';
 
 
 void main() {
@@ -12,12 +14,13 @@ class ElearningApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'E-Learning App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: DashboardScreen(),
+      // title: 'E-Learning App',
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
+      initialRoute: RouterManger.homescreen,
+      onGenerateRoute: RouterManger.generateRoute,
     );
   }
 

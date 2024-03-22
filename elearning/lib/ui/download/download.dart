@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DownloadPage extends StatelessWidget {
@@ -9,7 +10,7 @@ class DownloadPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pushNamed(RouterManger.homescreen);
           },
         ),
       ),
@@ -51,7 +52,21 @@ class DownloadPage extends StatelessWidget {
       ),
       SizedBox(height: 8.0),
       // Thumbnail (Replace AssetImage with your actual image)
-      Image.asset('assets/thumbnail_image.jpg', width: 120.0, height: 120.0),
+      // Image.asset('assets/thumbnail_image.jpg', width: 120.0, height: 120.0),
+      Container(
+              width: double.infinity,
+              height: 200.0, // Adjust the height of the video container
+              color: Colors.grey, // Placeholder color for the video
+              // Here you can add your video player widget
+              child: IconButton(
+              icon: Icon(Icons.play_circle_filled, size: 64.0, color: Colors.white),
+              onPressed: () {
+                // Add functionality to play the video
+              },
+            ),
+            ),
+            
+     
       SizedBox(height: 16.0),
       // Footer Section
       Row(
