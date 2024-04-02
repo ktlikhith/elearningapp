@@ -1,6 +1,8 @@
+import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:elearning/ui/Livesession/livesession.dart';
+import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
 import 'package:elearning/ui/Q&A_page/questionandanswer.dart';
@@ -15,22 +17,25 @@ class RouterManger{
   static const String myprofile ='/ui/Profile/profile.dart';
   static const String Askexpert='/ui/Q&A_page/questionandanswer.dart';
   static const String downloads='/ui/Download/download.dart';
+  static const String continuescreen='ui/Dashboard/continuescreen.dart';
+  static const String morescreen='ui/More/bottommore.dart';
   static const String Gamification='ui/Gamification/gameappbar.dart';
+
 
 
   static Route<dynamic> generateRoute(RouteSettings settings){
     switch(settings.name){
       case homescreen:
       return MaterialPageRoute(
-        builder:(context) => DashboardScreen()
+        builder:(context) => const DashboardScreen()
       ,);
       case mylearning:
       return MaterialPageRoute(
-        builder:(context) => MyLearningApp()
+        builder:(context) => const MyLearningApp()
       ,);
       case livesession:
       return MaterialPageRoute(
-        builder:(context) => LiveSessionPage( courseTitle: 'Flutter Development Masterclass',
+        builder:(context) => const LiveSessionPage( courseTitle: 'Flutter Development Masterclass',
       speakerName: 'Jane Doe',
       duration: '1h 30m - 3h',
       mode: 'Online',
@@ -43,23 +48,46 @@ class RouterManger{
 
     case myprofile:
       return MaterialPageRoute(
-        builder:(context) => ProfileApp()
+        builder:(context) => const ProfileApp()
       ,);
 
       case Askexpert:
       return MaterialPageRoute(
-        builder:(context) => QuestionAnswersPage()
+        builder:(context) => const QuestionAnswersPage()
       ,);
       case downloads:
       return MaterialPageRoute(
         builder:(context) => DownloadPage()
       ,);
+      case continuescreen:
+      return MaterialPageRoute(
+        builder:(context) => ContinueWatchingScreen(
+      items: List.generate(
+        5,
+        (index) => ContinueWatchingItem(
+          title: 'Title $index',
+          imageUrl: 'https://via.placeholder.com/150',
+          lastWatched: '2 hours ago',
+          onTap: () {
+            print('Item $index tapped');
+          },
+        ),
+      ),
+    ),
+      );
+
+       case morescreen:
+      return MaterialPageRoute(
+        builder:(context) => MyMorePage()
+      ,);
+
+
       case Gamification:
       return MaterialPageRoute(
         builder:(context) => GamificationPage()
       ,);
       default:
-      throw FormatException("Page Not found!!!");
+      throw const FormatException("Page Not found!!!");
     }
   }
 }

@@ -1,57 +1,86 @@
+import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
+
 import 'package:elearning/ui/Dashboard/drawer.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+
 import 'package:flutter/material.dart';
 import 'upcoming_event.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return 
-      
-       DashboardPage();
-    
+    return const DashboardPage();
   }
 }
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({Key? key}) : super(key: key);
+
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Dashboard'),
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            // Handle menu button pressed
-            _scaffoldKey.currentState?.openDrawer();
-          },
+       backgroundColor: Theme.of(context).primaryColor, // Use primaryColor from theme
+        elevation: 0, // Remove app bar shadow // Remove app bar shadow
+        leading:  Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img1.jpeg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
         ),
         actions: <Widget>[
           IconButton(
-            icon: FaIcon(FontAwesomeIcons.envelope),
+            icon: const FaIcon(FontAwesomeIcons.bell),
             onPressed: () {
               // Handle notification icon press
             },
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(RouterManger.myprofile);
+              },
+              
+              child: CircleAvatar(
+          radius: 20,
+          backgroundImage: AssetImage('assets/images/img1.jpeg'),
+        ),
+            ),
+          ),
         ],
-      ), 
-      drawer: Builder(
-        builder: (context) => DrawerContent(), // Use Builder to obtain context under Scaffold
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Theme.of(context).backgroundColor, // Set background color to white
       body: SingleChildScrollView(
+        controller: _scrollController, // Attach scroll controller
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              const Text(
                 'Welcome, John Doe!',
                 style: TextStyle(
                   fontSize: 24.0,
@@ -66,101 +95,19 @@ class DashboardPage extends StatelessWidget {
                   color: Colors.grey[800],
                 ),
               ),
-              SizedBox(height: 25.0),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildSection("Past Due", "2", Colors.red),
-                  buildSection("Due Soon", "5", Colors.yellow),
-                  buildSection("Due Later", "10", Colors.grey),
-                ],
-              ),
-              SizedBox(height: 15.0),
-
-              Text(
-                'Upcoming courses',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.grey[800],
-                ),
-              ),
-              SizedBox(height: 15.0),
-
-              UpcomingEventsSection(),
-              
-              SizedBox(height: 15.0),
-              Text(
-                'Continue Learning',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              buildContinueLearningSection(),
+              const SizedBox(height: 25.0),
+              AutoScrollableSections(),
+              const SizedBox(height: 15.0),
+              const UpcomingEventsSection(),
+              const SizedBox(height: 15.0),
+              CustomDashboardWidget(),
             ],
           ),
         ),
       ),
+    );
+  }
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0),
     );
   }
-
-  Widget buildSection(String title, String number, Color color) {
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12.0),
-    ),
-    child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color,
-            ),
-            child: Icon(
-              Icons.search,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          SizedBox(width: 10), // Adjust spacing between icon and number
-          Container(
-            padding: EdgeInsets.all(4.0),
-            child: Text(
-              number,
-              style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          SizedBox(width: 10), // Adjust spacing between number and title
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
-
-}
-
-
-
-

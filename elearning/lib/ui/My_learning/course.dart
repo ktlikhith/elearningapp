@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 Widget buildCourseSection() {
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 16.0),
-    padding: EdgeInsets.all(16.0),
+    margin: const EdgeInsets.symmetric(vertical: 16.0),
+    padding: const EdgeInsets.all(16.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.0),
       color: Colors.white,
@@ -13,7 +12,7 @@ Widget buildCourseSection() {
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 2,
           blurRadius: 5,
-          offset: Offset(0, 2), // changes position of shadow
+          offset: const Offset(0, 2), // changes position of shadow
         ),
       ],
     ),
@@ -23,16 +22,16 @@ Widget buildCourseSection() {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
           'Video ', // Replace with actual video title
           style: TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8.0), 
+        const SizedBox(height: 8.0), 
             // Duration text with icon
-            Row(
+            const Row(
               children: [
                 Icon(Icons.timer, size: 18.0, color: Colors.grey), // Duration icon
                 SizedBox(width: 4.0),
@@ -63,7 +62,7 @@ Widget buildCourseSection() {
                 //color:Colors.grey,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.play_circle_filled, size: 40.0, color: Colors.black),
+                    icon: const Icon(Icons.play_circle_filled, size: 40.0, color: Colors.black),
                     onPressed: () {
                       // Add functionality to play the video
                     },
@@ -73,21 +72,21 @@ Widget buildCourseSection() {
             ),
           ],
         ),
-        SizedBox(height: 8.0), // Add spacing between duration and title
+        const SizedBox(height: 8.0), // Add spacing between duration and title
         // Title below the video section
-        Text(
+        const Text(
           'Video Titlejwqdjbjbqjdbbjehhrbfnbhqgerbn frnebhgehrbnbfnbvhgqrbrh2bqbyfh2gb hgy', // Replace with actual video title
           style: TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8.0), // Add spacing between title and status
+        const SizedBox(height: 8.0), // Add spacing between title and status
         // Status and due date
         Row(
           children: [
             // Status
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -106,9 +105,9 @@ Widget buildCourseSection() {
                 ),
               ],
             ),
-            SizedBox(width: 16.0), // Add spacing between status and due date
+            const SizedBox(width: 16.0), // Add spacing between status and due date
             // Due date
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -128,23 +127,23 @@ Widget buildCourseSection() {
                 
               ],
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             IconButton(
-              icon: Icon(Icons.download),
+              icon: const Icon(Icons.download),
               onPressed: () {
                 // Add functionality for download button
               },
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             IconButton(
-              icon: Icon(Icons.more_vert),
+              icon: const Icon(Icons.more_vert),
               onPressed: () {
                 // Add functionality for more button
               },
             ),
           ],
         ),
-        SizedBox(height: 8.0), // Add spacing between status and download/more options
+        const SizedBox(height: 8.0), // Add spacing between status and download/more options
         // Download icon and more options
         
       ],

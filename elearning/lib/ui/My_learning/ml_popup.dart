@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MLPopup extends StatelessWidget {
+  const MLPopup({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -17,7 +19,7 @@ class MLPopup extends StatelessWidget {
 
   Widget contentBox(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
@@ -29,7 +31,7 @@ class MLPopup extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Course Details',
                 style: TextStyle(
                   fontSize: 14.0,
@@ -38,36 +40,36 @@ class MLPopup extends StatelessWidget {
               ),
               
               IconButton(
-                icon: Icon(Icons.info,size: 18.0,),
+                icon: const Icon(Icons.info,size: 18.0,),
                 onPressed: () {
                   // Handle information icon tap
                 },
               ),
             ],
           ),
-          SizedBox(height: 10.0),
-          Text(
+          const SizedBox(height: 10.0),
+          const Text(
             'Course Title',
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           LinearProgressIndicator(
             value: 0.3, // Change the value based on the progress
             backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
-          SizedBox(height: 10.0),
-          Text(
+          const SizedBox(height: 10.0),
+          const Text(
             'Course Description',
             style: TextStyle(fontSize: 16.0),
-          ),Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',style: TextStyle(
+          ),const Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',style: TextStyle(
                   fontSize: 13.0,
                 ),),
-          SizedBox(height: 20.0),
-          Row(
+          const SizedBox(height: 20.0),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -104,19 +106,19 @@ class MLPopup extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
             IconButton(
       // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: FaIcon(FontAwesomeIcons.save, color: Colors.black,), 
+      icon: const FaIcon(FontAwesomeIcons.save, color: Colors.black,), 
       onPressed: () { print("Pressed"); }
      ),
               IconButton(
       // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: FaIcon(FontAwesomeIcons.close, color: const Color.fromARGB(255, 249, 2, 2),),
-      onPressed: () { Navigator.pop(context); }, style: ElevatedButton.styleFrom(backgroundColor:Color.fromARGB(255, 180, 152, 152) ),
+      icon: const FaIcon(FontAwesomeIcons.close, color: Color.fromARGB(255, 249, 2, 2),),
+      onPressed: () { Navigator.pop(context); }, style: ElevatedButton.styleFrom(backgroundColor:const Color.fromARGB(255, 180, 152, 152) ),
      
                 
               ),
@@ -125,9 +127,9 @@ class MLPopup extends StatelessWidget {
                   // Handle Video Camera button tap
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 180, 152, 152),
+                  backgroundColor: const Color.fromARGB(255, 180, 152, 152),
                 ),
-                child: Icon(Icons.videocam),
+                child: const Icon(Icons.videocam),
               ),
             ],
           ),

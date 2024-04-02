@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 //   }
 // }
 class QuestionAnswersPage extends StatefulWidget {
+  const QuestionAnswersPage({super.key});
+
   @override
   _QuestionAnswersPageState createState() => _QuestionAnswersPageState();
 }
@@ -26,7 +28,7 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
         //     // Add functionality for the menu icon here
         //   },
         // ),
-        title: Text(
+        title: const Text(
           "Question and Answers",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -34,19 +36,19 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pushNamed(RouterManger.homescreen);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(10.0),
@@ -57,37 +59,37 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundImage: NetworkImage('url_to_profile_picture'),
                         radius: 30,
                       ),
-                      SizedBox(width: 10.0),
+                      const SizedBox(width: 10.0),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "User's Name",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 4.0),
+                          const SizedBox(height: 4.0),
                           Text(
                             "1 hour ago",
                             style: TextStyle(
                               color: Colors.grey.withOpacity(0.6),
                             ),
                           ),
-                          SizedBox(height: 8.0),
-                          Text(
+                          const SizedBox(height: 8.0),
+                          const Text(
                             "User's Question?",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
                             ),
                           ),
-                          SizedBox(height: 8.0),
-                          Text(
+                          const SizedBox(height: 8.0),
+                          const Text(
                             "Category: Marketing",
                             style: TextStyle(
                               color: Colors.blue,
@@ -97,36 +99,36 @@ class _QuestionAnswersPageState extends State<QuestionAnswersPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
                       // Add functionality for "View all Answers" button here
                     },
-                    child: Text("View all Answers"),
                     style: ElevatedButton.styleFrom(
                       surfaceTintColor: Colors.blue,
                     ),
+                    child: const Text("View all Answers"),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   if (showAnswerInput)
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                         hintText: 'Type your answer here...',
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
                     ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
                         showAnswerInput = true;
                       });
                     },
-                    child: Text("Answer Now"),
                     style: ElevatedButton.styleFrom(
                       surfaceTintColor: Colors.blue,
                     ),
+                    child: const Text("Answer Now"),
                   ),
                 ],
               ),
