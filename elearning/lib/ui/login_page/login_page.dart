@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -19,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
           String errorMessage = snapshot.error as String? ?? '';
 
           return Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -44,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
+                          const Text(
                             'Login',
                             style: TextStyle(
                               fontSize: 24,
@@ -52,27 +54,27 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.black,
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           TextFormField(
                             onChanged: loginBloc.updateEmail, // Updated line
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter your email',
                               labelText: 'Email',
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.email),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           TextFormField(
                             onChanged: loginBloc.updatePassword, // Updated line
                             obscureText: _obscureText,
                             decoration: InputDecoration(
                               hintText: 'Enter your password',
                               labelText: 'Password',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.lock),
+                              border: const OutlineInputBorder(),
+                              prefixIcon: const Icon(Icons.lock),
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.visibility),
+                                icon: const Icon(Icons.visibility),
                                 onPressed: () {
                                   setState(() {
                                     _obscureText = !_obscureText;
@@ -85,13 +87,13 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) =>LoginPage() ),
+                                MaterialPageRoute(builder: (context) =>const LoginPage() ),
                               );
                             },
-                            child: Text('Forget Password?'),
+                            child: const Text('Forget Password?'),
                           ),
-                          SizedBox(height: 20),
-                          Container(
+                          const SizedBox(height: 20),
+                          SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
@@ -99,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 11, 6, 41),
+                                  const Color.fromARGB(255, 11, 6, 41),
                                 ),
                                 shape: MaterialStateProperty.all<OutlinedBorder>(
                                   RoundedRectangleBorder(
@@ -107,8 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
                                   vertical: 12.0,
                                   horizontal: 24.0,
                                 ),
@@ -122,10 +124,10 @@ class _LoginPageState extends State<LoginPage> {
                           if (errorMessage.isNotEmpty)
                             Text(
                               errorMessage,
-                              style: TextStyle(color: Colors.red),
+                              style: const TextStyle(color: Colors.red),
                             ),
                           if (loginSuccess) // Handle successful login here
-                            Text(
+                            const Text(
                               'Login successful!',
                               style: TextStyle(color: Colors.green),
                             ),

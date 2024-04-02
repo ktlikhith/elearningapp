@@ -2,18 +2,22 @@ import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DownloadPage extends StatelessWidget {
+  const DownloadPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Downloads'),
+        title: const Text('Downloads'),
+         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pushNamed(RouterManger.homescreen);
           },
         ),
       ),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -23,7 +27,7 @@ class DownloadPage extends StatelessWidget {
               // Content Container
               
               Container(
-  padding: EdgeInsets.all(16.0),
+  padding: const EdgeInsets.all(16.0),
   decoration: BoxDecoration(
     borderRadius: BorderRadius.circular(10.0),
     border: Border.all(color: Colors.grey),
@@ -36,21 +40,21 @@ class DownloadPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            margin: EdgeInsets.only(right: 8.0),
-            child: Text('Size: 50MB'), // Replace with actual size
+            margin: const EdgeInsets.only(right: 8.0),
+            child: const Text('Size: 50MB'), // Replace with actual size
           ),
           Container(
-            child: Text('Format: MP4'), // Replace with actual format
+            child: const Text('Format: MP4'), // Replace with actual format
           ),
         ],
       ),
-      SizedBox(height: 16.0),
+      const SizedBox(height: 16.0),
       // Title
-      Text(
+      const Text(
         'Downloadable Video Title',
         style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
-      SizedBox(height: 8.0),
+      const SizedBox(height: 8.0),
       // Thumbnail (Replace AssetImage with your actual image)
       // Image.asset('assets/thumbnail_image.jpg', width: 120.0, height: 120.0),
       Container(
@@ -59,7 +63,7 @@ class DownloadPage extends StatelessWidget {
               color: Colors.grey, // Placeholder color for the video
               // Here you can add your video player widget
               child: IconButton(
-              icon: Icon(Icons.play_circle_filled, size: 64.0, color: Colors.white),
+              icon: const Icon(Icons.play_circle_filled, size: 64.0, color: Colors.white),
               onPressed: () {
                 // Add functionality to play the video
               },
@@ -67,12 +71,12 @@ class DownloadPage extends StatelessWidget {
             ),
             
      
-      SizedBox(height: 16.0),
+      const SizedBox(height: 16.0),
       // Footer Section
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Status: Not Downloaded'), // Replace with actual status
@@ -90,16 +94,16 @@ class DownloadPage extends StatelessWidget {
                 //child: 
                 IconButton(
       // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: FaIcon(FontAwesomeIcons.download, color: Colors.black,), 
+      icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black,), 
       onPressed: () { print("Pressed"); }
      ),
               
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               // More Options Button (Optional)
               
                  IconButton(
       // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: FaIcon(FontAwesomeIcons.ellipsis , color: Colors.black, ), 
+      icon: const FaIcon(FontAwesomeIcons.ellipsis , color: Colors.black, ), 
       onPressed: () { print("Pressed"); }
      ),
               

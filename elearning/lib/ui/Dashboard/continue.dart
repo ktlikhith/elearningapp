@@ -1,80 +1,124 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-Widget buildContinueLearningSection() {
-  return Container(
-    width: double.infinity,
-    margin: EdgeInsets.symmetric(vertical: 16.0),
-    padding: EdgeInsets.all(16.0),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset: Offset(0, 2), // changes position of shadow
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 200.0, // Adjust the height of the video container
-              color: Colors.grey, // Placeholder color for the video
-              // Here you can add your video player widget
+class CustomDashboardWidget extends StatelessWidget {
+  final int numberOfVideos;
+
+  CustomDashboardWidget({this.numberOfVideos = 3}); // Change to 3 videos
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Assuming you have some styling for your dashboard container
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Continue Learning',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(RouterManger.continuescreen);
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward, color: Colors.blue),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                if (numberOfVideos > 0) ...[
+                  SizedBox(
+                    width: 120,
+                    child: _buildSection(),
+                  ),
+                ],
+                if (numberOfVideos > 1) SizedBox(width: 10), // Add spacing if there are more videos
+                if (numberOfVideos > 1) ...[
+                  // Display additional video sections if there are more than one video
+                  SizedBox(
+                    width: 120,
+                    child: _buildSection(),
+                  ),
+                ],
+                if (numberOfVideos > 2) SizedBox(width: 10), // Add spacing if there are more videos
+                if (numberOfVideos > 2) ...[
+                  // Display additional video sections if there are more than two videos
+                  SizedBox(
+                    width: 120,
+                    child: _buildSection(),
+                  ),
+                ],
+              ],
             ),
-            IconButton(
-              icon: Icon(Icons.play_circle_filled, size: 64.0, color: Colors.white),
-              onPressed: () {
-                // Add functionality to play the video
-              },
-            ),
-            // Positioned(
-            //   top: 16.0,
-            //   left: 16.0,
-            //   child: IconButton(
-            //     icon: Icon(Icons.arrow_back),
-            //     onPressed: () {
-            //       // Add functionality for the back button
-            //     },
-            //   ),
-            // ),
-            Positioned(
-              top: 5.0,
-              right: 5.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSection() {
+    return Container(
+      width: 120, // Adjust the width as needed
+      color: Color.fromARGB(255, 15, 15, 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 120, // Adjust the height as needed
+            color: Colors.blueGrey, // Replace with your video widget
+            child: Center(
               child: IconButton(
-                icon: Icon(Icons.more_vert),
+                icon: Icon(Icons.play_circle_fill),
                 onPressed: () {
-                  // Add functionality for the more button
+                  // Add your play button functionality here
                 },
               ),
             ),
-          ],
-        ),
-        SizedBox(height: 16.0),
-        Row(
-          children: [
-            Icon(Icons.access_time, size: 16.0),
-            SizedBox(width: 8.0),
-            Text('2 hours ago'),
-          ],
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          'Title of the Course',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
           ),
-        ),
-      ],
-    ),
-  );
+          Container(
+            height: 50,
+            color: Colors.white, // Adjust as needed
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.info),
+                  onPressed: () {
+                    // Add your info icon functionality here
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {
+                    // Add your option icon functionality here
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
-

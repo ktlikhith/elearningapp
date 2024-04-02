@@ -5,15 +5,19 @@ import 'package:flutter/material.dart';
 
 
 class MyLearningApp extends StatelessWidget {
+  const MyLearningApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return 
-       MyLearningPage();
+       const MyLearningPage();
     
   }
 }
 
 class MyLearningPage extends StatefulWidget {
+  const MyLearningPage({super.key});
+
   @override
   _MyLearningPageState createState() => _MyLearningPageState();
 }
@@ -31,7 +35,8 @@ class _MyLearningPageState extends State<MyLearningPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+         backgroundColor: Theme.of(context).primaryColor,
+        title: const Row(
           children: [
             Text(
               'My Learning App',
@@ -48,7 +53,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
           ),
         ],
         bottom: _isSearching
-            ? PreferredSize(
+            ? const PreferredSize(
                 preferredSize: Size.fromHeight(56.0),
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
@@ -62,22 +67,26 @@ class _MyLearningPageState extends State<MyLearningPage> {
               )
             : null,
       ),
-      body: SingleChildScrollView(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: const SingleChildScrollView(
        child:MyLearningAppBody()
         ),
+        
     );
   }
 }
 
 class MyLearningAppBody extends StatelessWidget {
+  const MyLearningAppBody({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 18.0),
+          const SizedBox(height: 18.0),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -100,7 +109,7 @@ class MyLearningAppBody extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 24.0), // Add some space between sections
+          const SizedBox(height: 24.0), // Add some space between sections
           // Call buildCourseSection here
           buildCourseSection(), // This will display the course section
         ],
