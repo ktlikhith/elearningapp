@@ -2,6 +2,8 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
 
+import 'package:elearning/ui/Dashboard/drawer.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 
 import 'package:flutter/material.dart';
 import 'upcoming_event.dart';
@@ -103,7 +105,9 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
       ),
-      
+    );
+  }
+        bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0),
     );
   }
 }

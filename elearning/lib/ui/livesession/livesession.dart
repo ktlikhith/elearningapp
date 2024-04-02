@@ -1,3 +1,4 @@
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,7 +35,7 @@ class LiveSessionPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+           Navigator.of(context).pop();
           },
         ),
       ),
@@ -93,7 +94,9 @@ class LiveSessionPage extends StatelessWidget {
           ],
         ),
       ),
-      
+
+      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2),
+
     );
   }
 }

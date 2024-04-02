@@ -21,6 +21,7 @@ class ElearningApp extends StatelessWidget {
       ),
       initialRoute: RouterManger.homescreen,
       onGenerateRoute: RouterManger.generateRoute,
+      
     );
   }
 }

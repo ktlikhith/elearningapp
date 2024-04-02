@@ -1,5 +1,6 @@
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
+import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
@@ -18,6 +19,8 @@ class RouterManger{
   static const String downloads='/ui/Download/download.dart';
   static const String continuescreen='ui/Dashboard/continuescreen.dart';
   static const String morescreen='ui/More/bottommore.dart';
+  static const String Gamification='ui/Gamification/gameappbar.dart';
+
 
 
   static Route<dynamic> generateRoute(RouteSettings settings){
@@ -78,6 +81,11 @@ class RouterManger{
         builder:(context) => MyMorePage()
       ,);
 
+
+      case Gamification:
+      return MaterialPageRoute(
+        builder:(context) => GamificationPage()
+      ,);
       default:
       throw const FormatException("Page Not found!!!");
     }
