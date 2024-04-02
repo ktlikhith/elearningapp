@@ -3,6 +3,7 @@ import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
 
 import 'package:elearning/ui/Gamification/gameappbar.dart';
+import 'package:elearning/ui/login_page/login_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
@@ -23,6 +24,7 @@ class ElearningApp extends StatelessWidget {
       // ),
       initialRoute: RouterManger.homescreen,
       onGenerateRoute: RouterManger.generateRoute,
+      
     );
   }
 

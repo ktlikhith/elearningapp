@@ -1,4 +1,5 @@
 import 'package:elearning/ui/Gamification/spinwheel.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -145,6 +146,7 @@ class GamificationPage extends StatelessWidget {
           ),
         ],
       ),
+        bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 3),
     );
   }
 
