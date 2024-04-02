@@ -1,5 +1,6 @@
 import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 
 
@@ -65,6 +66,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
       body: SingleChildScrollView(
        child:MyLearningAppBody()
         ),
+           bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1),
     );
   }
 }
@@ -106,6 +108,7 @@ class MyLearningAppBody extends StatelessWidget {
         ],
       ),
     );
+    
   }
 }
 

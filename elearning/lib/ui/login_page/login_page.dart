@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.lightBlueAccent, Colors.lightGreen],
+                colors: [Color.fromARGB(195, 235, 91, 8), Colors.lightGreen],
               ),
             ),
             child: Center(
@@ -31,11 +31,11 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 92, 103, 231),
+                    color: Color.fromARGB(168, 89, 90, 91),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Card(
-                    elevation: 8,
+                    elevation: 15,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 child: Text(
                                   'Login ',
-                                  style: TextStyle(fontSize: 20,color: Color.fromARGB(255, 194, 228, 55)),
+                                  style: TextStyle(fontSize: 20,color: Color.fromARGB(195, 243, 130, 37)),
                                 ),
                               ),
                             ),
