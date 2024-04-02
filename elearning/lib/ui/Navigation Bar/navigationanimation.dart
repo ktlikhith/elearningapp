@@ -83,7 +83,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'More',
                 onPressed: () {
                   _handleTabPressed(4);
-                  print('More tab pressed');
+                  Navigator.of(context).pushNamed(RouterManger.morescreen);
                 },
               ),
             ],
@@ -112,9 +112,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         case 3: // Game tab
           Navigator.of(context).pushNamed(RouterManger.Gamification);
           break;
-        case 4: // More tab
-          print('More tab pressed');
-          break;
+        // case 4: // More tab
+        //    Navigator.of(context).pushNamed(RouterManger.morescreen);
+        //   break;
         default:
         Navigator.of(context).pushNamed(RouterManger.homescreen);
           break;

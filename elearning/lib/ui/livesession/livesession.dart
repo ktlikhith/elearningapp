@@ -32,12 +32,7 @@ class LiveSessionPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-           Navigator.of(context).pop();
-          },
-        ),
+        
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
