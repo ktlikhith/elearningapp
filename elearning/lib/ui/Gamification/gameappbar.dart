@@ -7,21 +7,10 @@ class GamificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
-        title: Text(
-          '',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-            color: Color.fromARGB(183, 144, 139, 139),
-            child: Column(
+        backgroundColor: Theme.of(context).primaryColor, 
+        title: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -34,7 +23,11 @@ class GamificationPage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+      ),
+      backgroundColor: Theme.of(context).backgroundColor, 
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
