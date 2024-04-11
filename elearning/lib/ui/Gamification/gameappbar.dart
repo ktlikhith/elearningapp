@@ -1,6 +1,7 @@
 import 'package:elearning/ui/Gamification/spinwheel.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GamificationPage extends StatelessWidget {
@@ -15,7 +16,7 @@ class GamificationPage extends StatelessWidget {
               children: [
                 Text(
                   'My Points',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24,)
                 ),
                 Text(
                   '1000', // Replace with actual points value

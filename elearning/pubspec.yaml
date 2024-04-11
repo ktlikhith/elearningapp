@@ -33,8 +33,9 @@ dependencies:
 
   
   font_awesome_flutter: ^10.7.0
-  video_player: ^2.2.12
+  video_player: ^2.8.5
   google_nav_bar: ^5.0.6
+  flutter_svg: ^2.0.4
   
 
 
@@ -45,8 +46,8 @@ dependencies:
   google_fonts: ^6.2.1
   
  
-  go_router: ^10.1.0
-  badges: ^2.0.3
+  go_router: ^13.2.3 
+  badges: ^3.1.2 
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,6 +67,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/img1.jpeg
+    - assets/images/login_Bckground.jpg
     - assets/images/spin wheel image.png
 
 

@@ -1,4 +1,6 @@
+import 'package:elearning/constants.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/login_page/login_screen%20.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,14 +15,38 @@ class ElearningApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.orangeAccent, // Set the primary color for the app bar
-        backgroundColor: Colors.white, // Set the background color for all pages
-        textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
+                scaffoldBackgroundColor: Colors.white,
+        primarySwatch: Colors.blue,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 48),
+            backgroundColor: Color.fromARGB(255, 246, 144, 55),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide.none,
+            ),
+            elevation: 0,
+          ),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          fillColor: Color.fromARGB(198, 243, 232, 232),
+          filled: true,
+          border: defaultOutlineInputBorder,
+          enabledBorder: defaultOutlineInputBorder,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 241, 134, 41)),
+          ),
+        ),
+        // primaryColor: Colors.orangeAccent, // Set the primary color for the app bar
+        // backgroundColor: Colors.white, // Set the background color for all pages
+        // textTheme: GoogleFonts.robotoTextTheme(
+        //   Theme.of(context).textTheme,
+        // ),
       ),
-      initialRoute: RouterManger.homescreen,
-      onGenerateRoute: RouterManger.generateRoute,
+      // initialRoute: RouterManger.homescreen,
+      // onGenerateRoute: RouterManger.generateRoute,
+      home: LoginScreen(),
       
     );
   }
