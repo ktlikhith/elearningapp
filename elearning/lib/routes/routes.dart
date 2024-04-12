@@ -1,3 +1,4 @@
+import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
@@ -61,22 +62,15 @@ class RouterManger{
       return MaterialPageRoute(
         builder:(context) => DownloadPage()
       ,);
-      case continuescreen:
+    case RouterManger.continuescreen:
+      final List<VideoItem>? videoItems = settings.arguments as List<VideoItem>?;
       return MaterialPageRoute(
-        builder:(context) => ContinueWatchingScreen(
-      items: List.generate(
-        5,
-        (index) => ContinueWatchingItem(
-          title: 'Title $index',
-          imageUrl: 'https://via.placeholder.com/150',
-          lastWatched: '2 hours ago',
-          onTap: () {
-            print('Item $index tapped');
-          },
-        ),
-      ),
-    ),
+        builder: (context) {
+          return ContinueWatchingScreen(videoItems: videoItems ?? []);
+        }
       );
+
+
 
        case morescreen:
       return MaterialPageRoute(

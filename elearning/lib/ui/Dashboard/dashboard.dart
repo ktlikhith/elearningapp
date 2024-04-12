@@ -137,7 +137,7 @@ class _DashboardPageState extends State<DashboardPage> {
               const SizedBox(height: 15.0),
               const UpcomingEventsSection(),
               const SizedBox(height: 15.0),
-              CustomDashboardWidget(),
+              CustomDashboardWidget(token: widget.token),
             ],
           ),
         ),
