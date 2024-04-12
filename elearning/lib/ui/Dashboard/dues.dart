@@ -1,22 +1,57 @@
 import 'dart:async';
+import 'package:elearning/services/auth.dart';
 import 'package:flutter/material.dart';
 
 
 
 class AutoScrollableSections extends StatefulWidget {
+  final String token;
+
+  const AutoScrollableSections({Key? key, required this.token}) : super(key: key);
+
   @override
   _AutoScrollableSectionsState createState() => _AutoScrollableSectionsState();
 }
 
+
 class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
+  String _past='';
+  String _soon='';
+  String _later='';
 
   @override
-  void initState() {
-    super.initState();
-    _startAutoScroll();
+void initState() {
+  super.initState();
+  _startAutoScroll();
+  _fetchDueInfo(widget.token); // Call _fetchdue with the token passed from the dashboard
+}
+
+  Future<void> _fetchDueInfo(String token) async {
+  try {
+    final userInfo = await SiteConfigApiService.getUserId(token);
+    //final baseUrl = userInfo['siteurl'];
+   // final wstoken = 'your_wstoken'; // Add your wstoken here
+    final userId = userInfo['id'];
+ // Extract function names
+    final functionNames = userInfo['functions'];
+    //final List<String> functionNames = functions.map<String>((function) => function['name']).toList();
+    final dueInfo = await DueApiService.getDueInfo(token, userId, functionNames);
+    // Handle due information as needed
+    final past=dueInfo['pastcountactivity'];
+    final soon=dueInfo['countsevendays'];
+    final later=dueInfo['countthirtydays'];
+   
+    setState(() {
+        _past = past;
+        _soon = soon;
+        _later= later;
+      });
+  } catch (e) {
+    print('Error fetching due information: $e');
   }
+}
 
   @override
   void dispose() {
@@ -55,9 +90,9 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
       controller: _scrollController,
       child: Row(
         children: [
-          buildSection("Past Due", "2", Colors.red),
-          buildSection("Due Soon", "5", Colors.yellow),
-          buildSection("Due Later", "10", Colors.grey),
+          buildSection("Past Due", '$_past', Colors.red),
+          buildSection("Due Soon", '$_soon', Colors.yellow),
+          buildSection("Due Later", '$_later', Colors.grey),
         ],
       ),
     );

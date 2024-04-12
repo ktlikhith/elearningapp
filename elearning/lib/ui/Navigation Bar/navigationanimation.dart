@@ -42,7 +42,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             backgroundColor: Colors.white,
             color: Colors.black,
             activeColor: Colors.white,
-            tabBackgroundColor: Color.fromARGB(255, 130, 212, 245),
+            tabBackgroundColor: Theme.of(context).primaryColor,
             gap: 5,
             padding: EdgeInsets.all(14),
             tabs: [
@@ -51,7 +51,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'Home',
                 onPressed: () {
                   _handleTabPressed(0);
-                  Navigator.of(context).pushNamed(RouterManger.homescreen);
+                 Navigator.of(context).pushReplacementNamed(RouterManger.homescreen);
                 },
               ),
               GButton(
@@ -59,7 +59,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'Learning',
                 onPressed: () {
                   _handleTabPressed(1);
-                  Navigator.of(context).pushNamed(RouterManger.mylearning);
+                 Navigator.of(context).pushReplacementNamed(RouterManger.mylearning);
                 },
               ),
               GButton(
@@ -67,7 +67,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'Live',
                 onPressed: () {
                   _handleTabPressed(2);
-                  Navigator.of(context).pushNamed(RouterManger.livesession);
+                 Navigator.of(context).pushReplacementNamed(RouterManger.livesession);
                 },
               ),
               GButton(
@@ -75,7 +75,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'Game',
                 onPressed: () {
                   _handleTabPressed(3);
-                  Navigator.of(context).pushNamed(RouterManger.Gamification);
+                 Navigator.of(context).pushReplacementNamed(RouterManger.Gamification);
                 },
               ),
               GButton(
@@ -83,7 +83,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 text: 'More',
                 onPressed: () {
                   _handleTabPressed(4);
-                  Navigator.of(context).pushNamed(RouterManger.morescreen);
+                 Navigator.of(context).pushReplacementNamed(RouterManger.morescreen);
                 },
               ),
             ],

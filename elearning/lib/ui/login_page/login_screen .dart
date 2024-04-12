@@ -1,24 +1,32 @@
-import 'package:elearning/ui/login_page/forgot_pass.dart';
+import 'package:elearning/bloc/authbloc.dart';
+import 'package:elearning/repositories/authrepository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import FilteringTextInputFormatter
-import 'authentication.dart'; // Import the authenticateUser function
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginScreen extends StatefulWidget {
+
+class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  Widget build(BuildContext context) {
+    final AuthRepository authRepository = AuthRepository(); // Create an instance of AuthRepository
+    return BlocProvider(
+      create: (context) => AuthBloc(context: context,authRepository: authRepository), // Provide AuthRepository to AuthBloc
+      child: _LoginScreenContent(), // Use _LoginScreenContent as child
+    );
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenContent extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  String? _emailValidator(String? value) {
+  String? _usernameValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'Please enter your username';
     }
     // You can add more validation logic here if needed
     return null;
@@ -32,13 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  void _login() async {
+  void _login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      String email = _emailController.text.trim();
+      String username = _usernameController.text.trim();
       String password = _passwordController.text.trim();
 
-      String result = await authenticateUser(email, password);
-      print(result); // Print the authentication result
+      // Access the AuthBloc using BlocProvider.of
+      final authBloc = BlocProvider.of<AuthBloc>(context);
+      authBloc.add(LoginRequested(username: username, password: password));
     }
   }
 
@@ -87,23 +96,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'User Name',
+                            'Username',
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           const SizedBox(height: 12),
                           TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
+                            controller: _usernameController,
+                            keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
-                              hintText: 'Enter User Name',
+                              hintText: 'Enter your username',
                             ),
-                            validator: _emailValidator,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[a-zA-Z0-9@._]'), // Allow only email characters
-                              ),
-                            ],
+                            validator: _usernameValidator,
                           ),
                           const SizedBox(height: 24),
                           Text(
@@ -122,34 +126,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _obscureText ? Icons.visibility_off : Icons.visibility,
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    _obscureText = !_obscureText;
-                                  });
+                                  _obscureText = !_obscureText;
                                 },
                               ),
                             ),
                             validator: _passwordValidator,
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
-                                );
-                              },
-                              child: const Text(
-                                'Forgot password?',
-                                style: TextStyle(color: Color(0xFF3D80DE)),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: _login, // Call the _login function
+                      onPressed: () => _login(context),
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
                           const Size(double.infinity, 48),
