@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 
 class RouterManger{
-  static const String homescreen ='/';
+  static const String homescreen ='/ui/Dashboard/dashboard.dart';
   static const String mylearning ='/ui/My_learning/mylearning.dart';
   static const String livesession ='/ui/Livesession/livesession.dart';
   static const String myprofile ='/ui/Profile/profile.dart';
@@ -26,9 +26,10 @@ class RouterManger{
   static Route<dynamic> generateRoute(RouteSettings settings){
     switch(settings.name){
       case homescreen:
-      return MaterialPageRoute(
-        builder:(context) => const DashboardScreen()
-      ,);
+            final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => DashboardScreen(token: token), // Pass the token to DashboardScreen
+  );
       case mylearning:
       return MaterialPageRoute(
         builder:(context) => const MyLearningApp()
