@@ -50,7 +50,7 @@ class SiteConfigApiService {
 
 
 class DueApiService {
-  static Future<Map<String, dynamic>> getDueInfo(String token, int userId, List<String> functionNames) async {
+  static Future<Map<String, dynamic>> getDueInfo(String token, int userId) async {
     try {
       final dueUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
           'moodlewsrestformat=json&wstoken=$token&'
@@ -63,7 +63,7 @@ class DueApiService {
           'pastcountactivity': responseData['pastcountactivity'],
           'countsevendays': responseData['countsevendays'],
           'countthirtydays': responseData['countthirtydays'],
-          'functions': functionNames,
+          //'functions': functionNames,
         };
       } else {
         throw Exception('Failed to fetch due information');
@@ -74,3 +74,5 @@ class DueApiService {
     }
   }
 }
+
+

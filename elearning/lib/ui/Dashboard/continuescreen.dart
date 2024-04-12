@@ -20,7 +20,7 @@ class ContinueWatchingItem extends StatelessWidget {
       onTap: () => onTap(),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black, // Background color for each list item
+          color: Colors.white, // Background color for each list item
           borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius
           boxShadow: [
             BoxShadow(

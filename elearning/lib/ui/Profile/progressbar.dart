@@ -1,4 +1,7 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 
 Widget buildProgressBar(String title, int percentage) {
@@ -13,13 +16,14 @@ Widget buildProgressBar(String title, int percentage) {
             style: const TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 5),
-          LinearProgressIndicator(
-            backgroundColor: Colors.grey[300],
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-            value: percentage / 100, 
-          ),
-          const SizedBox(height: 2),
-          Text('$percentage%'),
+           LinearPercentIndicator(
+                lineHeight: 30.0,
+                linearStrokeCap: LinearStrokeCap.roundAll,
+                percent: percentage / 100,
+                backgroundColor: Colors.grey.shade300,
+                progressColor: Colors.orangeAccent, 
+                center: Text("$percentage%"),
+              ),
           
         ],
       ),

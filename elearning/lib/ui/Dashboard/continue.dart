@@ -18,6 +18,7 @@ class CustomDashboardWidget extends StatelessWidget {
             children: [
               const Text(
                 'Continue Learning',
+                 
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -36,7 +37,7 @@ class CustomDashboardWidget extends StatelessWidget {
                         color: Colors.blue,
                       ),
                     ),
-                    Icon(Icons.arrow_forward, color: Colors.blue),
+                   
                   ],
                 ),
               ),

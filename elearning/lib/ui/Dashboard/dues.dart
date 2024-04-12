@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:elearning/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 
@@ -37,7 +38,7 @@ void initState() {
  // Extract function names
     final functionNames = userInfo['functions'];
     //final List<String> functionNames = functions.map<String>((function) => function['name']).toList();
-    final dueInfo = await DueApiService.getDueInfo(token, userId, functionNames);
+    final dueInfo = await DueApiService.getDueInfo(token, userId);
     // Handle due information as needed
     final past=dueInfo['pastcountactivity'];
     final soon=dueInfo['countsevendays'];
@@ -90,8 +91,8 @@ void initState() {
       controller: _scrollController,
       child: Row(
         children: [
-          buildSection("Past Due", '$_past', Colors.red),
-          buildSection("Due Soon", '$_soon', Colors.yellow),
+          buildSection("Past Due", '$_past', Colors.red.shade400),
+          buildSection("Due Soon", '$_soon', Colors.yellow.shade200),
           buildSection("Due Later", '$_later', Colors.grey),
         ],
       ),
@@ -106,7 +107,7 @@ void initState() {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Row(
@@ -118,11 +119,12 @@ void initState() {
                 shape: BoxShape.circle,
                 color: color,
               ),
-              child: const Icon(
-                Icons.gamepad,
+              child:Center(
+              child: const FaIcon(FontAwesomeIcons.hourglassEnd,
                 color: Colors.white,
                 size: 20,
               ),
+              )
             ),
             const SizedBox(width: 25.0),
             Column(
@@ -132,7 +134,7 @@ void initState() {
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 7.0, width: 50.0),
@@ -141,7 +143,7 @@ void initState() {
                   style: const TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    //color: Colors.white,
                   ),
                 ),
               ],

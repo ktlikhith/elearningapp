@@ -25,104 +25,81 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Handle back button press
-        if (_selectedIndex != 0) {
-          _handleTabPressed(0); // Assuming index 0 is for the Home tab
-          return false; // Prevent default behavior (pop navigation)
-        }
-        return true; // Allow default behavior (pop navigation)
-      },
-      child: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
-          child: GNav(
-            backgroundColor: Colors.white,
-            color: Colors.black,
-            activeColor: Colors.white,
-            tabBackgroundColor: Theme.of(context).primaryColor,
-            gap: 5,
-            padding: EdgeInsets.all(14),
-            tabs: [
-              GButton(
-                icon: FontAwesomeIcons.house,
-                text: 'Home',
-                onPressed: () {
-                  _handleTabPressed(0);
-                 Navigator.of(context).pushReplacementNamed(RouterManger.homescreen);
-                },
-              ),
-              GButton(
-                icon: FontAwesomeIcons.graduationCap,
-                text: 'Learning',
-                onPressed: () {
-                  _handleTabPressed(1);
-                 Navigator.of(context).pushReplacementNamed(RouterManger.mylearning);
-                },
-              ),
-              GButton(
-                icon: FontAwesomeIcons.bookOpen,
-                text: 'Live',
-                onPressed: () {
-                  _handleTabPressed(2);
-                 Navigator.of(context).pushReplacementNamed(RouterManger.livesession);
-                },
-              ),
-              GButton(
-                icon: FontAwesomeIcons.trophy,
-                text: 'Game',
-                onPressed: () {
-                  _handleTabPressed(3);
-                 Navigator.of(context).pushReplacementNamed(RouterManger.Gamification);
-                },
-              ),
-              GButton(
-                icon: FontAwesomeIcons.ellipsis,
-                text: 'More',
-                onPressed: () {
-                  _handleTabPressed(4);
-                 Navigator.of(context).pushReplacementNamed(RouterManger.morescreen);
-                },
-              ),
-            ],
-            selectedIndex: _selectedIndex,
-          ),
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
+        child: GNav(
+          backgroundColor: Colors.white,
+          color: Colors.black,
+          activeColor: Colors.white,
+          tabBackgroundColor: Theme.of(context).primaryColor,
+          gap: 5,
+          padding: EdgeInsets.all(14),
+          tabs: [
+            GButton(
+              icon: FontAwesomeIcons.house,
+              text: 'Home',
+              onPressed: () {
+                _handleTabPressed(0);
+              },
+            ),
+            GButton(
+              icon: FontAwesomeIcons.graduationCap,
+              text: 'Learning',
+              onPressed: () {
+                _handleTabPressed(1);
+              },
+            ),
+            GButton(
+              icon: FontAwesomeIcons.bookOpen,
+              text: 'Live',
+              onPressed: () {
+                _handleTabPressed(2);
+              },
+            ),
+            GButton(
+              icon: FontAwesomeIcons.trophy,
+              text: 'Game',
+              onPressed: () {
+                _handleTabPressed(3);
+              },
+            ),
+            GButton(
+              icon: FontAwesomeIcons.ellipsis,
+              text: 'More',
+              onPressed: () {
+                _handleTabPressed(4);
+              },
+            ),
+          ],
+          selectedIndex: _selectedIndex,
         ),
       ),
     );
   }
 
   void _handleTabPressed(int index) {
-  setState(() {
-    if (index != _selectedIndex) {
-      // Update the selected index only if it's different from the current index
+    setState(() {
       _selectedIndex = index;
-      switch (index) {
-        case 0: // Home tab
-          Navigator.of(context).pushNamed(RouterManger.homescreen);
-          break;
-        case 1: // Learning tab
-          Navigator.of(context).pushNamed(RouterManger.mylearning);
-          break;
-        case 2: // Live tab
-          Navigator.of(context).pushNamed(RouterManger.livesession);
-          break;
-        case 3: // Game tab
-          Navigator.of(context).pushNamed(RouterManger.Gamification);
-          break;
-        // case 4: // More tab
-        //    Navigator.of(context).pushNamed(RouterManger.morescreen);
-        //   break;
-        default:
+    });
+
+    switch (index) {
+      case 0:
         Navigator.of(context).pushNamed(RouterManger.homescreen);
-          break;
-      }
-    } else if (index == 0) {
-      // Handle back navigation if Home tab is already selected
-      Navigator.of(context).popUntil((route) => route.isFirst);
+        break;
+      case 1:
+        Navigator.of(context).pushNamed(RouterManger.mylearning);
+        break;
+      case 2:
+        Navigator.of(context).pushNamed(RouterManger.livesession);
+        break;
+      case 3:
+        Navigator.of(context).pushNamed(RouterManger.Gamification);
+        break;
+      // case 4:
+      //   Navigator.of(context).pushNamed(RouterManger.morescreen);
+      //   break;
     }
-  });
-}
+  }
 }

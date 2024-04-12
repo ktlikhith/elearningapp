@@ -11,15 +11,15 @@ import 'package:flutter/material.dart';
 
 
 class RouterManger{
-  static const String homescreen ='/ui/Dashboard/dashboard.dart';
-  static const String mylearning ='/ui/My_learning/mylearning.dart';
-  static const String livesession ='/ui/Livesession/livesession.dart';
-  static const String myprofile ='/ui/Profile/profile.dart';
-  static const String Askexpert='/ui/Q&A_page/questionandanswer.dart';
-  static const String downloads='/ui/Download/download.dart';
-  static const String continuescreen='ui/Dashboard/continuescreen.dart';
-  static const String morescreen='ui/More/bottommore.dart';
-  static const String Gamification='ui/Gamification/gameappbar.dart';
+  static const String homescreen = '/dashboard';
+  static const String mylearning = '/mylearning';
+  static const String livesession = '/livesession';
+  static const String myprofile = '/profile';
+  static const String Askexpert = '/questionandanswer';
+  static const String downloads = '/download';
+  static const String continuescreen = '/continuescreen';
+  static const String morescreen = '/bottommore';
+  static const String Gamification = '/gameappbar';
 
 
 
@@ -28,7 +28,7 @@ class RouterManger{
       case homescreen:
             final token = settings.arguments as String; // Retrieve the token from settings.arguments
             return MaterialPageRoute(
-            builder: (context) => DashboardScreen(token: token), // Pass the token to DashboardScreen
+            builder: (context) => DashboardScreen(token: token ), // Pass the token to DashboardScreen
   );
       case mylearning:
       return MaterialPageRoute(
@@ -48,9 +48,10 @@ class RouterManger{
     );
 
     case myprofile:
-      return MaterialPageRoute(
-        builder:(context) => const ProfileApp()
-      ,);
+     final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => ProfilePage(token: token ),
+      );
 
       case Askexpert:
       return MaterialPageRoute(
