@@ -39,10 +39,14 @@ dependencies:
   http: ^1.2.1
   bloc: ^8.1.4
   flutter_bloc: ^8.1.5
+
   percent_indicator: ^4.2.3
   image_picker: ^1.0.8
   http_parser: ^4.0.2
   path: ^1.9.0
+
+  animate_do: ^3.1.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +76,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/images/background-2.png
+    - assets/images/background.png
     - assets/images/img1.jpeg
     - assets/images/login_Bckground.jpg
     - assets/images/spin wheel image.png

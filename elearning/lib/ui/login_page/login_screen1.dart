@@ -1,3 +1,5 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:elearning/ui/login_page/forgot_pass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elearning/bloc/authbloc.dart';
@@ -23,7 +25,12 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _LoginScreenContent extends StatelessWidget {
+class _LoginScreenContent extends StatefulWidget {
+  @override
+  State<_LoginScreenContent> createState() => _LoginScreenContentState();
+}
+
+class _LoginScreenContentState extends State<_LoginScreenContent> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   TextEditingController _usernameController = TextEditingController();
@@ -45,6 +52,12 @@ class _LoginScreenContent extends StatelessWidget {
     return null;
   }
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   void _login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       String username = _usernameController.text.trim();
@@ -60,6 +73,7 @@ class _LoginScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,45 +150,60 @@ class _LoginScreenContent extends StatelessWidget {
                       ),
                       child: Form(
                         key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _usernameController,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Username",
-                                hintStyle: TextStyle(color: Colors.grey.shade700),
-                              ),
-                              validator: _usernameValidator,
-                            ),
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: _obscureText,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Password",
-                                hintStyle: TextStyle(color: Colors.grey.shade700),
-                                suffixIcon: IconButton(
-                                  icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
-                                  onPressed: () {
-                                    _obscureText = !_obscureText;
-                                  },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: [
+                              FadeInUp(
+                                duration: Duration(milliseconds: 1900),
+                                child: TextFormField(
+                                  controller: _usernameController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Username",
+                                    hintStyle: TextStyle(color: Colors.grey.shade700),
+                                  ),
+                                  validator: _usernameValidator,
                                 ),
                               ),
-                              validator: _passwordValidator,
-                            ),
-                          ],
+                              SizedBox(height: 10),
+                              FadeInUp(
+                                duration: Duration(milliseconds: 1900),
+                                child: TextFormField(
+                                  controller: _passwordController,
+                                  obscureText: _obscureText,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Password",
+                                    hintStyle: TextStyle(color: Colors.grey.shade700),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                                      ),
+                                      onPressed: _togglePasswordVisibility,
+                                    ),
+                                  ),
+                                  validator: _passwordValidator,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
-                  FadeInUp(
-                    duration: Duration(milliseconds: 1700),
-                    child: Center(
+                  Center(
+                    child: FadeInUp(
+                      duration: Duration(milliseconds: 1900),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                          );
+                        },
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(color: Color.fromRGBO(196, 135, 198, 1)),
@@ -187,7 +216,7 @@ class _LoginScreenContent extends StatelessWidget {
                     duration: Duration(milliseconds: 1900),
                     child: MaterialButton(
                       onPressed: () => _login(context),
-                      color: Color.fromRGBO(49, 39, 79, 1),
+                      color: const Color.fromARGB(243, 255, 86, 34),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
@@ -202,7 +231,7 @@ class _LoginScreenContent extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
