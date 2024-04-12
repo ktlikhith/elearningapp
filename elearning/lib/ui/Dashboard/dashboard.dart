@@ -98,7 +98,7 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.myprofile);
+                Navigator.of(context).pushNamed(RouterManger.myprofile,arguments:widget.token);
               },
               child: CircleAvatar(
                 radius: 20,
