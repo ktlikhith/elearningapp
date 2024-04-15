@@ -28,8 +28,8 @@ class MyMorePage extends StatelessWidget {
         children: <Widget>[
           
           ListTile(
-            leading: Icon(Icons.people),
-            title: Text('Social Feed'),
+            leading: Icon(Icons.school),
+            title: Text('Learning Path'),
             onTap: () {
               // Implement social feed functionality here
             },

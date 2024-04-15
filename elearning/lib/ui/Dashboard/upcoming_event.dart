@@ -52,7 +52,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Upcoming course',
+            'Upcoming Events',
             style: TextStyle(
               fontSize: 16.0,
               // color: Colors.grey[800],
