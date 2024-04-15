@@ -3,14 +3,32 @@ import 'package:flutter/material.dart';
 
 Widget buildSection({required IconData icon, required int number, required String title}) {
   return Container(
-    width: 150.0,
+    width: 130.0,
     margin: const EdgeInsets.only(right: 16.0),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      color: Colors.white,
+          boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          spreadRadius: 2,
+          blurRadius: 4,
+          offset: Offset(0, 4),
+        ),
+      ],
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(12.0),
+           gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+        Color(0xFFFFA000),    Color(0xFFD500F9), // Replace with your desired gradient colors
+         // Example colors used here
+        ],
+      ),
+      
       
     ),
     padding: const EdgeInsets.all(16.0),
+    
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,7 +36,7 @@ Widget buildSection({required IconData icon, required int number, required Strin
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CircleAvatar(
-              backgroundColor: Colors.blue,
+              backgroundColor: const Color.fromARGB(255, 216, 226, 234),
 
             child: Icon(icon, size: 20.0),
             ),

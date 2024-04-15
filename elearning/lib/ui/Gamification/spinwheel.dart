@@ -1,67 +1,84 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:kbspinningwheel/kbspinningwheel.dart';
 import 'gameappbar.dart';
 
-class SpinWheel extends StatefulWidget {
+class SpinWheel1 extends StatefulWidget {
   @override
-  _SpinWheelState createState() => _SpinWheelState();
+  _SpinWheel1State createState() => _SpinWheel1State();
 }
 
-class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 3), // Adjust duration as needed
-    );
-    _animation = Tween(begin: 0.0, end: 2 * pi).animate(_controller);
-  }
+class _SpinWheel1State extends State<SpinWheel1> {
+  final StreamController<int> _dividerController = StreamController<int>();
 
   @override
   void dispose() {
-    _controller.dispose();
+    _dividerController.close();
     super.dispose();
-  }
-
-  void _spinWheel() {
-    _controller.forward(from: 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _spinWheel, // Call _spinWheel function on tap
-      child: RotationTransition(
-        turns: _animation,
-        child: Container(
-          width: 200, // Adjust size as needed
-          height: 200, // Adjust size as needed
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.blue, width: 5), // Optional border
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Center(
-                  child: Image.asset(
-                    'assets/images/spin wheel image.png', // Replace with your actual spin wheel image path
-                    fit: BoxFit.contain, // Fit the image inside without cropping
-                  ),
-                ),
-              ),
-            ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinningWheel(
+            image: Image.asset('assets/images/roulette-8-300.png'),
+            width: 310,
+            height: 310,
+            initialSpinAngle: _generateRandomAngle(),
+            spinResistance: 0.6,
+            canInteractWhileSpinning: false,
+            dividers: 8,
+            onUpdate: _dividerController.add,
+            onEnd: _dividerController.add,
+            secondaryImage:
+                Image.asset('assets/images/roulette-center-300.png'),
+            secondaryImageHeight: 60,
+            secondaryImageWidth: 110,
+            secondaryImageLeft:30,
+            secondaryImageTop: 60,
+            
           ),
-        ),
+          SizedBox(height: 30),
+          StreamBuilder<int?>(
+            stream: _dividerController.stream,
+            builder: (context, snapshot) =>
+                snapshot.hasData ? RouletteScore(snapshot.data ?? 1) : Container(),
+          )
+        ],
       ),
+    );
+  }
+
+  double _generateRandomAngle() => Random().nextDouble() * pi * 2;
+}
+
+
+
+class RouletteScore extends StatelessWidget {
+  final int selected;
+
+  const RouletteScore(this.selected);
+
+  final Map<int, String> labels = const {
+    1: '1000\$',
+    2: '400\$',
+    3: '800\$',
+    4: '7000\$',
+    5: '5000\$',
+    6: '300\$',
+    7: '2000\$',
+    8: '100\$',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '${labels[selected]}',
+      style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0),
     );
   }
 }

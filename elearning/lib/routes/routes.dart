@@ -6,7 +6,7 @@ import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
-import 'package:elearning/ui/Q&A_page/questionandanswer.dart';
+
 import 'package:elearning/ui/download/download.dart';
 import 'package:flutter/material.dart';
 
@@ -54,10 +54,7 @@ class RouterManger{
             builder: (context) => ProfilePage(token: token ),
       );
 
-      case Askexpert:
-      return MaterialPageRoute(
-        builder:(context) => const QuestionAnswersPage()
-      ,);
+      
       case downloads:
       return MaterialPageRoute(
         builder:(context) => DownloadPage()

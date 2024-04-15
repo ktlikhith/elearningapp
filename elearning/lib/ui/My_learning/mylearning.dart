@@ -94,17 +94,17 @@ class MyLearningAppBody extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 buildSection(
-                  icon: Icons.home,
+                  icon: Icons.video_library_outlined,
                   number: 5,
                   title: 'My Playlists',
                 ),
                 buildSection(
-                  icon: Icons.person,
+                  icon: Icons.save,
                   number: 3,
                   title: 'Saved',
                 ),
                 buildSection(
-                  icon: Icons.settings,
+                  icon: Icons.download,
                   number: 8,
                   title: 'Downloads',
                 ),
@@ -113,7 +113,10 @@ class MyLearningAppBody extends StatelessWidget {
           ),
           const SizedBox(height: 24.0), // Add some space between sections
           // Call buildCourseSection here
-          buildCourseSection(), // This will display the course section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: buildCourseSections(5,context), // Assuming you want to display 5 course sections
+          ),// This will display the course section
         ],
       ),
     );
@@ -124,5 +127,4 @@ class MyLearningAppBody extends StatelessWidget {
 
 
  
-
 

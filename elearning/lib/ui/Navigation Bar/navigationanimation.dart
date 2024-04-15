@@ -97,9 +97,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       case 3:
         Navigator.of(context).pushNamed(RouterManger.Gamification);
         break;
-      // case 4:
-      //   Navigator.of(context).pushNamed(RouterManger.morescreen);
-      //   break;
+      case 4:
+        Navigator.of(context).pushNamed(RouterManger.morescreen);
+        break;
     }
   }
 }
