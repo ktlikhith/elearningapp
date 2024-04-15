@@ -106,8 +106,24 @@ void initState() {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
+            boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          spreadRadius: 2,
+          blurRadius: 4,
+          offset: Offset(0, 4),
+        ),
+      ],
           color: Colors.grey,
           borderRadius: BorderRadius.circular(12.0),
+           gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+         Color(0xFFFFA000),    Color(0xFFD500F9), // Replace with your desired gradient colors
+         // Example colors used here
+        ],
+      ),
         ),
         child: Row(
           children: [

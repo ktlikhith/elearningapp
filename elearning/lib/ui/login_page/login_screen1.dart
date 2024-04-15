@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
+import 'package:neopop/widgets/buttons/neopop_button/neopop_button.dart';
 
 void main() => runApp(
       MaterialApp(
@@ -132,6 +133,17 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
                       ),
                     ),
                   ),
+                  FadeInUp(
+                    duration: Duration(milliseconds: 1500),
+                    child: Text(
+                      "Please login to access and Start Learning",
+                      style: TextStyle(
+                        color: Color.fromRGBO(49, 39, 79, 1),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 30),
                   FadeInUp(
                     duration: Duration(milliseconds: 1700),
@@ -211,24 +223,49 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  FadeInUp(
-                    duration: Duration(milliseconds: 1900),
-                    child: MaterialButton(
-                      onPressed: () => _login(context),
-                      color: const Color.fromARGB(243, 255, 86, 34),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      height: 50,
-                      child: Center(
-                        child: Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
+                 SizedBox(height: 30),
+FadeInUp(
+  duration: Duration(milliseconds: 1900),
+  child: MaterialButton(
+    onPressed: () => _login(context),
+    // color: const Color.fromARGB(243, 255, 86, 34),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    height: 40, // Increased button height
+    minWidth: double.infinity, // Button fills available width
+    child: Container(
+      height: 40, // Adjusted container height
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFFFA000),
+            Color(0xFFD500F9),
+            // Replace with your desired gradient colors
+          ],
+        ),
+      ),
+      child: Center(
+        child: Text(
+          "Login",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+  ),
+),
+
                 ],
               ),
             ),
