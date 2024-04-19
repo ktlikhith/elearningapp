@@ -103,7 +103,7 @@ void initState() {
 
   Widget buildSection(String title, String number, Color color) {
      return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
@@ -115,16 +115,20 @@ void initState() {
           offset: Offset(0, 4),
         ),
       ],
-          color: Colors.grey,
+          color: Color.fromARGB(172, 255, 253, 253),
           borderRadius: BorderRadius.circular(12.0),
-           gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-         Color(0xFFFFA000),    Color.fromARGB(178, 212, 0, 249), // Replace with your desired gradient colors
-         // Example colors used here
-        ],
-      ),
+      //      gradient: LinearGradient(
+      //   begin: Alignment.topLeft,
+      //   end: Alignment.bottomRight,
+      //   colors: [
+      //    Color(0xFFFFA000),    Color.fromARGB(178, 212, 0, 249), // Replace with your desired gradient colors
+      //    // Example colors used here
+      //   ],
+      // ),
+       border: Border.all(
+            color: Colors.green, // Green border color
+            width: 2.0,
+          ),
         ),
          child: Row(
           children: [

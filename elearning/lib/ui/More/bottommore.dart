@@ -38,7 +38,7 @@ class MyMorePage extends StatelessWidget {
             leading: Icon(Icons.bar_chart),
             title: Text('Reports'),
             onTap: () {
-              // Implement reports functionality here
+              Navigator.of(context).pushNamed(RouterManger.Report);
             },
           ),
           ListTile(

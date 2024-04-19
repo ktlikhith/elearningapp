@@ -46,10 +46,17 @@ dependencies:
   image_picker: ^1.0.8
   http_parser: ^4.0.2
   path: ^1.9.0
+  fl_chart: ^0.67.0
 
   animate_do: ^3.1.2
   kbspinningwheel : ^1.0.3
   neopop: ^1.0.2
+  carousel_slider: ^4.0.0
+  
+  
+  
+  
+
 
 
 
@@ -86,7 +93,7 @@ flutter:
    
     - assets/images/roulette-center-300.png
     - assets/images/roulette-8-300.png
-
+    - assets/gif/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
