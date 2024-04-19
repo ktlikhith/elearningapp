@@ -6,12 +6,7 @@ import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:neopop/widgets/buttons/neopop_button/neopop_button.dart';
 
-void main() => runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: LoginScreen(),
-      ),
-    );
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);

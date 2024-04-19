@@ -1,14 +1,10 @@
 import 'dart:convert';
-import 'dart:io'; // Add this import for the File class
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart'; // Add this import for ImagePicker
-import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart' as path; // Add this import
+
 
 
 
@@ -40,91 +36,42 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _fetchProfileData(String token) async {
-    const String baseUrl = 'https://lxp-demo2.raptechsolutions.com';
-    final userInfo = await SiteConfigApiService.getUserId(token);
-    final userId = userInfo['id'];
     try {
-      final response = await http.get(Uri.parse('$baseUrl/webservice/rest/server.php?moodlewsrestformat=json&wstoken=$token&wsfunction=local_corporate_api_create_profileapi&userid=$userId'));
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = json.decode(response.body);
+      final data = await ProfileAPI.fetchProfileData(token);
 
-        // Extract values from user_info
-        List<dynamic> userInfoList = json.decode(data['user_info']);
+      // Extract values from data and update state
+      setState(() {
+        final userInfoList = json.decode(data['user_info']);
         if (userInfoList.isNotEmpty) {
-          Map<String, dynamic> userInfo = userInfoList[0];
+          final userInfo = userInfoList[0];
           _studentName = userInfo['studentname'];
           _studentEmail = userInfo['studentemail'];
-          // Extract profile picture URL from studentimage
           final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(userInfo['studentimage']);
           if (profilePictureMatch != null) {
             _profilePictureUrl = profilePictureMatch.group(1)!;
           }
         }
 
-        // Extract values from achievements
-        List<dynamic> achievementsList = json.decode(data['achievements']);
+        final achievementsList = json.decode(data['achievements']);
         if (achievementsList.isNotEmpty) {
-          Map<String, dynamic> achievements = achievementsList[0];
+          final achievements = achievementsList[0];
           _userPoints = achievements['userpoints'];
           _badgesEarn = achievements['badgesearn'];
           _userLevel = achievements['userlevel'];
         }
 
-        // Extract values from course_progress
-        Map<String, dynamic> courseProgress = json.decode(data['course_progress']);
+        final courseProgress = json.decode(data['course_progress']);
         _completioned = courseProgress['completioned'];
         _inProgress = courseProgress['inprogress'];
         _totalNotStarted = courseProgress['totalnotstarted'];
-      } else {
-        throw Exception('Failed to fetch profile data');
-      }
+      });
     } catch (e) {
       print('Error fetching profile data: $e');
     }
-    setState(() {}); // Refresh UI after fetching data
   }
-Future<void> _uploadPhoto() async {
-  final picker = ImagePicker();
-  try {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      final String baseUrl = 'https://lxp-demo2.raptechsolutions.com';
-      final String wsFunction = 'core_user_update_picture';
-      final userInfo = await SiteConfigApiService.getUserId(widget.token);
-      final userId = userInfo['id'];
-      const int draftItemId = 768027985;
-
-      final uri = Uri.parse('$baseUrl/webservice/rest/server.php?moodlewsrestformat=json'
-          '&wstoken=${widget.token}&wsfunction=$wsFunction&userid=$userId&draftitemid=$draftItemId');
-
-      final request = http.MultipartRequest('POST', uri);
-      request.files.add(await http.MultipartFile.fromPath(
-        'userpicture',
-        file.path,
-        contentType: MediaType('image', path.extension(file.path).substring(1)),
-      ));
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 200) {
-        // Handle successful response
-        print('Photo uploaded successfully.');
-        // Optionally, you can update the UI or show a success message
-      } else {
-        // Handle errors
-        print('Failed to upload photo. Error code: ${response.statusCode}');
-        // Optionally, you can show an error message to the user
-      }
-    }
-  } catch (e) {
-    // Handle exceptions
-    print('Error uploading photo: $e');
-    // Optionally, you can show an error message to the user
+  Future<void> _uploadPhoto() async {
+    await ProfileAPI.uploadPhoto(widget.token);
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

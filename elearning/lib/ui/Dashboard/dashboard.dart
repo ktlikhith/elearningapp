@@ -1,13 +1,16 @@
-import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
+import 'package:elearning/ui/Dashboard/notification.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:typed_data';
+import 'dart:convert'; 
+
+
 
 
 class DashboardScreen extends StatelessWidget {
@@ -38,29 +41,52 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _scrollController = ScrollController();
   String _userName = ''; 
   String _userprofile='';// Default value set to an empty string
-
+  Uint8List? _tenantLogoBytes;
+  int _notificationCount= 0;
  @override
   void initState() {
     super.initState();
     _fetchUserInfo(widget.token);
+   
     
   }
 
-  Future<void> _fetchUserInfo(String token) async {
-    try {
-      final userInfo = await SiteConfigApiService.getUserId(token);
-      final fullName = userInfo['fullname'];
-      final function=userInfo['functions'];
-      final userprofile=userInfo['userpictureurl'];
 
+
+
+ Future<void> _fetchUserInfo(String token) async {
+  try {
+    final count = await NotificationCount.getUnreadNotificationCount(token);
+    final userInfo = await SiteConfigApiService.getUserId(token);
+    final fullName = userInfo['fullname'];
+    final userprofile = userInfo['userpictureurl'];
+    final logoData = await TanentLogo.fetchTenantUserData(token);
+    final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
+
+    // Check if tenantLogoBase64 is null or empty
+    if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
+      // Decode base64 string to Uint8List
+      final Uint8List tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
+      setState(() {
+        _notificationCount = count;
+        _userName = fullName;
+        _userprofile = userprofile;
+        _tenantLogoBytes = tenantLogoBytes;
+      });
+    } else {
       setState(() {
         _userName = fullName;
         _userprofile = userprofile;
+        _tenantLogoBytes = null; // Set logo bytes to null if data is empty
       });
-    } catch (e) {
-      print('Error fetching user information: $e');
     }
+  } catch (e) {
+    print('Error fetching user information: $e');
   }
+}
+
+
+  
 
 
 
@@ -74,26 +100,57 @@ class _DashboardPageState extends State<DashboardPage> {
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/img1.jpeg'),
-                fit: BoxFit.cover,
-              ),
-            ),
+         padding: EdgeInsets.all(8.0),
+          child: _tenantLogoBytes != null
+              ? SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.memory(
+                    _tenantLogoBytes!,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : SizedBox.shrink(), // Render an empty SizedBox if logo data is not available
+        ),
+        
+       actions: <Widget>[
+          Stack(
+  children: [
+    IconButton(
+      icon: FaIcon(FontAwesomeIcons.bell),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationScreen(token: widget.token),
+          ),
+        );
+      },
+    ),
+    Positioned(
+      right: 0,
+      top: 0,
+      child: Container(
+        padding: EdgeInsets.all(4), // Adjust padding as needed
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.red, // Customize badge background color here
+        ),
+        child: Text(
+          '$_notificationCount',
+          style: TextStyle(
+            color: Colors.white, // Customize text color here
+            fontSize: 12, // Adjust font size as needed
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const FaIcon(FontAwesomeIcons.bell),
-            onPressed: () {
-              // Handle notification icon press
-            },
-          ),
+      ),
+    ),
+  ],
+),
+
+               
+          
+        
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: GestureDetector(
