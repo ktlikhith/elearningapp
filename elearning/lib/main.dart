@@ -56,7 +56,7 @@
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/ui/login_page/login_screen.dart';
+import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,15 +73,15 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primaryColor: Color.fromARGB(230, 249, 78, 26),
+          primaryColor: Color.fromARGB(255, 212, 238, 250),
           backgroundColor: Colors.white, // Set the background color for all pages
           textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
 
         ),
         ),
-        home: LoginScreen(),
-        onGenerateRoute: RouterManger.generateRoute, 
+        home: LandingPage(),
+         onGenerateRoute: RouterManger.generateRoute,
       ),
     );
   }

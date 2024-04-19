@@ -6,6 +6,7 @@ import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
+import 'package:elearning/ui/Reports/reports_chart.dart';
 
 import 'package:elearning/ui/download/download.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class RouterManger{
   static const String continuescreen = '/continuescreen';
   static const String morescreen = '/bottommore';
   static const String Gamification = '/gameappbar';
+  static const String Report = '/reports_chart';
 
 
 
@@ -74,6 +76,10 @@ class RouterManger{
         builder:(context) => MyMorePage()
       ,);
 
+      case Report:
+      return MaterialPageRoute(
+        builder:(context) => ReportPage()
+      ,);
 
       case Gamification:
       return MaterialPageRoute(

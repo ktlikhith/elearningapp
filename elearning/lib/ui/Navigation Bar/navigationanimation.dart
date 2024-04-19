@@ -32,8 +32,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         child: GNav(
           backgroundColor: Colors.white,
           color: Colors.black,
-          activeColor: Colors.white,
-          tabBackgroundColor: Theme.of(context).primaryColor,
+          // activeColor: Colors.white,
+          // tabBackgroundColor: Theme.of(context).primaryColor,
           gap: 5,
           padding: EdgeInsets.all(14),
           tabs: [

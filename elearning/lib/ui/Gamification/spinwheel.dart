@@ -24,25 +24,34 @@ class _SpinWheel1State extends State<SpinWheel1> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SpinningWheel(
-            image: Image.asset('assets/images/roulette-8-300.png'),
-            width: 310,
-            height: 310,
-            initialSpinAngle: _generateRandomAngle(),
-            spinResistance: 0.6,
-            canInteractWhileSpinning: false,
-            dividers: 8,
-            onUpdate: _dividerController.add,
-            onEnd: _dividerController.add,
-            secondaryImage:
-                Image.asset('assets/images/roulette-center-300.png'),
-            secondaryImageHeight: 60,
-            secondaryImageWidth: 110,
-            secondaryImageLeft:30,
-            secondaryImageTop: 60,
-            
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Padding(
+              padding: const EdgeInsets.all(0.8),
+              child: SpinningWheel(
+                image: Image.asset('assets/images/roulette-8-300.png'),
+                width: 230,
+                height: 230,
+                initialSpinAngle: _generateRandomAngle(),
+                spinResistance: 0.8,
+                canInteractWhileSpinning: false,
+                dividers: 8,
+                onUpdate: _dividerController.add,
+                onEnd: _dividerController.add,
+                secondaryImage:
+                    Image.asset('assets/images/roulette-center-300.png'),
+                secondaryImageHeight: 60,
+                secondaryImageWidth: 110,
+                secondaryImageLeft:55,
+                secondaryImageTop: 76,
+                
+              ),
+            ),
           ),
-          SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: SizedBox(height: 30),
+          ),
           StreamBuilder<int?>(
             stream: _dividerController.stream,
             builder: (context, snapshot) =>
