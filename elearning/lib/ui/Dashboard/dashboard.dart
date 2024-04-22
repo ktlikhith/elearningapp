@@ -2,13 +2,16 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
-import 'package:elearning/ui/Dashboard/notification.dart';
+
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert'; 
+import 'dart:async';
+
 
 
 
@@ -33,7 +36,11 @@ class DashboardPage extends StatefulWidget {
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
+  
+  
+  
 }
+ 
 
 
 class _DashboardPageState extends State<DashboardPage> {
@@ -43,11 +50,15 @@ class _DashboardPageState extends State<DashboardPage> {
   String _userprofile='';// Default value set to an empty string
   Uint8List? _tenantLogoBytes;
   int _notificationCount= 0;
+  late Timer _timer;
+
  @override
   void initState() {
     super.initState();
     _fetchUserInfo(widget.token);
-   
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      _refreshNotificationCount(); // Call the method to refresh notification count every 3 seconds
+    });
     
   }
 
@@ -85,6 +96,22 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
+ Future<void> _refreshNotificationCount() async {
+    try {
+      final count = await NotificationCount.getUnreadNotificationCount(widget.token);
+      setState(() {
+        _notificationCount = count;
+      });
+    } catch (e) {
+      print('Error refreshing notification count: $e');
+    }
+  }
+
+@override
+  void dispose() {
+    _timer.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
+  }
 
   
 
