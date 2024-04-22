@@ -39,17 +39,10 @@ class RouterManger{
             builder: (context) => LearningScreen(token: token ),
       );
       case livesession:
-      return MaterialPageRoute(
-        builder:(context) => const LiveSessionPage( courseTitle: 'Flutter Development Masterclass',
-      speakerName: 'Jane Doe',
-      duration: '1h 30m - 3h',
-      mode: 'Online',
-      sessionAddress: 'https://example.com/live-session-link',
-      description: '''
-        Join us for an exciting journey into Flutter development.
-        Learn to build beautiful, responsive apps with Flutter!
-      ''',)
-    );
+      final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => LiveSessionPage(token: token ),
+      );
 
     case myprofile:
      final token = settings.arguments as String; // Retrieve the token from settings.arguments
@@ -70,12 +63,11 @@ class RouterManger{
         }
       );
 
-
-
        case morescreen:
-      return MaterialPageRoute(
-        builder:(context) => MyMorePage()
-      ,);
+      final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => MyMorePage(token: token ),
+      );
 
       case Report:
       return MaterialPageRoute(

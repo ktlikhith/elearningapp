@@ -18,9 +18,9 @@ class AutoScrollableSections extends StatefulWidget {
 class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
-  String _past='No courses';
-  String _soon='No courses';
-  String _later='No courses';
+  String _past='';
+  String _soon='';
+  String _later='';
 
   @override
 void initState() {
@@ -40,7 +40,7 @@ void initState() {
     //final List<String> functionNames = functions.map<String>((function) => function['name']).toList();
     final dueInfo = await DueApiService.getDueInfo(token, userId);
     // Handle due information as needed
-    final past=dueInfo['pastcountactivity'];
+    final past=dueInfo['countactivity'];
     final soon=dueInfo['countsevendays'];
     final later=dueInfo['countthirtydays'];
    
