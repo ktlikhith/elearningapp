@@ -59,13 +59,13 @@ class DueApiService {
     try {
       final dueUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
           'moodlewsrestformat=json&wstoken=$token&'
-          'wsfunction=local_corporate_api_get_coursesapi&userid=$userId');
+          'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
   
       final response = await http.get(dueUrl);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         return{
-          'pastcountactivity': responseData['pastcountactivity'],
+          'countactivity': responseData['countactivity'],
           'countsevendays': responseData['countsevendays'],
           'countthirtydays': responseData['countthirtydays'],
           //'functions': functionNames,

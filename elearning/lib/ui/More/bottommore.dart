@@ -1,64 +1,113 @@
-import 'package:elearning/routes/routes.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class MyMorePage extends StatelessWidget {
+import 'package:elearning/routes/routes.dart';
+import 'package:elearning/services/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class MyMorePage extends StatefulWidget {
+  final String token;
+
+  const MyMorePage({Key? key, required this.token}) : super(key: key);
+
+  @override
+  _MyMorePageState createState() => _MyMorePageState();
+}
+
+ 
+class _MyMorePageState extends State<MyMorePage> {
+  late String _profilePictureUrl = '';
+
+   @override
+  void initState() {
+    super.initState();
+    _fetchProfileData(widget.token);
+  }
+
+  Future<void> _fetchProfileData(String token) async {
+    try {
+      final data = await ProfileAPI.fetchProfileData(token);
+
+      // Extract values from data and update state
+      setState(() {
+        final userInfoList = json.decode(data['user_info']);
+        if (userInfoList.isNotEmpty) {
+          final userInfo = userInfoList[0];
+          final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(userInfo['studentimage']);
+          if (profilePictureMatch != null) {
+            _profilePictureUrl = profilePictureMatch.group(1)!;
+          }
+        }
+
+        
+      });
+    } catch (e) {
+      print('Error fetching profile data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('More Page'),
-         backgroundColor: Theme.of(context).primaryColor,// Set app bar color to blue
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.myprofile);
-              },
-              child: CircleAvatar(
-          radius: 20,
-          backgroundImage: AssetImage('assets/images/img1.jpeg'),
-        ),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('More Page'),
+          backgroundColor: Theme.of(context).primaryColor,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                 backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.graduationCap),
+              title: Text('Learning Path'),
+              onTap: () {
+                // Implement social feed functionality here
+              },
+            ),
+            
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.chartSimple),
+              title: Text('Reports'),
+              onTap: () {
+                Navigator.of(context).pushNamed(RouterManger.Report);
+              },
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.download),
+              title: Text('Downloads'),
+              onTap: () {
+                // Implement downloads functionality here
+              },
+            ),
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.rightFromBracket),
+              title: Text('Logout'),
+              onTap: () {
+                // Implement logout functionality here
+              },
+            ),
+            // Add more ListTile for additional options
+          ],
+        ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: ListView(
-        children: <Widget>[
-          
-          ListTile(
-            leading: Icon(Icons.school),
-            title: Text('Learning Path'),
-            onTap: () {
-              // Implement social feed functionality here
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.bar_chart),
-            title: Text('Reports'),
-            onTap: () {
-              Navigator.of(context).pushNamed(RouterManger.Report);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.file_download),
-            title: Text('Downloads'),
-            onTap: () {
-              // Implement downloads functionality here
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () {
-              // Implement logout functionality here
-            },
-          ),
-          // Add more ListTile for additional options
-        ],
-      ),
-      
     );
   }
 }
