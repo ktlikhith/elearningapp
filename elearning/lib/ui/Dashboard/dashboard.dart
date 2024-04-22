@@ -2,7 +2,6 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
-
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
@@ -219,7 +218,7 @@ class _DashboardPageState extends State<DashboardPage> {
              
               AutoScrollableSections(token: widget.token),
               const SizedBox(height: 15.0),
-              const UpcomingEventsSection(),
+              UpcomingEventsSection(token: widget.token),
               const SizedBox(height: 15.0),
               CustomDashboardWidget(token: widget.token),
             ],

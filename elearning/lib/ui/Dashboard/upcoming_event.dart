@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:elearning/services/live_event.dart';
+
 
 class UpcomingEventsSection extends StatefulWidget {
-  const UpcomingEventsSection({Key? key}) : super(key: key);
+  final String token;
+  const UpcomingEventsSection({Key? key, required this.token}) : super(key: key);
 
   @override
   _UpcomingEventsSectionState createState() => _UpcomingEventsSectionState();
@@ -12,7 +15,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
   late PageController _pageController;
   late Timer _timer;
   int _currentPage = 0;
-  int _totalPages = 3; // Total number of pages
+   late Future<Map<String, dynamic>> _futureData;
 
   @override
   void initState() {
@@ -20,17 +23,11 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     _pageController = PageController(initialPage: 0);
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       _currentPage++;
-      if (_currentPage >= _totalPages) {
-        _currentPage = 0;
-      }
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
+      // You may want to handle resetting the current page here if needed
     });
+
+    // Initialize _futureData here
+    _futureData = LiveEventService().fetchLiveEvent(widget.token);
   }
 
   @override
@@ -54,34 +51,47 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
           Text(
             'Upcoming Events',
             style: TextStyle(
-              fontSize: 16.0,
-              // color: Colors.grey[800],
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 15.0),
-          SizedBox(
-            height: 210, // Adjust height as needed
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is OverscrollNotification) {
-                  _currentPage = 0; // Reset current page to first page
-                }
-                return false;
-              },
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _totalPages,
-                itemBuilder: (BuildContext context, int index) {
-                  // Calculate the current index accounting for looping
-                  final currentIndex = index % _totalPages;
-                  return _buildEventCard(
-                    image: 'https://via.placeholder.com/200',
-                    dateTime: 'Time: 8:00 PM',
-                    title: 'Event Title $currentIndex',
-                  );
-                },
-              ),
-            ),
+          FutureBuilder<Map<String, dynamic>>(
+        future: _futureData, // Use the initialized _futureData here
+            builder: (context, snapshot) {
+            
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              // } else if (snapshot.hasError) {
+              //   return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return SizedBox(
+                  height: 210,
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is OverscrollNotification) {
+                        // Handle overscroll if needed
+                      }
+                      return false;
+                    },
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final event = snapshot.data![index];
+                        return _buildEventCard(
+                          image: event['image'] ?? '',
+                          dateTime: event['dateTime'] ?? '',
+                          title: event['title'] ?? '',
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return Center(child: Text('No events available'));
+              }
+            },
           ),
         ],
       ),
@@ -96,23 +106,21 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
-        width: 200, // Adjust width as needed
+        width: 200,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image of the event
             Container(
-              height: 150, // Adjust height as needed
+              height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 image: DecorationImage(
-                  image: NetworkImage(image), // Image URL
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SizedBox(height: 8.0),
-            // Date and time of the event
             Text(
               dateTime,
               style: TextStyle(
@@ -121,7 +129,6 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
               ),
             ),
             SizedBox(height: 4.0),
-            // Title of the event
             Text(
               title,
               style: TextStyle(
