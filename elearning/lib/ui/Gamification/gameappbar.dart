@@ -151,7 +151,7 @@ class GamificationPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 3),
+     // bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 3),
     );
   }
 

@@ -5,8 +5,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int initialIndex;
+  final String token;
 
-  const CustomBottomNavigationBar({Key? key, required this.initialIndex})
+
+  const CustomBottomNavigationBar({Key? key, required this.initialIndex, required this.token})
       : super(key: key);
 
   @override
@@ -86,10 +88,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed(RouterManger.homescreen);
+        Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
         break;
       case 1:
-        Navigator.of(context).pushNamed(RouterManger.mylearning);
+       Navigator.of(context).pushReplacementNamed(RouterManger.mylearning, arguments: widget.token);
         break;
       case 2:
         Navigator.of(context).pushNamed(RouterManger.livesession);

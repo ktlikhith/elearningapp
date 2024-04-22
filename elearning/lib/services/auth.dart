@@ -187,3 +187,76 @@ class NotificationCount {
 }
 
 
+
+
+
+// class CourseReportApiService {
+  
+
+//    Future<List<Course>> getAllCourses(String token) async {
+    
+//       final userInfo =  await SiteConfigApiService.getUserId(token);
+//       final userId = userInfo['id'];
+//       final url = '${Constants.baseUrl}/webservice/rest/server.php?'
+//           'moodlewsrestformat=json'
+//           '&wstoken=$token'
+//           '&wsfunction=local_corporate_api_course_reportapi'
+//           '&userid=$userId';
+//       final response = await http.get(Uri.parse(url));
+      
+//       if (response.statusCode == 200) {
+//       try {
+//         final jsonData = jsonDecode(response.body);
+        
+//         // Check if the jsonData is a String, then attempt to parse it
+//         if (jsonData is String) {
+//           final coursesJson = jsonDecode(jsonData) as List<dynamic>;
+//           return coursesJson.map((courseJson) => Course.fromJson(courseJson)).toList();
+//         }
+//         // If jsonData is not a String, assume it's already a List<dynamic>
+//         else if (jsonData is List<dynamic>) {
+//           return jsonData.map((courseJson) => Course.fromJson(courseJson)).toList();
+//         } else {
+//           throw Exception('Invalid response format');
+//         }
+//       } catch (e) {
+//         throw Exception('Error parsing response: $e');
+//       }
+//     } else {
+//       // If response status code is not 200, throw an error
+//       throw Exception('Failed to fetch courses');
+//     }
+//   }
+// }
+
+
+
+// class Course {
+//   final String id;
+//   final String name;
+//   final String courseImg;
+//   final String startDate;
+//   final String courseEndDate;
+//   final String courseDuration;
+
+//   Course({
+//     required this.id,
+//     required this.name,
+//     required this.courseImg,
+//     required this.startDate,
+//     required this.courseEndDate,
+//     required this.courseDuration,
+//   });
+
+//   factory Course.fromJson(Map<String, dynamic> json) {
+//     return Course(
+//       id: json['id'],
+//       name: json['name'],
+//       courseImg: json['courseimg'],
+//       startDate: json['coursestartdate'],
+//       courseEndDate: json['courseendate'],
+//       courseDuration: json['course_duration']
+//     );
+//   }
+// }
+

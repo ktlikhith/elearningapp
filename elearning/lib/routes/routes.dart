@@ -34,9 +34,10 @@ class RouterManger{
             builder: (context) => DashboardScreen(token: token ), // Pass the token to DashboardScreen
   );
       case mylearning:
-      return MaterialPageRoute(
-        builder:(context) => const MyLearningApp()
-      ,);
+     final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => LearningScreen(token: token ),
+      );
       case livesession:
       return MaterialPageRoute(
         builder:(context) => const LiveSessionPage( courseTitle: 'Flutter Development Masterclass',

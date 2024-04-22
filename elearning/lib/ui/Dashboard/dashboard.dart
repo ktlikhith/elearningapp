@@ -199,7 +199,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0),
+      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0,token: widget.token),
     );
   }
 }

@@ -90,7 +90,7 @@ class LiveSessionPage extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2),
+      //bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2),
 
     );
   }
