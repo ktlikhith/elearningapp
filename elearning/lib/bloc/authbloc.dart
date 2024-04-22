@@ -1,5 +1,6 @@
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/services/auth.dart';
+import 'package:elearning/ui/My_learning/course.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await authRepository.login(event.username, event.password);
       final token = result['token']; // Assuming login returns token
       emit(AuthAuthenticated(token));// Emit authenticated state on successful login
-      print('$token');
+     
       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
     } catch (error) {
       emit(AuthFailure(message: 'Authentication failed')); // Emit failure state with error message

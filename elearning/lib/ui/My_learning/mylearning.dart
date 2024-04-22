@@ -3,21 +3,21 @@ import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 
+class LearningScreen extends StatelessWidget {
+  final String token;
 
-
-class MyLearningApp extends StatelessWidget {
-  const MyLearningApp({super.key});
+  const LearningScreen({Key? key, required this.token}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return 
-       const MyLearningPage();
-    
+    return MyLearningPage(token: token);
   }
 }
 
 class MyLearningPage extends StatefulWidget {
-  const MyLearningPage({super.key});
+  final String token;
+
+  const MyLearningPage({Key? key, required this.token}) : super(key: key);
 
   @override
   _MyLearningPageState createState() => _MyLearningPageState();
@@ -36,7 +36,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: const Row(
           children: [
             Text(
@@ -69,17 +69,18 @@ class _MyLearningPageState extends State<MyLearningPage> {
             : null,
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: const SingleChildScrollView(
-       child:MyLearningAppBody()
-        ),
-
-           bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1),
+      body: SingleChildScrollView(
+        child: MyLearningAppBody(token: widget.token), // Pass the token to MyLearningAppBody
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1,token: widget.token,),
     );
   }
 }
 
 class MyLearningAppBody extends StatelessWidget {
-  const MyLearningAppBody({super.key});
+  final String token; // Add token field
+
+  const MyLearningAppBody({Key? key, required this.token}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,18 +114,9 @@ class MyLearningAppBody extends StatelessWidget {
           ),
           const SizedBox(height: 24.0), // Add some space between sections
           // Call buildCourseSection here
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: buildCourseSections(5,context), // Assuming you want to display 5 course sections
-          ),// This will display the course section
+          BuildCourseSections(token: token,), // Pass the token to BuildCourseSections
         ],
       ),
     );
-    
   }
 }
-
-
-
- 
-
