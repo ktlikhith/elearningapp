@@ -4,10 +4,7 @@ import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-
-
-
+import 'package:glass/glass.dart'; // Import the glass package
 
 class ProfilePage extends StatefulWidget {
   final String token;
@@ -69,85 +66,164 @@ class _ProfilePageState extends State<ProfilePage> {
       print('Error fetching profile data: $e');
     }
   }
+
   Future<void> _uploadPhoto() async {
     await ProfileAPI.uploadPhoto(widget.token);
   }
 
+  bool effectEnabled = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true, // Extend the background behind the app bar
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('Profile'),
+        backgroundColor: const Color.fromARGB(0, 251, 249, 249), // Make app bar transparent
+        title: const Text('User Profile'),titleTextStyle: TextStyle(color: const Color.fromARGB(255, 8, 8, 8),fontWeight: FontWeight.bold,fontSize: 20),
         centerTitle: true,
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        color: Colors.grey[200], // Grey background color
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
-                      ),
-                      IconButton(
-                        onPressed: _uploadPhoto,
-                        icon: Icon(Icons.camera_alt),
+      backgroundColor: Color.fromARGB(255, 118, 239, 239),
+      body: Stack(
+        fit: StackFit.expand, // Make the stack fill the entire screen
+        children: [
+          Container(
+  height: MediaQuery.of(context).size.height * 0.10, // Adjust the height as needed
+  decoration: BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/images/profile bg11.png'), // Your background image path
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter, // Position the image at the top center
+    ),
+  ),
+),
+
+          SingleChildScrollView(
+            padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 380,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(0, 151, 231, 213).withOpacity(0.4),
+                        spreadRadius: 4,
+                        blurRadius: 10,
+                        offset: Offset(0, 20),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    _studentName,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          children: [
+                            Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                                ),
+                                IconButton(
+                                  onPressed: _uploadPhoto,
+                                  icon: Icon(Icons.camera_alt),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              _studentName,
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              _studentEmail,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      buildAchievementUI(), // Use your existing buildAchievementUI function
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    _studentEmail,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Achievements',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                buildAchievement(_userPoints, 'Points', FontAwesomeIcons.th),
-                buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.certificate),
-                buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
+                ).asGlass(
+                 
+                  enabled: effectEnabled,
+                  tintColor: Color.fromARGB(0, 246, 246, 246),
+                  clipBorderRadius: BorderRadius.circular(40.0),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Progress',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                buildProgressUI(), // Use your existing buildProgressUI function
               ],
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Progress',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildProgressBar('Task 1', _completioned),
-                buildProgressBar('Task 2', _inProgress),
-                buildProgressBar('Task 3', _totalNotStarted.toInt()),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAchievementUI() {
+    // Build your achievement UI here
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            'Achievements',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildAchievement(_userPoints, 'Points', FontAwesomeIcons.th),
+              buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.certificate),
+              buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildProgressUI() {
+    // Build your progress UI here
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          buildProgressBar('Task 1', _completioned),
+          buildProgressBar('Task 2', _inProgress),
+          buildProgressBar('Task 3', _totalNotStarted.toInt()),
+          // Add more progress bars as needed
+        ],
       ),
     );
   }

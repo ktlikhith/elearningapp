@@ -101,7 +101,7 @@ void initState() {
 }
 
 
-  Widget buildSection(String title, String number, Color color) {
+Widget buildSection(String title, String number, Color color) {
      return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -126,7 +126,7 @@ void initState() {
       //   ],
       // ),
        border: Border.all(
-            color: Colors.green, // Green border color
+            color: const Color.fromARGB(255, 227, 236, 227), // Green border color
             width: 2.0,
           ),
         ),
@@ -140,8 +140,8 @@ void initState() {
                 color: color,
               ),
               child:Center(
-              child: const FaIcon(FontAwesomeIcons.hourglassEnd,
-                color: Colors.white,
+              child: const FaIcon(FontAwesomeIcons.clock,
+                color: Color.fromARGB(255, 48, 48, 48),
                 size: 20,
               ),
               )
@@ -161,7 +161,7 @@ void initState() {
                 Text(
                   number,
                   style: const TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                     //color: Colors.white,
                 ),

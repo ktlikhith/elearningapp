@@ -48,6 +48,7 @@ dependencies:
   http_parser: ^4.0.2
   path: ^1.9.0
   fl_chart: ^0.67.0
+  glass: ^2.0.0+1
 
   animate_do: ^3.1.2
   kbspinningwheel : ^1.0.3
@@ -88,6 +89,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/images/
     - assets/images/background-2.png
     - assets/images/background.png
     - assets/images/img1.jpeg

@@ -13,16 +13,17 @@ Widget buildProgressBar(String title, int percentage) {
           const SizedBox(height: 10),
           Text(
             '$title: ',
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold ),
           ),
           const SizedBox(height: 5),
            LinearPercentIndicator(
-                lineHeight: 30.0,
+                barRadius: Radius.circular(20),
+                lineHeight: 18.0,
                 linearStrokeCap: LinearStrokeCap.roundAll,
                 percent: percentage / 100,
-                backgroundColor: Colors.grey.shade300,
+                backgroundColor: Color.fromARGB(255, 200, 244, 241),
                 progressColor: const Color.fromARGB(243, 255, 86, 34),
-                center: Text("$percentage%"),
+                center: Text("$percentage%",),
               ),
           
         ],

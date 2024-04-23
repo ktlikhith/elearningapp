@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
-import 'gameappbar.dart';
+import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
+
 
 class SpinWheel1 extends StatefulWidget {
   @override
@@ -42,12 +43,13 @@ class _SpinWheel1State extends State<SpinWheel1> {
                     Image.asset('assets/images/roulette-center-300.png'),
                 secondaryImageHeight: 60,
                 secondaryImageWidth: 110,
-                secondaryImageLeft:55,
-                secondaryImageTop: 76,
+                secondaryImageLeft:46,
+                secondaryImageTop: 68,
                 
               ),
             ),
           ),
+          Text('Spin the wheel and luck your chance to get points benefit and redeem.'),
           Padding(
             padding: const EdgeInsets.all(0),
             child: SizedBox(height: 30),
@@ -56,8 +58,27 @@ class _SpinWheel1State extends State<SpinWheel1> {
             stream: _dividerController.stream,
             builder: (context, snapshot) =>
                 snapshot.hasData ? RouletteScore(snapshot.data ?? 1) : Container(),
-          )
+                
+          ),
+           NeoPopTiltedButton(
+  isFloating: true,
+  onTapUp: () {},
+  decoration: NeoPopTiltedButtonDecoration(
+    color:Color(0xFFD500F9),
+    plunkColor: Color(0xFFD500F9),
+    shadowColor: Color.fromRGBO(181, 177, 177, 1),
+    showShimmer: true,
+
+ 
+  ),
+  child: Padding(
+    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
+    child: Text('SPIN'),
+  ),
+),
+          
         ],
+        
       ),
     );
   }
