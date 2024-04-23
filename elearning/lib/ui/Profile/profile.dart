@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glass/glass.dart'; // Import the glass package
@@ -230,40 +231,5 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildProgressBar(String title, int progress) {
-    String statusText = '';
-    Color statusColor = Colors.black;
-
-    if (progress == 0) {
-      statusText = 'Not Started';
-      statusColor = Colors.red;
-    } else if (progress == 100) {
-      statusText = 'Completed';
-      statusColor = Colors.green;
-    } else {
-      statusText = 'In Progress';
-      statusColor = Colors.blue;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 5),
-        LinearProgressIndicator(
-          value: progress / 100,
-          backgroundColor: Colors.grey[300],
-          valueColor: AlwaysStoppedAnimation<Color>(statusColor),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          statusText,
-          style: TextStyle(color: statusColor),
-        ),
-      ],
-    );
-  }
+  
 }
