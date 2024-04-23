@@ -18,9 +18,9 @@ class AutoScrollableSections extends StatefulWidget {
 class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
-  String _past='';
-  String _soon='';
-  String _later='';
+  int _past=0;
+  int _soon=0;
+  int _later=0;
 
   @override
 void initState() {

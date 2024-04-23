@@ -15,6 +15,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
  
   final CourseReportApiService _apiService = CourseReportApiService();
   List<Course> _courses = [];
+
   bool _isLoading = true; // Flag to track loading state
 
   @override
@@ -25,7 +26,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 
    Future<void> _fetchCourses(String token) async {
     try {
-      final List<Course> response = await _apiService.getAllCourses(token);
+      final List<Course> response = await _apiService.fetchCourses(token);
       if (mounted) {
         setState(() {
           _courses = response;
@@ -83,18 +84,17 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
             color: Colors.grey,
             width: 1.0, // Border width
           ),
-    borderRadius: BorderRadius.circular(8.0),
-     image: course.courseImg != null && course.courseImg.isNotEmpty
-        ? DecorationImage(
-            image: NetworkImage(course.courseImg!),
-            fit: BoxFit.cover,
-          )
-        : DecorationImage(
-            image: AssetImage('assets/placeholder_image.jpg'),
-            fit: BoxFit.cover,
-          ),
-  ),
-        
+          borderRadius: BorderRadius.circular(8.0),
+          image: course.courseImg != null && course.courseImg.isNotEmpty
+              ? DecorationImage(
+                  image: NetworkImage(course.courseImg!),
+                  fit: BoxFit.cover,
+                )
+              : DecorationImage(
+                  image: AssetImage('assets/placeholder_image.jpg'),
+                  fit: BoxFit.cover,
+                ),
+        ),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -118,70 +118,83 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
       ),
       const SizedBox(height: 8.0), // Add spacing between title and status
       // Status and due date
-     
-         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Status', // Replace with actual status title
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color.fromARGB(255, 34, 34, 34),
-                  ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Status', // Replace with actual status title
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color.fromARGB(255, 34, 34, 34),
                 ),
-                Text(
-                  '10', // Use course status dynamically
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              const SizedBox(height: 8.0),
+              SizedBox(
+                height: 8.0,
+                width: 140.0, // Increased width for the progress bar
+                child: Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    Container(
+                      height: 20.0,
+                      width: 140.0 * course.courseProgress / 100, // Dynamic width based on progress
+                      decoration: BoxDecoration(
+                        color: getProgressBarColor(course.courseProgress), // Change color based on progress
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(width: 16.0), // Add spacing between status and due date
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Due Date', // Replace with actual due date title
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: const Color.fromARGB(255, 48, 48, 48),
-                  ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 16.0), // Add spacing between status and due date
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Due Date', // Replace with actual due date title
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: const Color.fromARGB(255, 48, 48, 48),
                 ),
-                Text(
-                  course.courseEndDate, // Use course due date dynamically
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              Text(
+                course.courseEndDate, // Use course due date dynamically
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            const SizedBox(width: 16.0),
-            IconButton(
-              icon: const Icon(Icons.download),
-              onPressed: () {
-                // Add functionality for download button
-              },
-            ),
-            const SizedBox(width: 16.0),
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {
-                // Add functionality for more button
-              },
-            ),
-          ],
-        ),
-      
+              ),
+            ],
+          ),
+        ],
+      ),
       const SizedBox(height: 8.0), // Add spacing between status and download/more options
     ],
   );
 }
+
+Color getProgressBarColor(int progress) {
+  if (progress == 0) {
+    return Colors.red; // Color for not started
+  } else if (progress == 100) {
+    return Colors.green; // Color for completed
+  } else {
+    return Colors.orange; // Color for in progress
+  }
+}
+
 
 void showMLPopup(BuildContext context) {
   showDialog(

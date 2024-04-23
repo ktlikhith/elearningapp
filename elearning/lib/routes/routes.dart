@@ -55,13 +55,13 @@ class RouterManger{
       return MaterialPageRoute(
         builder:(context) => DownloadPage()
       ,);
-    case RouterManger.continuescreen:
-      final List<VideoItem>? videoItems = settings.arguments as List<VideoItem>?;
-      return MaterialPageRoute(
-        builder: (context) {
-          return ContinueWatchingScreen(videoItems: videoItems ?? []);
-        }
-      );
+    // case RouterManger.continuescreen:
+    //   final List<VideoItem>? videoItems = settings.arguments as List<VideoItem>?;
+    //   return MaterialPageRoute(
+    //     builder: (context) {
+    //       return ContinueWatchingScreen(videoItems: videoItems ?? []);
+    //     }
+    //   );
 
        case morescreen:
       final token = settings.arguments as String; // Retrieve the token from settings.arguments
