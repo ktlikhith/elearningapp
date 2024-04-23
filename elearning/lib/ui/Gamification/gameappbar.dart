@@ -16,13 +16,16 @@ class GamificationPage extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'My Points',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:15.0),
+              child: Text(
+                'My Points',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24,),
+              ),
             ),
             Text(
               '1000', // Replace with actual points value
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -42,17 +45,17 @@ class GamificationPage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      buildPointsCategory('Login Points', Icons.login ),
-                      buildPointsCategory('Daily Quiz Points', Icons.quiz),
-                      buildPointsCategory('Spin Wheel Points', Icons.casino),
-                      buildPointsCategory('Reward Received', Icons.card_giftcard),
+                      buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical),
+                      buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain),
+                      buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra),
+                      buildPointsCategory('Reward Received', FontAwesomeIcons.gifts),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(0),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 color: Color.fromARGB(255, 232, 231, 231),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -62,23 +65,8 @@ class GamificationPage extends StatelessWidget {
                       child: Column(
                         children: [
                           SpinWheel1(), // Include SpinWheel1 here
-                          Text('Spin the wheel and luck your chance to get points benefit and redeem.'),
-                         NeoPopTiltedButton(
-  isFloating: true,
-  onTapUp: () {},
-  decoration: NeoPopTiltedButtonDecoration(
-    color:Color(0xFFD500F9),
-    plunkColor: Color(0xFFD500F9),
-    shadowColor: Color.fromRGBO(181, 177, 177, 1),
-    showShimmer: true,
-
- 
-  ),
-  child: Padding(
-    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
-    child: Text('SPIN'),
-  ),
-),
+                          
+                        
 
                         ],
                       ),
@@ -171,8 +159,9 @@ Widget buildPointsCategory(String title, IconData icon) {
           offset: Offset(0, 4),
         ),
       ],
+       color: Color.fromARGB(255, 255, 252, 252),
       border: Border.all(
-        color: Color(0xFFD500F9) , // Green border color
+         color: const Color.fromARGB(255, 227, 236, 227), // Green border color
         width: 2.0,
       ),
       // gradient: LinearGradient(
@@ -183,7 +172,7 @@ Widget buildPointsCategory(String title, IconData icon) {
       //     color2, // Example colors used here
       //   ],
       // ),
-      color: Colors.white
+      
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -209,7 +198,7 @@ Widget buildPointsCategory(String title, IconData icon) {
                 ),
               
                 Text(
-                  '500', // Replace with actual point value
+                  '250', // Replace with actual point value
                   style: TextStyle(color: Color.fromARGB(255, 5, 5, 5), fontSize: 18),
                   textAlign: TextAlign.center,
                 ),

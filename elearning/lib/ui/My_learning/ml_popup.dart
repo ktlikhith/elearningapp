@@ -1,22 +1,22 @@
-
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:glass/glass.dart'; // Import the glass package
 
 class MLPopup extends StatelessWidget {
-
   const MLPopup({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(30.0),
       ),
       elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      child: contentBox(context),
+      backgroundColor: Color.fromARGB(60, 252, 249, 249),
+      child: contentBox(context).asGlass(              tintColor: Color.fromARGB(255, 248, 244, 244),
+              clipBorderRadius: BorderRadius.circular(30.0),
+            ),
     );
   }
 
@@ -25,8 +25,8 @@ class MLPopup extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
+        // color: Colors.white,
+        borderRadius: BorderRadius.circular(30.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -42,12 +42,6 @@ class MLPopup extends StatelessWidget {
                 ),
               ),
               
-              IconButton(
-                icon: const Icon(Icons.info,size: 18.0,),
-                onPressed: () {
-                  // Handle information icon tap
-                },
-              ),
             ],
           ),
           const SizedBox(height: 10.0),
@@ -68,9 +62,13 @@ class MLPopup extends StatelessWidget {
           const Text(
             'Course Description',
             style: TextStyle(fontSize: 16.0),
-          ),const Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',style: TextStyle(
-                  fontSize: 13.0,
-                ),),
+          ),
+          const Text(
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+            style: TextStyle(
+              fontSize: 13.0,
+            ),
+          ),
           const SizedBox(height: 20.0),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,27 +111,46 @@ class MLPopup extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-            IconButton(
-      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: const FaIcon(FontAwesomeIcons.save, color: Colors.black,), 
-      onPressed: () { print("Pressed"); }
-     ),
-              IconButton(
-      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-      icon: const FaIcon(FontAwesomeIcons.close, color: Color.fromARGB(255, 249, 2, 2),),
-      onPressed: () { Navigator.pop(context); }, style: ElevatedButton.styleFrom(backgroundColor:const Color.fromARGB(255, 180, 152, 152) ),
-     
-                
-              ),
-              ElevatedButton(
+               ElevatedButton(
                 onPressed: () {
                   // Handle Video Camera button tap
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 180, 152, 152),
+                  backgroundColor:
+                      Color.fromARGB(255, 239, 237, 237),
                 ),
                 child: const Icon(Icons.videocam),
               ),
+              ElevatedButton(
+                onPressed: () {
+                   Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CourseContentPage(),
+    ),
+  );
+                  
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Color.fromARGB(242, 247, 246, 246),
+                ),
+                child: Text('Start Course'),
+              ),
+              IconButton(
+                icon: const FaIcon(
+                  FontAwesomeIcons.close,
+                  color: Color.fromARGB(255, 249, 2, 2),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Color.fromARGB(255, 248, 247, 247),
+                ),
+              ),
+             
             ],
           ),
         ],

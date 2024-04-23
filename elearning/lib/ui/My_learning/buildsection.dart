@@ -16,10 +16,10 @@ Widget buildSection({required IconData icon, required int number, required Strin
             offset: Offset(0, 4),
           ),
         ],
-            color: Color.fromARGB(255, 234, 232, 232),
+            color: Color.fromARGB(255, 253, 251, 251),
             borderRadius: BorderRadius.circular(12.0),
            border: Border.all(
-            color: Color(0xFFFFA000), // Green border color
+              color: const Color.fromARGB(255, 227, 236, 227), // Green border color
             width: 2.0,
           ),
         //      gradient: LinearGradient(
