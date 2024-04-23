@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:elearning/services/auth.dart';
-import 'package:elearning/ui/Profile/achivement.dart';
-import 'package:elearning/ui/Profile/progressbar.dart';
+import 'package:elearning/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glass/glass.dart'; // Import the glass package
@@ -36,28 +34,20 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       final data = await ProfileAPI.fetchProfileData(token);
 
-      // Extract values from data and update state
       setState(() {
-        final userInfoList = json.decode(data['user_info']);
-        if (userInfoList.isNotEmpty) {
-          final userInfo = userInfoList[0];
-          _studentName = userInfo['studentname'];
-          _studentEmail = userInfo['studentemail'];
-          final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(userInfo['studentimage']);
-          if (profilePictureMatch != null) {
-            _profilePictureUrl = profilePictureMatch.group(1)!;
-          }
+        _studentName = data['user_info'][0]['studentname'];
+        _studentEmail = data['user_info'][0]['studentemail'];
+        final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(data['user_info'][0]['studentimage']);
+        if (profilePictureMatch != null) {
+          _profilePictureUrl = profilePictureMatch.group(1)!;
         }
 
-        final achievementsList = json.decode(data['achievements']);
-        if (achievementsList.isNotEmpty) {
-          final achievements = achievementsList[0];
-          _userPoints = achievements['userpoints'];
-          _badgesEarn = achievements['badgesearn'];
-          _userLevel = achievements['userlevel'];
-        }
+        final achievements = data['achievements'][0];
+        _userPoints = achievements['userpoints'];
+        _badgesEarn = achievements['badgesearn'];
+        _userLevel = achievements['userlevel'];
 
-        final courseProgress = json.decode(data['course_progress']);
+        final courseProgress = data['course_progress'];
         _completioned = courseProgress['completioned'];
         _inProgress = courseProgress['inprogress'];
         _totalNotStarted = courseProgress['totalnotstarted'];
@@ -225,6 +215,55 @@ class _ProfilePageState extends State<ProfilePage> {
           // Add more progress bars as needed
         ],
       ),
+    );
+  }
+
+  Widget buildAchievement(String value, String label, IconData icon) {
+    return Column(
+      children: [
+        FaIcon(icon, size: 40),
+        const SizedBox(height: 5),
+        Text(value, style: const TextStyle(fontSize: 18)),
+        const SizedBox(height: 5),
+        Text(label, style: const TextStyle(fontSize: 14)),
+      ],
+    );
+  }
+
+  Widget buildProgressBar(String title, int progress) {
+    String statusText = '';
+    Color statusColor = Colors.black;
+
+    if (progress == 0) {
+      statusText = 'Not Started';
+      statusColor = Colors.red;
+    } else if (progress == 100) {
+      statusText = 'Completed';
+      statusColor = Colors.green;
+    } else {
+      statusText = 'In Progress';
+      statusColor = Colors.blue;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 5),
+        LinearProgressIndicator(
+          value: progress / 100,
+          backgroundColor: Colors.grey[300],
+          valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          statusText,
+          style: TextStyle(color: statusColor),
+        ),
+      ],
     );
   }
 }

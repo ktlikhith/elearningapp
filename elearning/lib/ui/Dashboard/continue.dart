@@ -1,5 +1,5 @@
-import 'package:elearning/routes/routes.dart';
-import 'package:elearning/ui/Dashboard/video_player_popup.dart';
+import 'package:elearning/services/continue_leraning_service.dart';
+import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:flutter/material.dart';
 
 class CustomDashboardWidget extends StatefulWidget {
@@ -12,210 +12,180 @@ class CustomDashboardWidget extends StatefulWidget {
 }
 
 class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
-  List<VideoItem> _videoItems = [];
+  final ContinueService _courseService = ContinueService();
+  List<Course> _courses = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchVideoData(widget.token);
+    _fetchCourses(widget.token);
   }
 
-  Future<void> _fetchVideoData(String token) async {
-    // Simulated API response
-    final jsonData = {
-      "videos": [
-        {
-          "title": "Video 1",
-          "image": "https://via.placeholder.com/150",
-          "last_watched": "2 hours ago",
-          "description": "Description for Video 1",
-          "videourl": "https://www.youtube.com/watch?v=BBAyRBTfsOU",
-        },
-        {
-          "title": "Video 2",
-          "image": "https://via.placeholder.com/150",
-          "last_watched": "1 day ago",
-          "description": "Description for Video 2",
-          "videourl": 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-        },
-         {
-          "title": "Video 3",
-          "image": "https://via.placeholder.com/150",
-          "last_watched": "3 days ago",
-          "description": "Description for Video 3",
-          "videourl": 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-        },
-        {
-          "title": "Video 4",
-          "image": "https://via.placeholder.com/150",
-          "last_watched": "3 days ago",
-          "description": "Description for Video 4",
-          "videourl": 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-        },
-         
-      ]
-    };
-
-    // Process the JSON data
-    final videoList = jsonData['videos'] as List<Map<String, dynamic>>?;
-
-    setState(() {
-      _videoItems = videoList
-          ?.map<VideoItem>((item) => VideoItem(
-                title: item['title'] ?? '',
-                imageUrl: item['image'] ?? '',
-                lastWatched: item['last_watched'] ?? '',
-                description: item['description'] ?? '',
-                videoUrl: item['videourl'] ?? '',
-              ))
-          .toList() ?? [];
-    });
+  Future<void> _fetchCourses(String token) async {
+    try {
+      final List<Course> response = await _courseService.fetchCourses(token);
+      if (mounted) {
+        setState(() {
+          _courses = response;
+        });
+      }
+    } catch (e) {
+      print('Error fetching courses: $e');
+      // Handle error here
+    }
   }
 
-
-Widget _buildSection(BuildContext context, VideoItem video) {
-  final cardWidth = 120.0; // Width of each card
-
-  return Padding(
-    padding: EdgeInsets.only(right: 10.0), // Adjust the spacing as needed
-    child: Container(
-      width: cardWidth,
-      color: Color.fromARGB(255, 15, 15, 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return VideoPlayerPopup(videoUrl: video.videoUrl);
-                },
-              );
-            },
-            child: Container(
-              height: 120,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(video.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.play_circle_fill),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return VideoPlayerPopup(videoUrl: video.videoUrl);
-                      },
-                    );
-                  },
-                  color: Colors.white,
-                  iconSize: 50.0,
-                ),
-              ),
+ 
+ Widget _buildSection(BuildContext context, Course course) {
+  return SizedBox(
+    width: 300, // Set a fixed width for all cards
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
             ),
-          ),
-          Container(
-            height: 50,
-            color: Colors.white, // Adjust as needed
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              // Handle course tap
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(Icons.info),
-                  onPressed: () {
-                    // Add your info icon functionality here
-                  },
+                Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(course.courseImg),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                  ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    // Add your option icon functionality here
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'End Date: ${course.courseEndDate}',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        height: 10,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
+                          widthFactor: course.courseProgress / 100,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     ),
   );
 }
 
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      // Assuming you have some styling for your dashboard container
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Continue Learning',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
+  @override
+   Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Continue Learning',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
               ),
-              GestureDetector(
-                onTap: () {
-    Navigator.of(context).pushNamed(
-      RouterManger.continuescreen,
-      arguments: _videoItems, // Pass _videoItems to the next screen
-    );},
-                child: Row(
-                  children: [
-                    Text(
-                      'See All',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: _videoItems.map((video) {
-                return SizedBox(
-                  width: screenWidth > 3 * 120 ? 120 : screenWidth / 3,
-                  child: _buildSection(context,video),
-                );
-              }).toList(),
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ContinueWatchingScreen(
+                                  token: widget.token,
+                                  courses: _courses,
+                                ),
+                              ),
+                            );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _courses.map((course) {
+              return _buildSection(context, course);
+            }).toList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-}
-
-class VideoItem {
-  final String title;
-  final String imageUrl;
-  final String lastWatched;
-  final String description;
-  final String videoUrl; // Add this property
-
-  VideoItem({
-    required this.title,
-    required this.imageUrl,
-    required this.lastWatched,
-    required this.description,
-    required this.videoUrl, // Add this property to the constructor
-  });
 }
 
