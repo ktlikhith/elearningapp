@@ -17,19 +17,37 @@ class CourseContentPage extends StatelessWidget {
     // Mock data for course breakdown
     List<CourseSection> courseSections = [
       CourseSection(
-        title: ' PDF Files',
+        title: 'PDF Files',
         subSections: [
           CourseSubSection(title: 'Introduction to PDFs'),
           CourseSubSection(title: 'Advanced PDF Techniques'),
           CourseSubSection(title: 'PDF Design Principles'),
+          CourseSubSection(title: 'Dummy PDF 1'), // Add a dummy PDF
+          CourseSubSection(title: 'Dummy PDF 2'), // Add another dummy PDF
         ],
       ),
       CourseSection(
-        title: ' Video Files',
+        title: 'Video Files',
         subSections: [
           CourseSubSection(title: 'Introduction to Videos'),
           CourseSubSection(title: 'Advanced Video Techniques'),
           CourseSubSection(title: 'Video Editing Basics'),
+        ],
+      ),
+      CourseSection(
+        title: 'H5P Content',
+        subSections: [
+          CourseSubSection(title: 'H5P Interactive Quiz'),
+          CourseSubSection(title: 'H5P Drag and Drop'),
+          CourseSubSection(title: 'H5P Presentation'),
+        ],
+      ),
+      CourseSection(
+        title: 'SCORM Content',
+        subSections: [
+          CourseSubSection(title: 'SCORM Introduction'),
+          CourseSubSection(title: 'SCORM Quiz'),
+          CourseSubSection(title: 'SCORM Interactive Module'),
         ],
       ),
     ];
@@ -39,25 +57,24 @@ class CourseContentPage extends StatelessWidget {
       itemBuilder: (context, index) {
         final section = courseSections[index];
         return ExpansionTile(
-  title: Text(
-    section.title,
-    style: TextStyle(
-      fontSize: 20.0, // Change the font size to your desired value
-      fontWeight: FontWeight.bold, // Optional: you can also change the font weight
-    ),
-  ),
-  children: section.subSections
-      .map((subSection) => ListTile(
-            title: Text(subSection.title),
-            onTap: () {
-              // Handle sub-section tap, e.g., navigate to content page
-              // or show content based on sub-section
-              print('Pressed on ${subSection.title}');
-            },
-          ))
-      .toList(),
-);
-
+          title: Text(
+            section.title,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          children: section.subSections
+              .map((subSection) => ListTile(
+                    title: Text(subSection.title),
+                    onTap: () {
+                      // Handle sub-section tap, e.g., navigate to content page
+                      // or show content based on sub-section
+                      print('Pressed on ${subSection.title}');
+                    },
+                  ))
+              .toList(),
+        );
       },
     );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -79,6 +80,14 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.graduationCap),
               title: Text('Learning Path'),
               onTap: () {
+                
+                   Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CourseContentPage(),
+    ),
+  );
+                
                 // Implement social feed functionality here
               },
             ),

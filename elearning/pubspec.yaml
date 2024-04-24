@@ -49,6 +49,7 @@ dependencies:
   path: ^1.9.0
   fl_chart: ^0.67.0
   glass: ^2.0.0+1
+  table_sticky_headers: ^2.0.5
 
   animate_do: ^3.1.2
   kbspinningwheel : ^1.0.3
