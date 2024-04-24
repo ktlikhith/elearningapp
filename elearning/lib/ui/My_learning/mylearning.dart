@@ -39,17 +39,18 @@ class _MyLearningPageState extends State<MyLearningPage> {
         backgroundColor: Theme.of(context).primaryColor,
         title: const Row(
           children: [
+            
             Text(
               'My Learning App',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,color: Colors.white
               ),
             ),
           ],
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search),
+            icon: Icon(_isSearching ? Icons.close : Icons.search,color: Colors.white),
             onPressed: _handleSearchPressed,
           ),
         ],

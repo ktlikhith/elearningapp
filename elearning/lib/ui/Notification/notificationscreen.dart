@@ -70,9 +70,10 @@ Widget build(BuildContext context) {
   try {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: Text('Notifications'),titleTextStyle: TextStyle(color: Color.fromARGB(255, 235, 231, 231),fontWeight: FontWeight.bold,fontSize: 20,),
+         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () {
             Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
           },
