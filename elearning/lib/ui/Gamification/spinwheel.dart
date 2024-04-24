@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
@@ -12,10 +13,12 @@ class SpinWheel1 extends StatefulWidget {
 
 class _SpinWheel1State extends State<SpinWheel1> {
   final StreamController<int> _dividerController = StreamController<int>();
+  final StreamController<double> _wheelNotifier = StreamController<double>();
 
   @override
   void dispose() {
     _dividerController.close();
+    _wheelNotifier.close();
     super.dispose();
   }
 
@@ -30,20 +33,22 @@ class _SpinWheel1State extends State<SpinWheel1> {
             child: Padding(
               padding: const EdgeInsets.all(0.8),
               child: SpinningWheel(
-                image: Image.asset('assets/images/roulette-8-300.png'),
+                image: Image.asset('assets/images/spinimgwebsite.png'),
                 width: 230,
                 height: 230,
                 initialSpinAngle: _generateRandomAngle(),
-                spinResistance: 0.8,
+                spinResistance: 0.6,
+                shouldStartOrStop: _wheelNotifier.stream,
+               
                 canInteractWhileSpinning: false,
-                dividers: 8,
+                dividers: 12,
                 onUpdate: _dividerController.add,
                 onEnd: _dividerController.add,
                 secondaryImage:
                     Image.asset('assets/images/roulette-center-300.png'),
                 secondaryImageHeight: 60,
                 secondaryImageWidth: 110,
-                secondaryImageLeft:46,
+                secondaryImageLeft:45,
                 secondaryImageTop: 68,
                 
               ),
@@ -62,7 +67,9 @@ class _SpinWheel1State extends State<SpinWheel1> {
           ),
            NeoPopTiltedButton(
   isFloating: true,
-  onTapUp: () {},
+  onTapUp: ()=>
+    _wheelNotifier.sink.add(_generateRandomVelocity())
+  ,
   decoration: NeoPopTiltedButtonDecoration(
     color:Color(0xFFD500F9),
     plunkColor: Color(0xFFD500F9),
@@ -82,7 +89,7 @@ class _SpinWheel1State extends State<SpinWheel1> {
       ),
     );
   }
-
+  double _generateRandomVelocity()=> ( Random().nextDouble() * 6000) + 2000;
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;
 }
 
@@ -94,14 +101,19 @@ class RouletteScore extends StatelessWidget {
   const RouletteScore(this.selected);
 
   final Map<int, String> labels = const {
-    1: '1000\$',
-    2: '400\$',
-    3: '800\$',
-    4: '7000\$',
-    5: '5000\$',
-    6: '300\$',
-    7: '2000\$',
-    8: '100\$',
+    1: '17',
+    2: '00',
+    3: '21',
+    4: '30',
+    5: '50',
+    6: '00',
+    7: '5',
+    8: '7',
+    9: '5',
+    10: '9',
+    11: '13',
+    12: '5',
+
   };
 
   @override
