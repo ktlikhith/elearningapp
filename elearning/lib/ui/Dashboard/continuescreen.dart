@@ -1,80 +1,90 @@
-import 'package:elearning/ui/Dashboard/continue.dart';
-import 'package:elearning/ui/Dashboard/video_player_popup.dart';
+import 'package:elearning/services/continue_leraning_service.dart';
 import 'package:flutter/material.dart';
 
 class ContinueWatchingScreen extends StatelessWidget {
-  final List<VideoItem> videoItems;
+  final String token;
+  final List<Course> courses;
 
-  ContinueWatchingScreen({required this.videoItems});
+  const ContinueWatchingScreen({Key? key, required this.token, required this.courses})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Continue Learning'),
-         backgroundColor: Theme.of(context).primaryColor,
+        title: Text('Continue Watching'),
       ),
       body: ListView.builder(
-        itemCount: videoItems.length,
+        itemCount: courses.length,
         itemBuilder: (context, index) {
-          final VideoItem videoItem = videoItems[index];
-          return GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return VideoPlayerPopup(videoUrl: videoItem.videoUrl);
-                },
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 150,
-                    height: 150,
-                    child: Image.network(
-                      videoItem.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+          final Course course = courses[index];
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              side: BorderSide(color: Colors.grey[400]!),
+            ),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(8.0),
+              leading: Container(
+                width: 60.0,
+                height: 60.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    image: NetworkImage(course.courseImg),
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(width: 8.0),
+                ),
+              ),
+              title: Row(
+                children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          videoItem.title,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          videoItem.description,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          'Last watched: ${videoItem.lastWatched}',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        Text(course.name),
+                        Text('Start Date: ${course.courseStartDate}'),
+                        Text('End Date: ${course.courseEndDate}'),
                       ],
+                    ),
+                  ),
+                  Text(
+                    _getStatusText(course.courseProgress),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: _getStatusColor(course.courseProgress),
                     ),
                   ),
                 ],
               ),
+              onTap: () {
+                // Navigate to course details screen
+              },
             ),
           );
         },
       ),
     );
+  }
+
+  String _getStatusText(int progress) {
+    if (progress == 0) {
+      return 'Not Started';
+    } else if (progress == 100) {
+      return 'Completed';
+    } else {
+      return 'In Progress';
+    }
+  }
+
+  Color _getStatusColor(int progress) {
+    if (progress == 0) {
+      return Colors.red;
+    } else if (progress == 100) {
+      return Colors.green;
+    } else {
+      return Colors.orange;
+    }
   }
 }

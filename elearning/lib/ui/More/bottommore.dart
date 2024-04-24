@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/services/auth.dart';
-import 'package:elearning/ui/My_learning/startcourse_content.dart';
+
+import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Learning_path/learningpath.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -17,7 +19,7 @@ class MyMorePage extends StatefulWidget {
 
  
 class _MyMorePageState extends State<MyMorePage> {
-  late String _profilePictureUrl = '';
+   late String _profilePictureUrl = '';
 
    @override
   void initState() {
@@ -28,24 +30,17 @@ class _MyMorePageState extends State<MyMorePage> {
   Future<void> _fetchProfileData(String token) async {
     try {
       final data = await ProfileAPI.fetchProfileData(token);
-
-      // Extract values from data and update state
       setState(() {
-        final userInfoList = json.decode(data['user_info']);
-        if (userInfoList.isNotEmpty) {
-          final userInfo = userInfoList[0];
-          final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(userInfo['studentimage']);
-          if (profilePictureMatch != null) {
-            _profilePictureUrl = profilePictureMatch.group(1)!;
-          }
+        final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(data['user_info'][0]['studentimage']);
+        if (profilePictureMatch != null) {
+          _profilePictureUrl = profilePictureMatch.group(1)!;
         }
-
-        
       });
     } catch (e) {
       print('Error fetching profile data: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +75,17 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.graduationCap),
               title: Text('Learning Path'),
               onTap: () {
-                
-                   Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => CourseContentPage(),
-    ),
-  );
-                
-                // Implement social feed functionality here
+
+                  Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearningPathPage(
+                                  token: widget.token,
+                                  
+                                ),
+                              ),
+                            );
+
               },
             ),
             

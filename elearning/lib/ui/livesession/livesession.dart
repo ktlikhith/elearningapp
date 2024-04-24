@@ -1,4 +1,5 @@
 import 'package:elearning/services/live_event.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 
 class LiveSessionPage extends StatefulWidget {
@@ -107,6 +108,7 @@ Future<void> _fetchLiveEventData() async {
           }
         },
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2, token: widget.token),
     );
   }
 }
