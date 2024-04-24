@@ -51,7 +51,7 @@ class _MyMorePageState extends State<MyMorePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('More Page'),
+          title: Text('More Page'),titleTextStyle: TextStyle(color: Color.fromARGB(255, 235, 231, 231),fontWeight: FontWeight.bold,fontSize: 20,),
           backgroundColor: Theme.of(context).primaryColor,
           actions: <Widget>[
             Padding(

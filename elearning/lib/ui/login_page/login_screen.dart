@@ -43,7 +43,7 @@ class GlassContainer extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Color.fromARGB(255, 53, 52, 52).withOpacity(0.3),
             borderRadius: borderRadius,
             // border: Border.all(
             //   color: Colors.black, // Border color
@@ -105,7 +105,7 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
         // Background Image
         Positioned.fill(
           child: Image.asset(
-            'assets/images/lgbg0.1.png',
+            'assets/images/plain-white-background-2.jpg',
             fit: BoxFit.cover,
           ),
         ),
@@ -240,7 +240,7 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Color.fromARGB(255, 8, 25, 208).withOpacity(0.3),
                                     spreadRadius: 2,
                                     blurRadius: 4,
                                     offset: Offset(0, 2),

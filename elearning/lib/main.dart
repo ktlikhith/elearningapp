@@ -73,7 +73,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 212, 238, 250),
+          primaryColor: Color.fromARGB(255, 10, 10, 10),
+          secondaryHeaderColor: Colors.orange,
           backgroundColor: Colors.white, // Set the background color for all pages
           textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,

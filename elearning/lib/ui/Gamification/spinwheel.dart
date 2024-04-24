@@ -37,8 +37,9 @@ class _SpinWheel1State extends State<SpinWheel1> {
                 width: 230,
                 height: 230,
                 initialSpinAngle: _generateRandomAngle(),
-                spinResistance: 0.6,
+                spinResistance: 0.3,
                 shouldStartOrStop: _wheelNotifier.stream,
+                
                
                 canInteractWhileSpinning: false,
                 dividers: 12,
@@ -71,8 +72,8 @@ class _SpinWheel1State extends State<SpinWheel1> {
     _wheelNotifier.sink.add(_generateRandomVelocity())
   ,
   decoration: NeoPopTiltedButtonDecoration(
-    color:Color(0xFFD500F9),
-    plunkColor: Color(0xFFD500F9),
+    color:Colors.orange,
+    plunkColor: Colors.orange,
     shadowColor: Color.fromRGBO(181, 177, 177, 1),
     showShimmer: true,
 

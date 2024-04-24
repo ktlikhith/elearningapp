@@ -42,7 +42,7 @@ Widget buildSection({required IconData icon, required int number, required Strin
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CircleAvatar(
-                backgroundColor: const Color.fromARGB(255, 216, 226, 234),
+                backgroundColor: Colors.orange,
     
               child: Icon(icon, size: 20.0),
               ),

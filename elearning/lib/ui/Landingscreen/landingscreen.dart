@@ -2,25 +2,6 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
 import 'package:flutter/material.dart';
 
-
-// class LandingScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Corporate eLearning App',
-//       theme: ThemeData(
-//         primaryColor: Color(0xFF007bff), // Accent Color: Yellow
-//         scaffoldBackgroundColor: Color(0xFFF8F9FA), // Background Color: Light Gray
-//         textTheme: TextTheme(
-//           headline1: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
-//           bodyText1: TextStyle(fontSize: 16, fontFamily: 'Roboto'),
-//         ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xFFFFC107)),
-//       ),
-//       home: LandingPage(),
-//     );
-//   }
-// }
-
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -32,17 +13,17 @@ class _LandingPageState extends State<LandingPage> {
 
   List<Map<String, String>> pagesData = [
     {
-      'gif': 'assets/gif/Animation - 1713382291232.gif',
+      'gif': 'assets/gif/landing6.gif',
       'title': 'Discover New Skills',
       'subtitle': 'Explore a wide range of courses tailored for your professional growth.',
     },
     {
-      'gif': 'assets/gif/Animation - 1713381464815.gif',
+      'gif': 'assets/gif/loginbg7.gif',
       'title': 'Interactive Learning',
       'subtitle': 'Engage with interactive lessons and quizzes for effective learning.',
     },
     {
-      'gif': 'assets/gif/Animation - 1713381378792.gif',
+      'gif': 'assets/gif/landing5.gif',
       'title': 'Join Now!',
       'subtitle': 'Sign in to unlock the full potential of our eLearning platform.',
     },
@@ -51,7 +32,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set your branding background color here
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           PageView.builder(
@@ -63,11 +44,14 @@ class _LandingPageState extends State<LandingPage> {
               });
             },
             itemBuilder: (context, index) {
-              return _buildPage(
-                pagesData[index]['gif']!,
-                pagesData[index]['title']!,
-                pagesData[index]['subtitle']!,
-                isLastPage: index == pagesData.length - 1,
+              return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: _buildPage(
+                  pagesData[index]['gif']!,
+                  pagesData[index]['title']!,
+                  pagesData[index]['subtitle']!,
+                  isLastPage: index == pagesData.length - 1,
+                ),
               );
             },
           ),
@@ -83,13 +67,17 @@ class _LandingPageState extends State<LandingPage> {
                         curve: Curves.ease,
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 3,
+                    ),
                     child: Text('Skip'),
                   )
                 : SizedBox(),
           ),
           Positioned(
             bottom: 20,
-            left: 20,
+            left: 0,
+            right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -98,21 +86,25 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: _currentPage == pagesData.length - 1
-                ? ElevatedButton(
-  onPressed: () {
- Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
-  },
-  child: Text('Login'),
-)
-                : SizedBox(),
-          ),
+          if (_currentPage == pagesData.length - 1)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  backgroundColor: Color.fromARGB(255, 176, 176, 177),
+                  elevation: 6,
+                ),
+                child: Text('Login'),
+              ),
+            ),
         ],
       ),
     );
@@ -125,8 +117,8 @@ class _LandingPageState extends State<LandingPage> {
       children: [
         Image.asset(
           gifPath,
-          fit: BoxFit.fitWidth, // Ensure the image fits the width of the screen
-          width: MediaQuery.of(context).size.width, // Set the width to the screen width
+          fit: BoxFit.fitWidth,
+          width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.6,
         ),
         SizedBox(height: 20),
@@ -145,7 +137,7 @@ class _LandingPageState extends State<LandingPage> {
             color: const Color.fromARGB(255, 8, 8, 8),
           ),
         ),
-        if (isLastPage) SizedBox(height: 100), // Add some space for the login button
+        if (isLastPage) SizedBox(height: 100),
       ],
     );
   }
@@ -154,6 +146,7 @@ class _LandingPageState extends State<LandingPage> {
     return Container(
       width: 10,
       height: 10,
+      margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _currentPage == index ? Colors.blue : Colors.grey,

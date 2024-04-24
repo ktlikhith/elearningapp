@@ -35,7 +35,7 @@ Future<void> _fetchLiveEventData() async {
           'Live Session',
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.bold,color: Colors.white,
           ),
         ),
       ),

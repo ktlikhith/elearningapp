@@ -35,6 +35,7 @@ class LearningPathPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Learning Path'),
       ),
       body: SingleChildScrollView(

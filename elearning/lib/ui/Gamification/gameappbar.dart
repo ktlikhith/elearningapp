@@ -1,5 +1,6 @@
 
 import 'package:elearning/ui/Gamification/spinwheel.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -166,20 +167,21 @@ class GamificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 65,
         backgroundColor: Theme.of(context).primaryColor,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              padding: const EdgeInsets.symmetric(horizontal: 95.0,vertical: 3),
               child: Text(
                 'My Points',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24,color: Colors.white),
               ),
             ),
             Text(
               '1000', // Replace with actual points value
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),
             ),
           ],
         ),
@@ -227,7 +229,7 @@ class GamificationPage extends StatelessWidget {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.yellow,
+                            backgroundColor: Colors.orange,
                             radius: 30,
                             child: FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.white),
                           ),
@@ -288,7 +290,7 @@ class GamificationPage extends StatelessWidget {
           ),
         ),
       ),
-      // bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 3),
+      // bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 3, token: '',),
     );
   }
 }
