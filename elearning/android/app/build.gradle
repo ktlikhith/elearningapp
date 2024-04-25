@@ -31,6 +31,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+buildscript {
+    ext.kotlin_version = '1.6.0' // Update to the desired Kotlin version
+    
+}
 
     kotlinOptions {
         jvmTarget = '1.8'
@@ -64,4 +68,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+}

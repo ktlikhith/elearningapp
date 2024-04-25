@@ -1,3 +1,17 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+       classpath 'com.android.tools.build:gradle:4.1.0' // or the latest version
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0' // Kotlin version
+        classpath 'com.google.gms:google-services:4.3.10' // Google Services plugin
+        classpath 'dev.flutter:flutter-gradle-plugin:0.6.3' // Flutter Gradle plugin // Check the latest version of the Flutter Gradle plugin
+    }
+}
+
 allprojects {
     repositories {
         google()
