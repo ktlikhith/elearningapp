@@ -99,10 +99,10 @@ class _LandingPageState extends State<LandingPage> {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: Color.fromARGB(255, 176, 176, 177),
+                  backgroundColor: Color.fromARGB(255, 242, 242, 243),
                   elevation: 6,
                 ),
-                child: Text('Login'),
+                child: Text('Login',style: TextStyle(color:  Colors.orange),),
               ),
             ),
         ],

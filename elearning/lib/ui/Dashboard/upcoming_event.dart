@@ -48,11 +48,14 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Upcoming Events',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Upcoming Events',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(height: 15.0),

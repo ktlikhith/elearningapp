@@ -43,7 +43,7 @@ class GlassContainer extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
         child: Container(
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 53, 52, 52).withOpacity(0.3),
+            color: Color.fromARGB(255, 161, 191, 199).withOpacity(0.3),
             borderRadius: borderRadius,
             // border: Border.all(
             //   color: Colors.black, // Border color
@@ -103,14 +103,14 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
     return Stack(
       children: [
         // Background Image
-        Positioned.fill(
-          child: Image.asset(
-            'assets/images/plain-white-background-2.jpg',
-            fit: BoxFit.cover,
-          ),
-        ),
+        // Positioned.fill(
+        //   child: Image.asset(
+        //     'assets/images/plain-white-background-2.jpg',
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         Scaffold(
-          backgroundColor: Color.fromARGB(0, 246, 244, 244), // Make scaffold background transparent
+          backgroundColor: Color.fromRGBO(255, 255, 255, 1), // Make scaffold background transparent
           resizeToAvoidBottomInset: true,
           body: SingleChildScrollView(
             child: Center(

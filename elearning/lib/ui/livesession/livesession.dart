@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,12 @@ Future<void> _fetchLiveEventData() async {
             fontSize: 24,
             fontWeight: FontWeight.bold,color: Colors.white,
           ),
+        ),
+           leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+          },
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,

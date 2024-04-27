@@ -86,15 +86,21 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      controller: _scrollController,
-      child: Row(
-        children: [
-          buildSection("Past Due", '$_past', Colors.red.shade400),
-          buildSection("Due Soon", '$_soon', Colors.yellow.shade200),
-          buildSection("Due Later", '$_later', Colors.grey),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all( 0.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollController,
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Row(
+            children: [
+              buildSection("Past Due", '$_past', Colors.red.shade400),
+              buildSection("Due Soon", '$_soon', Colors.yellow.shade200),
+              buildSection("Due Later", '$_later', Colors.grey),
+            ],
+          ),
+        ),
       ),
     );
   }

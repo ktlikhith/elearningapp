@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
@@ -46,7 +47,14 @@ class _MyLearningPageState extends State<MyLearningPage> {
                 fontWeight: FontWeight.bold,color: Colors.white
               ),
             ),
+            
           ],
+        ),
+           leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+          },
         ),
         actions: <Widget>[
           IconButton(

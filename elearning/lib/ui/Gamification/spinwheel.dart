@@ -29,7 +29,7 @@ class _SpinWheel1State extends State<SpinWheel1> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(0),
+            padding: const EdgeInsets.all(8),
             child: Padding(
               padding: const EdgeInsets.all(0.8),
               child: SpinningWheel(
@@ -49,8 +49,8 @@ class _SpinWheel1State extends State<SpinWheel1> {
                     Image.asset('assets/images/roulette-center-300.png'),
                 secondaryImageHeight: 60,
                 secondaryImageWidth: 110,
-                secondaryImageLeft:45,
-                secondaryImageTop: 68,
+                secondaryImageLeft:42,
+                secondaryImageTop: 45,
                 
               ),
             ),
