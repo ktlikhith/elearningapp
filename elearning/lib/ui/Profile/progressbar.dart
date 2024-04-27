@@ -22,7 +22,7 @@ Widget buildProgressBar(String title, int percentage) {
                 linearStrokeCap: LinearStrokeCap.roundAll,
                 percent: percentage / 100,
                 backgroundColor: Color.fromARGB(255, 200, 244, 241),
-                progressColor: const Color.fromARGB(243, 255, 86, 34),
+                progressColor:  Colors.orange,
                 center: Text("$percentage%",),
               ),
           

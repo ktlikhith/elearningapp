@@ -27,7 +27,7 @@ class GamificationPage extends StatelessWidget {
     return Container(
       height: 120,
       width: 120,
-      margin: EdgeInsets.symmetric(horizontal: 8),
+      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 2),
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -173,7 +173,7 @@ class GamificationPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 95.0,vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 82.0,vertical: 1.5),
               child: Text(
                 'My Points',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24,color: Colors.white),
@@ -185,14 +185,15 @@ class GamificationPage extends StatelessWidget {
             ),
           ],
         ),
+        
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 40, width: 50),
+              
 
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

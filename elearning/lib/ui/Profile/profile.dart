@@ -193,8 +193,8 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              buildAchievement(_userPoints, 'Points', FontAwesomeIcons.th),
-              buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.certificate),
+              buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar),
+              buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved),
               buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
             ],
           ),
@@ -222,11 +222,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildAchievement(String value, String label, IconData icon) {
     return Column(
       children: [
-        FaIcon(icon, size: 40),
+        FaIcon(icon, size: 30),
         const SizedBox(height: 5),
-        Text(value, style: const TextStyle(fontSize: 18)),
+        Text(value, style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.orange)),
         const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 14)),
+        Text(label, style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
       ],
     );
   }

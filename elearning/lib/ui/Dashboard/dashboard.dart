@@ -120,112 +120,126 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
-        leading: Padding(
-         padding: EdgeInsets.all(8.0),
-          child: _tenantLogoBytes != null
-              ? SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Image.memory(
-                    _tenantLogoBytes!,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : SizedBox.shrink(), // Render an empty SizedBox if logo data is not available
-        ),
-        
-       actions: <Widget>[
-          Stack(
-  children: [
-    IconButton(
-      icon: FaIcon(FontAwesomeIcons.bell),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationScreen(token: widget.token),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0.0),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 0,
+          leading: Padding(
+           padding: EdgeInsets.all(8.0),
+            child: _tenantLogoBytes != null
+                ? SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Image.memory(
+                      _tenantLogoBytes!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : SizedBox.shrink(), // Render an empty SizedBox if logo data is not available
           ),
-        );
-      },
-    ),
-    Positioned(
-      right: 0,
-      top: 0,
-      child: Container(
-        padding: EdgeInsets.all(4), // Adjust padding as needed
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.red, // Customize badge background color here
-        ),
-        child: Text(
-          '$_notificationCount',
-          style: TextStyle(
-            color: Colors.white, // Customize text color here
-            fontSize: 12, // Adjust font size as needed
-          ),
-        ),
-      ),
-    ),
-  ],
-),
-
-               
           
-        
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.myprofile,arguments:widget.token);
-              },
-              child: CircleAvatar(
-                radius: 20,
-                backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
-              ),
+         actions: <Widget>[
+            Stack(
+        children: [
+      IconButton(
+        icon: FaIcon(FontAwesomeIcons.bell),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NotificationScreen(token: widget.token),
+            ),
+          );
+        },
+      ),
+      Positioned(
+        right: 0,
+        top: 0,
+        child: Container(
+          padding: EdgeInsets.all(4), // Adjust padding as needed
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red, // Customize badge background color here
+          ),
+          child: Text(
+            '$_notificationCount',
+            style: TextStyle(
+              color: Colors.white, // Customize text color here
+              fontSize: 12, // Adjust font size as needed
             ),
           ),
-        ],
-      ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Welcome, $_userName!',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Explore your courses and start learning.',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                ),
-              ),
-              const SizedBox(height: 25.0),
-             
-              AutoScrollableSections(token: widget.token),
-              const SizedBox(height: 15.0),
-              UpcomingEventsSection(token: widget.token),
-              const SizedBox(height: 15.0),
-              CustomDashboardWidget(token: widget.token),
-            ],
-          ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0,token: widget.token),
+        ],
+      ),
+      
+                 
+            
+          
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(RouterManger.myprofile,arguments:widget.token);
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: SingleChildScrollView(
+          controller: _scrollController,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+                  child: Text(
+                    'Welcome, $_userName!',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 0),
+                  child: Text(
+                    'Explore your courses and start learning.',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25.0),
+               
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: AutoScrollableSections(token: widget.token),
+                ),
+                const SizedBox(height: 15.0),
+                
+                 UpcomingEventsSection(token: widget.token),
+                
+                const SizedBox(height: 15.0),
+                CustomDashboardWidget(token: widget.token),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0,token: widget.token),
+      ),
     );
   }
 }
