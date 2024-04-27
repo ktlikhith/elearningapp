@@ -8,7 +8,7 @@
     <application
         android:label="E-learning Demo"
         android:name="${applicationName}"
-        android:icon="@mipmap/eapplogo">
+        android:icon="@drawable/eapplogo">
         <activity
             android:name=".MainActivity"
             android:exported="true"
