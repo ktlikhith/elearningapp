@@ -29,7 +29,12 @@ Future<void> _fetchLiveEventData() async {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
+        return true;
+      },
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
@@ -116,6 +121,7 @@ Future<void> _fetchLiveEventData() async {
         },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2, token: widget.token),
+      ),
     );
   }
 }

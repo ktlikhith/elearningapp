@@ -75,9 +75,10 @@ class RouterManger{
       ,);
 
       case Gamification:
-      return MaterialPageRoute(
-        builder:(context) => GamificationPage()
-      ,);
+      final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => GamificationPage(token: token ),
+      );
       default:
       throw const FormatException("Page Not found!!!");
     }

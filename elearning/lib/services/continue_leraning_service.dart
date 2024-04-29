@@ -2,19 +2,26 @@ import 'dart:convert';
 import 'package:elearning/services/auth.dart';
 import 'package:http/http.dart' as http;
 
-
 class ContinueService {
-   Future<List<Course>> fetchCourses(String token) async {
-   
+  Future<List<Course>> fetchCourses(String token) async {
+    try {
       final userInfo = await SiteConfigApiService.getUserId(token);
       final userId = userInfo['id'];
-      final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
-          'moodlewsrestformat=json&wstoken=$token&'
-          'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
-     try {
-      final response = await http.get(apiUrl);
+      final apiUrl = Uri.parse(
+        '${Constants.baseUrl}/webservice/rest/server.php?'
+        'moodlewsrestformat=json&wstoken=$token&'
+        'wsfunction=local_corporate_api_create_coursesapi&userid=$userId',
+      );
+      final response = await http.get(
+        apiUrl,
+        headers: {
+          // Add your authentication token here
+          'Authorization': 'Bearer $token',
+        },
+      );
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        //print(responseData);
         final List<dynamic> coursesData = responseData['allcourses'];
         return coursesData.map((courseData) => Course.fromJson(courseData)).toList();
       } else {
