@@ -59,5 +59,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthFailure(message: 'Authentication failed')); // Emit failure state with error message
       print('Authentication failed: $error'); // Print error message to the terminal
     }
+    // This function clears the user session or token
+
+
   }
+
+
+ 
+
+
 }

@@ -40,6 +40,7 @@ class _MyMorePageState extends State<MyMorePage> {
       print('Error fetching profile data: $e');
     }
   }
+  
 
 
   @override
@@ -107,7 +108,9 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.rightFromBracket),
               title: Text('Logout'),
               onTap: () {
-                // Implement logout functionality here
+                
+                  Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+               
               },
             ),
             // Add more ListTile for additional options
@@ -116,4 +119,7 @@ class _MyMorePageState extends State<MyMorePage> {
       ),
     );
   }
+
+
+  
 }

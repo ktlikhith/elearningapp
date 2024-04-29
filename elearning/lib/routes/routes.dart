@@ -2,6 +2,7 @@ import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
+import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
@@ -17,12 +18,12 @@ class RouterManger{
   static const String mylearning = '/mylearning';
   static const String livesession = '/livesession';
   static const String myprofile = '/profile';
-  static const String Askexpert = '/questionandanswer';
   static const String downloads = '/download';
   static const String continuescreen = '/continuescreen';
   static const String morescreen = '/bottommore';
   static const String Gamification = '/gameappbar';
   static const String Report = '/reports_chart';
+  static const String landingpage = '/landingscreen';
 
 
 
@@ -55,13 +56,7 @@ class RouterManger{
       return MaterialPageRoute(
         builder:(context) => DownloadPage()
       ,);
-    // case RouterManger.continuescreen:
-    //   final List<VideoItem>? videoItems = settings.arguments as List<VideoItem>?;
-    //   return MaterialPageRoute(
-    //     builder: (context) {
-    //       return ContinueWatchingScreen(videoItems: videoItems ?? []);
-    //     }
-    //   );
+    
 
        case morescreen:
       final token = settings.arguments as String; // Retrieve the token from settings.arguments
@@ -79,6 +74,12 @@ class RouterManger{
             return MaterialPageRoute(
             builder: (context) => GamificationPage(token: token ),
       );
+
+      case landingpage:
+      return MaterialPageRoute(
+        builder:(context) => LandingPage()
+      ,);
+
       default:
       throw const FormatException("Page Not found!!!");
     }

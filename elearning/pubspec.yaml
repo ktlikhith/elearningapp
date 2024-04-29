@@ -44,7 +44,7 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_img: ^0.1.6+148
   scratcher: ^2.5.0
-
+  shared_preferences: ^2.2.3
   percent_indicator: ^4.2.3
   image_picker: ^1.0.8
   http_parser: ^4.0.2
