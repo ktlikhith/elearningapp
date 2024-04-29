@@ -35,7 +35,12 @@ class _MyLearningPageState extends State<MyLearningPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
+        return true;
+      },
+      child:  Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: const Row(
@@ -82,6 +87,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
         child: MyLearningAppBody(token: widget.token), // Pass the token to MyLearningAppBody
       ),
       bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1,token: widget.token,),
+    ),
     );
   }
 }

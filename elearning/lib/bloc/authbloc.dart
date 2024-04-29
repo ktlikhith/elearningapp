@@ -51,6 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final result = await authRepository.login(event.username, event.password);
       final token = result['token']; // Assuming login returns token
+      //print(token);
       emit(AuthAuthenticated(token));// Emit authenticated state on successful login
      
       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);

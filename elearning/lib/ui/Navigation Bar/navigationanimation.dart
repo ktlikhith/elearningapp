@@ -97,7 +97,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
        Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
         break;
       case 3:
-        Navigator.of(context).pushNamed(RouterManger.Gamification);
+        Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
         break;
       case 4:
        Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
