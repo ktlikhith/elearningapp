@@ -1,10 +1,12 @@
+import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/Gamification/reward_section.dart';
 import 'package:elearning/ui/Gamification/leaderboard.dart';
 import 'package:elearning/ui/Gamification/scratchscreen.dart';
 import 'package:elearning/ui/Gamification/spinwheel.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GamificationPage extends StatefulWidget {
   final String token;
@@ -16,62 +18,12 @@ class GamificationPage extends StatefulWidget {
 }
 
 class _GamificationPageState extends State<GamificationPage> {
-  Widget buildPointsCategory(String title, IconData icon) {
-    return Container(
-      height: 120,
-      width: 120,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-        color: Color.fromARGB(255, 255, 252, 252),
-        border: Border.all(
-          color: const Color.fromARGB(255, 227, 236, 227), // Green border color
-          width: 2.0,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 25, color: Color.fromARGB(255, 10, 10, 10)),
-          SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(color: Color.fromARGB(255, 9, 9, 9), fontSize: 15),
-                    textAlign: TextAlign.center,
-                    maxLines: 2, // Limiting to 2 lines to prevent overflow
-                    overflow: TextOverflow.ellipsis, // Ellipsis for overflow
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0),
-                    child: SizedBox(height: 4),
-                  ),
-                  Text(
-                    '250', // Replace with actual point value
-                    style: TextStyle(color: Color.fromARGB(255, 5, 5, 5), fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  late Future<Map<String, dynamic>> _rewardDataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _rewardDataFuture = Rewardservice().getUserRewardPoints(widget.token);
   }
 
   @override
@@ -85,21 +37,31 @@ class _GamificationPageState extends State<GamificationPage> {
         appBar: AppBar(
           toolbarHeight: 65,
           backgroundColor: Theme.of(context).primaryColor,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 82.0, vertical: 1.5),
-                child: Text(
-                  'My Points',
-                 
-                ),
-              ),
-              Text(
-                '1000', // Replace with actual points value
-                
-              ),
-            ],
+          title: FutureBuilder<Map<String, dynamic>>(
+            future: _rewardDataFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error loading points');
+              } else {
+                final totalPoints = snapshot.data!['total_points'];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 82.0, vertical: 1.5),
+                      child: Text(
+                        'My Points',
+                      ),
+                    ),
+                    Text(
+                      totalPoints?.toString() ?? '0',
+                    ),
+                  ],
+                );
+              }
+            },
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -114,20 +76,8 @@ class _GamificationPageState extends State<GamificationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical),
-                        buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain),
-                        buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra),
-                        buildPointsCategory('Reward Received', FontAwesomeIcons.gifts),
-                      ],
-                    ),
-                  ),
-                ),
+                RewrdSection(token: widget.token),
+
                 SizedBox(height: 20),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),

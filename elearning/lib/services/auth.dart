@@ -40,6 +40,7 @@ class SiteConfigApiService {
       return {
         'id': responseData['userid'],
         'fullname': responseData['fullname'],
+        'username': responseData['username'],
         'firstname': responseData['firstname'],
         'userpictureurl': responseData['userpictureurl'],
         'siteurl': responseData['siteurl'],
