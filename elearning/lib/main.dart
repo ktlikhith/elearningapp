@@ -78,8 +78,16 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white, // Set the background color for all pages
           textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
-
         ),
+        appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle( // Set the style for app bar title text
+              color: Colors.white, // Set your desired color here
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        
+         
         ),
         home: LandingPage(),
          onGenerateRoute: RouterManger.generateRoute,

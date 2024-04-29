@@ -125,7 +125,11 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
+           title: const Text(
+          'Dashboard',
+        ),
           backgroundColor: Theme.of(context).primaryColor,
+         
           elevation: 0,
           leading: Padding(
            padding: EdgeInsets.all(8.0),
@@ -141,11 +145,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 : SizedBox.shrink(), // Render an empty SizedBox if logo data is not available
           ),
           
+          
          actions: <Widget>[
             Stack(
         children: [
       IconButton(
-        icon: FaIcon(FontAwesomeIcons.bell),
+        icon: FaIcon(FontAwesomeIcons.bell,color: Colors.white,),
         onPressed: () {
           Navigator.push(
             context,
@@ -202,7 +207,7 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                   child: Text(
                     'Welcome, $_userName!',
                     style: TextStyle(

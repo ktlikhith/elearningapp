@@ -131,35 +131,39 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
 
 
   @override
-   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Continue Learning',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
+Widget build(BuildContext context) {
+  return Visibility(
+  visible: _courses.isNotEmpty,
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Continue Learning',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ContinueWatchingScreen(
-                                  token: widget.token,
-                                  courses: _courses,
-                                ),
-                              ),
-                            );
-              },
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContinueWatchingScreen(
+                    token: widget.token,
+                    courses: _courses,
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0), // Add left padding here
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
@@ -176,19 +180,20 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                 ),
               ),
             ),
-          ],
-        ),
-        SizedBox(height: 16),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _courses.map((course) {
-              return _buildSection(context, course);
-            }).toList(),
           ),
+        ],
+      ),
+      SizedBox(height: 16),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: _courses.map((course) {
+            return _buildSection(context, course);
+          }).toList(),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  ),
+);
 }
-
+}

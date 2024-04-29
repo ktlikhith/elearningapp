@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,14 @@ class LearningPathPage extends StatelessWidget {
       appBar: AppBar(
          backgroundColor: Theme.of(context).primaryColor,
         title: Text('Learning Path'),
+         leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.morescreen,arguments: token);
+          },
+        ),
       ),
+      
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(

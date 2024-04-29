@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/continue_leraning_service.dart';
 import 'package:flutter/material.dart';
 
@@ -13,58 +14,70 @@ class ContinueWatchingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Continue Watching'),
+         backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: token);
+          },
+        ),
       ),
+      
+       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-        itemCount: courses.length,
-        itemBuilder: (context, index) {
-          final Course course = courses[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            shape: RoundedRectangleBorder(
+  itemCount: courses.length,
+  itemBuilder: (context, index) {
+    final Course course = courses[index];
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(color: Colors.grey[400]!),
+      ),
+      child: Container( // Add a Container here
+        color: Colors.white, // Set the background color to white
+        child: ListTile(
+          contentPadding: EdgeInsets.all(8.0),
+          leading: Container(
+            width: 60.0,
+            height: 60.0,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
-              side: BorderSide(color: Colors.grey[400]!),
+              image: DecorationImage(
+                image: NetworkImage(course.courseImg),
+                fit: BoxFit.cover,
+              ),
             ),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(8.0),
-              leading: Container(
-                width: 60.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(course.courseImg),
-                    fit: BoxFit.cover,
-                  ),
+          ),
+          title: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(course.name),
+                    Text('Start Date: ${course.courseStartDate}'),
+                    Text('End Date: ${course.courseEndDate}'),
+                  ],
                 ),
               ),
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(course.name),
-                        Text('Start Date: ${course.courseStartDate}'),
-                        Text('End Date: ${course.courseEndDate}'),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    _getStatusText(course.courseProgress),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: _getStatusColor(course.courseProgress),
-                    ),
-                  ),
-                ],
+              Text(
+                _getStatusText(course.courseProgress),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: _getStatusColor(course.courseProgress),
+                ),
               ),
-              onTap: () {
-                // Navigate to course details screen
-              },
-            ),
-          );
-        },
+            ],
+          ),
+          onTap: () {
+            // Navigate to course details screen
+          },
+        ),
       ),
+    );
+  },
+),
     );
   }
 
