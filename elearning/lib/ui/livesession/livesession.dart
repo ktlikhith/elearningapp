@@ -37,13 +37,11 @@ Future<void> _fetchLiveEventData() async {
       child: Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text(
+        title: Text(
           'Live Session',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,color: Colors.white,
-          ),
+         
         ),
+        centerTitle: false,
            leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () {

@@ -48,9 +48,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
             
             Text(
               'My Learning App',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,color: Colors.white
-              ),
+             
             ),
             
           ],

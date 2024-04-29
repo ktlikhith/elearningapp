@@ -92,12 +92,12 @@ class _GamificationPageState extends State<GamificationPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 82.0, vertical: 1.5),
                 child: Text(
                   'My Points',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
+                 
                 ),
               ),
               Text(
                 '1000', // Replace with actual points value
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                
               ),
             ],
           ),
