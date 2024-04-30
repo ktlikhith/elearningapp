@@ -116,6 +116,12 @@ class _GamificationPageState extends State<GamificationPage> {
                               },
                               child: Text('Gift Rewards'),
                             ),
+                            ElevatedButton(
+                            onPressed: () {
+                            Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                            },
+                            child: Text('QUIZ'),
+                          ),
                           ],
                         ),
                       ),

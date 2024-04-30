@@ -59,6 +59,7 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AuthBloc(context: context,authRepository: AuthRepository()),
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primaryColor: Color.fromARGB(255, 10, 10, 10),

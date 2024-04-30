@@ -126,7 +126,7 @@ class MLPopup extends StatelessWidget {
                    Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => CourseContentPage(),
+      builder: (context) => CourseDetailsPage(),
     ),
   );
                   

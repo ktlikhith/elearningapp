@@ -108,19 +108,19 @@ class MyLearningAppBody extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 buildSection(
-                  icon: Icons.video_library_outlined,
+                 svgPath: 'assets/images/activity.svg',
                   number: 5,
-                  title: 'My Playlists',
+                  title: 'Totalactivity',
                 ),
                 buildSection(
-                  icon: Icons.save,
+                  svgPath: 'assets/images/activity.svg',
                   number: 3,
-                  title: 'Saved',
+                  title: 'Completed',
                 ),
                 buildSection(
-                  icon: Icons.download,
+                   svgPath: 'assets/images/activity.svg',
                   number: 8,
-                  title: 'Downloads',
+                  title: 'Inprogress',
                 ),
               ],
             ),
