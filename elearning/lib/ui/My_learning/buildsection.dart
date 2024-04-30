@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 
-Widget buildSection({required IconData icon, required int number, required String title}) {
+Widget buildSection({required String svgPath, required int number, required String title}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -42,9 +43,9 @@ Widget buildSection({required IconData icon, required int number, required Strin
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CircleAvatar(
-                backgroundColor: Colors.orange,
+                // backgroundColor: Colors.orange,
     
-              child: Icon(icon, size: 20.0),
+              child: SvgPicture.asset(svgPath),
               ),
               Text(
                 number.toString(),
