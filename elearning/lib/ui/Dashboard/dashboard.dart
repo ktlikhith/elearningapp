@@ -125,9 +125,9 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-           title: const Text(
-          'Dashboard',
-        ),
+        //    title: const Text(
+        //   // 'Dashboard',
+        // ),
           backgroundColor: Theme.of(context).primaryColor,
          
           elevation: 0,

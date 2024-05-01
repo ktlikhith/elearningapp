@@ -69,8 +69,9 @@ class RouterManger{
       );
 
       case Report:
+        final token = settings.arguments as String;
       return MaterialPageRoute(
-        builder:(context) => ReportPage()
+        builder:(context) => ReportPage(token: token)
       ,);
 
       case Gamification:

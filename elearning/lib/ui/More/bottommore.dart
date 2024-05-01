@@ -100,7 +100,7 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.chartSimple),
               title: Text('Reports'),
               onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.Report);
+                Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
               },
             ),
             ListTile(

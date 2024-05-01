@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:elearning/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -95,9 +96,9 @@ void initState() {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              buildSection("Past Due", '$_past', Colors.red.shade400),
-              buildSection("Due Soon", '$_soon', Colors.yellow.shade200),
-              buildSection("Due Later", '$_later', Colors.grey),
+              buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),'assets/images/svg/task-past-due-svgrepo-com.svg'),
+              buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),'assets/images/svg/task-due-svgrepo-com.svg'),
+              buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),'assets/images/svg/date-time-svgrepo-com.svg'),
             ],
           ),
         ),
@@ -107,7 +108,7 @@ void initState() {
 }
 
 
-Widget buildSection(String title, String number, Color color) {
+Widget buildSection(String title, String number, Color color,String svgPath) {
      return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -146,12 +147,11 @@ Widget buildSection(String title, String number, Color color) {
                 color: color,
               ),
               child:Center(
-              child: const FaIcon(FontAwesomeIcons.clock,
-                color: Color.fromARGB(255, 48, 48, 48),
-                size: 20,
+              child: SvgPicture.asset(svgPath),
+               
               ),
-              )
-            ),
+              ),
+            
             const SizedBox(width: 25.0),
             Column(
               children: [
