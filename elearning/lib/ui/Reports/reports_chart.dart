@@ -1,27 +1,62 @@
 import 'dart:async';
+import 'package:elearning/services/report_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/widgets.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ReportPage(),
-    );
-  }
-}
 
 class ReportPage extends StatefulWidget {
+final String token;
+  const ReportPage({Key? key, required this.token}): super(key: key);
+
+  
   @override
   _ReportPageState createState() => _ReportPageState();
 }
 
 class _ReportPageState extends State<ReportPage> {
-  double notStartedPercentage = 60.0;
-  double completedPercentage = 40.0;
+
+  final ReportApiService reportApiService = ReportApiService();
+
+  Future<void> fetchData(token) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+     // Replace with your actual API token
+      final userData = await reportApiService.fetchUserActivity(widget.token);
+      
+      // Access the data you need
+      final double totalNoActivity = double.parse(userData['totalnoactivity']);
+      final double completedActivity = double.parse(userData['completedactivity']);
+      final double notstartedactivity = totalNoActivity-completedActivity;
+      print('$totalNoActivity');
+      print(
+        '$completedActivity'
+      );
+      
+      setState(() {
+        notStartedPercentage = (totalNoActivity / (notstartedactivity*100)) ;
+        completedPercentage = (completedActivity / (completedActivity*100));
+       
+      isLoading = false;
+  
+        // Update other chart data as needed
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
+  late double notStartedPercentage;
+  late double completedPercentage;
 
   // Simulated data for line chart
   List<FlSpot> lineChartData = [
@@ -58,19 +93,21 @@ class _ReportPageState extends State<ReportPage> {
   void initState() {
     super.initState();
     // Simulate data loading
-    fetchData();
+    
+    fetchData(widget.token); 
+    
   }
 
-  Future<void> fetchData() async {
-    // Simulate fetching data from API
-    setState(() {
-      isLoading = true;
-    });
-    await Future.delayed(Duration(seconds: 2)); // Simulate 2-second delay
-    setState(() {
-      isLoading = false;
-    });
-  }
+  // Future<void> fetchData() async {
+  //   // Simulate fetching data from API
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   await Future.delayed(Duration(seconds: 2)); // Simulate 2-second delay
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -111,10 +148,10 @@ Widget build(BuildContext context) {
                   ),
                   SizedBox(height: 20),
                   // Line Chart
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: _buildLineChart(),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  //   child: _buildLineChart(),
+                  // ),
                   SizedBox(height: 20),
                   // Pie Chart
                   Padding(

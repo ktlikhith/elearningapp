@@ -96,6 +96,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/images/svg/
     - assets/quizicons/
     - assets/images/eapplogo.png
     - assets/images/background-2.png

@@ -49,8 +49,8 @@ class _SpinWheel1State extends State<SpinWheel1> {
                     Image.asset('assets/images/roulette-center-300.png'),
                 secondaryImageHeight: 60,
                 secondaryImageWidth: 110,
-                secondaryImageLeft:42,
-                secondaryImageTop: 45,
+                secondaryImageLeft:35,
+                secondaryImageTop: 49,
                 
               ),
             ),

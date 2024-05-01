@@ -109,7 +109,7 @@ class MyLearningAppBody extends StatelessWidget {
               children: <Widget>[
                 buildSection(
                  svgPath: 'assets/images/activity.svg',
-                  number: 5,
+                  number: 8,
                   title: 'Totalactivity',
                 ),
                 buildSection(
@@ -119,7 +119,7 @@ class MyLearningAppBody extends StatelessWidget {
                 ),
                 buildSection(
                    svgPath: 'assets/images/activity.svg',
-                  number: 8,
+                  number: 5,
                   title: 'Inprogress',
                 ),
               ],
