@@ -127,4 +127,7 @@ class Course {
       courseDuration: json['course_duration'] ?? '',
     );
   }
+   String getImageUrlWithToken(String token) {
+    return '$courseImg?token=$token';
+  }
 }

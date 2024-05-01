@@ -12,13 +12,7 @@ class ContinueService {
         'moodlewsrestformat=json&wstoken=$token&'
         'wsfunction=local_corporate_api_create_coursesapi&userid=$userId',
       );
-      final response = await http.get(
-        apiUrl,
-        headers: {
-          // Add your authentication token here
-          'Authorization': 'Bearer $token',
-        },
-      );
+      final response = await http.get(apiUrl);
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         //print(responseData);
@@ -68,5 +62,9 @@ class Course {
       courseVideoUrl: json['course_videourl'] ?? '',
       courseDuration: json['course_duration'] ?? '',
     );
+  }
+
+  String getImageUrlWithToken(String token) {
+    return '$courseImg?token=$token';
   }
 }

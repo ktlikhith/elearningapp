@@ -67,7 +67,7 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                   height: 150,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(course.courseImg),
+                      image: NetworkImage(course.getImageUrlWithToken(widget.token)),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.only(

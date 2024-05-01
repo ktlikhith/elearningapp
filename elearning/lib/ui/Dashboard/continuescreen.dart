@@ -44,7 +44,7 @@ class ContinueWatchingScreen extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
-                image: NetworkImage(course.courseImg),
+                image: NetworkImage(course.getImageUrlWithToken(token)),
                 fit: BoxFit.cover,
               ),
             ),
