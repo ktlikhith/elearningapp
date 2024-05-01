@@ -101,6 +101,9 @@ class Notifications {
       read: json['read'] ?? false,
     );
   }
+   String getImageUrlWithToken(String token) {
+    return '$iconUrl?token=$token';
+}
 }
 
 

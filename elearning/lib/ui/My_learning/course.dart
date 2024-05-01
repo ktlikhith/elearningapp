@@ -85,15 +85,11 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
             width: 1.0, // Border width
           ),
           borderRadius: BorderRadius.circular(8.0),
-          image: course.courseImg != null && course.courseImg.isNotEmpty
-              ? DecorationImage(
-                  image: NetworkImage(course.courseImg!),
+          image:DecorationImage(
+                  image: NetworkImage(course.getImageUrlWithToken(widget.token)),
                   fit: BoxFit.cover,
                 )
-              : DecorationImage(
-                  image: AssetImage('assets/placeholder_image.jpg'),
-                  fit: BoxFit.cover,
-                ),
+              
         ),
         child: Stack(
           alignment: Alignment.center,

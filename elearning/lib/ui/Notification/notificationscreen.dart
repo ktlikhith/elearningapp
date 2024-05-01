@@ -181,7 +181,7 @@ class NotificationDetailsScreen extends StatelessWidget {
             Row(
               children: [
                 CachedNetworkImage(
-                  imageUrl: notification.iconUrl,
+                  imageUrl: notification.getImageUrlWithToken(token),
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   width: 40,
