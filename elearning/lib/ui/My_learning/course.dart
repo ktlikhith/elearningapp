@@ -18,6 +18,9 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 
   bool _isLoading = true; // Flag to track loading state
 
+
+  
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       if (mounted) {
         setState(() {
           _courses = response;
+          print(_courses);
           _isLoading = false; // Update loading state
         });
       }
@@ -71,6 +75,15 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 }
 
 Widget buildSingleCourseSection(BuildContext context, Course course) {
+  String course_id;
+  String course_name=course.getcoursenameWithToken(widget.token);
+  String Cprogress=course.getcourseProgressWithToken(widget.token);
+  String Cdiscrpition=course.getcourseDescriptionWithToken(widget.token);
+  String courseStartDate=course.getcourseStartDateWithToken(widget.token);
+  String courseEndDate=course.getcourseEndDateWithToken(widget.token);
+  String course_videourl=course.getcourseVideoUrlWithToken(widget.token);
+  String courseDuration=course.getcourseDurationWithToken(widget.token);
+  
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -96,9 +109,12 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
           children: [
             IconButton(
               icon: const Icon(Icons.play_circle_filled, size: 40.0, color: Colors.black),
-              onPressed: () {
-                showMLPopup(context); // Call showMLPopup with the context
-              },
+               tooltip: course_id=course.getCourseIDWithToken(widget.token),
+           
+               
+              onPressed: () => showMLPopup(context, course_id, course_name,Cprogress,Cdiscrpition,courseStartDate,courseEndDate,course_videourl,courseDuration),
+                // showMLPopup(context); // Call showMLPopup with the context
+              
             ),
           ],
         ),
@@ -182,7 +198,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
 }
 
 Color getProgressBarColor(int progress) {
-  if (progress == 0) {
+  if (progress >= 0 && progress<=35) {
     return Colors.red; // Color for not started
   } else if (progress == 100) {
     return Colors.green; // Color for completed
@@ -192,11 +208,11 @@ Color getProgressBarColor(int progress) {
 }
 
 
-void showMLPopup(BuildContext context) {
+void showMLPopup(BuildContext context, String courseId,String course_name ,String Cprogress,String Cdiscrpition ,String courseStartDate,String courseEndDate,String course_videourl,String courseDuration  ) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return MLPopup(); // Create an instance of MLPopup without passing context
+      return MLPopup(context,token:widget.token, course_id: courseId, course_name: course_name, Cprogress:Cprogress , Cdiscrpition:Cdiscrpition,courseStartDate:courseStartDate,courseEndDate:courseEndDate,course_videourl:course_videourl,courseDuration:courseDuration); // Create an instance of MLPopup without passing context
     },
   );
 }

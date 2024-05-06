@@ -47,7 +47,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
           children: [
             
             Text(
-              'My Learning App',
+              'My Learning',
              
             ),
             
@@ -109,12 +109,12 @@ class MyLearningAppBody extends StatelessWidget {
               children: <Widget>[
                 buildSection(
                  svgPath: 'assets/images/activity.svg',
-                  number: 8,
+                  number: 50,
                   title: 'Totalactivity',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: 3,
+                  number: 45,
                   title: 'Completed',
                 ),
                 buildSection(
