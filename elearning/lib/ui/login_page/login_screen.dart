@@ -1,10 +1,13 @@
+
 import 'dart:ui';
-import 'package:animate_do/animate_do.dart';
+import 'package:elearning/services/auth.dart';
+import 'package:elearning/services/resetpass_service.dart';
 import 'package:elearning/ui/login_page/forgot_pass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,54 +22,18 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class GlassContainer extends StatelessWidget {
-  final Widget child;
-  final BorderRadius borderRadius;
-  final double sigmaX;
-  final double sigmaY;
-  final double borderWidth; // New property to adjust border thickness
-
-  const GlassContainer({
-    Key? key,
-    required this.child,
-    this.borderRadius = BorderRadius.zero,
-    this.sigmaX = 10,
-    this.sigmaY = 10,
-    this.borderWidth = 0.0, // Default border width
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: borderRadius,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 161, 191, 199).withOpacity(0.3),
-            borderRadius: borderRadius,
-            // border: Border.all(
-            //   color: Colors.black, // Border color
-            //   // width: borderWidth, // Border thickness
-            // ),
-          ),
-          child: child,
-        ),
-      ),
-    );
-  }
-}
-
 class _LoginScreenContent extends StatefulWidget {
   @override
   State<_LoginScreenContent> createState() => _LoginScreenContentState();
 }
+
 
 class _LoginScreenContentState extends State<_LoginScreenContent> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  //bool _isButtonEnabled = false;
 
   String? _usernameValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -87,7 +54,13 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
       _obscureText = !_obscureText;
     });
   }
+// void _updateButtonState() {
+//     setState(() {
+//       _isButtonEnabled = _formKey.currentState?.validate() ?? false;
+//     });
+//   }
 
+  
   void _login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       String username = _usernameController.text.trim();
@@ -100,173 +73,196 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Background Image
-        // Positioned.fill(
-        //   child: Image.asset(
-        //     'assets/images/plain-white-background-2.jpg',
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
-        Scaffold(
-          backgroundColor: Color.fromRGBO(255, 255, 255, 1), // Make scaffold background transparent
-          resizeToAvoidBottomInset: true,
-          body: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 250, horizontal: 50),
-                child: GlassContainer(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderWidth: 2.0, // Adjust border thickness here
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        FadeInUp(
-                          duration: Duration(milliseconds: 1000),
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Color.fromRGBO(18, 18, 18, 1),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                            ),
-                          ),
-                        ),
-                        FadeInUp(
-                          duration: Duration(milliseconds: 1500),
-                          child: Text(
-                            "Please login to access and Start Learning",
-                            style: TextStyle(
-                              color: Color.fromRGBO(16, 16, 16, 1),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        FadeInUp(
-                          duration: Duration(milliseconds: 1000),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color.fromARGB(105, 255, 255, 255),
-                              border: Border.all(color: Color.fromRGBO(14, 14, 14, 0.686)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(196, 135, 198, .3),
-                                  blurRadius: 20,
-                                  offset: Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: Form(
-                              key: _formKey,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  children: [
-                                    FadeInUp(
-                                      duration: Duration(milliseconds: 1000),
-                                      child: TextFormField(
-                                        controller: _usernameController,
-                                        keyboardType: TextInputType.text,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Username",
-                                          hintStyle: TextStyle(color: Colors.grey.shade700),
-                                        ),
-                                        validator: _usernameValidator,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    FadeInUp(
-                                      duration: Duration(milliseconds: 1000),
-                                      child: TextFormField(
-                                        controller: _passwordController,
-                                        obscureText: _obscureText,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Password",
-                                          hintStyle: TextStyle(color: Colors.grey.shade700),
-                                          suffixIcon: IconButton(
-                                            icon: Icon(
-                                              _obscureText ? Icons.visibility_off : Icons.visibility,
-                                            ),
-                                            onPressed: _togglePasswordVisibility,
-                                          ),
-                                        ),
-                                        validator: _passwordValidator,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Center(
-                          child: FadeInUp(
-                            duration: Duration(milliseconds: 1000),
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
-                                );
-                              },
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(color: Color.fromRGBO(62, 50, 221, 1)),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        FadeInUp(
-                          duration: Duration(milliseconds: 1000),
-                          child: MaterialButton(
-                            onPressed: () => _login(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            height: 40,
-                            minWidth: double.infinity,
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromARGB(255, 8, 25, 208).withOpacity(0.3),
-                                    spreadRadius: 2,
-                                    blurRadius: 4,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(22),
-                                color: Color.fromARGB(255, 13, 12, 12),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Login",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Authentication failed. Please check your credentials.'),
+             
+            ),
+          );
+        }
+      },
+        child: Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: SafeArea(
+
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Form(
+          key: _formKey,
+          //onChanged: _updateButtonState,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hi!  Welcome back',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      
                     ),
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 24, // Adjust the width to match the text's size
+                    height: 24, // Adjust the height to match the text's size
+                    child: SvgPicture.asset(
+                      'assets/images/svg/waving-hand-svgrepo-com.svg',
+                     
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Let's continue studying to achieve your goals",
+                style: TextStyle(fontSize: 16),
+                
+              ),
+              
+              SizedBox(height: 50),
+             
+
+              Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  
+                ),
+              ),
+              SizedBox(height: 5),
+              // Curved border box for username text field
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
+                ),
+               
+                child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.person, color: Colors.grey),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                       
+                        controller: _usernameController,
+                        keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: 'username',
+                        
+                        border: InputBorder.none,
+                       
+                      ),
+                      validator: _usernameValidator,
+                    ),
+                  ),
+                ],
+              ),
+                
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Password',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                 
+                ),
+              ),
+              SizedBox(height: 5),
+              // Curved border box for password text field
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.lock, color: Colors.grey),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                       
+                         controller: _passwordController,
+                         obscureText: _obscureText,
+                        
+                        decoration: InputDecoration(
+                          hintText: 'password',
+                         
+                          border: InputBorder.none,
+                           suffixIcon: IconButton(
+                            icon: Icon(
+                             _obscureText ? Icons.visibility_off : Icons.visibility,
+                             ),
+                             onPressed: _togglePasswordVisibility,
+                             ),
+                        ),
+                         validator: _passwordValidator,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+             
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                              final passwordResetService = PasswordResetService(Constants.baseUrl);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ForgotPasswordScreen(passwordResetService: passwordResetService)),
+                              );
+                            },
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+             
+            SizedBox(
+            width: double.infinity, 
+            child: ElevatedButton(
+               onPressed: () => _login(context),
+              // onPressed: _isButtonEnabled ? () => _login(context) : null,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 14), // Adjust vertical padding
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
+                ),
+                backgroundColor: Theme.of(context).secondaryHeaderColor,
+                 
+              ),
+             
+              
+              child: Text(
+                'Sign In',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
             ),
           ),
+            ],
+          ),
         ),
-      ],
+        ),
+      ),
+        ),
     );
   }
 }
+
+

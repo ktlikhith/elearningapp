@@ -5,6 +5,7 @@ import 'package:elearning/ui/Gamification/Quiz/quiz_screens/quiz/quiz_screen.dar
 import 'package:elearning/ui/Gamification/Quiz/quiz_screens/score_screen.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:elearning/ui/Landingscreen/landingscreen.dart';
+import 'package:elearning/ui/Learning_path/learningpath.dart';
 import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
@@ -28,6 +29,7 @@ class RouterManger{
   static const String landingpage = '/landingscreen';
   static const String Quiz = 'Quiz/quiz_screens/quiz/quiz_screen.dart';
   static const String quizscore ='/score_screen.dart';
+  static const String learningpath= '/learningpath.dart';
 
 
 
@@ -66,6 +68,11 @@ class RouterManger{
       final token = settings.arguments as String; // Retrieve the token from settings.arguments
             return MaterialPageRoute(
             builder: (context) => MyMorePage(token: token ),
+      );
+      case learningpath:
+      final token = settings.arguments as String; // Retrieve the token from settings.arguments
+            return MaterialPageRoute(
+            builder: (context) => LearningPathPage(token: token ),
       );
 
       case Report:

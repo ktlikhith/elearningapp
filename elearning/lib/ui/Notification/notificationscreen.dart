@@ -72,6 +72,7 @@ Widget build(BuildContext context) {
       appBar: AppBar(
         title: Text('Notifications'),
          backgroundColor: Theme.of(context).primaryColor,
+          centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () {
@@ -171,6 +172,13 @@ class NotificationDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Notification Details'),
          backgroundColor: Theme.of(context).primaryColor,
+          centerTitle: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
+            },
+          ),
       ),
        backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(
@@ -208,7 +216,7 @@ class NotificationDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              notification.fullMessage,
+              removeHtmlTags(notification.fullMessage),
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),
@@ -222,5 +230,13 @@ class NotificationDetailsScreen extends StatelessWidget {
         ),
       ),
     );
+ 
+ 
   }
+
+  String removeHtmlTags(String htmlString) {
+  RegExp htmlTagRegExp = RegExp(r'<[^>]*>'); // Regular expression to match HTML tags
+  return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
+}
+
 }

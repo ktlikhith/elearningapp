@@ -1,6 +1,8 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LearningPathPage extends StatelessWidget {
   final String token;
@@ -28,162 +30,205 @@ class LearningPathPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLearningPathPage(BuildContext context, Map<String, dynamic> learningPathData) {
-    // Build your UI using the learningPathData
-    // For example:
-    final learningPathDetail = learningPathData['learningpathdetail'][0];
-    final List<dynamic> courseProgress = learningPathData['learningpath_progress'];
+ Widget _buildLearningPathPage(BuildContext context, Map<String, dynamic> learningPathData) {
+  final learningPathDetail = learningPathData['learningpathdetail'][0];
+  final List<dynamic> courseProgress = learningPathData['learningpath_progress'];
 
-    return Scaffold(
-      appBar: AppBar(
-         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Learning Path'),
-         leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.morescreen,arguments: token);
-          },
-        ),
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text('Learning Path'),
+      centerTitle: false,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: token);
+        },
       ),
+    ),
+    backgroundColor: Theme.of(context).backgroundColor,
+    body: SingleChildScrollView(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
       
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Learning Path Overview Section
-            Card(
-              elevation: 4.0,
+        children: [
+          Container(
+           
+                  decoration: BoxDecoration(
+                    
+                color: Colors.white, // Set background color to white
+                borderRadius: BorderRadius.circular(8.0), // Set border radius
+                border: Border.all(color: Colors.grey[300]!), // Set border color
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      learningPathDetail['learningpathname'],
-                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      learningPathDetail['discriotion'],
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Duration: ${learningPathDetail['duration']}',
-                      style: TextStyle(fontSize: 16.0),
+                    // Learning Path Image
+                    Image.network(
+                      'https://lxp-demo2.raptechsolutions.com${learningPathDetail['learningpathimage']}',
+                      height: 200,
+                      fit: BoxFit.cover,
                     ),
                     SizedBox(height: 16.0),
-                    // Custom Progress Bar Widget
-                    CustomProgressBar(progress: 0.5), // Use the actual progress value here
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            // Individual Course Sections
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: courseProgress.length,
-              itemBuilder: (context, index) {
-                final course = courseProgress[index];
-                return Card(
-                  elevation: 4.0,
-                  child: InkWell(
-                    onTap: () {
-                      // Navigate to course details screen with token
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    // Learning Path Details
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 2.0, // Adjust the width as needed
+                          ),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            learningPathDetail['learningpathname'],
+                            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            removeHtmlTags(learningPathDetail['discriotion']),
+                            style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0),
+                          Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
-                          // Course Image
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              course['courseimg'],
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
+                          FaIcon(
+                            FontAwesomeIcons.clock,
+                            size: 16.0, // Adjust the size of the icon as needed
+                            color: Colors.black, // Adjust the color of the icon as needed
+                          ),
+                          SizedBox(width: 8.0), // Add some spacing between the icon and text
+                          Expanded(
+                            child: Text(
+                              'Duration: ${learningPathDetail['duration']}',
+                              style: TextStyle(fontSize: 16.0),
                             ),
                           ),
-                          SizedBox(width: 16.0),
-                          // Course Details
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  course['coursename'],
-                                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  course['coursedec'],
-                                  style: TextStyle(fontSize: 16.0),
-                                ),
-                                SizedBox(height: 8.0),
-                                CustomProgressBar(progress: 0.3), // Use the actual progress value here
-                              ],
-                            ),
+                          SizedBox(width: 30.0), // Add some spacing between the texts
+                          FaIcon(
+                            FontAwesomeIcons.book,
+                            size: 16.0, // Adjust the size of the icon as needed
+                            color: Colors.black, // Adjust the color of the icon as needed
+                          ),
+                          SizedBox(width: 8.0), // Add some spacing between the icon and text
+                          Text(
+                            'NoCourses: ${learningPathDetail['nocourses']}',
+                            style: TextStyle(fontSize: 16.0),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class CustomProgressBar extends StatelessWidget {
-  final double progress;
+                        
+                        ],
+                      ),
+                    ),
 
-  const CustomProgressBar({Key? key, required this.progress}) : super(key: key);
+                    SizedBox(height: 16.0),
+                    // Learning Path Progress
+                    Text(
+                      'Learning Content',
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
+                    // SizedBox(height: 8.0),
+                    // Text(
+                    //   '${courseProgress.length} Courses',
+                    //   style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+                    // ),
+                    SizedBox(height: 8.0),
+                    // List of Courses
+                    ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: courseProgress.length,
+                    separatorBuilder: (context, index) => SizedBox(height: 16.0), // Add space between items
+                    itemBuilder: (context, index) {
+                      final course = courseProgress[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // Navigate to course details screen with token
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Course Image
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    '${course['courseimg']}?token=$token',
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(height: 8.0),
+                                // Course Details
+                                Text(
+                                  removeHtmlTags(course['coursename']),
+                                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 8.0),
+                                Text(
+                                  removeHtmlTags(course['coursedec']),
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
+                                SizedBox(height: 12.0),
+                                Container(
+                                  height: 10,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: FractionallySizedBox(
+                                    alignment: Alignment.centerLeft,
+                                    widthFactor: course['courseprogressbar'] / 100,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 12.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
-        border: Border.all(color: Colors.grey),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6.0),
-        child: Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * progress,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.red,
-                    Colors.orange,
-                    Colors.green,
                   ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                '${(progress * 100).toInt()}%',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
+          
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+// html_parser.dart
+
+String removeHtmlTags(String htmlString) {
+  RegExp htmlTagRegExp = RegExp(r'<[^>]*>'); // Regular expression to match HTML tags
+  return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
+}
+
 }

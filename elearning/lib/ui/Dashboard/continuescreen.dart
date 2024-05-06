@@ -1,10 +1,10 @@
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/services/continue_leraning_service.dart';
+import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/material.dart';
 
 class ContinueWatchingScreen extends StatelessWidget {
   final String token;
-  final List<Course> courses;
+  final List<CourseData> courses;
 
   const ContinueWatchingScreen({Key? key, required this.token, required this.courses})
       : super(key: key);
@@ -14,45 +14,42 @@ class ContinueWatchingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Continue Watching'),
-         backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
+         centerTitle: false,
+        backgroundColor: Theme.of(context).primaryColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: token);
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
           },
         ),
       ),
-      
-       backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-  itemCount: courses.length,
-  itemBuilder: (context, index) {
-    final Course course = courses[index];
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: Colors.grey[400]!),
-      ),
-      child: Container( // Add a Container here
-        color: Colors.white, // Set the background color to white
-        child: ListTile(
-          contentPadding: EdgeInsets.all(8.0),
-          leading: Container(
-            width: 60.0,
-            height: 60.0,
-            decoration: BoxDecoration(
+        itemCount: courses.length,
+        itemBuilder: (context, index) {
+          final CourseData course = courses[index];
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
-              image: DecorationImage(
-                image: NetworkImage(course.getImageUrlWithToken(token)),
-                fit: BoxFit.cover,
-              ),
+              side: BorderSide(color: Colors.grey[400]!),
             ),
-          ),
-          title: Row(
-            children: [
-              Expanded(
-                child: Column(
+            child: Container(
+              color: Colors.white,
+              child: ListTile(
+                contentPadding: EdgeInsets.all(8.0),
+                leading: Container(
+                  width: 60.0,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: NetworkImage(course.getImageUrlWithToken(token)),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(course.name),
@@ -60,24 +57,21 @@ class ContinueWatchingScreen extends StatelessWidget {
                     Text('End Date: ${course.courseEndDate}'),
                   ],
                 ),
-              ),
-              Text(
-                _getStatusText(course.courseProgress),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: _getStatusColor(course.courseProgress),
+                trailing: Text(
+                  _getStatusText(course.courseProgress),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: _getStatusColor(course.courseProgress),
+                  ),
                 ),
+                onTap: () {
+                  // Navigate to course details screen
+                },
               ),
-            ],
-          ),
-          onTap: () {
-            // Navigate to course details screen
-          },
-        ),
+            ),
+          );
+        },
       ),
-    );
-  },
-),
     );
   }
 

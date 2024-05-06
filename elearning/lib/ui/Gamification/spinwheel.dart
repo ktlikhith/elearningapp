@@ -1,19 +1,36 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
+import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
+class SpinWheel extends StatefulWidget {
+  final String token;
+  final Future<RewardData> rewardDataFuture;
 
-class SpinWheel1 extends StatefulWidget {
+  SpinWheel({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
+
   @override
-  _SpinWheel1State createState() => _SpinWheel1State();
+  _SpinWheelState createState() => _SpinWheelState();
 }
 
-class _SpinWheel1State extends State<SpinWheel1> {
+class _SpinWheelState extends State<SpinWheel> {
   final StreamController<int> _dividerController = StreamController<int>();
   final StreamController<double> _wheelNotifier = StreamController<double>();
+  late bool spinButton = false; // Provide an initial value
+
+@override
+void initState() {
+  super.initState();
+  widget.rewardDataFuture.then((rewardData) {
+    setState(() {
+      spinButton = rewardData.spinButton;
+    });
+  });
+}
+
+
 
   @override
   void dispose() {
@@ -39,19 +56,15 @@ class _SpinWheel1State extends State<SpinWheel1> {
                 initialSpinAngle: _generateRandomAngle(),
                 spinResistance: 0.3,
                 shouldStartOrStop: _wheelNotifier.stream,
-                
-               
                 canInteractWhileSpinning: false,
                 dividers: 12,
                 onUpdate: _dividerController.add,
                 onEnd: _dividerController.add,
-                secondaryImage:
-                    Image.asset('assets/images/roulette-center-300.png'),
+                secondaryImage: Image.asset('assets/images/roulette-center-300.png'),
                 secondaryImageHeight: 60,
                 secondaryImageWidth: 110,
-                secondaryImageLeft:35,
+                secondaryImageLeft: 35,
                 secondaryImageTop: 49,
-                
               ),
             ),
           ),
@@ -66,35 +79,33 @@ class _SpinWheel1State extends State<SpinWheel1> {
                 snapshot.hasData ? RouletteScore(snapshot.data ?? 1) : Container(),
                 
           ),
-           NeoPopTiltedButton(
-  isFloating: true,
-  onTapUp: ()=>
-    _wheelNotifier.sink.add(_generateRandomVelocity())
-  ,
-  decoration: NeoPopTiltedButtonDecoration(
-    color:Colors.orange,
-    plunkColor: Colors.orange,
-    shadowColor: Color.fromRGBO(181, 177, 177, 1),
-    showShimmer: true,
-
- 
-  ),
-  child: Padding(
-    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
-    child: Text('SPIN'),
-  ),
-),
-          
+         spinButton!= null
+         
+              ? NeoPopTiltedButton(
+                  isFloating: true,
+                  onTapUp: spinButton ? () => _wheelNotifier.sink.add(_generateRandomVelocity()) : null,
+                  decoration: NeoPopTiltedButtonDecoration(
+                    color: Colors.orange,
+                    plunkColor: Colors.orange,
+                    shadowColor: Color.fromRGBO(181, 177, 177, 1),
+                    showShimmer: true,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
+                    child: Text('SPIN'),
+                  ),
+              
+                )
+         
+              : CircularProgressIndicator(), // Show loading indicator if spinButton is not yet fetched
         ],
-        
       ),
     );
   }
-  double _generateRandomVelocity()=> ( Random().nextDouble() * 6000) + 2000;
+
+  double _generateRandomVelocity() => (Random().nextDouble() * 6000) + 2000;
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;
 }
-
-
 
 class RouletteScore extends StatelessWidget {
   final int selected;
@@ -114,7 +125,6 @@ class RouletteScore extends StatelessWidget {
     10: '9',
     11: '13',
     12: '5',
-
   };
 
   @override
@@ -125,3 +135,5 @@ class RouletteScore extends StatelessWidget {
     );
   }
 }
+
+

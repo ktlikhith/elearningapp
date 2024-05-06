@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
+import 'package:elearning/ui/Profile/updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glass/glass.dart'; // Import the glass package
@@ -69,99 +72,100 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       extendBodyBehindAppBar: true, // Extend the background behind the app bar
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(0, 251, 249, 249), // Make app bar transparent
-        title: const Text('User Profile'),titleTextStyle: TextStyle(color: const Color.fromARGB(255, 8, 8, 8),fontWeight: FontWeight.bold,fontSize: 20),
-        centerTitle: true,
-      ),
-      backgroundColor: Color.fromARGB(255, 118, 239, 239),
-      body: Stack(
-        fit: StackFit.expand, // Make the stack fill the entire screen
-        children: [
-          Container(
-  height: MediaQuery.of(context).size.height * 0.10, // Adjust the height as needed
-  decoration: BoxDecoration(
-    image: DecorationImage(
-      image: AssetImage('assets/images/profile bg11.png'), // Your background image path
-      fit: BoxFit.fitWidth,
-      alignment: Alignment.topCenter, // Position the image at the top center
+  backgroundColor: Theme.of(context).primaryColor,
+  title: const Text('User Profile'),
+  titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+  centerTitle: false,
+  leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+          },
+        ),
+  actions: [
+    IconButton(
+      icon: Icon(Icons.edit,color: Theme.of(context).backgroundColor,),
+      onPressed: () {
+        
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
+      },
     ),
-  ),
+  ],
 ),
 
-          SingleChildScrollView(
-            padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
+      backgroundColor: Theme.of(context).backgroundColor,
+     body: Stack(
+  children: [
+    SingleChildScrollView(
+      padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 380,
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 380,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(0, 151, 231, 213).withOpacity(0.4),
-                        spreadRadius: 4,
-                        blurRadius: 10,
-                        offset: Offset(0, 20),
-                      ),
-                    ],
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
-                                ),
-                                IconButton(
-                                  onPressed: _uploadPhoto,
-                                  icon: Icon(Icons.camera_alt),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              _studentName,
-                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              _studentEmail,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        ),
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                          ),
+                          IconButton(
+                            onPressed: _uploadPhoto,
+                            icon: Icon(Icons.camera_alt),
+                          ),
+                        ],
+                        
                       ),
-                      const SizedBox(height: 30),
-                      buildAchievementUI(), // Use your existing buildAchievementUI function
+                      
+                      const SizedBox(height: 10),
+                      Text(
+                        _studentName,
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _studentEmail,
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
+                    
                   ),
-                ).asGlass(
-                 
-                  enabled: effectEnabled,
-                  tintColor: Color.fromARGB(0, 246, 246, 246),
-                  clipBorderRadius: BorderRadius.circular(40.0),
+                  
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Progress',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                buildProgressUI(), // Use your existing buildProgressUI function
+                const SizedBox(height: 30),
+                buildAchievementUI(), // Use your existing buildAchievementUI function
               ],
             ),
+          ).asGlass(
+            enabled: effectEnabled,
+            tintColor: Theme.of(context).primaryColor,
+            clipBorderRadius: BorderRadius.circular(40.0),
           ),
+          const SizedBox(height: 20),
+          const Text(
+            'Progress',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          buildProgressUI(), // Use your existing buildProgressUI function
         ],
       ),
+    ),
+    
+    
+  ],
+),
+
+
     );
   }
 
@@ -219,17 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildAchievement(String value, String label, IconData icon) {
-    return Column(
-      children: [
-        FaIcon(icon, size: 30),
-        const SizedBox(height: 5),
-        Text(value, style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.orange)),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-      ],
-    );
-  }
+ 
 
   
 }

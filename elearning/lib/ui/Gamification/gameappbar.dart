@@ -18,12 +18,12 @@ class GamificationPage extends StatefulWidget {
 }
 
 class _GamificationPageState extends State<GamificationPage> {
-  late Future<Map<String, dynamic>> _rewardDataFuture;
+  late Future<RewardData> _rewardDataFuture;
 
   @override
   void initState() {
     super.initState();
-    _rewardDataFuture = Rewardservice().getUserRewardPoints(widget.token);
+    _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
   }
 
   @override
@@ -37,7 +37,7 @@ class _GamificationPageState extends State<GamificationPage> {
         appBar: AppBar(
           toolbarHeight: 65,
           backgroundColor: Theme.of(context).primaryColor,
-          title: FutureBuilder<Map<String, dynamic>>(
+          title: FutureBuilder<RewardData>(
             future: _rewardDataFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +45,8 @@ class _GamificationPageState extends State<GamificationPage> {
               } else if (snapshot.hasError) {
                 return Text('Error loading points');
               } else {
-                final totalPoints = snapshot.data!['total_points'];
+                final totalPoints = snapshot.data!.totalPoints;
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -56,7 +57,7 @@ class _GamificationPageState extends State<GamificationPage> {
                       ),
                     ),
                     Text(
-                      totalPoints?.toString() ?? '0',
+                      totalPoints,
                     ),
                   ],
                 );
@@ -76,7 +77,8 @@ class _GamificationPageState extends State<GamificationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                RewrdSection(token: widget.token),
+                RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
+
 
                 SizedBox(height: 20),
                 Container(
@@ -89,7 +91,7 @@ class _GamificationPageState extends State<GamificationPage> {
                         flex: 1,
                         child: Column(
                           children: [
-                            SpinWheel1(), // Include SpinWheel1 here
+                            SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture), // Include SpinWheel1 here
                           ],
                         ),
                       ),
@@ -117,11 +119,11 @@ class _GamificationPageState extends State<GamificationPage> {
                               child: Text('Gift Rewards'),
                             ),
                             ElevatedButton(
-                            onPressed: () {
-                            Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
-                            },
-                            child: Text('QUIZ'),
-                          ),
+                              onPressed: () {
+                                Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                              },
+                              child: Text('QUIZ'),
+                            ),
                           ],
                         ),
                       ),

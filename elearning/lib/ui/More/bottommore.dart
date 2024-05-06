@@ -53,6 +53,7 @@ class _MyMorePageState extends State<MyMorePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('More Page'),
+           centerTitle: false,
            leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () {
@@ -82,16 +83,7 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.graduationCap),
               title: Text('Learning Path'),
               onTap: () {
-
-                  Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LearningPathPage(
-                                  token: widget.token,
-                                  
-                                ),
-                              ),
-                            );
+              Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token);
 
               },
             ),

@@ -2,65 +2,59 @@ import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RewrdSection extends StatefulWidget {
-  final String token;
 
-  RewrdSection({Key? key, required this.token}) : super(key: key);
+class RewardSection extends StatefulWidget {
+  final String token;
+  final Future<RewardData> rewardDataFuture;
+
+  RewardSection({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
 
   @override
-  _RewrdSectionState createState() => _RewrdSectionState();
+  _RewardSectionState createState() => _RewardSectionState();
 }
 
-class _RewrdSectionState extends State<RewrdSection> {
-  Map<String, dynamic> _rewardData = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchRewardData();
-  }
-
-  Future<void> _fetchRewardData() async {
-    try {
-      final rewardData = await Rewardservice().getUserRewardPoints(widget.token);
-      setState(() {
-        _rewardData = rewardData;
-      });
-    } catch (e) {
-      print('Error fetching reward data: $e');
-      // Handle error here
-    }
-  }
-
+class _RewardSectionState extends State<RewardSection> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, _rewardData['login_points']),
-                    buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, _rewardData['quiz_points']),
-                    buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, _rewardData['spinwheel_points']),
-                    buildPointsCategory('Reward Received', FontAwesomeIcons.gift, _rewardData['rewards_received_points']),
-                  ],
-                ),
+    return FutureBuilder<RewardData>(
+      future: widget.rewardDataFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error loading points');
+        } else {
+          final _rewardData = snapshot.data;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, _rewardData?.loginPoints),
+                          buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, _rewardData?.quizPoints),
+                          buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, _rewardData?.spinwheelPoints),
+                          buildPointsCategory('Reward Received', FontAwesomeIcons.gift, _rewardData?.rewardsReceivedPoints),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 
-  Widget buildPointsCategory(String title, IconData icon, dynamic points) {
+  Widget buildPointsCategory(String title, IconData icon, int? points) {
     return Container(
       height: 120,
       width: 120,
