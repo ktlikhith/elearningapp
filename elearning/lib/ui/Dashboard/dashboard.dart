@@ -125,9 +125,9 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-        //    title: const Text(
-        //   // 'Dashboard',
-        // ),
+           title: const Text(
+           'Dashboard',
+           ),
           backgroundColor: Theme.of(context).primaryColor,
          
           elevation: 0,
@@ -235,7 +235,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 15.0),
                 
-                // UpcomingEventsSection(token: widget.token),
+                UpcomingEventsSection(token: widget.token),
                 
                 const SizedBox(height: 15.0),
                 CustomDashboardWidget(token: widget.token),

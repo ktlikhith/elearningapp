@@ -53,31 +53,32 @@ class SiteConfigApiService {
 }
 
 
-class DueApiService {
-  static Future<Map<String, dynamic>> getDueInfo(String token, int userId) async {
-    try {
-      final dueUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
-          'moodlewsrestformat=json&wstoken=$token&'
-          'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
+// class DueApiService {
+//   static Future<Map<String, dynamic>> getDueInfo(String token, int userId) async {
+//     try {
+//       final dueUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
+//           'moodlewsrestformat=json&wstoken=$token&'
+//           'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
   
-      final response = await http.get(dueUrl);
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        return{
-          'countactivity': responseData['countactivity'],
-          'countsevendays': responseData['countsevendays'],
-          'countthirtydays': responseData['countthirtydays'],
-          //'functions': functionNames,
-        };
-      } else {
-        throw Exception('Failed to fetch due information');
-      }
-    } catch (e) {
-      print('Error fetching due information: $e');
-      rethrow;
-    }
-  }
-}
+//       final response = await http.get(dueUrl);
+//       if (response.statusCode == 200) {
+//         final responseData = json.decode(response.body);
+        
+//         return{
+//           'countactivity': responseData['countactivity'],
+//           'countsevendays': responseData['countsevendays'],
+//           'countthirtydays': responseData['countthirtydays'],
+//           //'functions': functionNames,
+//         };
+//       } else {
+//         throw Exception('Failed to fetch due information');
+//       }
+//     } catch (e) {
+//       print('Error fetching due information: $e');
+//       rethrow;
+//     }
+//   }
+// }
 
 
 class TanentLogo {

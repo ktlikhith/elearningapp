@@ -2,7 +2,10 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event_service.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class LiveSessionPage extends StatefulWidget {
   final String token;
@@ -51,6 +54,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: FutureBuilder<List<LiveSession>>(
+        
           future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,26 +64,61 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             } else if (snapshot.hasData) {
               final List<LiveSession> sessions = snapshot.data!;
               return ListView.builder(
+                  padding : const EdgeInsets.all(8.0),
+                
                 itemCount: sessions.length,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigate to the session URL when tapped
-                      _launchURL(sessions[index].url);
-                    },
-                    child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Image.network(sessions[index].imgUrl), // Image displayed above other content
-                          SizedBox(height: 8), // Add some spacing between image and other content
-                          ListTile(
-                            title: Text(sessions[index].activityName),
-                            subtitle: Text('Speaker: ${sessions[index].username}\nStart Time: ${sessions[index].startTime}\nMode: ${sessions[index].sessionMod}'),
+                  return Container(
+                      padding : const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    
+                color: Colors.white, // Set background color to white
+                borderRadius: BorderRadius.circular(8.0), // Set border radius
+                border: Border.all(color: Colors.grey[300]!), // Set border color
+              ),
+                
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          child: Image.network(
+                            sessions[index].imgUrl,
+                            fit: BoxFit.cover,
+                            height: 250,
                           ),
-                        ],
+                        ),
+                        SizedBox(height: 8),
+                        ListTile(
+                          title: Text(sessions[index].activityName, style: TextStyle(fontWeight: FontWeight.bold,)),
+                          subtitle: Text('Speaker: ${sessions[index].username}\nStart Time: ${sessions[index].startTime}\nMode: ${sessions[index].sessionMod}'),
+                        ),
+                        SizedBox(height: 8),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            _launchURL(sessions[index].url);
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
+                            children: [
+                              Icon(FontAwesomeIcons.play, color: Theme.of(context).backgroundColor,), // Add the Font Awesome icon
+                              SizedBox(width: 8), // Add some space between the icon and text
+                              Text(
+                                'Join Now',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Theme.of(context).secondaryHeaderColor, // Set button background color
+                          ),
+                        ),
                       ),
+
+                      ],
                     ),
+                  
                   );
                 },
               );
@@ -92,13 +131,12 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
       ),
     );
   }
-
-  // Function to launch URL
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
+}
+
 }

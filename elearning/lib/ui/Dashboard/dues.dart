@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:elearning/services/auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-
+import 'package:elearning/services/homepage_service.dart'; // Import the HomePageService class
 
 class AutoScrollableSections extends StatefulWidget {
   final String token;
@@ -15,52 +13,32 @@ class AutoScrollableSections extends StatefulWidget {
   _AutoScrollableSectionsState createState() => _AutoScrollableSectionsState();
 }
 
-
 class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
-  int _past=0;
-  int _soon=0;
-  int _later=0;
+  int _past = 0;
+  int _soon = 0;
+  int _later = 0;
 
   @override
-void initState() {
-  super.initState();
-  _startAutoScroll();
-  _fetchDueInfo(widget.token); // Call _fetchdue with the token passed from the dashboard
-}
-
-  Future<void> _fetchDueInfo(String token) async {
-  try {
-    final userInfo = await SiteConfigApiService.getUserId(token);
-    //final baseUrl = userInfo['siteurl'];
-   // final wstoken = 'your_wstoken'; // Add your wstoken here
-    final userId = userInfo['id'];
- // Extract function names
-    final functionNames = userInfo['functions'];
-    //final List<String> functionNames = functions.map<String>((function) => function['name']).toList();
-    final dueInfo = await DueApiService.getDueInfo(token, userId);
-    // Handle due information as needed
-    final past=dueInfo['countactivity'];
-    final soon=dueInfo['countsevendays'];
-    final later=dueInfo['countthirtydays'];
-   
-    setState(() {
-        _past = past;
-        _soon = soon;
-        _later= later;
-      });
-  } catch (e) {
-    print('Error fetching due information: $e');
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+    _fetchHomePageData(); // Call method to fetch homepage data
   }
-}
 
-  // @override
-  // void dispose() {
-  //   _timer?.cancel();
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
+  Future<void> _fetchHomePageData() async {
+    try {
+      final homePageData = await HomePageService.fetchHomePageData(widget.token);
+      setState(() {
+        _past = homePageData.countActivity;
+        _soon = homePageData.countSevenDays;
+        _later = homePageData.countThirtyDays;
+      });
+    } catch (e) {
+      print('Error fetching homepage data: $e');
+    }
+  }
 
   void _startAutoScroll() {
     _timer = Timer.periodic(Duration(seconds: 2), (timer) {
@@ -86,9 +64,16 @@ void initState() {
   }
 
   @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all( 0.0),
+      padding: const EdgeInsets.all(0.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
@@ -96,48 +81,41 @@ void initState() {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),'assets/images/svg/task-past-due-svgrepo-com.svg'),
-              buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),'assets/images/svg/task-due-svgrepo-com.svg'),
-              buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),'assets/images/svg/date-time-svgrepo-com.svg'),
+              buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
+                  'assets/images/svg/task-past-due-svgrepo-com.svg'),
+              buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
+                  'assets/images/svg/task-due-svgrepo-com.svg'),
+              buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
+                  'assets/images/svg/date-time-svgrepo-com.svg'),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-
-Widget buildSection(String title, String number, Color color,String svgPath) {
-     return Padding(
+  Widget buildSection(String title, String number, Color color, String svgPath) {
+    return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.3),
-          spreadRadius: 2,
-          blurRadius: 4,
-          offset: Offset(0, 4),
-        ),
-      ],
-          color: Color.fromARGB(172, 255, 253, 253),
+         // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.3),
+          //     spreadRadius: 2,
+          //     blurRadius: 4,
+          //     offset: Offset(0, 4),
+          //   ),
+          // ],
+           color: Colors.white,
           borderRadius: BorderRadius.circular(12.0),
-      //      gradient: LinearGradient(
-      //   begin: Alignment.topLeft,
-      //   end: Alignment.bottomRight,
-      //   colors: [
-      //    Color(0xFFFFA000),    Color.fromARGB(178, 212, 0, 249), // Replace with your desired gradient colors
-      //    // Example colors used here
-      //   ],
-      // ),
-       border: Border.all(
-            color: const Color.fromARGB(255, 227, 236, 227), // Green border color
+          border: Border.all(
+            color: const Color.fromARGB(255, 227, 236, 227),
             width: 2.0,
           ),
         ),
-         child: Row(
+        child: Row(
           children: [
             Container(
               width: 30,
@@ -146,12 +124,10 @@ Widget buildSection(String title, String number, Color color,String svgPath) {
                 shape: BoxShape.circle,
                 color: color,
               ),
-              child:Center(
-              child: SvgPicture.asset(svgPath),
-               
+              child: Center(
+                child: SvgPicture.asset(svgPath),
               ),
-              ),
-            
+            ),
             const SizedBox(width: 25.0),
             Column(
               children: [
@@ -160,7 +136,6 @@ Widget buildSection(String title, String number, Color color,String svgPath) {
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    //color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 7.0, width: 50.0),
@@ -169,8 +144,7 @@ Widget buildSection(String title, String number, Color color,String svgPath) {
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
-                    //color: Colors.white,
-                ),
+                  ),
                 ),
               ],
             ),
@@ -179,4 +153,4 @@ Widget buildSection(String title, String number, Color color,String svgPath) {
       ),
     );
   }
-
+}

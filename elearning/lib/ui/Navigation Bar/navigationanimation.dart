@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,13 +19,23 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  late int _selectedIndex;
+  late int _selectedIndex = 0; 
+  Timer? _timer; // Define _timer as a Timer variable
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.initialIndex;
-  }
+
+ @override
+void initState() {
+  super.initState();
+  _selectedIndex = widget.initialIndex ?? 0; // Use initialIndex if provided, otherwise default to 0
+}
+
+@override
+void dispose() {
+  _timer?.cancel(); // Cancel the timer
+  super.dispose();
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,26 +94,28 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   void _handleTabPressed(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  if (!mounted) return; // Check if the state is still mounted
 
-    switch (index) {
-      case 0:
-        Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
-        break;
-      case 1:
-       Navigator.of(context).pushReplacementNamed(RouterManger.mylearning, arguments: widget.token);
-        break;
-      case 2:
-       Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
-        break;
-      case 3:
-        Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
-        break;
-      case 4:
-       Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
-        break;
-    }
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+    case 0:
+      Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+      break;
+    case 1:
+      Navigator.of(context).pushReplacementNamed(RouterManger.mylearning, arguments: widget.token);
+      break;
+    case 2:
+      Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
+      break;
+    case 3:
+      Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
+      break;
+    case 4:
+      Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
+      break;
   }
+}
 }

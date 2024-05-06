@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   PageController _pageController = PageController();
   int _currentPage = 0;
+  bool _isConnected = true;
+  
 
   List<Map<String, String>> pagesData = [
     {
@@ -28,12 +31,26 @@ class _LandingPageState extends State<LandingPage> {
       'subtitle': 'Sign in to unlock the full potential of our eLearning platform.',
     },
   ];
+@override
+  void initState() {
+    super.initState();
+    _checkInternetConnection();
+  }
+
+  Future<void> _checkInternetConnection() async {
+  var connectivityResult = await Connectivity().checkConnectivity();
+  setState(() {
+    _isConnected = connectivityResult != ConnectivityResult.none;
+  });
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
+      body: Padding(
+         padding: const EdgeInsets.all(16.0), // Adjust the padding as needed
+  child:Stack(
         children: [
           PageView.builder(
             controller: _pageController,
@@ -69,8 +86,9 @@ class _LandingPageState extends State<LandingPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 3,
+                      backgroundColor: Theme.of(context).secondaryHeaderColor
                     ),
-                    child: Text('Skip'),
+                    child: Text('Skip' ,style: TextStyle(color: Colors.white),),
                   )
                 : SizedBox(),
           ),
@@ -91,21 +109,42 @@ class _LandingPageState extends State<LandingPage> {
               bottom: 20,
               right: 20,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
+                onPressed: _isConnected
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                        );
+                      }
+                    : null, // Disable button if not connected
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: Color.fromARGB(255, 242, 242, 243),
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
                   elevation: 6,
                 ),
-                child: Text('Login',style: TextStyle(color:  Colors.orange),),
+                child: Text('Login',style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          if (!_isConnected)
+            Positioned.fill(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Please check your internet connection',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    ElevatedButton(
+                      onPressed: _checkInternetConnection,
+                      child: Text('Retry'),
+                    ),
+                  ],
+                ),
               ),
             ),
         ],
+      ),
       ),
     );
   }

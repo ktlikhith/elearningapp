@@ -1,33 +1,50 @@
 import 'dart:convert';
-// import 'dart:html';
 import 'package:elearning/services/auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
-class ReportApiService {
-  // final String baseUrl =
-  //     "https://lxp-demo2.raptechsolutions.com/webservice/rest/server.php";
-
-  Future<Map<String, dynamic>> fetchUserActivity(String token) async {
-    try {
-      final userInfo = await SiteConfigApiService.getUserId(token);
+class ReportService {
+  
+  Future<Report> fetchReport(String token) async {
+     final userInfo = await SiteConfigApiService.getUserId(token);
       final userId = userInfo['id'];
-      final url = '${Constants.baseUrl}?moodlewsrestformat=json&wstoken=$token&wsfunction=local_corporate_api_user_reportapi&userid=$userId';
+      final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
+      'moodlewsrestformat=json&wstoken=$token&wsfunction=local_corporate_api_user_reportapi&userid=$userId');
+      final response = await http.get(apiUrl);
 
-      final response = await http.get(Uri.parse(url));
-      print('$response');
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        if (responseData.containsKey('error')) {
-          throw Exception(responseData['error']);
-        }
-        return responseData;
-      } else {
-        throw Exception('Failed to load user activity');
-      }
-    } catch (e) {
-      throw Exception('Error fetching user activity: $e');
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return Report.fromJson(jsonData);
+    } else {
+      throw Exception('Failed to load report');
     }
+  }
+}
+
+class Report {
+  final String id;
+  final String studentName;
+  final String studentImage;
+  final double averageGrade;
+  final int totalNoActivity;
+  final int completedActivity;
+
+  Report({
+    required this.id,
+    required this.studentName,
+    required this.studentImage,
+    required this.averageGrade,
+    required this.totalNoActivity,
+    required this.completedActivity,
+  });
+
+  factory Report.fromJson(Map<String, dynamic> json) {
+    return Report(
+      id: json['id'] ?? 0,
+      studentName: json['studentname'] ,
+      studentImage: json['studentimage'] ,
+      averageGrade: json['avragegrade'].toDouble() ,
+      totalNoActivity: json['totalnoactivity'] ,
+      completedActivity: json['completedactivity'] ,
+    );
   }
 }
