@@ -1,188 +1,143 @@
+
+
+import 'package:elearning/services/course_content.dart';
+import 'package:elearning/ui/My_learning/webviewpage.dart';
 import 'package:flutter/material.dart';
 
-class CourseDetailsPage extends StatelessWidget {
+class CourseDetailsPage extends StatefulWidget {
+  final String token;
+  final String courseId;
+
+  CourseDetailsPage(this.token, this.courseId);
+
+  @override
+  _CourseDetailsPageState createState() => _CourseDetailsPageState();
+}
+
+class _CourseDetailsPageState extends State<CourseDetailsPage> {
+  List<Map<String, dynamic>>? _courseContentData;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCourseContent();
+  
+    
+  }
+
+  Future<void> _fetchCourseContent() async {
+    
+    try {
+   
+      final courseContent = await CourseContentApiService()
+          .fetchCourseContentData(widget.token, widget.courseId);
+      print(courseContent);
+      if (mounted) {
+        setState(() {
+          _courseContentData = courseContent;
+        });
+      }
+    } catch (e) {
+      print('Error fetching course content: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Scaffold(
-        appBar: AppBar(
-           backgroundColor: Theme.of(context).primaryColor,
-          title: Text('Course Details'),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text('Course Details'),
+      ),
+      body: _courseContentData != null
+          ? _buildCourseContent()
+          : Center(child: CircularProgressIndicator()),
+    );
+  }
+Widget _buildCourseContent() {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var section in _courseContentData!)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Image
               Container(
-                height: 300, // Adjust the height as needed
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/img1.jpeg'), // Correct image path
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              // Curved Edge Container
-              Container(
-                margin: EdgeInsets.all(20), // Adjust the margin to overlap the image
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                color: Colors.orange, // Add blue background color for the section row
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
                   children: [
-                    // Title of the Course
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Course Title',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      section['name'] ?? 'Section Name',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 224, 222, 219),
+                        fontSize: 18,
                       ),
-                    ),
-                    // Description of the Course
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'Course Description goes here...',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    // Content Headers
-                    ExpansionTile(
-                      leading: Icon(Icons.play_circle_filled), // Icon for video content
-                      title: Text(
-                        'Module 1',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text('GO1 | SCORM | PDF | Quiz'), // Dummy content types
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.play_circle_filled), // Icon for video content
-                          title: Text('Video Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.insert_drive_file), // Icon for SCORM content
-                          title: Text('SCORM Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.picture_as_pdf), // Icon for PDF content
-                          title: Text('PDF Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.quiz), // Icon for quiz content
-                          title: Text('Quiz Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                      ],
-                    ),
-                    // Module 2
-                    ExpansionTile(
-                      leading: Icon(Icons.play_circle_filled),
-                      title: Text(
-                        'Module 2',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text('GO1 | SCORM | PDF | Quiz'),
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.play_circle_filled),
-                          title: Text('Video Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.insert_drive_file),
-                          title: Text('SCORM Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.picture_as_pdf),
-                          title: Text('PDF Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.quiz),
-                          title: Text('Quiz Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                      ],
-                    ),
-                    // Module 3
-                    ExpansionTile(
-                      leading: Icon(Icons.play_circle_filled),
-                      title: Text(
-                        'Module 3',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text('GO1 | SCORM | PDF | Quiz'),
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.play_circle_filled),
-                          title: Text('Video Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.insert_drive_file),
-                          title: Text('SCORM Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.picture_as_pdf),
-                          title: Text('PDF Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.quiz),
-                          title: Text('Quiz Content'),
-                          onTap: () {
-                            // Handle tap
-                          },
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+              SizedBox(height: 8),
+              for (var module in section['modules'])
+                ListTile(
+                  leading: _buildModuleIcon(module['modicon']! + '?token=${widget.token}'),
+                  title: Text(module['name'] ?? 'Module Name'),
+                 onTap: () {
+  if (module['url'] != null && module['url'].isNotEmpty) {
+    String modifiedUrl = module['url']! + '?token=${widget.token}';
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', modifiedUrl),
       ),
     );
   }
+},
+                ),
+              Divider(), // Add a divider between modules
+            ],
+          ),
+      ],
+    ),
+  );
+}
+
+
+
+Widget _buildModuleIcon(String? iconUrl) {
+  print('$iconUrl');
+  //     DecorationImage(
+  //                 image: NetworkImage( '$iconUrl'),
+  //                 fit: BoxFit.cover,
+  //               );
+  if (iconUrl != null && iconUrl.isNotEmpty) {
+  //   // Check if the URL contains a query parameter (?)
+  //   if (iconUrl.contains('?')) {
+  //     // Append additional parameters to the URL to ensure correct image loading
+  //     iconUrl += '&time=' + DateTime.now().millisecondsSinceEpoch.toString();
+  //   } else {
+  //     // If no query parameter exists, add one to the URL
+  //     iconUrl += '?time=' + DateTime.now().millisecondsSinceEpoch.toString();
+  //   }
+
+
+    return Image.network(
+      iconUrl,
+      width: 40,
+      height: 40,
+      fit: BoxFit.cover,
+      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+        // Placeholder icon if loading the modicon fails
+        return Icon(Icons.error_outline);
+      },
+    );
+  } else {
+    // Placeholder icon if modicon URL is invalid or empty
+    return Icon(Icons.error_outline);
+  }
+}
+
 }

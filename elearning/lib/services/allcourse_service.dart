@@ -81,6 +81,7 @@ class CourseReportApiService {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final List<dynamic> coursesData = responseData['allcourses'];
+        
         return coursesData.map((courseData) => Course.fromJson(courseData)).toList();
       } else {
         throw Exception('Failed to load courses');
@@ -89,6 +90,10 @@ class CourseReportApiService {
       throw Exception('Error fetching courses: $e');
     }
   }
+
+
+
+  // static int getcoursenameWithToken(String token) {}
 }
 
 class Course {
@@ -130,4 +135,30 @@ class Course {
    String getImageUrlWithToken(String token) {
     return '$courseImg?token=$token';
   }
+  String getCourseIDWithToken(String token) {
+    
+    return '$id';
+  }
+    String getcoursenameWithToken(String token) {
+    return '$name';
+  }
+   String getcourseProgressWithToken(String token) {
+    return '$courseProgress';
+  }
+   String getcourseDescriptionWithToken(String token) {
+    return '$courseDescription';
+  }
+   String getcourseStartDateWithToken(String token) {
+    return '$courseStartDate';
+  }
+   String getcourseEndDateWithToken(String token) {
+    return '$courseEndDate';
+  }
+   String getcourseVideoUrlWithToken(String token) {
+    return '$courseVideoUrl';
+  }
+   String getcourseDurationWithToken(String token) {
+    return '$courseDuration';
+  }
+  
 }

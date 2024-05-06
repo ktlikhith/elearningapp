@@ -8,32 +8,22 @@ Widget buildSection({required String svgPath, required int number, required Stri
     child: Container(
       width: 130.0,
       margin: const EdgeInsets.only(right: 16.0),
-      decoration: BoxDecoration(
-            boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-            color: Color.fromARGB(255, 253, 251, 251),
-            borderRadius: BorderRadius.circular(12.0),
-           border: Border.all(
-              color: const Color.fromARGB(255, 227, 236, 227), // Green border color
+       decoration: BoxDecoration(
+         // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.3),
+          //     spreadRadius: 2,
+          //     blurRadius: 4,
+          //     offset: Offset(0, 4),
+          //   ),
+          // ],
+           color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(
+            color: const Color.fromARGB(255, 227, 236, 227),
             width: 2.0,
           ),
-        //      gradient: LinearGradient(
-        //   begin: Alignment.topLeft,
-        //   end: Alignment.bottomRight,
-        //   colors: [
-        //   Color(0xFFFFA000),    Color(0xFFD500F9), // Replace with your desired gradient colors
-        //    // Example colors used here
-        //   ],
-        // ),
-        
-        
-      ),
+        ),
       padding: const EdgeInsets.all(16.0),
       
       child: Column(
