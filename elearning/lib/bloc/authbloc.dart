@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:elearning/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Define events
 abstract class AuthEvent {}
@@ -50,7 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading()); // Emit loading state while performing authentication
     try {
       final result = await authRepository.login(event.username, event.password);
-      final token = result['token']; // Assuming login returns token
+      final token = result['token'];
+       // Replace with actual token from backend
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setString('token', token); // Assuming login returns token
       //print(token);
       emit(AuthAuthenticated(token));// Emit authenticated state on successful login
      
