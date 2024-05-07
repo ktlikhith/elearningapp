@@ -68,13 +68,14 @@ Widget _buildCourseContent() {
                 color: Colors.orange, // Add blue background color for the section row
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Center the session name horizontally
                   children: [
                     Text(
                       section['name'] ?? 'Section Name',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: const Color.fromARGB(255, 224, 222, 219),
-                        fontSize: 18,
+                        fontSize: 22,
                       ),
                     ),
                   ],
@@ -83,19 +84,23 @@ Widget _buildCourseContent() {
               SizedBox(height: 8),
               for (var module in section['modules'])
                 ListTile(
-                  leading: _buildModuleIcon(module['modicon']! + '?token=${widget.token}'),
-                  title: Text(module['name'] ?? 'Module Name'),
-                 onTap: () {
-  if (module['url'] != null && module['url'].isNotEmpty) {
-    String modifiedUrl = module['url']! + '?token=${widget.token}';
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', modifiedUrl),
-      ),
-    );
-  }
-},
+                  leading: _buildModuleIcon(module['modicon']! + '?privatetoken=UlHC9oFhqqBZWbhyjnqxXBoKP5oq63FpoJQSTLacHIDb9sI7ORgZ4FbXEhpa4bWE'),
+                  title: Text(module['name'] ?? 'Module Name',  style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 6, 6, 6),
+                        fontSize: 18,),
+                  ),
+                  onTap: () {
+                    if (module['url'] != null && module['url'].isNotEmpty) {
+                      String modifiedUrl = module['url']! + '?privatetoken=UlHC9oFhqqBZWbhyjnqxXBoKP5oq63FpoJQSTLacHIDb9sI7ORgZ4FbXEhpa4bWE';
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WebViewPage(module['name'] ?? 'Module Name', modifiedUrl),
+                        ),
+                      );
+                    }
+                  },
                 ),
               Divider(), // Add a divider between modules
             ],
@@ -104,6 +109,7 @@ Widget _buildCourseContent() {
     ),
   );
 }
+
 
 
 

@@ -7,6 +7,7 @@ import 'package:elearning/ui/Learning_path/learningpath.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyMorePage extends StatefulWidget {
   final String token;
@@ -26,6 +27,11 @@ class _MyMorePageState extends State<MyMorePage> {
     super.initState();
     _fetchProfileData(widget.token);
   }
+  Future<void> _clearToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+  // Navigate back to the landing page or login screen if needed
+}
 
   Future<void> _fetchProfileData(String token) async {
     try {
@@ -106,6 +112,7 @@ class _MyMorePageState extends State<MyMorePage> {
               leading: FaIcon(FontAwesomeIcons.rightFromBracket),
               title: Text('Logout'),
               onTap: () {
+                 _clearToken();
                 
                   Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
                
