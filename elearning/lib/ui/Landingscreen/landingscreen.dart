@@ -1,7 +1,9 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class _LandingPageState extends State<LandingPage> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   bool _isConnected = true;
-  
+  bool _isLoggedIn = false;
 
   List<Map<String, String>> pagesData = [
     {
@@ -31,120 +33,137 @@ class _LandingPageState extends State<LandingPage> {
       'subtitle': 'Sign in to unlock the full potential of our eLearning platform.',
     },
   ];
-@override
+
+  @override
   void initState() {
     super.initState();
     _checkInternetConnection();
+    _checkLoginStatus();
   }
 
   Future<void> _checkInternetConnection() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
-  setState(() {
-    _isConnected = connectivityResult != ConnectivityResult.none;
-  });
-}
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      _isConnected = connectivityResult != ConnectivityResult.none;
+    });
+  }
+
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    setState(() {
+      _isLoggedIn = token != null && token.isNotEmpty;
+    });
+
+    if (_isLoggedIn) {
+      // Token exists, navigate directly to HomeScreen
+      Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-         padding: const EdgeInsets.all(16.0), // Adjust the padding as needed
-  child:Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            itemCount: pagesData.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: _buildPage(
-                  pagesData[index]['gif']!,
-                  pagesData[index]['title']!,
-                  pagesData[index]['subtitle']!,
-                  isLastPage: index == pagesData.length - 1,
-                ),
-              );
-            },
-          ),
-          Positioned(
-            top: 40,
-            right: 20,
-            child: _currentPage < pagesData.length - 1
-                ? ElevatedButton(
-                    onPressed: () {
-                      _pageController.animateToPage(
-                        pagesData.length - 1,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 3,
-                      backgroundColor: Theme.of(context).secondaryHeaderColor
-                    ),
-                    child: Text('Skip' ,style: TextStyle(color: Colors.white),),
-                  )
-                : SizedBox(),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                pagesData.length,
-                (index) => _buildDot(index),
-              ),
+        padding: const EdgeInsets.all(16.0),
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              itemCount: pagesData.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _buildPage(
+                    pagesData[index]['gif']!,
+                    pagesData[index]['title']!,
+                    pagesData[index]['subtitle']!,
+                    isLastPage: index == pagesData.length - 1,
+                  ),
+                );
+              },
             ),
-          ),
-          if (_currentPage == pagesData.length - 1)
+            Positioned(
+              top: 40,
+              right: 20,
+              child: _currentPage < pagesData.length - 1
+                  ? ElevatedButton(
+                      onPressed: () {
+                        _pageController.animateToPage(
+                          pagesData.length - 1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 3,
+                          backgroundColor: Theme.of(context).secondaryHeaderColor),
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  : SizedBox(),
+            ),
             Positioned(
               bottom: 20,
-              right: 20,
-              child: ElevatedButton(
-                onPressed: _isConnected
-                    ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
-                        );
-                      }
-                    : null, // Disable button if not connected
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: Theme.of(context).secondaryHeaderColor,
-                  elevation: 6,
-                ),
-                child: Text('Login',style: TextStyle(color: Colors.white)),
-              ),
-            ),
-          if (!_isConnected)
-            Positioned.fill(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Please check your internet connection',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    ElevatedButton(
-                      onPressed: _checkInternetConnection,
-                      child: Text('Retry'),
-                    ),
-                  ],
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  pagesData.length,
+                  (index) => _buildDot(index),
                 ),
               ),
             ),
-        ],
-      ),
+            if (_currentPage == pagesData.length - 1 && !_isLoggedIn)
+              Positioned(
+                bottom: 20,
+                right: 20,
+                child: ElevatedButton(
+                  onPressed: _isConnected
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
+                        }
+                      : null, // Disable button if not connected
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    elevation: 6,
+                  ),
+                  child: Text('Login', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            if (!_isConnected)
+              Positioned.fill(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Please check your internet connection',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      ElevatedButton(
+                        onPressed: _checkInternetConnection,
+                        child: Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
