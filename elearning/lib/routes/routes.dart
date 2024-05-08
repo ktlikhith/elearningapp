@@ -83,8 +83,10 @@ class RouterManger{
 
       case Gamification:
       final token = settings.arguments as String; // Retrieve the token from settings.arguments
-            return MaterialPageRoute(
-            builder: (context) => GamificationPage(token: token ),
+        
+              return MaterialPageRoute(
+          builder: (context) => GamificationPage(token: token),
+        
       );
        case quizscore:
       return MaterialPageRoute(

@@ -1,6 +1,7 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ContinueWatchingScreen extends StatelessWidget {
   final String token;
@@ -14,10 +15,10 @@ class ContinueWatchingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Continue Watching'),
-         centerTitle: false,
+        centerTitle: false,
         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
           },
@@ -25,8 +26,11 @@ class ContinueWatchingScreen extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-        itemCount: courses.length,
+        itemCount: courses.isEmpty ? 5 : courses.length, // Use 5 shimmer items if courses list is empty
         itemBuilder: (context, index) {
+          if (courses.isEmpty) {
+            return _buildShimmerItem();
+          }
           final CourseData course = courses[index];
           return Card(
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -71,6 +75,61 @@ class ContinueWatchingScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildShimmerItem() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          side: BorderSide(color: Colors.grey[400]!),
+        ),
+        child: Container(
+          color: Colors.white,
+          child: ListTile(
+            contentPadding: EdgeInsets.all(8.0),
+            leading: Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.grey[300], // Placeholder color for shimmer effect
+              ),
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 10.0,
+                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                ),
+                SizedBox(height: 8.0),
+                Container(
+                  width: double.infinity,
+                  height: 10.0,
+                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                ),
+                SizedBox(height: 8.0),
+                Container(
+                  width: double.infinity,
+                  height: 10.0,
+                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                ),
+              ],
+            ),
+            trailing: Container(
+              width: 60.0,
+              height: 10.0,
+              color: Colors.grey[300], // Placeholder color for shimmer effect
+            ),
+          ),
+        ),
       ),
     );
   }

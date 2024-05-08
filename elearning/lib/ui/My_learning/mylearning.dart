@@ -3,6 +3,7 @@ import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart'; // Import the shimmer package
 
 class LearningScreen extends StatelessWidget {
   final String token;
@@ -40,60 +41,75 @@ class _MyLearningPageState extends State<MyLearningPage> {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
         return true;
       },
-      child:  Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: const Row(
-          children: [
-            
-            Text(
-              'My Learning',
-             
-            ),
-            
-          ],
-        ),
-           leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search,color: Colors.white),
-            onPressed: _handleSearchPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          title: const Row(
+            children: [
+              Text(
+                'My Learning',
+              ),
+            ],
           ),
-        ],
-        bottom: _isSearching
-            ? const PreferredSize(
-                preferredSize: Size.fromHeight(56.0),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      border: OutlineInputBorder(),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
+            },
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
+              onPressed: _handleSearchPressed,
+            ),
+          ],
+          bottom: _isSearching
+              ? const PreferredSize(
+                  preferredSize: Size.fromHeight(56.0),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
-                ),
-              )
-            : null,
+                )
+              : null,
+        ),
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: SingleChildScrollView(
+          child: MyLearningAppBody(token: widget.token), // Pass the token to MyLearningAppBody
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1, token: widget.token),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: SingleChildScrollView(
-        child: MyLearningAppBody(token: widget.token), // Pass the token to MyLearningAppBody
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1,token: widget.token,),
-    ),
     );
   }
 }
 
-class MyLearningAppBody extends StatelessWidget {
+class MyLearningAppBody extends StatefulWidget {
   final String token; // Add token field
 
   const MyLearningAppBody({Key? key, required this.token}) : super(key: key);
+
+  @override
+  _MyLearningAppBodyState createState() => _MyLearningAppBodyState();
+}
+
+class _MyLearningAppBodyState extends State<MyLearningAppBody> {
+  bool _isLoading = true; // Initial loading state
+
+  @override
+  void initState() {
+    super.initState();
+    // Simulate data loading delay
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _isLoading = false; // Set loading to false after delay
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +124,7 @@ class MyLearningAppBody extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 buildSection(
-                 svgPath: 'assets/images/activity.svg',
+                  svgPath: 'assets/images/activity.svg',
                   number: 50,
                   title: 'Totalactivity',
                 ),
@@ -118,7 +134,7 @@ class MyLearningAppBody extends StatelessWidget {
                   title: 'Completed',
                 ),
                 buildSection(
-                   svgPath: 'assets/images/activity.svg',
+                  svgPath: 'assets/images/activity.svg',
                   number: 5,
                   title: 'Inprogress',
                 ),
@@ -126,10 +142,76 @@ class MyLearningAppBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24.0), // Add some space between sections
-          // Call buildCourseSection here
-          BuildCourseSections(token: token,), // Pass the token to BuildCourseSections
+          // Shimmer effect while loading BuildCourseSections
+          _isLoading
+              ? _buildLoadingShimmer()
+              : BuildCourseSections(token: widget.token), // Pass the token to BuildCourseSections
         ],
       ),
+    );
+  }
+
+   Widget _buildLoadingShimmer() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 3, // Show 3 dummy containers while loading
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 200, // Adjust height as needed
+                  color: Colors.grey, // Placeholder color for the video
+                ),
+                const SizedBox(height: 16.0), // Add spacing between video section and other content
+                Container(
+                  width: double.infinity,
+                  height: 20.0,
+                  color: Colors.grey, // Placeholder color for title
+                ),
+                const SizedBox(height: 8.0), // Add spacing between title and status
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 100.0,
+                      height: 12.0,
+                      color: Colors.grey, // Placeholder color for status
+                    ),
+                    const SizedBox(width: 16.0), // Add spacing between status and due date
+                    Container(
+                      width: 80.0,
+                      height: 12.0,
+                      color: Colors.grey, // Placeholder color for due date
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8.0), // Add spacing between status and download/more options
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

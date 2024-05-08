@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:elearning/services/leaderboardservice.dart';
+import 'package:shimmer/shimmer.dart';
 
 class leaderboard extends StatefulWidget {
   final String token;
@@ -51,7 +52,7 @@ class _leaderboardState extends State<leaderboard> {
           Text('Leader Board', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
           isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? _buildShimmerSkeleton()
               : users.isNotEmpty
                   ? buildLeaderBoard()
                   : Text(
@@ -62,6 +63,62 @@ class _leaderboardState extends State<leaderboard> {
       ),
     );
   }
+Widget _buildShimmerSkeleton() {
+  return SizedBox(
+    height: 300, // Adjust height as needed
+    child: Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: 5, // Adjust the number of shimmer items as needed
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 16,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        width: 150,
+                        height: 16,
+                        color: Colors.grey[300],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    ),
+  );
+}
+
 
   Widget buildLeaderBoard() {
     return SingleChildScrollView(
