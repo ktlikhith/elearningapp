@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:elearning/services/homepage_service.dart'; // Import the HomePageService class
+import 'package:shimmer/shimmer.dart';
 
 class AutoScrollableSections extends StatefulWidget {
   final String token;
@@ -19,6 +20,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
   int _past = 0;
   int _soon = 0;
   int _later = 0;
+  bool _isLoading = true; // Flag to track loading state
 
   @override
   void initState() {
@@ -34,9 +36,13 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
         _past = homePageData.countActivity;
         _soon = homePageData.countSevenDays;
         _later = homePageData.countThirtyDays;
+        _isLoading = false; // Update loading state
       });
     } catch (e) {
       print('Error fetching homepage data: $e');
+      setState(() {
+        _isLoading = false; // Update loading state in case of error
+      });
     }
   }
 
@@ -81,13 +87,35 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
+              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
                   'assets/images/svg/task-past-due-svgrepo-com.svg'),
-              buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
                   'assets/images/svg/task-due-svgrepo-com.svg'),
-              buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
                   'assets/images/svg/date-time-svgrepo-com.svg'),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerItem() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          width: 200,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(
+              color: const Color.fromARGB(255, 227, 236, 227),
+              width: 2.0,
+            ),
           ),
         ),
       ),
@@ -100,15 +128,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-         // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.3),
-          //     spreadRadius: 2,
-          //     blurRadius: 4,
-          //     offset: Offset(0, 4),
-          //   ),
-          // ],
-           color: Colors.white,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: const Color.fromARGB(255, 227, 236, 227),

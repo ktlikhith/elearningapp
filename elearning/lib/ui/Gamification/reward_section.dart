@@ -1,7 +1,7 @@
 import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:shimmer/shimmer.dart';
 
 class RewardSection extends StatefulWidget {
   final String token;
@@ -20,7 +20,7 @@ class _RewardSectionState extends State<RewardSection> {
       future: widget.rewardDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return _buildShimmerSkeleton();
         } else if (snapshot.hasError) {
           return Text('Error loading points');
         } else {
@@ -108,6 +108,82 @@ class _RewardSectionState extends State<RewardSection> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerSkeleton() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          4, // Adjust the number of shimmer items as needed
+          (index) => _buildShimmerItem(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerItem() {
+    return Container(
+      height: 120,
+      width: 120,
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+        color: Colors.white,
+        border: Border.all(
+          color: const Color.fromARGB(255, 227, 236, 227), // Green border color
+          width: 2.0,
+        ),
+      ),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            SizedBox(height: 8),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 12,
+                      color: Colors.grey[300],
+                    ),
+                    SizedBox(height: 4),
+                    Container(
+                      width: 30,
+                      height: 12,
+                      color: Colors.grey[300],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

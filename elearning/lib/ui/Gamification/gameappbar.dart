@@ -40,13 +40,8 @@ class _GamificationPageState extends State<GamificationPage> {
           title: FutureBuilder<RewardData>(
             future: _rewardDataFuture,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error loading points');
-              } else {
+              if (snapshot.connectionState == ConnectionState.done) {
                 final totalPoints = snapshot.data!.totalPoints;
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -61,6 +56,8 @@ class _GamificationPageState extends State<GamificationPage> {
                     ),
                   ],
                 );
+              } else {
+                return SizedBox.shrink(); // Hide the title while loading
               }
             },
           ),
@@ -78,8 +75,6 @@ class _GamificationPageState extends State<GamificationPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
-
-
                 SizedBox(height: 20),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -91,7 +86,7 @@ class _GamificationPageState extends State<GamificationPage> {
                         flex: 1,
                         child: Column(
                           children: [
-                            SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture), // Include SpinWheel1 here
+                            SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture),
                           ],
                         ),
                       ),
