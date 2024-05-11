@@ -45,8 +45,8 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
-      color: Colors.grey[200],
+      padding: EdgeInsets.all(0),
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -120,25 +120,58 @@ class _LeaderboardState extends State<Leaderboard> {
       ),
     );
   }
-
-  Widget buildLeaderBoard() {
+Widget buildLeaderBoard() {
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: DataTable(
+      headingRowColor: MaterialStateColor.resolveWith((states) => Colors.orange), // Set the color for the heading row
       columnSpacing: 20,
       columns: [
-        DataColumn(label: Text('#No', style: TextStyle(color: Colors.black))),
-        DataColumn(label: Text('Name', style: TextStyle(color: Colors.black))),
-        DataColumn(label: Text('Rank', style: TextStyle(color: Colors.black))),
-        DataColumn(label: Text('Points', style: TextStyle(color: Colors.black))),
-        DataColumn(label: Text('Department', style: TextStyle(color: Colors.black))),
+        DataColumn(
+          label: Center(
+            child: Text('#No', style: TextStyle(color: Colors.white)),
+          ),
+        ),
+        DataColumn(
+          label: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 60),
+              child: Text('Name', style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Rank', style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Center(
+            child: Text('Points', style: TextStyle(color: Colors.white)),
+          ),
+        ),
+        DataColumn(
+          label: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text('Department', style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        ),
       ],
       rows: users.asMap().entries.map((entry) {
         int index = entry.key + 1; // Serial number starts from 1
         User user = entry.value;
         return DataRow(
           cells: [
-            DataCell(Text('$index')), // Serial number cell
+            DataCell(
+              Center(
+                child: Text('$index'),
+              ),
+            ), // Serial number cell (horizontally centered)
             DataCell(
               Row(
                 children: [
@@ -146,29 +179,41 @@ class _LeaderboardState extends State<Leaderboard> {
                     backgroundImage: NetworkImage(user.image),
                   ),
                   SizedBox(width: 10),
-                  Text(user.name),
+                  Expanded(
+                    child: Text(user.name), // Align name to the left
+                  ),
                 ],
               ),
             ),
-            DataCell( Row(
+            DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end, // Align children to the end
                 children: [
-                 
-                 
-                  Text(user.rank),
-                   SizedBox(width: 10),
-                   CircleAvatar(
+                  Text(user.rank), // Align rank to the left
+                  SizedBox(width: 10),
+                  CircleAvatar(
                     backgroundImage: NetworkImage(user.rank_icon),
                   ),
                 ],
               ),
             ),
-            DataCell(Text(user.points)),
-            DataCell(Text(user.department)),
+            DataCell(
+              Center(
+                child: Text(user.points),
+              ),
+            ), // Centered points
+            DataCell(
+              
+                  Center(
+                child:Text(user.department),
+                  ),
+            ), // Centered department
           ],
         );
       }).toList(),
     ),
   );
 }
+
 
 }
