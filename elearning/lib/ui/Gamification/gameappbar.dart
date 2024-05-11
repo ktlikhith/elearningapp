@@ -101,19 +101,22 @@ class _GamificationPageState extends State<GamificationPage> {
                       //   },
                       //   child: Text('Gift Rewards'),
                       // ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
-                      //   },
-                      //   child: Text('QUIZ'),
-                      // ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                        },
+                        child: Text('QUIZ'),
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(height: 20),
                 ScratchCardScreen(token: widget.token),
                 SizedBox(height: 20),
-                Leaderboard(token: widget.token),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Leaderboard(token: widget.token),
+                ),
                 SizedBox(height: 20),
               ],
             ),
