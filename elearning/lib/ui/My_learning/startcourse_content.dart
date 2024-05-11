@@ -1,14 +1,15 @@
-
-
 import 'package:elearning/services/course_content.dart';
 import 'package:elearning/ui/My_learning/webviewpage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CourseDetailsPage extends StatefulWidget {
   final String token;
   final String courseId;
+  final String courseName;
 
-  CourseDetailsPage(this.token, this.courseId);
+  CourseDetailsPage(this.token, this.courseId, this.courseName);
 
   @override
   _CourseDetailsPageState createState() => _CourseDetailsPageState();
@@ -21,17 +22,12 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   void initState() {
     super.initState();
     _fetchCourseContent();
-  
-    
   }
 
   Future<void> _fetchCourseContent() async {
-    
     try {
-   
       final courseContent = await CourseContentApiService()
           .fetchCourseContentData(widget.token, widget.courseId);
-      print(courseContent);
       if (mounted) {
         setState(() {
           _courseContentData = courseContent;
@@ -47,103 +43,153 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Course Details'),
+        title: Text(widget.courseName),
       ),
       body: _courseContentData != null
           ? _buildCourseContent()
-          : Center(child: CircularProgressIndicator()),
+          : _buildShimmerCourseContent(),
     );
   }
-Widget _buildCourseContent() {
-  return SingleChildScrollView(
-    padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (var section in _courseContentData!)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                color: Colors.orange, // Add blue background color for the section row
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center the session name horizontally
-                  children: [
-                    Text(
-                      section['name'] ?? 'Section Name',
+
+  Widget _buildCourseContent() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var section in _courseContentData!)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  color: Colors.orange,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        section['name'] ?? 'Section Name',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 224, 222, 219),
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8),
+                for (var module in section['modules'])
+                  ListTile(
+                    leading: _buildModuleIcon(module['modicon']),
+                    title: Text(
+                      module['name'] ?? 'Module Name',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 224, 222, 219),
-                        fontSize: 22,
+                        color: Color.fromARGB(255, 6, 6, 6),
+                        fontSize: 18,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 8),
-              for (var module in section['modules'])
-                ListTile(
-                  leading: _buildModuleIcon(module['modicon']! + '?privatetoken=UlHC9oFhqqBZWbhyjnqxXBoKP5oq63FpoJQSTLacHIDb9sI7ORgZ4FbXEhpa4bWE'),
-                  title: Text(module['name'] ?? 'Module Name',  style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 6, 6, 6),
-                        fontSize: 18,),
+                    onTap: () {
+                      if (module['url'] != null && module['url'].isNotEmpty) {
+                        String moduleUrl = module['url'];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WebViewPage(module['name'] ?? 'Module Name', moduleUrl),
+                          ),
+                        );
+                      }
+                    },
                   ),
-                  onTap: () {
-                    if (module['url'] != null && module['url'].isNotEmpty) {
-                      String modifiedUrl = module['url']! + '?privatetoken=UlHC9oFhqqBZWbhyjnqxXBoKP5oq63FpoJQSTLacHIDb9sI7ORgZ4FbXEhpa4bWE';
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WebViewPage(module['name'] ?? 'Module Name', modifiedUrl),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              Divider(), // Add a divider between modules
-            ],
-          ),
-      ],
-    ),
-  );
-}
-
-
-
-
-Widget _buildModuleIcon(String? iconUrl) {
-  print('$iconUrl');
-  //     DecorationImage(
-  //                 image: NetworkImage( '$iconUrl'),
-  //                 fit: BoxFit.cover,
-  //               );
-  if (iconUrl != null && iconUrl.isNotEmpty) {
-  //   // Check if the URL contains a query parameter (?)
-  //   if (iconUrl.contains('?')) {
-  //     // Append additional parameters to the URL to ensure correct image loading
-  //     iconUrl += '&time=' + DateTime.now().millisecondsSinceEpoch.toString();
-  //   } else {
-  //     // If no query parameter exists, add one to the URL
-  //     iconUrl += '?time=' + DateTime.now().millisecondsSinceEpoch.toString();
-  //   }
-
-
-    return Image.network(
-      iconUrl,
-      width: 40,
-      height: 40,
-      fit: BoxFit.cover,
-      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-        // Placeholder icon if loading the modicon fails
-        return Icon(Icons.error_outline);
-      },
+                Divider(),
+              ],
+            ),
+        ],
+      ),
     );
-  } else {
-    // Placeholder icon if modicon URL is invalid or empty
-    return Icon(Icons.error_outline);
   }
-}
 
+  Widget _buildShimmerCourseContent() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (int i = 0; i < 5; i++) // Add shimmer placeholders while loading
+            Column(
+              children: [
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    color: Colors.grey[300],
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 150, // Adjust width as needed
+                          height: 22, // Adjust height as needed
+                          color: Colors.grey[300],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                ListTile(
+                  leading: _buildShimmerModuleIcon(), // Use shimmer effect for icons
+                  title: _buildShimmerText(), // Use shimmer effect for text
+                ),
+                Divider(),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModuleIcon(String? iconUrl) {
+    if (iconUrl != null && iconUrl.isNotEmpty) {
+      return SvgPicture.network(
+        iconUrl,
+        width: 40,
+        height: 40,
+        fit: BoxFit.cover,
+        placeholderBuilder: (BuildContext context) {
+          // Placeholder icon while loading
+          return _buildShimmerModuleIcon();
+        },
+      );
+    } else {
+      // Placeholder icon if the icon URL is invalid or empty
+      return Icon(Icons.error_outline);
+    }
+  }
+
+  Widget _buildShimmerModuleIcon() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: 40,
+        height: 40,
+        color: Colors.grey[300],
+      ),
+    );
+  }
+
+  Widget _buildShimmerText() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: 150, // Adjust width as needed
+        height: 22, // Adjust height as needed
+        color: Colors.grey[300],
+      ),
+    );
+  }
 }

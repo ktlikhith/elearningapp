@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -19,7 +20,19 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
   late Timer _timer;
   int _currentPage = 0;
   Future<List<EventData>>? _futureEventData;
-  String img = 'https://lxp-demo2.raptechsolutions.com/theme/remui/pix/demo-img.png';
+  List<String> svgAssets = [
+    'assets/liveeventsvg/event2.svg',
+    'assets/liveeventsvg/event3.svg',
+    'assets/liveeventsvg/event4.svg',
+    'assets/liveeventsvg/event8.svg',
+    'assets/liveeventsvg/event9.svg',
+    'assets/liveeventsvg/event10.svg',
+    'assets/liveeventsvg/event11.svg',
+    'assets/liveeventsvg/event12.svg',
+    'assets/liveeventsvg/event13.svg',
+    'assets/liveeventsvg/event14.svg',
+    'assets/liveeventsvg/event15.svg',
+  ]; // Add your SVG asset paths here
 
   @override
   void initState() {
@@ -53,35 +66,35 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Upcoming Events',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
+    return FutureBuilder<List<EventData>>(
+      future: _futureEventData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildShimmerEffect(context); // Updated to pass context
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          return Container(
+            padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
             ),
-          ),
-          const SizedBox(height: 15.0),
-          FutureBuilder<List<EventData>>(
-            future: _futureEventData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return _buildShimmerEffect(context); // Updated to pass context
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                return SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 0),
+                  child: Text(
+                    'Upcoming Events',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15.0),
+                SizedBox(
                   height: 210,
                   child: NotificationListener<ScrollNotification>(
                     onNotification: (notification) {
@@ -95,23 +108,24 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext context, int index) {
                         final event = snapshot.data![index];
+                        String svgPath = svgAssets[index % svgAssets.length]; // Assign SVG based on event index
                         return _buildEventCard(
-                          image: img,
                           dateTime: event.dueDate,
                           title: event.name,
+                          svgPath: svgPath,
                           context: context,
                         );
                       },
                     ),
                   ),
-                );
-              } else {
-                return Center(child: Text('No events available'));
-              }
-            },
-          ),
-        ],
-      ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return SizedBox.shrink(); // Empty widget if no events available
+        }
+      },
     );
   }
 
@@ -142,54 +156,69 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       ),
     );
   }
-
-  Widget _buildEventCard({
-    required String image,
-    required String dateTime,
-    required String title,
-    required BuildContext context,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Container(
-          width: 200,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(image),
-                    fit: BoxFit.cover,
-                  ),
+Widget _buildEventCard({
+  required String dateTime,
+  required String title,
+  required String svgPath,
+  required BuildContext context,
+}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
+    },
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: Offset(0, 2), // changes the position of shadow
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center, // Center vertically
+          children: [
+            // SVG image on the left
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 75,
+                height: 75,
+                child: SvgPicture.asset(
+                  svgPath,
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(height: 8.0),
-              Row(
+            ),
+            SizedBox(width: 16.0), // Space between SVG and event details
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                    ),
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 30.0),
+                  SizedBox(height: 8.0),
                   Text(
                     dateTime,
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

@@ -58,6 +58,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   shimmer: ^3.0.0
   
+  
 
   animate_do: ^3.1.2
   kbspinningwheel : ^1.0.3
@@ -101,6 +102,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/liveeventsvg/
     - assets/images/svg/
     - assets/quizicons/
     - assets/images/eapplogo.png
