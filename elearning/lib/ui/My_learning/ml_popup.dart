@@ -154,7 +154,7 @@ class MLPopup extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CourseDetailsPage(token, course_id),
+                          CourseDetailsPage(token, course_id,course_name),
                     ),
                   );
                 },

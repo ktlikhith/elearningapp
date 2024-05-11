@@ -90,38 +90,38 @@ class _GamificationPageState extends State<GamificationPage> {
                           ],
                         ),
                       ),
-                      VerticalDivider(thickness: 1, color: Colors.black),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.orange,
-                              radius: 30,
-                              child: FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.white),
-                            ),
-                            Text('Redemption Zone'),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Implement points redeem functionality
-                              },
-                              child: Text('Points Redeem'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Implement gift rewards functionality
-                              },
-                              child: Text('Gift Rewards'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
-                              },
-                              child: Text('QUIZ'),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // VerticalDivider(thickness: 1, color: Colors.black),
+                      // Expanded(
+                      //   flex: 1,
+                      //   child: Column(
+                      //     children: [
+                      //       CircleAvatar(
+                      //         backgroundColor: Colors.orange,
+                      //         radius: 30,
+                      //         child: FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.white),
+                      //       ),
+                      //       Text('Redemption Zone'),
+                      //       ElevatedButton(
+                      //         onPressed: () {
+                      //           // Implement points redeem functionality
+                      //         },
+                      //         child: Text('Points Redeem'),
+                      //       ),
+                      //       ElevatedButton(
+                      //         onPressed: () {
+                      //           // Implement gift rewards functionality
+                      //         },
+                      //         child: Text('Gift Rewards'),
+                      //       ),
+                      //       ElevatedButton(
+                      //         onPressed: () {
+                      //           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                      //         },
+                      //         child: Text('QUIZ'),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

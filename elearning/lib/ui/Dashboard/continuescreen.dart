@@ -47,10 +47,16 @@ class ContinueWatchingScreen extends StatelessWidget {
                   height: 60.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: NetworkImage(course.getImageUrlWithToken(token)),
-                      fit: BoxFit.cover,
-                    ),
+                  ),
+                  child: Image.network(
+                    course.getImageUrlWithToken(token),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/coursedefaultimg.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                 ),
                 title: Column(

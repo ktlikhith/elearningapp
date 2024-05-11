@@ -254,7 +254,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height:  210.0,
+                      height:  200.0,
                       color: Colors.grey, // Placeholder color for status
                     ),
                     const SizedBox(height: 16.0), // Add spacing between status and due date
@@ -264,11 +264,28 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: Colors.grey, // Placeholder color for due date
                     ),
                      const SizedBox(height: 16.0),
-                    Container(
+                      Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       height:  210.0,
                       color: Colors.grey, // Placeholder color for due date
                     ),
+                     const SizedBox(height: 16.0),
+                   Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: const Color.fromARGB(255, 122, 121, 121),
+              ),
+              child: Shimmer.fromColors(
+                baseColor: const Color.fromARGB(255, 175, 175, 175)!,
+                highlightColor: Color.fromARGB(255, 161, 160, 160)!,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.grey[300],
+                  ),
+                ),
+              ),
+            )
                   ],
                 ),
               ],

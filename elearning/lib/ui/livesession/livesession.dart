@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event_service.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
@@ -32,49 +33,48 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
   }
 
   Widget _buildShimmerEffect() {
-  return ListView.builder(
-    padding: const EdgeInsets.all(8.0),
-    itemCount: 4, // Adjust the number of shimmer items as needed
-    itemBuilder: (context, index) {
-      return Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: Colors.grey[300]!),
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemCount: 4, // Adjust the number of shimmer items as needed
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: Colors.grey[300]!),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 150, // Adjust the height of the shimmer image placeholder
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200, // Adjust the width of the text shimmer placeholder
+                  height: 22,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 8),
+                Container(
+                  width: 150, // Adjust the width of the text shimmer placeholder
+                  height: 22,
+                  color: Colors.grey[300],
+                ),
+              ],
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                height: 150, // Adjust the height of the shimmer image placeholder
-                color: Colors.grey[300],
-              ),
-              SizedBox(height: 12),
-              Container(
-                width: 200, // Adjust the width of the text shimmer placeholder
-                height: 22,
-                color: Colors.grey[300],
-              ),
-              SizedBox(height: 8),
-              Container(
-                width: 150, // Adjust the width of the text shimmer placeholder
-                height: 22,
-                color: Colors.grey[300],
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -102,7 +102,8 @@ class Notifications {
     );
   }
    String getImageUrlWithToken(String token) {
-    return '$iconUrl?token=$token';
+    print(iconUrl);
+    return '$iconUrl';
 }
 }
 

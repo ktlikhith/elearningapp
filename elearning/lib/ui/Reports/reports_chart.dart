@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ReportPage extends StatefulWidget {
   final String token;
@@ -92,15 +93,23 @@ class _ReportPageState extends State<ReportPage> {
             ),
     );
   }
-
-
 Widget _buildPieChart() {
   if (isLoading) {
-    return CircularProgressIndicator(); // Show loading indicator while data is being fetched
-  } else {
+    // Show shimmer effect while loading data
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: double.infinity,
+        height: 200, // Adjust height as needed
+        color: Colors.white, // Placeholder color for shimmer effect
+      ),
+    );
+  } else if (reportData != null) {
+    // Build the actual pie chart when data is available
     Map<String, double> dataMap = {
-      'Completed': (reportData?.completedActivity ?? 0).toDouble(),
-      'Not Completed': ((reportData?.totalNoActivity ?? 0) - (reportData?.completedActivity ?? 0)).toDouble(),
+      'Completed': (reportData!.completedActivity ?? 0).toDouble(),
+      'Not Completed': ((reportData!.totalNoActivity ?? 0) - (reportData!.completedActivity ?? 0)).toDouble(),
     };
 
     List<Color> colorList = [Colors.blue, Colors.grey[300]!];
@@ -122,8 +131,12 @@ Widget _buildPieChart() {
         ),
       ),
     );
+  } else {
+    // Placeholder widget if data is not available
+    return Center(
+      child: Text('No data available.'),
+    );
   }
 }
 
 }
-

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
@@ -9,7 +10,7 @@ class SpinWheel extends StatefulWidget {
   final String token;
   final Future<RewardData> rewardDataFuture;
 
-  SpinWheel({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
+  const SpinWheel({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
 
   @override
   _SpinWheelState createState() => _SpinWheelState();
@@ -20,17 +21,15 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<double> _wheelNotifier = StreamController<double>();
   late bool spinButton = false; // Provide an initial value
 
-@override
-void initState() {
-  super.initState();
-  widget.rewardDataFuture.then((rewardData) {
-    setState(() {
-      spinButton = rewardData.spinButton;
+  @override
+  void initState() {
+    super.initState();
+    widget.rewardDataFuture.then((rewardData) {
+      setState(() {
+        spinButton = rewardData.spinButton;
+      });
     });
-  });
-}
-
-
+  }
 
   @override
   void dispose() {
@@ -41,63 +40,71 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
-            child: Padding(
-              padding: const EdgeInsets.all(0.8),
-              child: SpinningWheel(
-                image: Image.asset('assets/images/spinimgwebsite.png'),
-                width: 230,
-                height: 230,
-                initialSpinAngle: _generateRandomAngle(),
-                spinResistance: 0.3,
-                shouldStartOrStop: _wheelNotifier.stream,
-                canInteractWhileSpinning: false,
-                dividers: 12,
-                onUpdate: _dividerController.add,
-                onEnd: _dividerController.add,
-                secondaryImage: Image.asset('assets/images/roulette-center-300.png'),
-                secondaryImageHeight: 60,
-                secondaryImageWidth: 110,
-                secondaryImageLeft: 35,
-                secondaryImageTop: 49,
-              ),
-            ),
-          ),
-          Text('Spin the wheel and luck your chance to get points benefit and redeem.'),
+  padding: const EdgeInsets.only(top: 10,bottom: 0),
+  child: SpinningWheel(
+    image: Image.asset(
+      'assets/images/spinimgwebsite.png',
+      // width: screenWidth * 0.4,
+      // height: screenHeight * 0.4,
+    ),
+    width: screenWidth * 0.5,
+    height: screenHeight * 0.5,
+    initialSpinAngle: _generateRandomAngle(),
+    spinResistance: 0.3,
+    shouldStartOrStop: _wheelNotifier.stream,
+    canInteractWhileSpinning: false,
+    dividers: 12,
+    onUpdate: _dividerController.add,
+    onEnd: _dividerController.add,
+    secondaryImage: Image.asset(
+      'assets/images/roulette-center-300.png',
+      // width: screenWidth * 0.2,
+      // height: screenHeight * 0.2,
+    ),
+    secondaryImageHeight: screenHeight * 0.08,
+    secondaryImageWidth: screenWidth * 0.15,
+    secondaryImageLeft: screenWidth * 0.17,
+    secondaryImageTop: screenHeight * 0.08,
+  ),
+),
+
           Padding(
-            padding: const EdgeInsets.all(0),
-            child: SizedBox(height: 30),
+            padding: const EdgeInsets.only(top: 0), // Added vertical padding
+            child: Text(
+              'Spin the wheel and luck your chance to get points benefit and redeem.',
+              textAlign: TextAlign.center, // Center align the text
+            ),
           ),
           StreamBuilder<int?>(
             stream: _dividerController.stream,
             builder: (context, snapshot) =>
                 snapshot.hasData ? RouletteScore(snapshot.data ?? 1) : Container(),
-                
           ),
-         spinButton!= null
-         
-              ? NeoPopTiltedButton(
-                  isFloating: true,
-                  onTapUp: spinButton ? () => _wheelNotifier.sink.add(_generateRandomVelocity()) : null,
-                  decoration: NeoPopTiltedButtonDecoration(
-                    color: Colors.orange,
-                    plunkColor: Colors.orange,
-                    shadowColor: Color.fromRGBO(181, 177, 177, 1),
-                    showShimmer: true,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
-                    child: Text('SPIN'),
-                  ),
-              
-                )
-         
-              : CircularProgressIndicator(), // Show loading indicator if spinButton is not yet fetched
+          if (spinButton != null)
+            NeoPopTiltedButton(
+              isFloating: true,
+              onTapUp: spinButton ? () => _wheelNotifier.sink.add(_generateRandomVelocity()) : null,
+              decoration: NeoPopTiltedButtonDecoration(
+                color: Colors.orange,
+                plunkColor: Colors.orange,
+                shadowColor: Color.fromRGBO(181, 177, 177, 1),
+                showShimmer: true,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
+                child: Text('SPIN'),
+              ),
+            )
+          else
+            CircularProgressIndicator(), // Show loading indicator if spinButton is not yet fetched
         ],
       ),
     );
@@ -135,5 +142,3 @@ class RouletteScore extends StatelessWidget {
     );
   }
 }
-
-
