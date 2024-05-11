@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _profilePictureUrl = '';
   late String _studentName = '';
   late String _studentEmail = '';
+  late String _department = '';
   late String _userPoints = '';
   late int _badgesEarn = 0;
   late String _userLevel = '';
@@ -43,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _studentName = data['user_info'][0]['studentname'];
         _studentEmail = data['user_info'][0]['studentemail'];
+        _department = data['user_info'][0]['department'];
         final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(data['user_info'][0]['studentimage']);
         if (profilePictureMatch != null) {
           _profilePictureUrl = profilePictureMatch.group(1)!;
@@ -66,9 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> _uploadPhoto() async {
-    await ProfileAPI.uploadPhoto(widget.token);
-  }
 
   bool effectEnabled = true;
 
@@ -87,74 +86,93 @@ class _ProfilePageState extends State<ProfilePage> {
             Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit,color: Theme.of(context).backgroundColor,),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
-            },
+  actions: [
+    IconButton(
+      icon: Icon(Icons.edit,color: Theme.of(context).backgroundColor,),
+      onPressed: () {
+        
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
+      },
+    ),
+  ],
+),
+
+      backgroundColor: Theme.of(context).backgroundColor,
+     body: Stack(
+  children: [
+    SingleChildScrollView(
+      padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
+      child: _isLoading
+                ? _buildLoadingSkeleton() // Show shimmer skeleton while loading
+                : Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 380,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                          ),
+                         
+                        ],
+                        
+                      ),
+                      
+                      const SizedBox(height: 10),
+                      Text(
+                        _studentName,
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _studentEmail,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Department : ',
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          _department,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                     
+                    ],
+                    
+                  ),
+                  
+                ),
+                const SizedBox(height: 30),
+                buildAchievementUI(), // Use your existing buildAchievementUI function
+              ],
+            ),
+          ).asGlass(
+            enabled: effectEnabled,
+            tintColor: Theme.of(context).backgroundColor,
+            clipBorderRadius: BorderRadius.circular(40.0),
           ),
         ],
       ),
-
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
-            child: _isLoading
-                ? _buildLoadingSkeleton() // Show shimmer skeleton while loading
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 380,
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
-                                ),
-                                IconButton(
-                                  onPressed: _uploadPhoto,
-                                  icon: Icon(Icons.camera_alt),
-                                ),
-                              ],
-
-                            ),
-
-                            const SizedBox(height: 10),
-                            Text(
-                              _studentName,
-                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              _studentEmail,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
-
-                        ),
-
-                      ),
-                      const SizedBox(height: 30),
-                      buildAchievementUI(), // Use your existing buildAchievementUI function
-                    ],
-
-                  ),
-
-                ),
+  ),
                 const SizedBox(height: 20),
                 const Text(
                   'Progress',
@@ -165,14 +183,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
             ),
 
-          ),
+          );
 
 
-        ],
-      ),
-
-
-    );
+    
   }
 
   Widget buildAchievementUI() {

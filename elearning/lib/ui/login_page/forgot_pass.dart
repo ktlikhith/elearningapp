@@ -1,7 +1,6 @@
-
+import 'package:flutter/material.dart';
 import 'package:elearning/services/resetpass_service.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
-import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   final PasswordResetService passwordResetService;
@@ -11,105 +10,132 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController inputController = TextEditingController();
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    final TextEditingController _emailController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset password'),
+        title: Text('Forgot Password?'),
         centerTitle: false,
         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-            },
-          ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //SizedBox(height: 10),
-            Text(
-              'Forgot Password?',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Enter your email address or username below to receive password reset instructions.',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: inputController,
-              decoration: InputDecoration(
-                labelText: 'Email or Username',
-                hintText: 'Enter your email or username',
-              ),
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email or username';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                String input = inputController.text.trim();
-                if (input.isNotEmpty) {
-                  _resetPassword(context, input);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Please enter your email or username.'),
-                    ),
-                  );
-                }
-              },
-              child: Text('Reset Password',style: TextStyle(color: Colors.white),),
-              style: TextButton.styleFrom(
-                            backgroundColor: Theme.of(context).secondaryHeaderColor, // Set button background color
-                          ),
-              
-            ),
-          ],
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          },
         ),
+      ),
+      body: Center(
+        child: Padding(
+        padding: const EdgeInsets.all( 16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             
+              Text(
+                'Enter your email address below to receive password reset instructions.',
+                style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+             
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
+                ),
+               
+                child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.email, color: Colors.grey),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                       
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your email',
+                        
+                        border: InputBorder.none,
+                       
+                      ),
+                       validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!isValidEmail(value)) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+              
+                      
+                    ),
+                  ),
+                ],
+              ),
+                
+              ),
+             
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _resetPassword(context, _emailController.text);
+                  }
+                },
+                child: Text('Reset Password', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
+                  padding: EdgeInsets.symmetric(vertical: 14,horizontal: 30),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       ),
     );
   }
 
-  void _resetPassword(BuildContext context, String input) async {
+  void _resetPassword(BuildContext context, String email) async {
     try {
       // Call the reset password service
       Map<String, dynamic> response =
-          await passwordResetService.resetPassword(input, '');
+          await passwordResetService.resetPassword(email);
 
       // Check the response and show appropriate message
       if (response.containsKey('status') &&
-          response['status'] == 'dataerror') {
-        // Handle error response
-        String errorMessage = 'Failed to reset password';
-        if (response.containsKey('warnings') &&
-            response['warnings'] is List &&
-            response['warnings'].isNotEmpty) {
-          errorMessage = response['warnings'][0]['message'];
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-          ),
-        );
-      } else {
+          response['status'] == 'emailpasswordconfirmmaybesent') {
         // Password reset instructions sent successfully
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Password reset instructions sent to your email.'),
+          ),
+        );
+      } else if (response.containsKey('status') &&
+          response['status'] == 'emailnotfound') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Email not found. Please enter a valid email.'),
+          ),
+        );
+      } else {
+        // Handle other status or errors
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to reset password. Please try again.'),
           ),
         );
       }
@@ -121,5 +147,11 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       );
     }
+  }
+
+  bool isValidEmail(String email) {
+    // Simple email validation regex
+    String emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    return RegExp(emailRegex).hasMatch(email);
   }
 }

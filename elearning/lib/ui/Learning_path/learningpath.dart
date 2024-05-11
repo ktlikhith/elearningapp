@@ -1,5 +1,7 @@
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -88,9 +90,9 @@ class LearningPathPage extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: token);
-          },
+           onPressed: () {
+          Navigator.pop(context);
+        },
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -111,7 +113,7 @@ class LearningPathPage extends StatelessWidget {
                   children: [
                     // Learning Path Image
                     Image.network(
-                      'https://lxp-demo2.raptechsolutions.com${learningPathDetail['learningpathimage']}',
+                      '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
                       height: 200,
                       fit: BoxFit.cover,
                     ),
@@ -194,9 +196,15 @@ class LearningPathPage extends StatelessWidget {
                             border: Border.all(color: Colors.grey[300]!),
                           ),
                           child: InkWell(
-                            onTap: () {
-                              // Navigate to course details screen with token
-                            },
+                  //           onTap: () {
+                  //             Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         CourseDetailsPage(token, course.id,course.name),
+                  //   ),
+                  // );
+                  //           },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(

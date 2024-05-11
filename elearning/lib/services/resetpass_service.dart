@@ -1,32 +1,30 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PasswordResetService {
-  final String baseUrl;
+  final String apiUrl;
 
-  PasswordResetService(this.baseUrl);
+  PasswordResetService(this.apiUrl);
 
-  Future<Map<String, dynamic>> resetPassword(String username, String email) async {
+  Future<Map<String, dynamic>> resetPassword(String email) async {
     try {
-      var url = Uri.parse('$baseUrl/webservice/rest/server.php');
-      var response = await http.post(
-        url,
-        body: jsonEncode({
-          "username": username,
-          "email": email,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          'moodlewsrestformat': 'json',
+          'wstoken': 'your_token_here',
+          'wsfunction': 'core_auth_email_password_reset',
+          'email': email,
         },
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return json.decode(response.body);
       } else {
-        throw Exception('Failed to reset password');
+        throw Exception('Failed to load data');
       }
     } catch (e) {
-      throw Exception('Error occurred: $e');
+      throw Exception('Failed to connect to the server');
     }
   }
 }
