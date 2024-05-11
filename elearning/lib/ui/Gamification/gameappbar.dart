@@ -113,7 +113,7 @@ class _GamificationPageState extends State<GamificationPage> {
                 SizedBox(height: 20),
                 ScratchCardScreen(token: widget.token),
                 SizedBox(height: 20),
-                leaderboard(token: widget.token),
+                Leaderboard(token: widget.token),
                 SizedBox(height: 20),
               ],
             ),

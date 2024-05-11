@@ -1,5 +1,6 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -75,7 +76,13 @@ class ContinueWatchingScreen extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  // Navigate to course details screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CourseDetailsPage(token, course.id,course.name),
+                    ),
+                  );
                 },
               ),
             ),

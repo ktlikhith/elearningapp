@@ -60,9 +60,9 @@ class _ReportPageState extends State<ReportPage> {
          centerTitle: false,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
-            },
+             onPressed: () {
+          Navigator.pop(context);
+        },
           ),
       ),
       body: isLoading

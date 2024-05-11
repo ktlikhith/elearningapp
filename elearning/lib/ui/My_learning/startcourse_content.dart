@@ -1,3 +1,4 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/course_content.dart';
 import 'package:elearning/ui/My_learning/webviewpage.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,13 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(widget.courseName),
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+    Navigator.pop(context);
+  },
+        ),
       ),
       body: _courseContentData != null
           ? _buildCourseContent()

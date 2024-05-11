@@ -42,6 +42,7 @@ class SiteConfigApiService {
         'fullname': responseData['fullname'],
         'username': responseData['username'],
         'firstname': responseData['firstname'],
+        'lastname': responseData['lastname'],
         'userpictureurl': responseData['userpictureurl'],
         'siteurl': responseData['siteurl'],
         'functions': functionNames,

@@ -1,4 +1,5 @@
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -107,7 +108,13 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
             color: Colors.white,
             child: InkWell(
               onTap: () {
-                // Handle course tap
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CourseDetailsPage(widget.token, course.id,course.name),
+                    ),
+                  );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
