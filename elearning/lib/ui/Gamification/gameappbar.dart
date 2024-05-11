@@ -72,55 +72,40 @@ class _GamificationPageState extends State<GamificationPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
                 SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  color: Color.fromARGB(255, 232, 231, 231),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
+                  // color: Color.fromARGB(255, 232, 231, 231),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture),
-                          ],
-                        ),
+                      SizedBox(
+                        height: 400, // Set the desired height here
+                        width: MediaQuery.of(context).size.width * 0.7, // Set a width if needed
+                        child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12,),
                       ),
-                      // VerticalDivider(thickness: 1, color: Colors.black),
-                      // Expanded(
-                      //   flex: 1,
-                      //   child: Column(
-                      //     children: [
-                      //       CircleAvatar(
-                      //         backgroundColor: Colors.orange,
-                      //         radius: 30,
-                      //         child: FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.white),
-                      //       ),
-                      //       Text('Redemption Zone'),
-                      //       ElevatedButton(
-                      //         onPressed: () {
-                      //           // Implement points redeem functionality
-                      //         },
-                      //         child: Text('Points Redeem'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: () {
-                      //           // Implement gift rewards functionality
-                      //         },
-                      //         child: Text('Gift Rewards'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: () {
-                      //           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
-                      //         },
-                      //         child: Text('QUIZ'),
-                      //       ),
-                      //     ],
-                      //   ),
+                      SizedBox(height: 20),
+                      // Text('Redemption Zone'), // Add your text here
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Implement points redeem functionality
+                      //   },
+                      //   child: Text('Points Redeem'),
+                      // ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Implement gift rewards functionality
+                      //   },
+                      //   child: Text('Gift Rewards'),
+                      // ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                      //   },
+                      //   child: Text('QUIZ'),
                       // ),
                     ],
                   ),
