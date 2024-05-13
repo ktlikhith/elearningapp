@@ -30,7 +30,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       if (mounted) {
         setState(() {
           _courses = response;
-          print(_courses);
+          
           _isLoading = false; // Update loading state
         });
       }
@@ -152,10 +152,10 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
       height: MediaQuery.of(context).size.height * 0.3, // 30% of screen height
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-          width: 1.0, // Border width
-        ),
+        // border: Border.all(
+        //   color: Colors.grey,
+        //   width: 1.0, // Border width
+        // ),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Stack(

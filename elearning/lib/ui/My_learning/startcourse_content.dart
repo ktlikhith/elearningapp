@@ -26,18 +26,26 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   }
 
   Future<void> _fetchCourseContent() async {
-    try {
-      final courseContent = await CourseContentApiService()
-          .fetchCourseContentData(widget.token, widget.courseId);
+  try {
+    final courseContentResponse = await CourseContentApiService().fetchCourseContentData(widget.token, widget.courseId);
+    
+    // Check if the response contains 'course_content'
+    if (courseContentResponse.containsKey('course_content')) {
+      final List<dynamic> courseContent = courseContentResponse['course_content'];
+      
       if (mounted) {
         setState(() {
-          _courseContentData = courseContent;
+          _courseContentData = List<Map<String, dynamic>>.from(courseContent);
         });
       }
-    } catch (e) {
-      print('Error fetching course content: $e');
+    } else {
+      throw Exception('Response does not contain course content');
     }
+  } catch (e) {
+    print('Error fetching course content: $e');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +57,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-    Navigator.pop(context);
-  },
+            Navigator.pop(context);
+          },
         ),
       ),
       body: _courseContentData != null

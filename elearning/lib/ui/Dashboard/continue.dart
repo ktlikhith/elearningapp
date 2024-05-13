@@ -120,18 +120,36 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(course.getImageUrlWithToken(widget.token)),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        topRight: Radius.circular(8.0),
-                      ),
-                    ),
-                  ),
+                          height: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              topRight: Radius.circular(8.0),
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              topRight: Radius.circular(8.0),
+                            ),
+                            child: Image.network(
+                              course.getImageUrlWithToken(widget.token),
+                             fit: BoxFit.cover,
+                              width: double.infinity,
+                              //height: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                // Return a default image when loading fails
+                                return Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                              height: double.infinity,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(

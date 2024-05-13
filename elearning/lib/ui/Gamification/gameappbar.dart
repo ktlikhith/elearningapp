@@ -61,12 +61,7 @@ class _GamificationPageState extends State<GamificationPage> {
               }
             },
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
-            },
-          ),
+         
         ),
         body: SingleChildScrollView(
           child: Padding(

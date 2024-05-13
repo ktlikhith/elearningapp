@@ -48,7 +48,7 @@ Widget buildSection({
                   child: Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 14.0,
                     ),
                   ),
                 ),

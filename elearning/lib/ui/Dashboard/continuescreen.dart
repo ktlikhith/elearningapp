@@ -49,16 +49,21 @@ class ContinueWatchingScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: Image.network(
-                    course.getImageUrlWithToken(token),
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/coursedefaultimg.jpg',
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
+                  child:  Image.network(
+                              course.getImageUrlWithToken(token),
+                             fit: BoxFit.cover,
+                              width: double.infinity,
+                              //height: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                // Return a default image when loading fails
+                                return Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                );
+                              },
+                            ),
                 ),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

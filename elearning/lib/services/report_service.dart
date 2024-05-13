@@ -24,7 +24,7 @@ class Report {
   final String id;
   final String studentName;
   final String studentImage;
-  final double averageGrade;
+  final int averageGrade;
   final int totalNoActivity;
   final int completedActivity;
 
@@ -42,7 +42,7 @@ class Report {
       id: json['id'] ?? 0,
       studentName: json['studentname'] ,
       studentImage: json['studentimage'] ,
-      averageGrade: json['avragegrade'].toDouble() ,
+      averageGrade: json['avragegrade'] ,
       totalNoActivity: json['totalnoactivity'] ,
       completedActivity: json['completedactivity'] ,
     );
