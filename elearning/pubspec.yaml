@@ -104,6 +104,7 @@ flutter:
     - assets/images/
     - assets/liveeventsvg/
     - assets/images/svg/
+    - assets/profilesvg/
     - assets/quizicons/
     - assets/images/eapplogo.png
     - assets/images/background-2.png

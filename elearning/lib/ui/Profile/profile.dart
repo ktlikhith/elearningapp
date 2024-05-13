@@ -3,6 +3,7 @@ import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
 import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
+import 'package:elearning/ui/Profile/rank_level.dart';
 import 'package:elearning/ui/Profile/updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -68,7 +69,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
   bool effectEnabled = true;
 
   @override
@@ -86,160 +86,188 @@ class _ProfilePageState extends State<ProfilePage> {
             Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
           },
         ),
-  actions: [
-    IconButton(
-      icon: Icon(Icons.edit,color: Theme.of(context).backgroundColor,),
-      onPressed: () {
-        
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
-      },
-    ),
-  ],
-),
-
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit,color: Theme.of(context).backgroundColor,),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
+            },
+          ),
+        ],
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
-     body: Stack(
-  children: [
-    SingleChildScrollView(
-      padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
-      child: _isLoading
-                ? _buildLoadingSkeleton() // Show shimmer skeleton while loading
-                : Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 380,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
-                          ),
-                         
-                        ],
-                        
-                      ),
-                      
-                      const SizedBox(height: 10),
-                      Text(
-                        _studentName,
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        _studentEmail,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 8),
-                      
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: Center(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.only(top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 20),
+              child: _isLoading
+                  ? _buildLoadingSkeleton() // Show shimmer skeleton while loading
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Department : ',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          _department,
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                        Container(
+                          width: 380,
+                          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.bottomRight,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 50,
+                                          backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      _studentName,
+                                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                    ),
+                                    // const SizedBox(height: 8),
+                                    Text(
+                                      _studentEmail,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    // const SizedBox(height: 8),
+                                    // Row(
+                                    //   mainAxisAlignment: MainAxisAlignment.center,
+                                    //   children: [
+                                    //     Text(
+                                    //       'Department : ',
+                                    //       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    //     ),
+                                    //     Text(
+                                    //       _department,
+                                    //       style: const TextStyle(fontSize: 16),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                             
+                              RankLevel(token: widget.token),
+                                   ],
+                          ),
+                        ), // Use RankLevel widget here
+                              const SizedBox(height: 20),
+                              buildAchievementUI(), // Use your existing buildAchievementUI function
+                       
+                        // .asGlass(
+                        //   enabled: effectEnabled,
+                        //   tintColor: Theme.of(context).backgroundColor,
+                        //   clipBorderRadius: BorderRadius.circular(40.0),
+                        // ),
+                          
+                
+                  // buildProgressUI(),
                       ],
                     ),
-                      ],
-                      ),
-                      ),
-                       const SizedBox(height: 30),
-                       buildAchievementUI(), // Use your existing buildAchievementUI function
-                              ],
-                            ),
-                          ).asGlass(
-                            enabled: effectEnabled,
-                            tintColor: Theme.of(context).backgroundColor,
-                            clipBorderRadius: BorderRadius.circular(40.0),
-                          ),
-                          const SizedBox(height: 20),
-                const Text(
-                  'Progress',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                buildProgressUI(),
-                        ],
-                      ),
-                  ),
-                
-              ],
-
             ),
-
-          );
-
-
-    
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildAchievementUI() {
-    // Build your achievement UI here
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'Achievements',
+  // Build your achievement UI here
+    double screenWidth = MediaQuery.of(context).size.width;
+  return Container(
+    width: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        
+        const Text(
+          'Achievements',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar),
+            buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved),
+            buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
+          ],
+        ),
+         const SizedBox(height: 10), // Add some space below the achievements row
+        Divider( // Add a divider
+          height: 1, // Set the height of the divider
+          thickness: 1, // Set the thickness of the divider line
+          color: Colors.grey[300], // Set the color of the divider line
+        ),
+        const SizedBox(height: 20),
+        const Text(
+            'Progress',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar),
-              buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved),
-              buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+          ), // Add some space below the existing row
+        buildProgressBar('Task1', _completioned), // Add the progress bar here
+        buildProgressBar('Task2', _inProgress),
+        buildProgressBar('Task3', _totalNotStarted.toInt()),
+      ],
+    ),
+  );
+}
 
-  Widget buildProgressUI() {
-    // Build your progress UI here
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          buildProgressBar('Task 1', _completioned),
-          buildProgressBar('Task 2', _inProgress),
-          buildProgressBar('Task 3', _totalNotStarted.toInt()),
-          // Add more progress bars as needed
-        ],
-      ),
-    );
-  }
+//  Widget buildProgressUI() {
+//   // Build your achievement UI here
+//   return Padding(
+//     padding: const EdgeInsets.all(20.0),
+//     child: Container(
+//       width: double.infinity,
+//       padding: const EdgeInsets.all(10),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(20),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.2),
+//             spreadRadius: 1,
+//             blurRadius: 3,
+//             offset: Offset(0, 2),
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           const Text(
+//             'Progress',
+//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//           ),
+         
+//           const SizedBox(height: 20), // Add some space below the existing row
+//           buildProgressBar('Task1', _completioned), // Add the progress bar here
+//           buildProgressBar('Task2', _inProgress),
+//           buildProgressBar('Task3', _totalNotStarted.toInt()),
+//         ],
+//       ),
+//     ),
+//   );
+// }
 
   Widget _buildLoadingSkeleton() {
     return Shimmer.fromColors(
