@@ -220,7 +220,7 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                              final passwordResetService = PasswordResetService(Constants.baseUrl);
+                              final passwordResetService = PasswordResetService('$Constants.baseUrl');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => ForgotPasswordScreen(passwordResetService: passwordResetService)),

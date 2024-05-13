@@ -155,30 +155,28 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                     
-                    ],
-                    
-                  ),
-                  
-                ),
-                const SizedBox(height: 30),
-                buildAchievementUI(), // Use your existing buildAchievementUI function
-              ],
-            ),
-          ).asGlass(
-            enabled: effectEnabled,
-            tintColor: Theme.of(context).backgroundColor,
-            clipBorderRadius: BorderRadius.circular(40.0),
-          ),
-        ],
-      ),
-  ),
-                const SizedBox(height: 20),
+                      ],
+                      ),
+                      ),
+                       const SizedBox(height: 30),
+                       buildAchievementUI(), // Use your existing buildAchievementUI function
+                              ],
+                            ),
+                          ).asGlass(
+                            enabled: effectEnabled,
+                            tintColor: Theme.of(context).backgroundColor,
+                            clipBorderRadius: BorderRadius.circular(40.0),
+                          ),
+                          const SizedBox(height: 20),
                 const Text(
                   'Progress',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                buildProgressUI(), // Use your existing buildProgressUI function
+                buildProgressUI(),
+                        ],
+                      ),
+                  ),
+                
               ],
 
             ),

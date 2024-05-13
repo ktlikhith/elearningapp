@@ -90,12 +90,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             'Live Session',
           ),
           centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
-            },
-          ),
+          
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: FutureBuilder<List<LiveSession>>(

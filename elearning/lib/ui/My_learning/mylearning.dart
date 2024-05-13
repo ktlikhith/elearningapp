@@ -1,4 +1,5 @@
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/services/report_service.dart';
 import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
@@ -27,11 +28,22 @@ class MyLearningPage extends StatefulWidget {
 
 class _MyLearningPageState extends State<MyLearningPage> {
   bool _isSearching = false;
+   final ReportService reportService = ReportService();
+    Report? reportData;
 
   void _handleSearchPressed() {
     setState(() {
       _isSearching = !_isSearching;
     });
+  }
+   
+
+  bool isLoading = false; // Simulated loading state
+
+  @override
+  void initState() {
+    super.initState();
+   
   }
 
   @override
@@ -51,12 +63,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
               ),
             ],
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
-            },
-          ),
+         
           actions: <Widget>[
             IconButton(
               icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
@@ -99,6 +106,8 @@ class MyLearningAppBody extends StatefulWidget {
 
 class _MyLearningAppBodyState extends State<MyLearningAppBody> {
   bool _isLoading = true; // Initial loading state
+  final ReportService reportService = ReportService();
+  Report? reportData; // Define reportData property
 
   @override
   void initState() {
@@ -109,8 +118,22 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
         _isLoading = false; // Set loading to false after delay
       });
     });
+    fetchData(widget.token); // Fetch report data
   }
 
+  // Fetch report data
+  Future<void> fetchData(String token) async {
+    try {
+      final data = await reportService.fetchReport(token);
+      setState(() {
+        reportData = data;
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+  // Build method remains the same
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -125,18 +148,18 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
               children: <Widget>[
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: 50,
+                  number: reportData?.totalNoActivity ?? 0,
                   title: 'Totalactivity',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: 45,
+                  number: reportData?.completedActivity ?? 0,
                   title: 'Completed',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: 5,
-                  title: 'Inprogress',
+                  number: reportData?.averageGrade ?? 0,
+                  title: 'Average Grade',
                 ),
               ],
             ),
@@ -151,7 +174,8 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
     );
   }
 
-   Widget _buildLoadingShimmer() {
+  // Build loading shimmer effect
+  Widget _buildLoadingShimmer() {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

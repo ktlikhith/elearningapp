@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class CourseContentApiService {
   
-  Future<List<Map<String, dynamic>>> fetchCourseContentData(String token, String courseId) async {
+  Future<Map<String, dynamic>> fetchCourseContentData(String token, String courseId) async {
     final userInfo = await SiteConfigApiService.getUserId(token);
    
     final userId = userInfo['id'];
@@ -19,16 +19,11 @@ class CourseContentApiService {
 
       if (response.statusCode == 200) {
         final decodedResponse = json.decode(response.body);
-        if (decodedResponse is Map<String, dynamic> &&
-            decodedResponse.containsKey('course_content')) {
-          final courseContent = decodedResponse['course_content'];
-          if (courseContent is List<dynamic>) {
-            return List<Map<String, dynamic>>.from(courseContent);
-          } else {
-            throw Exception('Unexpected response format');
-          }
+        if (decodedResponse is Map<String, dynamic>) {
+          
+          return decodedResponse; // Return the entire decoded response
         } else {
-          throw Exception('Response does not contain course content');
+          throw Exception('Unexpected response format');
         }
       } else {
         throw Exception('HTTP ${response.statusCode}: ${response.reasonPhrase}');
