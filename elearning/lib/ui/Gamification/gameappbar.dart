@@ -1,4 +1,5 @@
 import 'package:elearning/services/reward_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Gamification/reward_section.dart';
@@ -16,6 +17,8 @@ class GamificationPage extends StatefulWidget {
   @override
   _GamificationPageState createState() => _GamificationPageState();
 }
+// Import the RankLevel widget
+
 
 class _GamificationPageState extends State<GamificationPage> {
   late Future<RewardData> _rewardDataFuture;
@@ -67,35 +70,22 @@ class _GamificationPageState extends State<GamificationPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+               
                 RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
+               
                 SizedBox(height: 20),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
-                  // color: Color.fromARGB(255, 232, 231, 231),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 400, // Set the desired height here
-                        width: MediaQuery.of(context).size.width * 0.7, // Set a width if needed
+                        height: 400,
+                        width: MediaQuery.of(context).size.width * 0.7,
                         child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12,),
                       ),
                       SizedBox(height: 20),
-                      // Text('Redemption Zone'), // Add your text here
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // Implement points redeem functionality
-                      //   },
-                      //   child: Text('Points Redeem'),
-                      // ),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // Implement gift rewards functionality
-                      //   },
-                      //   child: Text('Gift Rewards'),
-                      // ),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
