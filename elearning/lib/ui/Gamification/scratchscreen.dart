@@ -1,5 +1,5 @@
+import 'package:elearning/services/gamepoints_service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scratcher/widgets.dart';
 import 'package:elearning/services/scratchcard_service.dart';
 import 'package:shimmer/shimmer.dart';
@@ -51,7 +51,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
-            '${scratchCards.length}/3',
+            '${scratchCards.length}/${scratchCards.length}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
@@ -95,54 +95,52 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
           // Scratch Card
           Scratcher(
             brushSize: 30,
-            threshold: 50,
-            color: Colors.blue,
+            threshold: 100,
+            image: Image.network(card.scratchImage), // Set the scratch image directly
             onChange: (value) {
               // Handle scratch progress change
             },
-            onThreshold: () {
-              if (card.point > 0) {
-                // Display the point and point image
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('Congratulations!'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('You won ${card.point} points!'),
-                        Image.network(card.pointImage),
-                      ],
-                    ),
-                  ),
-                );
-              } else {
-                // Display better luck next time and point image
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('Better Luck Next Time!'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Try again next time.'),
-                        Image.network(card.pointImage),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-            child: Container(
-              color: Colors.white,
-            ),
-          ),
-          // Scratch Image
-          Positioned.fill(
+           // Inside _buildScratchCard method of ScratchCardScreen widget
+onThreshold: () async {
+  try {
+    // Call RewardPointService to add reward points
+    await RewardPointService().addReward(
+      token: widget.token,
+      type: 'scratchcard', // Set the type to 'scratch'
+      points: card.point, // Pass the points from the scratch card
+    );
+    // Display the point and point image
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Congratulations!'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            
+            Image.network(card.pointImage),
+          ],
+        ),
+      ),
+    );
+  } catch (e) {
+    // Handle error if needed
+    print('Error adding reward points: $e');
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Error'),
+        content: Text('Failed to add reward points. Please try again later.'),
+      ),
+    );
+  }
+},
+
+            
             child: Image.network(
-              card.scratchImage,
-              fit: BoxFit.cover,
-            ),
+            card.pointImage,
+            fit: BoxFit.cover,
+          ),
           ),
         ],
       ),

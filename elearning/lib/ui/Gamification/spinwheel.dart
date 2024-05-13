@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
@@ -21,6 +22,7 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<int> _dividerController = StreamController<int>();
   final StreamController<double> _wheelNotifier = StreamController<double>();
   late bool spinButton = false; // Provide an initial value
+  late int selectedValue = 1; // Store the selected value here
 
   @override
   void initState() {
@@ -38,89 +40,108 @@ class _SpinWheelState extends State<SpinWheel> {
     _wheelNotifier.close();
     super.dispose();
   }
-@override
-Widget build(BuildContext context) {
-  return Container(
-    width: 400,
-    padding: const EdgeInsets.all(10),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.2),
-          spreadRadius: 2,
-          blurRadius: 4,
-          offset: Offset(0, 4),
-        ),
-      ],
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 2.5, bottom: 0),
-          child: SpinningWheel(
-            image: Image.asset(
-              'assets/images/spinimgwebsite.png',
-            ),
-            width: widget.width * 3.5, // Adjust the width of the SpinningWheel widget
-            height: widget.width * 3.5, // Adjust the height of the SpinningWheel widget
-            initialSpinAngle: _generateRandomAngle(),
-            spinResistance: 0.3,
-            shouldStartOrStop: _wheelNotifier.stream,
-            canInteractWhileSpinning: false,
-            dividers: 12,
-            onUpdate: _dividerController.add,
-            onEnd: _dividerController.add,
-            secondaryImage: Image.asset(
-              'assets/images/roulette-center-300.png',
-            ),
-            secondaryImageHeight: widget.width * 1, // Adjust the height of the secondary image
-            secondaryImageWidth: widget.width * 1, // Adjust the width of the secondary image
-            secondaryImageLeft: widget.width * 1.3, // Adjust the left position of the secondary image
-            secondaryImageTop: widget.width * 1.1, // Adjust the top position of the secondary image
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(
-            'Spin the wheel and luck your chance to get points benefit and redeem.',
-            textAlign: TextAlign.center,
-          ),
-        ),
-        StreamBuilder<int?>(
-          stream: _dividerController.stream,
-          builder: (context, snapshot) =>
-              snapshot.hasData ? RouletteScore(snapshot.data ?? 1) : Container(),
-        ),
-        if (spinButton != null)
-          NeoPopTiltedButton(
-            isFloating: true,
-            onTapUp: spinButton ? () => _wheelNotifier.sink.add(_generateRandomVelocity()) : null,
-            decoration: NeoPopTiltedButtonDecoration(
-              color: Colors.orange,
-              plunkColor: Colors.orange,
-              shadowColor: Color.fromRGBO(181, 177, 177, 1),
-              showShimmer: true,
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
-              child: Text('SPIN'),
-            ),
-          )
-        else
-          CircularProgressIndicator(),
-      ],
-    ),
-  );
-}
 
-  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 2.5, bottom: 0),
+            child: SpinningWheel(
+              image: Image.asset(
+                'assets/images/spinimgwebsite.png',
+              ),
+              width: widget.width * 3.5, // Adjust the width of the SpinningWheel widget
+              height: widget.width * 3.5, // Adjust the height of the SpinningWheel widget
+              initialSpinAngle: _generateRandomAngle(),
+              spinResistance: 0.3,
+              shouldStartOrStop: _wheelNotifier.stream,
+              canInteractWhileSpinning: false,
+              dividers: 12,
+              onUpdate: _dividerController.add,
+              onEnd: (int radiansSpun) {
+                _dividerController.add(selectedValue); // Trigger the StreamBuilder to update the selected index
+                _addRewardPoints(selectedValue); // Call method to add reward points with selected value
+              },
+              secondaryImage: Image.asset(
+                'assets/images/roulette-center-300.png',
+              ),
+              secondaryImageHeight: widget.width * 1, // Adjust the height of the secondary image
+              secondaryImageWidth: widget.width * 1, // Adjust the width of the secondary image
+              secondaryImageLeft: widget.width * 1.3, // Adjust the left position of the secondary image
+              secondaryImageTop: widget.width * 1.1, // Adjust the top position of the secondary image
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              'Spin the wheel and luck your chance to get points benefit and redeem.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+          StreamBuilder<int?>(
+            stream: _dividerController.stream,
+            builder: (context, snapshot) =>
+                snapshot.hasData ? Text('${snapshot.data ?? 1}', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0)) : Container(),
+          ),
+          if (spinButton != null)
+            NeoPopTiltedButton(
+              isFloating: true,
+              onTapUp: spinButton ? () => _wheelNotifier.sink.add(_generateRandomVelocity()) : null,
+              decoration: NeoPopTiltedButtonDecoration(
+                color: Colors.orange,
+                plunkColor: Colors.orange,
+                shadowColor: Color.fromRGBO(181, 177, 177, 1),
+                showShimmer: true,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
+                child: Text('SPIN'),
+              ),
+            )
+          else
+            CircularProgressIndicator(),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _addRewardPoints(int points) async {
+    try {
+      final response = await RewardPointService().addReward(
+        token: widget.token,
+        type: 'spinwheel', // Set the type to 'spin'
+        points: points, // Use the passed points value
+      );
+      print('Added reward points');
+    } catch (e) {
+      print('Error adding reward points: $e');
+      // Handle error if needed
+    }
+  }
 
   double _generateRandomVelocity() => (Random().nextDouble() * 6000) + 2000;
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;
 }
+
+  
+
 
 class RouletteScore extends StatelessWidget {
   final int selected;
@@ -149,4 +170,5 @@ class RouletteScore extends StatelessWidget {
       style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0),
     );
   }
+  
 }

@@ -19,7 +19,7 @@ class LeaderboardService {
        if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final List<dynamic> usersData = responseData as List<dynamic>;
-        print(usersData);
+       
         return usersData.map((userData) => User.fromJson(userData)).toList();
       } else {
         throw Exception('Failed to fetch leaderboard');
