@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 Widget buildSection({
   required String svgPath,
-  required int number,
+  required String number,
   required String title,
   bool isLoading = false,
 }) {

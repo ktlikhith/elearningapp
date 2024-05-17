@@ -1,3 +1,4 @@
+import 'package:elearning/ui/Dashboard/video_player_popup.dart';
 import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -139,10 +140,7 @@ class MLPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  //$course_videourl
-                  // Handle Video Camera button tap
-                },
+                onPressed: ()  => VideoPlayerPopup( course_videourl: 'https://youtu.be/H4hIfQMjvkM?si=utPk6-5ATqkO854p',),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 239, 237, 237),
                 ),

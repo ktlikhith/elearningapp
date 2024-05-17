@@ -3,9 +3,9 @@ import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayerPopup extends StatefulWidget {
-  final String videoUrl;
+  final String course_videourl;
 
-  VideoPlayerPopup({required this.videoUrl});
+  VideoPlayerPopup( {required this.course_videourl});
 
   @override
   _VideoPlayerPopupState createState() => _VideoPlayerPopupState();
@@ -23,11 +23,11 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
   }
 
   void _initializePlayer() {
-    if (widget.videoUrl.contains('youtube.com') ||
-        widget.videoUrl.contains('youtu.be')) {
+    if (widget.course_videourl.contains('youtube.com') ||
+        widget.course_videourl.contains('youtu.be')) {
       _playerWidget = YoutubePlayer(
         controller: YoutubePlayerController(
-          initialVideoId: YoutubePlayer.convertUrlToId(widget.videoUrl)!,
+          initialVideoId: YoutubePlayer.convertUrlToId(widget.course_videourl)!,
           flags: YoutubePlayerFlags(autoPlay: true, mute: false),
         ),
         showVideoProgressIndicator: true,
@@ -38,7 +38,7 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
         ),
       );
     } else {
-      _videoController = VideoPlayerController.network(widget.videoUrl);
+      _videoController = VideoPlayerController.network(widget.course_videourl);
       _playerWidget = Stack(
         alignment: Alignment.center,
         children: [
@@ -69,8 +69,8 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
 
   @override
   void dispose() {
-    if (widget.videoUrl.contains('youtube.com') ||
-        widget.videoUrl.contains('youtu.be')) {
+    if (widget.course_videourl.contains('youtube.com') ||
+        widget.course_videourl.contains('youtu.be')) {
       final YoutubePlayerController controller =
           (_playerWidget as YoutubePlayer).controller;
       controller.pause();
@@ -90,8 +90,8 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
         TextButton(
           onPressed: () {
             // Dispose video players when closing the dialog
-            if (widget.videoUrl.contains('youtube.com') ||
-                widget.videoUrl.contains('youtu.be')) {
+            if (widget.course_videourl.contains('youtube.com') ||
+                widget.course_videourl.contains('youtu.be')) {
               final YoutubePlayerController controller =
                   (_playerWidget as YoutubePlayer).controller;
               controller.pause();

@@ -76,11 +76,11 @@ class RouterManger{
             builder: (context) => LearningPathPage(token: token ),
       );
 
-      case Report:
-        final token = settings.arguments as String;
-      return MaterialPageRoute(
-        builder:(context) => ReportPage(token: token)
-      ,);
+      // case Report:
+      //   final token = settings.arguments as String;
+      // return MaterialPageRoute(
+      //   builder:(context) => ReportPage(token: token)
+      // ,);
 
       case Gamification:
       final token = settings.arguments as String; // Retrieve the token from settings.arguments

@@ -4,7 +4,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 
 
-Widget buildProgressBar(String title, int percentage) {
+Widget buildProgressBar(String title, double percentage) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: Row(
