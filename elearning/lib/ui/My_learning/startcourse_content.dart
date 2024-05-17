@@ -26,26 +26,26 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   }
 
   Future<void> _fetchCourseContent() async {
-  try {
-    final courseContentResponse = await CourseContentApiService().fetchCourseContentData(widget.token, widget.courseId);
-    
-    // Check if the response contains 'course_content'
-    if (courseContentResponse.containsKey('course_content')) {
-      final List<dynamic> courseContent = courseContentResponse['course_content'];
-      
-      if (mounted) {
-        setState(() {
-          _courseContentData = List<Map<String, dynamic>>.from(courseContent);
-        });
-      }
-    } else {
-      throw Exception('Response does not contain course content');
-    }
-  } catch (e) {
-    print('Error fetching course content: $e');
-  }
-}
+    try {
+      final courseContentResponse =
+          await CourseContentApiService().fetchCourseContentData(widget.token, widget.courseId);
 
+      // Check if the response contains 'course_content'
+      if (courseContentResponse.containsKey('course_content')) {
+        final List<dynamic> courseContent = courseContentResponse['course_content'];
+
+        if (mounted) {
+          setState(() {
+            _courseContentData = List<Map<String, dynamic>>.from(courseContent);
+          });
+        }
+      } else {
+        throw Exception('Response does not contain course content');
+      }
+    } catch (e) {
+      print('Error fetching course content: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,75 +61,111 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
           },
         ),
       ),
-      body: _courseContentData != null
-          ? _buildCourseContent()
-          : _buildShimmerCourseContent(),
+      body: _courseContentData != null ? _buildCourseContent() : _buildShimmerCourseContent(),
     );
   }
-
-  Widget _buildCourseContent() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (var section in _courseContentData!)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  color: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+Widget _buildCourseContent() {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var section in _courseContentData!)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    section['expanded'] = !(section['expanded'] ?? false);
+                  });
+                },
+                child: Container(
+                  
+                   decoration: BoxDecoration(
+                    color: Theme.of(context).secondaryHeaderColor,
+                    borderRadius: BorderRadius.circular(10), // Set border radius
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0), // Adjust padding as needed
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        section['name'] ?? 'Section Name',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 224, 222, 219),
-                          fontSize: 22,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10), // Add padding to the text from left
+                          child: Text(
+                            section['name'] ?? 'Section Name',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(220, 6, 6, 6),
+                              fontSize: 21,
+                            ),
+                          ),
                         ),
+                      ),
+                      Icon(
+                        section['expanded'] ?? false
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        color:  Color.fromARGB(255, 6, 6, 6),
+                        size: 30,
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 8),
-                for (var module in section['modules'])
-                  ListTile(
-                    leading: _buildModuleIcon(module['modicon']),
-                    title: Text(
-                      module['name'] ?? 'Module Name',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 6, 6, 6),
-                        fontSize: 18,
-                      ),
-                    ),
-                    onTap: () {
-                      if (module['url'] != null && module['url'].isNotEmpty) {
-                        String moduleUrl = module['url'];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                WebViewPage(module['name'] ?? 'Module Name', moduleUrl),
-                          ),
-                        );
-                      }
-                    },
+              ),
+              SizedBox(height: 8),
+              if (section['expanded'] ?? false)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0),
+                  child: Column(
+                    
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  
+                    children: [
+                      for (var module in section['modules'])
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: _buildModuleIcon(module['modicon']),
+                              title: Text(
+                                module['name'] ?? 'Module Name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 6, 6, 6),
+                                  fontSize: 18,
+                                ),
+                              ),
+                              onTap: () {
+                                if (module['url'] != null && module['url'].isNotEmpty) {
+                                  String moduleUrl = module['url'];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          WebViewPage(module['name'] ?? 'Module Name', moduleUrl),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                              Divider(), 
+                          ],
+                        ),
+                   // Major divider after all modules in the section
+                    ],
                   ),
-                Divider(),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
+                ),
+            ],
+          ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildShimmerCourseContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -171,8 +207,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     if (iconUrl != null && iconUrl.isNotEmpty) {
       return SvgPicture.network(
         iconUrl,
-        width: 40,
-        height: 40,
+        width: 26,
+        height: 26,
         fit: BoxFit.cover,
         placeholderBuilder: (BuildContext context) {
           // Placeholder icon while loading

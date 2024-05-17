@@ -2,8 +2,7 @@ import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/Dashboard/dashboard.dart';
 import 'package:elearning/ui/Gamification/Quiz%20test/quiztest.dart';
-import 'package:elearning/ui/Gamification/Quiz/quiz_screens/quiz/quiz_screen.dart';
-import 'package:elearning/ui/Gamification/Quiz/quiz_screens/score_screen.dart';
+
 import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:elearning/ui/Learning_path/learningpath.dart';
@@ -89,15 +88,12 @@ class RouterManger{
           builder: (context) => GamificationPage(token: token),
         
       );
-       case quizscore:
-      return MaterialPageRoute(
-        builder:(context) => ScoreScreen()
-      ,);
-
+     
 
 case Quiz:
+final token = settings.arguments as String; 
       return MaterialPageRoute(
-        builder:(context) => QuizPage()
+        builder:(context) => QuizPage(token: token)
       ,);
 
       case landingpage:
