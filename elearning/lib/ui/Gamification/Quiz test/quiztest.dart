@@ -84,6 +84,7 @@ class _QuizPageState extends State<QuizPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Quiz Result'),
+           
             content: Text('Successfully submitted the quiz!\nYour quiz score: $score'),
             actions: [
               TextButton(
@@ -160,6 +161,7 @@ class _QuizPageState extends State<QuizPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Quiz'),
+           centerTitle: false,
           backgroundColor: Theme.of(context).primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -201,6 +203,7 @@ class _QuizPageState extends State<QuizPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 60),
                 child: Card(
+                  color: Colors.grey.shade100,
                   elevation: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -268,7 +271,7 @@ class _QuizPageState extends State<QuizPage> {
                         onPressed: () {
                           isLastQuestion ? goToNextQuestion() : goToNextQuestion();
                         },
-                        child: Text(isLastQuestion ? 'Submit' : 'Next'),
+                        child: Text(isLastQuestion ? 'Submit' : 'Next',style: TextStyle(color: Colors.white),),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).secondaryHeaderColor,

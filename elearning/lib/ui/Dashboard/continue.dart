@@ -86,121 +86,130 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
     );
   }
 
-  Widget _buildSection(BuildContext context, CourseData course) {
-    return SizedBox(
-      width: 300,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Material(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.white,
-            child: InkWell(
-              onTap: () {
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CourseDetailsPage(widget.token, course.id,course.name),
-                    ),
-                  );
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                          height: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8.0),
-                              topRight: Radius.circular(8.0),
-                            ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8.0),
-                              topRight: Radius.circular(8.0),
-                            ),
-                            child: Image.network(
-                              course.getImageUrlWithToken(widget.token),
-                             fit: BoxFit.cover,
-                              width: double.infinity,
-                              //height: double.infinity,
-                              errorBuilder: (context, error, stackTrace) {
-                                // Return a default image when loading fails
-                                return Image.asset(
-                                  'assets/images/coursedefaultimg.jpg',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                              height: double.infinity,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+ Widget _buildSection(BuildContext context, CourseData course) {
+  const double cardHeight = 300; // Define a constant height for the card
+  const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          course.name,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+  return SizedBox(
+    width: 210,
+    height: cardHeight, // Set the card height to a constant value
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CourseDetailsPage(widget.token, course.id, course.name),
+                ),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Calculate available height for the image
+                      double availableHeight = constraints.maxHeight - titleMaxHeight - 80; // Adjust this value as needed
+                      return Container(
+                        height: availableHeight,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            topRight: Radius.circular(8.0),
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'End Date: ${course.courseEndDate}',
-                          style: TextStyle(
-                            color: Colors.grey[600],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            topRight: Radius.circular(8.0),
+                          ),
+                          child: Image.network(
+                            course.getImageUrlWithToken(widget.token),
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Return a default image when loading fails
+                              return Image.asset(
+                                'assets/images/coursedefaultimg.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              );
+                            },
                           ),
                         ),
-                        SizedBox(height: 12),
-                        Container(
-                          height: 10,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: FractionallySizedBox(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: course.courseProgress / 100,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'End Date: ${course.courseEndDate}',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        height: 10,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
+                          widthFactor: course.courseProgress / 100,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -231,13 +240,8 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).secondaryHeaderColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey[300]!),
-                  ),
+                
+                  
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -246,18 +250,13 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white, // Change text color to white
+                          color: Theme.of(context).secondaryHeaderColor,
                         ),
                       ),
-                      SizedBox(width: 8), // Add spacing between text and icon
-                      FaIcon(
-                        FontAwesomeIcons.angleDoubleRight, // Icon to be used
-                        size: 16,
-                        color: Colors.white, // Icon color
-                      ),
+                     
                     ],
                   ),
-                ),
+                
               ),
             ),
           ],

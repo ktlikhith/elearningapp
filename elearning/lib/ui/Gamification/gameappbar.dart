@@ -64,7 +64,7 @@ class _GamificationPageState extends State<GamificationPage> {
               }
             },
           ),
-         
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -90,7 +90,10 @@ class _GamificationPageState extends State<GamificationPage> {
                         onPressed: () {
                           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
                         },
-                        child: Text('QUIZ'),
+                        style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
+                ),
+                        child: Text('QUIZ',style: TextStyle(color: Colors.white),),
                       ),
                     ],
                   ),

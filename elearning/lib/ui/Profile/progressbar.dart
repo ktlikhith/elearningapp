@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+int toIntValue(dynamic value) {
+  if (value is int) {
+    return value;
+  } else if (value is double) {
+    return value.round(); // Round the double to the nearest integer
+  } else {
+    throw ArgumentError('Value must be either int or double');
+  }
+}
 
-
-Widget buildProgressBar(String title, double percentage) {
+Widget buildProgressBar(String title, value) {
+  int intValue = toIntValue(value);
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Row(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 3,
-          child: Text(
-            '$title:',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+        Text(
+          '$title:',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
-        Expanded(
-          flex: 18,
-          child: LinearPercentIndicator(
-            barRadius: Radius.circular(30),
-            lineHeight: 14.0,
-            linearStrokeCap: LinearStrokeCap.roundAll,
-            percent: percentage / 100,
-            backgroundColor: Color.fromARGB(255, 204, 205, 205),
-            progressColor: Colors.orange,
-            center: Text(
-              "$percentage%",
-              style: TextStyle(fontSize: 12, color: Colors.black),
-            ),
+        SizedBox(height: 8), // Add some space between the title and progress bar
+        LinearPercentIndicator(
+          barRadius: Radius.circular(30),
+          lineHeight: 14.0,
+          linearStrokeCap: LinearStrokeCap.roundAll,
+          percent: intValue / 100,
+          backgroundColor: Color.fromARGB(255, 204, 205, 205),
+          progressColor: Colors.orange,
+          center: Text(
+            "$intValue%",
+            style: TextStyle(fontSize: 12, color: Colors.black),
           ),
         ),
       ],

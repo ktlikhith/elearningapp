@@ -95,7 +95,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 ),
                 const SizedBox(height: 15.0),
                 SizedBox(
-                  height: 210,
+                  height: 150,
                   child: NotificationListener<ScrollNotification>(
                     onNotification: (notification) {
                       if (notification is OverscrollNotification) {
@@ -167,7 +167,7 @@ Widget _buildEventCard({
       Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
     },
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -188,8 +188,8 @@ Widget _buildEventCard({
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: 75,
-                height: 75,
+                width: 40,
+                height: 40,
                 child: SvgPicture.asset(
                   svgPath,
                   fit: BoxFit.contain,

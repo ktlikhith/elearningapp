@@ -203,41 +203,6 @@ String? phoneValidator(String? value) {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(
-                'Username',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  
-                ),
-              ),
-              SizedBox(height: 5),
-              // Curved border box for username text field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
-                ),
-                child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.person, color: Colors.grey),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                        controller: _usernameController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                       
-                      ),
-                      enabled: false, 
-                    ),
-                  ),
-                ],
-              ), 
-              ),
               SizedBox(height: 16),
                Text(
                 'First Name',
@@ -256,10 +221,6 @@ String? phoneValidator(String? value) {
                 ),
                 child: Row(
                 children: [
-                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    
-                  ),
                   Expanded(
                     child: TextFormField(
                         controller: _firstnameController,
@@ -299,10 +260,6 @@ String? phoneValidator(String? value) {
                 ),
                 child: Row(
                 children: [
-                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    
-                  ),
                   Expanded(
                     child: TextFormField(
                         controller: _lastnameController,
@@ -324,8 +281,42 @@ String? phoneValidator(String? value) {
               ), 
               ), 
               
-              
                SizedBox(height: 16),
+               Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  
+                ),
+              ),
+              SizedBox(height: 5),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10), // Add a circular border radius
+                ),
+                child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.person, color: Colors.grey),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                        controller: _usernameController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric( vertical: 12),
+                       
+                      ),
+                      enabled: false, 
+                    ),
+                  ),
+                ],
+              ), 
+              ),
+              SizedBox(height: 16),
                Text(
                 'Phone',
                 style: TextStyle(
@@ -352,7 +343,7 @@ String? phoneValidator(String? value) {
                         controller: _phoneController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        contentPadding: EdgeInsets.symmetric(vertical: 12),
                        
                       ),
                        validator: phoneValidator,

@@ -7,8 +7,7 @@ import 'package:elearning/ui/Profile/rank_level.dart';
 import 'package:elearning/ui/Profile/updateProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:glass/glass.dart'; // Import the glass package
-import 'package:shimmer/shimmer.dart'; // Import the shimmer package
+import 'package:shimmer/shimmer.dart'; 
 
 class ProfilePage extends StatefulWidget {
   final String token;
@@ -27,9 +26,9 @@ class _ProfilePageState extends State<ProfilePage> {
   var  _userPoints = '';
   var _badgesEarn = 0;
   var _userLevel = '';
-  var _completioned = 0;
-  var _inProgress = 0;
-  var _totalNotStarted = 0.0;
+  var _completioned ;
+  var _inProgress ;
+  var _totalNotStarted ;
   bool _isLoading = true; // Add loading state
   
 
@@ -65,6 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
         _inProgress = courseProgress['inprogress'];
         _totalNotStarted = courseProgress['totalnotstarted'];
 
+        
+        
+
         _isLoading = false; // Update loading state
       });
     } catch (e) {
@@ -87,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+            Navigator.pop(context);
           },
         ),
         actions: [
@@ -112,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Container(
                           width: 380,
-                          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
+                          //padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -140,39 +142,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _studentEmail,
                                       style: const TextStyle(fontSize: 16),
                                     ),
-                                    // const SizedBox(height: 8),
-                                    // Row(
-                                    //   mainAxisAlignment: MainAxisAlignment.center,
-                                    //   children: [
-                                    //     Text(
-                                    //       'Department : ',
-                                    //       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    //     ),
-                                    //     Text(
-                                    //       _department,
-                                    //       style: const TextStyle(fontSize: 16),
-                                    //     ),
-                                    //   ],
-                                    // ),
+  
                                   ],
                                 ),
                               ),
-                             
+                             const SizedBox(height: 20),
                               RankLevel(token: widget.token),
                                    ],
                           ),
                         ), // Use RankLevel widget here
                               const SizedBox(height: 20),
-                              buildAchievementUI(), // Use your existing buildAchievementUI function
-                       
-                        // .asGlass(
-                        //   enabled: effectEnabled,
-                        //   tintColor: Theme.of(context).backgroundColor,
-                        //   clipBorderRadius: BorderRadius.circular(40.0),
-                        // ),
-                          
-                
-                  // buildProgressUI(),
+                              buildAchievementUI(),
                       ],
                     ),
             ),
@@ -187,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double screenWidth = MediaQuery.of(context).size.width;
   return Container(
     width: 400,
-    padding: const EdgeInsets.symmetric(horizontal: 10),
+    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
@@ -223,55 +203,19 @@ class _ProfilePageState extends State<ProfilePage> {
           thickness: 1, // Set the thickness of the divider line
           color: Colors.grey[300], // Set the color of the divider line
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 35),
         const Text(
             'Progress',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ), // Add some space below the existing row
-        buildProgressBar('Task1', _completioned.toDouble()), // Add the progress bar here
-        buildProgressBar('Task2', _inProgress.toDouble()),
-        buildProgressBar('Task3', _totalNotStarted.toDouble()),
+        buildProgressBar('Completioned', _completioned), 
+        buildProgressBar('InProgress', _inProgress),
+        buildProgressBar('TotalNotStarted', _totalNotStarted),
       ],
     ),
   );
 }
 
-//  Widget buildProgressUI() {
-//   // Build your achievement UI here
-//   return Padding(
-//     padding: const EdgeInsets.all(20.0),
-//     child: Container(
-//       width: double.infinity,
-//       padding: const EdgeInsets.all(10),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(20),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.2),
-//             spreadRadius: 1,
-//             blurRadius: 3,
-//             offset: Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           const Text(
-//             'Progress',
-//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//           ),
-         
-//           const SizedBox(height: 20), // Add some space below the existing row
-//           buildProgressBar('Task1', _completioned), // Add the progress bar here
-//           buildProgressBar('Task2', _inProgress),
-//           buildProgressBar('Task3', _totalNotStarted.toInt()),
-//         ],
-//       ),
-//     ),
-//   );
-// }
 
   Widget _buildLoadingSkeleton() {
     return Shimmer.fromColors(

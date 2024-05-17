@@ -1,4 +1,4 @@
-import 'package:elearning/ui/Dashboard/video_player_popup.dart';
+import 'package:elearning/ui/My_learning/video_player_popup.dart';
 import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,18 +54,7 @@ class MLPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'Course Details',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+          
           const SizedBox(height: 10.0),
           Text(
             course_name ?? 'No course name available',
@@ -81,12 +70,8 @@ class MLPopup extends StatelessWidget {
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
           const SizedBox(height: 10.0),
-          const Text(
-            'Course Description',
-            style: TextStyle(fontSize: 16.0),
-          ),
           Text(
-            Cdiscrpition.isNotEmpty ? Cdiscrpition : 'No description available',
+            Cdiscrpition.isNotEmpty ? removeHtmlTags(Cdiscrpition): 'No description available',
             style: const TextStyle(
               fontSize: 16.0,
                fontWeight: FontWeight.bold,
@@ -140,11 +125,19 @@ class MLPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                onPressed: ()  => VideoPlayerPopup( course_videourl: 'https://youtu.be/H4hIfQMjvkM?si=utPk6-5ATqkO854p',),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 239, 237, 237),
+                onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => VideoPlayerPopup(
+                  course_videourl: course_videourl,
                 ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey,
+            ),
                 child: const Icon(Icons.videocam),
+                
               ),
               ElevatedButton(
                 onPressed: () {
@@ -157,9 +150,9 @@ class MLPopup extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(242, 247, 246, 246),
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
                 ),
-                child: const Text('Start Course'),
+                child: const Text('Start Course',style: TextStyle(color: Colors.white),),
               ),
               IconButton(
                 icon: const FaIcon(
@@ -170,13 +163,17 @@ class MLPopup extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 248, 247, 247),
-                ),
+              backgroundColor: Colors.grey,
+            ),
               ),
             ],
           ),
         ],
       ),
     );
+  }
+  String removeHtmlTags(String htmlString) {
+    RegExp htmlTagRegExp = RegExp(r'<[^>]*>'); // Regular expression to match HTML tags
+    return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
   }
 }

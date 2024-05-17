@@ -12,6 +12,15 @@ class WebViewPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: false,
+         leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        
       ),
       body: WebView(
         initialUrl: url,

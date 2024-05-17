@@ -192,6 +192,7 @@ Widget buildLeaderBoard() {
                   Text(user.rank), // Align rank to the left
                   SizedBox(width: 10),
                   CircleAvatar(
+                    
                     backgroundImage: NetworkImage(user.rank_icon),
                   ),
                 ],

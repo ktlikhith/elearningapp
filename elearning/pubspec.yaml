@@ -107,13 +107,22 @@ flutter:
     - assets/profilesvg/
     - assets/quizicons/
     - assets/images/eapplogo.png
-    - assets/images/background-2.png
-    - assets/images/background.png
-    - assets/images/img1.jpeg
+    
+   
    
     - assets/images/roulette-center-300.png
-    - assets/images/roulette-8-300.png
+   
     - assets/gif/
+
+  
+  # fonts:
+  #   - family: MyCustomFont
+  #     fonts:
+  #       - asset: assets/fonts/Nunito/
+  #       - asset: assets/fonts/Nunito/static/
+        
+          
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

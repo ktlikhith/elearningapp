@@ -51,6 +51,7 @@ class RankLevel extends StatelessWidget {
               _buildRow('Course Average % for Next Level', courseAverage, 'assets/profilesvg/risk-assessment-svgrepo-com.svg'),
             ],
           ),
+          
         );
       },
     );
@@ -82,6 +83,7 @@ class RankLevel extends StatelessWidget {
           ),
         ],
       ),
+      
     );
   }
 }
