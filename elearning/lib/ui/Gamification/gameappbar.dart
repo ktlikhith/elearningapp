@@ -88,7 +88,7 @@ class _GamificationPageState extends State<GamificationPage> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacementNamed(RouterManger.Quiz);
+                          Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
                         },
                         child: Text('QUIZ'),
                       ),
