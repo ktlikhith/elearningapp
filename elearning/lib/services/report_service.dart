@@ -24,9 +24,9 @@ class Report {
   final String id;
   final String studentName;
   final String studentImage;
-  final int averageGrade;
-  final int totalNoActivity;
-  final int completedActivity;
+  final  averageGrade;
+  final  totalNoActivity;
+  final  completedActivity;
 
   Report({
     required this.id,

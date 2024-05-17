@@ -8,7 +8,7 @@ class RewardPointService {
   Future<Map<String, dynamic>> addReward({
     required String token,
     required String type,
-    required int points,
+    required  points,
   }) async {
     try {
       final userInfo = await SiteConfigApiService.getUserId(token);
@@ -21,6 +21,7 @@ class RewardPointService {
           'userid=$userId&'
           'type=$type&'
           'point=$points');
+           
 
       final response = await http.get(apiUrl);
 

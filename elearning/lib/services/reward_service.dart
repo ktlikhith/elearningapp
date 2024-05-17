@@ -37,19 +37,19 @@ class RewardData {
   final String empcode;
   final String phone;
   final String profileImage;
-  final String myRank;
+  final  myRank;
   final String availablePoints;
   final String totalPoints;
-  final int redeemPoints;
-  final int averageGrade;
+  final  redeemPoints;
+  final  averageGrade;
   final bool spinButton;
-  final int pointsNeeded;
-  final String gradeNeeded;
+  final  pointsNeeded;
+  final  gradeNeeded;
   final String nextLevel;
-  final int loginPoints;
-  final int quizPoints;
-  final int spinwheelPoints;
-  final int rewardsReceivedPoints;
+  final  loginPoints;
+  final  quizPoints;
+  final  spinwheelPoints;
+  final  rewardsReceivedPoints;
 
   RewardData({
     required this.fullname,

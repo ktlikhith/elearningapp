@@ -28,10 +28,10 @@ class RankLevel extends StatelessWidget {
           final rewardData = snapshot.data!;
           mailid=rewardData.email;
           department = rewardData.department;
-          currentRank = rewardData.myRank;
-          nextLevel = rewardData.nextLevel;
+          currentRank = rewardData.myRank.toString();
+          nextLevel = rewardData.nextLevel.toString();
           pointsToNextLevel = rewardData.pointsNeeded.toString();
-          courseAverage = rewardData.gradeNeeded;
+          courseAverage = rewardData.gradeNeeded.toString();
         }
 
         return Container(

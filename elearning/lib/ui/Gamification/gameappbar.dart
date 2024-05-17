@@ -83,7 +83,7 @@ class _GamificationPageState extends State<GamificationPage> {
                       SizedBox(
                         height: 400,
                         width: MediaQuery.of(context).size.width * 0.7,
-                        child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12,),
+                        child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12),
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(

@@ -148,17 +148,17 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
               children: <Widget>[
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.totalNoActivity ?? 0,
+                  number: reportData?.totalNoActivity.toString() ?? '',
                   title: 'Totalactivity',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.completedActivity ?? 0,
+                  number: reportData?.completedActivity .toString()?? '',
                   title: 'Completed',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.averageGrade ?? 0,
+                  number: reportData?.averageGrade.toString() ?? '',
                   title: 'Average Grade',
                 ),
               ],

@@ -24,13 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _studentName = '';
   late String _studentEmail = '';
   late String _department = '';
-  late String _userPoints = '';
-  late int _badgesEarn = 0;
-  late String _userLevel = '';
-  late int _completioned = 0;
-  late int _inProgress = 0;
-  late double _totalNotStarted = 0.0;
+  var  _userPoints = '';
+  var _badgesEarn = 0;
+  var _userLevel = '';
+  var _completioned = 0;
+  var _inProgress = 0;
+  var _totalNotStarted = 0.0;
   bool _isLoading = true; // Add loading state
+  
 
   @override
   void initState() {
@@ -41,20 +42,23 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _fetchProfileData(String token) async {
     try {
       final data = await ProfileAPI.fetchProfileData(token);
+      
 
       setState(() {
         _studentName = data['user_info'][0]['studentname'];
         _studentEmail = data['user_info'][0]['studentemail'];
         _department = data['user_info'][0]['department'];
         final profilePictureMatch = RegExp(r'src="([^"]+)"').firstMatch(data['user_info'][0]['studentimage']);
+       
         if (profilePictureMatch != null) {
           _profilePictureUrl = profilePictureMatch.group(1)!;
+         
         }
 
         final achievements = data['achievements'][0];
-        _userPoints = achievements['userpoints'];
+       _userPoints =  achievements['userpoints'];
         _badgesEarn = achievements['badgesearn'];
-        _userLevel = achievements['userlevel'];
+        _userLevel =  achievements['userlevel'];
 
         final courseProgress = data['course_progress'];
         _completioned = courseProgress['completioned'];
@@ -224,9 +228,9 @@ class _ProfilePageState extends State<ProfilePage> {
             'Progress',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ), // Add some space below the existing row
-        buildProgressBar('Task1', _completioned), // Add the progress bar here
-        buildProgressBar('Task2', _inProgress),
-        buildProgressBar('Task3', _totalNotStarted.toInt()),
+        buildProgressBar('Task1', _completioned.toDouble()), // Add the progress bar here
+        buildProgressBar('Task2', _inProgress.toDouble()),
+        buildProgressBar('Task3', _totalNotStarted.toDouble()),
       ],
     ),
   );

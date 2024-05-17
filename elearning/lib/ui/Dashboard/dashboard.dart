@@ -49,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
     _fetchUserInfo(widget.token);
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       _refreshNotificationCount();
+      
     });
   }
 
@@ -176,6 +177,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 },
                 child: CircleAvatar(
                   radius: 20,
+                  
                   backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
                 ),
               ),
