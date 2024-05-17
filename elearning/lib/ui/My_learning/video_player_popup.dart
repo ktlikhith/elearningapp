@@ -83,27 +83,34 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Video Player'),
-      content: SingleChildScrollView(child: _playerWidget),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            // Dispose video players when closing the dialog
-            if (widget.course_videourl.contains('youtube.com') ||
-                widget.course_videourl.contains('youtu.be')) {
-              final YoutubePlayerController controller =
-                  (_playerWidget as YoutubePlayer).controller;
-              controller.pause();
-              controller.dispose();
-            } else {
-              _videoController.dispose();
-            }
-            Navigator.of(context).pop();
-          },
-          child: Text('Close'),
-        ),
-      ],
-    );
+   return AlertDialog(
+  backgroundColor: Colors.transparent, 
+  elevation: 0, // Remove elevation
+  contentPadding: EdgeInsets.zero, // Remove content padding
+  content: SizedBox(
+    width: MediaQuery.of(context).size.width, // Set width to screen width
+    child: SingleChildScrollView(child: _playerWidget),
+  ),
+  
+  actions: <Widget>[
+    TextButton(
+      onPressed: () {
+        // Dispose video players when closing the dialog
+        if (widget.course_videourl.contains('youtube.com') ||
+            widget.course_videourl.contains('youtu.be')) {
+          final YoutubePlayerController controller =
+              (_playerWidget as YoutubePlayer).controller;
+          controller.pause();
+          controller.dispose();
+        } else {
+          _videoController.dispose();
+        }
+        Navigator.of(context).pop();
+      },
+      child: Text('Close'),
+    ),
+  ],
+);
+
   }
 }

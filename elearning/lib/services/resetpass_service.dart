@@ -14,7 +14,7 @@ class PasswordResetService {
         Uri.parse(newUrl),
         body: {
           'moodlewsrestformat': 'json',
-          'wstoken': '993e63053901ed4044fafca72cc704e0',
+          'wstoken': 'ea87559594d7a2a15a8bd474b9a17926',
           'wsfunction': 'core_auth_request_password_reset',
           'email': email,
         },
@@ -22,7 +22,7 @@ class PasswordResetService {
       
 
       if (response.statusCode == 200) {
-
+     
         return json.decode(response.body);
       } else {
         throw Exception('Failed to load data');

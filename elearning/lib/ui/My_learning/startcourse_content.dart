@@ -1,6 +1,7 @@
-import 'package:elearning/routes/routes.dart';
+
 import 'package:elearning/services/course_content.dart';
-import 'package:elearning/ui/My_learning/webviewpage.dart';
+
+import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';

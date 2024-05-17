@@ -2,9 +2,10 @@ import 'dart:async';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event_service.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -90,6 +91,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             'Live Session',
           ),
           centerTitle: false,
+           automaticallyImplyLeading: false,
           
         ),
         backgroundColor: Theme.of(context).backgroundColor,
@@ -133,7 +135,17 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                         Center(
                           child: TextButton(
                             onPressed: () {
-                              _launchURL(sessions[index].url);
+                              if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
+                        String moduleUrl = sessions[index].url;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WebViewPage( 'Live Events', moduleUrl),
+                          ),
+                        );
+                      }
+                             
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space

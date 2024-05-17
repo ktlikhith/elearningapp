@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
 
+int toIntValue(dynamic value) {
+  if (value is int) {
+    return value;
+  } else if (value is double) {
+    return value.round(); // Round the double to the nearest integer
+  } else {
+    throw ArgumentError('Value must be either int or double');
+  }
+}
 Widget buildSection({
   required String svgPath,
-  required String number,
+  required  var number,
   required String title,
   bool isLoading = false,
 }) {
+  int intValue = toIntValue(number);
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: isLoading
@@ -34,7 +44,7 @@ Widget buildSection({
                       child: SvgPicture.asset(svgPath),
                     ),
                     Text(
-                      number.toString(),
+                      '$intValue',
                       style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,

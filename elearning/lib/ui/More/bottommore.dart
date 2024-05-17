@@ -83,44 +83,57 @@ class _MyMorePageState extends State<MyMorePage> {
           ],
         ),
         backgroundColor: Theme.of(context).backgroundColor,
-        body: ListView(
-          children: <Widget>[
-            ListTile(
+       body: ListView(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
               leading: FaIcon(FontAwesomeIcons.graduationCap),
               title: Text('Learning Path'),
-              onTap: () {
-              Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token);
-
-              },
             ),
-            
-            ListTile(
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
               leading: FaIcon(FontAwesomeIcons.chartSimple),
               title: Text('Reports'),
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
-              },
             ),
-            ListTile(
+          ),
+          InkWell(
+            onTap: () {
+              // Implement downloads functionality here
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
               leading: FaIcon(FontAwesomeIcons.download),
               title: Text('Downloads'),
-              onTap: () {
-                // Implement downloads functionality here
-              },
             ),
-            ListTile(
+          ),
+          InkWell(
+            onTap: () {
+              _clearToken();
+              Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
               leading: FaIcon(FontAwesomeIcons.rightFromBracket),
               title: Text('Logout'),
-              onTap: () {
-                 _clearToken();
-                
-                  Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
-               
-              },
             ),
-            // Add more ListTile for additional options
-          ],
-        ),
+          ),
+          
+        ],
+      ),
+
       ),
     );
   }

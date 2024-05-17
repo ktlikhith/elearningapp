@@ -4,7 +4,7 @@ import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart'; // Import the shimmer package
+import 'package:shimmer/shimmer.dart'; 
 
 class LearningScreen extends StatelessWidget {
   final String token;
@@ -63,7 +63,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
               ),
             ],
           ),
-         
+         automaticallyImplyLeading: false,
           actions: <Widget>[
             IconButton(
               icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
@@ -148,17 +148,17 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
               children: <Widget>[
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.totalNoActivity.toString() ?? '',
+                  number: reportData?.totalNoActivity ?? 0,
                   title: 'Totalactivity',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.completedActivity .toString()?? '',
+                  number: reportData?.completedActivity ?? 0,
                   title: 'Completed',
                 ),
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
-                  number: reportData?.averageGrade.toString() ?? '',
+                  number: reportData?.averageGrade ?? 0,
                   title: 'Average Grade',
                 ),
               ],

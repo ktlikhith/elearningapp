@@ -217,43 +217,50 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
               SizedBox(height: 8),
              
               Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                              final passwordResetService = PasswordResetService('$Constants.baseUrl');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ForgotPasswordScreen(passwordResetService: passwordResetService)),
-                              );
-                            },
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
-                  ),
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  final passwordResetService = PasswordResetService('https://lxp-demo2.raptechsolutions.com');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordScreen(passwordResetService: passwordResetService),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
+                child: Text(
+                  'Forgot Password?',
+                  style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
                 ),
               ),
-              SizedBox(height: 20),
+            ),
+
+            SizedBox(height: 20),
              
             SizedBox(
             width: double.infinity, 
             child: ElevatedButton(
-               onPressed: () => _login(context),
-              // onPressed: _isButtonEnabled ? () => _login(context) : null,
+              onPressed: () => _login(context),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 14), // Adjust vertical padding
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10), // Add a circular border radius
                 ),
                 backgroundColor: Theme.of(context).secondaryHeaderColor,
-                 
+              ).copyWith(
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
               ),
-             
-              
               child: Text(
-                'Sign In',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                'Sign In ', // Replace with your button text
+                style: TextStyle(
+                  color: Colors.white, // Replace with your desired text color
+                ),
               ),
             ),
+
           ),
             ],
           ),

@@ -111,18 +111,18 @@ onThreshold: () async {
     );
     // Display the point and point image
     showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Congratulations!'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            
-            Image.network(card.pointImage),
-          ],
-        ),
+  context: context,
+  builder: (_) => Dialog(
+    child: Container(
+      // You can set width and height if you want to control the size of the dialog
+      child: Image.network(
+        card.pointImage,
+        fit: BoxFit.cover, // This will ensure the image fits well in the dialog
       ),
-    );
+    ),
+  ),
+);
+
   } catch (e) {
     // Handle error if needed
     print('Error adding reward points: $e');

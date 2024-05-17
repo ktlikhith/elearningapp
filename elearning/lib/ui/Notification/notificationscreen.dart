@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:elearning/routes/routes.dart';
+
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/notification_service.dart';
+import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -123,7 +123,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
+              Navigator.pop(context);
             },
           ),
         ),
@@ -142,7 +142,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         borderRadius: BorderRadius.circular(10), // Example border radius
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.white,
                             spreadRadius: 2,
                             blurRadius: 5,
                             offset: Offset(0, 3),
@@ -216,7 +216,7 @@ class NotificationDetailsScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
+            Navigator.pop(context);
           },
         ),
       ),
@@ -260,12 +260,27 @@ class NotificationDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
+            Center(
+            child: ElevatedButton(
               onPressed: () {
-                // Handle button press, e.g., open a link
+                if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
+                  String moduleUrl = notification.contextUrl;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WebViewPage('Insights', moduleUrl),
+                    ),
+                  );
+                }
               },
-              child: Text('View Insight'),
+              style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
+              
             ),
+              child: Text('View Insight',style: TextStyle(color: Colors.white)),
+            ),
+          ),
+
           ],
         ),
       ),
