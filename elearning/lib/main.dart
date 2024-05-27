@@ -1,4 +1,4 @@
-
+import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -25,25 +23,19 @@ class MyApp extends StatelessWidget {
           primaryColor: Color.fromARGB(255, 10, 10, 10),
           secondaryHeaderColor: Colors.orange,
           backgroundColor: Colors.white, // Set the background color for all pages
-          textTheme: GoogleFonts.nunitoTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        //fontFamily: 'MyCustomFont',
-        appBarTheme: AppBarTheme(
-             titleTextStyle: GoogleFonts.nunito(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20, // Set your desired font size
-            ),
-              fontSize: 20,
+          textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
+          appBarTheme: AppBarTheme(
+            titleTextStyle: GoogleFonts.nunito(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20, // Set your desired font size
+              ),
             ),
           ),
-        
-         
         ),
-        home: LandingPage(),
-         onGenerateRoute: RouterManger.generateRoute,
+        home: LoginCheckWidget(), // Use LoginCheckWidget to perform login check
+        onGenerateRoute: RouterManger.generateRoute,
       ),
     );
   }

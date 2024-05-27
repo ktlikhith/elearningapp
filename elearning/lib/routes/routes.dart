@@ -11,12 +11,12 @@ import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
 import 'package:elearning/ui/Reports/reports_chart.dart';
-
-import 'package:elearning/ui/download/download.dart';
+import 'package:elearning/ui/download/download_screen.dart';
 import 'package:flutter/material.dart';
 
 
 class RouterManger{
+  static const String landingscreen= '/landingscreen';
   static const String homescreen = '/dashboard';
   static const String mylearning = '/mylearning';
   static const String livesession = '/livesession';
@@ -59,8 +59,14 @@ class RouterManger{
 
       
       case downloads:
+       final token = settings.arguments as String;
       return MaterialPageRoute(
-        builder:(context) => DownloadPage()
+        builder:(context) => DownloadsScreen(token: token)
+      ,);
+       case landingscreen:
+       
+      return MaterialPageRoute(
+        builder:(context) => LandingPage()
       ,);
     
 

@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
-import 'package:flutter/material.dart';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +13,6 @@ class _LandingPageState extends State<LandingPage> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   bool _isConnected = true;
-  bool _isLoggedIn = false;
 
   List<Map<String, String>> pagesData = [
     {
@@ -38,7 +36,6 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     _checkInternetConnection();
-    _checkLoginStatus();
   }
 
   Future<void> _checkInternetConnection() async {
@@ -46,19 +43,6 @@ class _LandingPageState extends State<LandingPage> {
     setState(() {
       _isConnected = connectivityResult != ConnectivityResult.none;
     });
-  }
-
-  Future<void> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-    setState(() {
-      _isLoggedIn = token != null && token.isNotEmpty;
-    });
-
-    if (_isLoggedIn) {
-      // Token exists, navigate directly to HomeScreen
-      Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
-    }
   }
 
   @override
@@ -123,7 +107,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
             ),
-            if (_currentPage == pagesData.length - 1 && !_isLoggedIn)
+            if (_currentPage == pagesData.length - 1)
               Positioned(
                 bottom: 20,
                 right: 20,
