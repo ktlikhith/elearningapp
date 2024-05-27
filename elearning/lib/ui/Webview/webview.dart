@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class WebViewPage extends StatelessWidget {
+class WebViewPage extends StatefulWidget {
   final String title;
   final String url;
 
   WebViewPage(this.title, this.url);
 
   @override
+  _WebViewPageState createState() => _WebViewPageState();
+}
+
+class _WebViewPageState extends State<WebViewPage> {
+  @override
+  void initState() {
+    super.initState();
+    if (WebView.platform == null) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: false,
-         leading: IconButton(
+        leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        
       ),
       body: WebView(
-        initialUrl: url,
-        javascriptMode: JavascriptMode.unrestricted, // Enable JavaScript if needed
+        initialUrl: widget.url,
+        javascriptMode: JavascriptMode.unrestricted,
+        onWebResourceError: (error) {
+          print('WebResourceError: $error');
+        },
         onPageFinished: (String url) {
-          // Handle page finished loading if necessary
+          print('Page finished loading: $url');
         },
       ),
     );

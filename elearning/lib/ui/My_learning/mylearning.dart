@@ -159,7 +159,7 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
                 buildSection(
                   svgPath: 'assets/images/activity.svg',
                   number: reportData?.averageGrade ?? 0,
-                  title: 'Average Grade',
+                  title: 'Grade',
                 ),
               ],
             ),

@@ -62,21 +62,18 @@
 //   });
 
 // }
-
 import 'dart:convert';
 import 'package:elearning/services/auth.dart';
 import 'package:http/http.dart' as http;
 
-
 class CourseReportApiService {
-   Future<List<Course>> fetchCourses(String token) async {
-   
-      final userInfo = await SiteConfigApiService.getUserId(token);
-      final userId = userInfo['id'];
-      final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
-          'moodlewsrestformat=json&wstoken=$token&'
-          'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
-     try {
+  Future<List<Course>> fetchCourses(String token) async {
+    final userInfo = await SiteConfigApiService.getUserId(token);
+    final userId = userInfo['id'];
+    final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
+        'moodlewsrestformat=json&wstoken=$token&'
+        'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
+    try {
       final response = await http.get(apiUrl);
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -91,10 +88,34 @@ class CourseReportApiService {
     }
   }
 
-
-
-  // static int getcoursenameWithToken(String token) {}
+  Future<String> getCourseImageWith_token_id(String token, String courseId) async {
+    try {
+      List<Course> courses = await fetchCourses(token);
+      for (Course course in courses) {
+        if (course.id == courseId) {
+          return course.getImageUrlWithToken(token);
+        }
+      }
+      throw Exception('Course not found');
+    } catch (e) {
+      throw Exception('Error retrieving course image: $e');
+    }
+  }
+   Future<String> getCourseDescriptionWith_token_id(String token, String courseId) async {
+    try {
+      List<Course> courses = await fetchCourses(token);
+      for (Course course in courses) {
+        if (course.id == courseId) {
+          return course.getcourseDescriptionWithToken(token);
+        }
+      }
+      throw Exception('Course not found');
+    } catch (e) {
+      throw Exception('Error retrieving course image: $e');
+    }
+  }
 }
+
 
 class Course {
   final String id;
@@ -132,33 +153,40 @@ class Course {
       courseDuration: json['course_duration'] ?? '',
     );
   }
-   String getImageUrlWithToken(String token) {
+
+  String getImageUrlWithToken(String token) {
     return '$courseImg?token=$token';
   }
+
   String getCourseIDWithToken(String token) {
-    
     return '$id';
   }
-    String getcoursenameWithToken(String token) {
+
+  String getcoursenameWithToken(String token) {
     return '$name';
   }
-   String getcourseProgressWithToken(String token) {
+
+  String getcourseProgressWithToken(String token) {
     return '$courseProgress';
   }
-   String getcourseDescriptionWithToken(String token) {
+
+  String getcourseDescriptionWithToken(String token) {
     return '$courseDescription';
   }
-   String getcourseStartDateWithToken(String token) {
+
+  String getcourseStartDateWithToken(String token) {
     return '$courseStartDate';
   }
-   String getcourseEndDateWithToken(String token) {
+
+  String getcourseEndDateWithToken(String token) {
     return '$courseEndDate';
   }
-   String getcourseVideoUrlWithToken(String token) {
+
+  String getcourseVideoUrlWithToken(String token) {
     return '$courseVideoUrl';
   }
-   String getcourseDurationWithToken(String token) {
+
+  String getcourseDurationWithToken(String token) {
     return '$courseDuration';
   }
-  
 }
