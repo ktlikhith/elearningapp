@@ -228,7 +228,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               )
             : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
+            
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+     
       ),
     );
   }
