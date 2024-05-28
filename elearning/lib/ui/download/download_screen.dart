@@ -679,10 +679,11 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
       appBar: AppBar(
         title: const Text('Downloads'),
         backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: false,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).pop();
+           Navigator.pop(context);
           },
         ),
       ),

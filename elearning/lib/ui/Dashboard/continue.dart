@@ -193,7 +193,7 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                           widthFactor: course.courseProgress / 100,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                               color: getProgressBarColor(course.courseProgress),
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                           ),
@@ -210,6 +210,16 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
     ),
   );
 }
+
+ Color getProgressBarColor(int progress) {
+    if (progress >= 0 && progress <= 35) {
+      return Colors.red; // Color for not started
+    } else if (progress >80) {
+      return Colors.green; // Color for completed
+    } else {
+      return Colors.orange; // Color for in progress
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
