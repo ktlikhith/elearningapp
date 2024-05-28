@@ -5,6 +5,7 @@ import 'package:elearning/ui/My_learning/video_player_screen.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -322,7 +323,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               ),
                               trailing: (module['contents'] != null || module['modname'] == 'customcert' )
                                   ? IconButton(
-                                      icon: Icon(Icons.download),
+                  icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black,size: 16.5,),
                                       onPressed: () {
                                         if (module['contents'] != null && module['contents'].isNotEmpty) {
                                           final content = module['contents'][0];

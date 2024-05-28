@@ -66,6 +66,8 @@ dependencies:
   chewie: ^1.8.1
   intel_hex: ^1.2.1
   intl: ^0.17.0
+  persistent_bottom_nav_bar_v2: 4.2.8
+  floating_bottom_navigation_bar: ^1.5.2
   
   # androidx_multidex: ^1.1.0
 
