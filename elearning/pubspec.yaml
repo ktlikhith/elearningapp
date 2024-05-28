@@ -115,6 +115,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/learning icons/
+    - assets/dashboardicons/
     - assets/liveeventsvg/
     - assets/images/svg/
     - assets/profilesvg/

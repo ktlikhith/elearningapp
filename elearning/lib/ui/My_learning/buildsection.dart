@@ -12,7 +12,7 @@ int toIntValue(dynamic value) {
   }
 }
 Widget buildSection({
-  required String svgPath,
+  required String iconPath,
   required  var number,
   required String title,
   bool isLoading = false,
@@ -41,7 +41,7 @@ Widget buildSection({
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircleAvatar(
-                      child: SvgPicture.asset(svgPath),
+                      child: Image.asset(iconPath),
                     ),
                     Text(
                       '$intValue',

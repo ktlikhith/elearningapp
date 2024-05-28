@@ -88,11 +88,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           child: Row(
             children: [
               _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
-                  'assets/images/svg/task-past-due-svgrepo-com.svg'),
+                  'assets/dashboardicons/due past.png'),
               _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
-                  'assets/images/svg/task-due-svgrepo-com.svg'),
+                  'assets/dashboardicons/Due soon.png'),
               _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
-                  'assets/images/svg/date-time-svgrepo-com.svg'),
+                  'assets/dashboardicons/due later.png'),
             ],
           ),
         ),
@@ -122,7 +122,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     );
   }
 
-  Widget buildSection(String title, String number, Color color, String svgPath) {
+  Widget buildSection(String title, String number, Color color, String iconPath) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -145,7 +145,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                 color: color,
               ),
               child: Center(
-                child: SvgPicture.asset(svgPath),
+                child: Image.asset(iconPath),
               ),
             ),
             const SizedBox(width: 25.0),
