@@ -21,7 +21,7 @@ class ContinueWatchingScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
+           Navigator.pop(context);
           },
         ),
       ),
@@ -68,9 +68,19 @@ class ContinueWatchingScreen extends StatelessWidget {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(course.name),
-                    Text('Start Date: ${course.courseStartDate}'),
-                    Text('End Date: ${course.courseEndDate}'),
+                    Text(course.name, style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),),
+                    Text('Start Date: ${course.courseStartDate}', style: TextStyle(
+                            
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[500],
+                          ),),
+                    Text('End Date: ${course.courseEndDate}', style: TextStyle(
+                           
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[500],
+                          ),),
                   ],
                 ),
                 trailing: Text(

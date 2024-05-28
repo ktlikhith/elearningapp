@@ -210,7 +210,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
+                            color: Colors.grey[600],
                           ),
                         ),
                       ),

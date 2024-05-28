@@ -138,7 +138,8 @@ class LearningPathPage extends StatelessWidget {
                           SizedBox(height: 8.0),
                           Text(
                             removeHtmlTags(learningPathDetail['discriotion']),
-                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],),
                           ),
                           SizedBox(height: 8.0),
                           Padding(
@@ -226,7 +227,8 @@ class LearningPathPage extends StatelessWidget {
                                   SizedBox(height: 8.0),
                                   Text(
                                     removeHtmlTags(course['coursedec']),
-                                    style: TextStyle(fontSize: 16.0),
+                                    style: TextStyle(fontSize: 16.0,color: Colors.grey[600]),
+                                    
                                   ),
                                   SizedBox(height: 12.0),
                                   Container(
