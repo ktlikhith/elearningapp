@@ -166,7 +166,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
 
         child: FloatingNavbar(
-          fontSize: 14,
+          fontSize: 11,
           iconSize: 24,
         
           backgroundColor: Colors.white,
@@ -175,9 +175,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           // selectedBackgroundColor: Theme.of(context).secondaryHeaderColor,
           onTap: _handleTabPressed,
           currentIndex: _selectedIndex,
-          itemBorderRadius: 8,
-          borderRadius: 8,
-          margin: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+          itemBorderRadius: 9,
+          borderRadius: 9,
+          margin: EdgeInsets.symmetric(horizontal: 4,vertical: 0),
           padding: EdgeInsets.only(bottom: 0,top: 0),
           
             
