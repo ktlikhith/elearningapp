@@ -147,17 +147,17 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
             child: Row(
               children: <Widget>[
                 buildSection(
-                  svgPath: 'assets/images/activity.svg',
+                  iconPath: 'assets/learning icons/total activity.png',
                   number: reportData?.totalNoActivity ?? 0,
                   title: 'Totalactivity',
                 ),
                 buildSection(
-                  svgPath: 'assets/images/activity.svg',
+                  iconPath: 'assets/learning icons/Completed Activity.png',
                   number: reportData?.completedActivity ?? 0,
                   title: 'Completed',
                 ),
                 buildSection(
-                  svgPath: 'assets/images/activity.svg',
+                  iconPath: 'assets/learning icons/Average.png',
                   number: reportData?.averageGrade ?? 0,
                   title: 'Grade',
                 ),

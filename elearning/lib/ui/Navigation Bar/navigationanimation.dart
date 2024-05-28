@@ -1,125 +1,3 @@
-// import 'dart:async';
-
-// import 'package:elearning/routes/routes.dart';
-// import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:google_nav_bar/google_nav_bar.dart';
-
-// class CustomBottomNavigationBar extends StatefulWidget {
-//   final int initialIndex;
-//   final String token;
-
-
-//   const CustomBottomNavigationBar({Key? key, required this.initialIndex, required this.token})
-//       : super(key: key);
-
-//   @override
-//   _CustomBottomNavigationBarState createState() =>
-//       _CustomBottomNavigationBarState();
-// }
-
-// class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-//   late int _selectedIndex = 0; 
-//   Timer? _timer; // Define _timer as a Timer variable
-
-
-//  @override
-// void initState() {
-//   super.initState();
-//   _selectedIndex = widget.initialIndex ?? 0; // Use initialIndex if provided, otherwise default to 0
-// }
-
-// @override
-// void dispose() {
-//   _timer?.cancel(); // Cancel the timer
-//   super.dispose();
-// }
-
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.white,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 18),
-//         child: GNav(
-//           backgroundColor: Colors.white,
-//           color: Colors.black,
-//           activeColor: Colors.white,
-//           tabBackgroundColor: Theme.of(context).secondaryHeaderColor,
-//           gap: 5,
-//           padding: EdgeInsets.all(14),
-//           tabs: [
-//             GButton(
-//               icon: FontAwesomeIcons.house,
-//               text: 'Home',
-//               onPressed: () {
-//                 _handleTabPressed(0);
-//               },
-//             ),
-//             GButton(
-//               icon: FontAwesomeIcons.graduationCap,
-//               text: 'Learning',
-//               onPressed: () {
-//                 _handleTabPressed(1);
-//               },
-//             ),
-//             GButton(
-//               icon: FontAwesomeIcons.bookOpen,
-//               text: 'Live',
-//               onPressed: () {
-//                 _handleTabPressed(2);
-//               },
-//             ),
-//             GButton(
-//               icon: FontAwesomeIcons.trophy,
-//               text: 'Game',
-//               onPressed: () {
-//                 _handleTabPressed(3);
-//               },
-//             ),
-//             GButton(
-//               icon: FontAwesomeIcons.ellipsis,
-//               text: 'More',
-//               onPressed: () {
-//                 _handleTabPressed(4);
-//               },
-//             ),
-//           ],
-//           selectedIndex: _selectedIndex,
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _handleTabPressed(int index) {
-//   if (!mounted) return; // Check if the state is still mounted
-
-//   setState(() {
-//     _selectedIndex = index;
-//   });
-
-//   switch (index) {
-//     case 0:
-//       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
-//       break;
-//     case 1:
-//       Navigator.of(context).pushReplacementNamed(RouterManger.mylearning, arguments: widget.token);
-//       break;
-//     case 2:
-//       Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
-//       break;
-//     case 3:
-//       Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
-//       break;
-//     case 4:
-//       Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
-//       break;
-//   }
-// }
-// }
-
 
 import 'dart:async';
 
@@ -166,7 +44,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
 
         child: FloatingNavbar(
-          fontSize: 14,
+          fontSize: 11,
           iconSize: 24,
         
           backgroundColor: Colors.white,
@@ -175,9 +53,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           // selectedBackgroundColor: Theme.of(context).secondaryHeaderColor,
           onTap: _handleTabPressed,
           currentIndex: _selectedIndex,
-          itemBorderRadius: 8,
-          borderRadius: 8,
-          margin: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+          itemBorderRadius: 9,
+          borderRadius: 9,
+          margin: EdgeInsets.symmetric(horizontal: 4,vertical: 0),
           padding: EdgeInsets.only(bottom: 0,top: 0),
           
             
