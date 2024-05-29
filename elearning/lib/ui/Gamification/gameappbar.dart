@@ -49,14 +49,12 @@ class _GamificationPageState extends State<GamificationPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 82.0, vertical: 1.5),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.5),
                       child: Text(
-                        'My Points',
+                        'My Points : $totalPoints',
                       ),
                     ),
-                    Text(
-                      totalPoints,
-                    ),
+
                   ],
                 );
               } else {
