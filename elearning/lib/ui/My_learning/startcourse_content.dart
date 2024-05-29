@@ -128,6 +128,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     final imageHeight = screenHeight * 0.25;
 
     return Scaffold(
+      
       body: FutureBuilder<String>(
         future: _courseImageUrlFuture,
         builder: (context, snapshot) {

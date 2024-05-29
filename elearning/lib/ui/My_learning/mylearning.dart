@@ -136,6 +136,12 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
   // Build method remains the same
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final buttonPadding = EdgeInsets.symmetric(
+      vertical: 14,
+      horizontal: screenWidth < 600 ? 20 : 30, // Adjust padding based on screen width
+    );
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -226,7 +232,7 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
                     Container(
                       width: 80.0,
                       height: 12.0,
-                      color: Colors.grey, // Placeholder color for due date
+                      color: Colors.grey, // Placeholder color                  for due date
                     ),
                   ],
                 ),
@@ -239,3 +245,4 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
     );
   }
 }
+

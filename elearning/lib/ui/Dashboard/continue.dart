@@ -61,9 +61,9 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
     }
   }
 
-  Widget _buildShimmerItem() {
+  Widget _buildShimmerItem(double width) {
     return SizedBox(
-      width: 300,
+      width: width,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -86,135 +86,133 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
     );
   }
 
- Widget _buildSection(BuildContext context, CourseData course) {
-  const double cardHeight = 300; // Define a constant height for the card
-  const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
+  Widget _buildSection(BuildContext context, CourseData course, double width, double height) {
+    const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
-  return SizedBox(
-    width: 210,
-    height: cardHeight, // Set the card height to a constant value
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Material(
-          borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CourseDetailsPage(widget.token, course.id, course.name),
-                ),
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      // Calculate available height for the image
-                      double availableHeight = constraints.maxHeight - titleMaxHeight - 80; // Adjust this value as needed
-                      return Container(
-                        height: availableHeight,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8.0),
-                            topRight: Radius.circular(8.0),
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8.0),
-                            topRight: Radius.circular(8.0),
-                          ),
-                          child: Image.network(
-                            course.getImageUrlWithToken(widget.token),
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Return a default image when loading fails
-                              return Image.asset(
-                                'assets/images/coursedefaultimg.jpg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
+    return SizedBox(
+      width: width,
+      height: height, // Set the card height to a constant value
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Material(
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CourseDetailsPage(widget.token, course.id, course.name),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        course.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Calculate available height for the image
+                        double availableHeight = constraints.maxHeight - titleMaxHeight - 80; // Adjust this value as needed
+                        return Container(
+                          height: availableHeight,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              topRight: Radius.circular(8.0),
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              topRight: Radius.circular(8.0),
+                            ),
+                            child: Image.network(
+                              course.getImageUrlWithToken(widget.token),
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                // Return a default image when loading fails
+                                return Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          course.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'End Date: ${course.courseEndDate}',
-                        style: TextStyle(
-                          color: Colors.grey[600],
+                        SizedBox(height: 8),
+                        Text(
+                          'End Date: ${course.courseEndDate}',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        height: 10,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: FractionallySizedBox(
-                          alignment: Alignment.centerLeft,
-                          widthFactor: course.courseProgress / 100,
-                          child: Container(
-                            decoration: BoxDecoration(
-                               color: getProgressBarColor(course.courseProgress),
-                              borderRadius: BorderRadius.circular(5.0),
+                        SizedBox(height: 8),
+                        Container(
+                          height: 10,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor: course.courseProgress / 100,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: getProgressBarColor(course.courseProgress),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
- Color getProgressBarColor(int progress) {
+  Color getProgressBarColor(int progress) {
     if (progress >= 0 && progress <= 35) {
       return Colors.red; // Color for not started
-    } else if (progress >80) {
+    } else if (progress > 80) {
       return Colors.green; // Color for completed
     } else {
       return Colors.orange; // Color for in progress
@@ -223,6 +221,11 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double cardWidth = screenWidth * 0.6; // Adjust card width as needed
+    final double cardHeight = screenHeight * 0.4; // Adjust card height as needed
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -230,11 +233,11 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
               child: Text(
                 'Continue Learning',
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: screenWidth * 0.06,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -244,44 +247,43 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ContinueWatchingScreen(token: widget.token, courses: _courses,),
+                    builder: (context) => ContinueWatchingScreen(
+                      token: widget.token,
+                      courses: _courses,
+                    ),
                   ),
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                
-                  
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'See All',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).secondaryHeaderColor,
-                        ),
+                padding: EdgeInsets.only(right: screenWidth * 0.04),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).secondaryHeaderColor,
                       ),
-                     
-                    ],
-                  ),
-                
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: screenHeight * 0.02),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: _isLoading
                 ? List.generate(
                     5, // Number of shimmer items
-                    (index) => _buildShimmerItem(),
+                    (index) => _buildShimmerItem(cardWidth),
                   )
                 : _courses.map((course) {
-                    return _buildSection(context, course);
+                    return _buildSection(context, course, cardWidth, cardHeight);
                   }).toList(),
           ),
         ),

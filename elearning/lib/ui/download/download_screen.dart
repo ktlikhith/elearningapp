@@ -600,51 +600,51 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
     return file;
   }
 
+  void _showFileInfo(BuildContext context, String filePath, String date) {
+    final fileSize = _getFileSize(filePath);
+    final fileExtension = _getFileExtension(filePath);
 
-void _showFileInfo(BuildContext context, String filePath, String date) {
-  final fileSize = _getFileSize(filePath);
-  final fileExtension = _getFileExtension(filePath);
+    // Parse the date string
+    DateTime parsedDate = DateTime.parse(date);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
+    String formattedTime = DateFormat('hh:mm a').format(parsedDate); // 12-hour format with AM/PM
 
-  // Parse the date string
-  DateTime parsedDate = DateTime.parse(date);
-  String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
-  String formattedTime = DateFormat('hh:mm a').format(parsedDate); // 12-hour format with AM/PM
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true, // Allow the bottom sheet to take full height
-    builder: (context) {
-      return Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'File Information',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12.0),
-                Text('Size: $fileSize'),
-                const SizedBox(height: 8.0),
-                Text('Format: $fileExtension'),
-                const SizedBox(height: 8.0),
-                Text('Downloaded Date: $formattedDate'),
-                const SizedBox(height: 8.0),
-                Text('Downloaded Time: $formattedTime'),
-              ],
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allow the bottom sheet to take full height
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'File Information',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12.0),
+                  Text('Size: $fileSize'),
+                  const SizedBox(height: 8.0),
+                  Text('Format: $fileExtension'),
+                  const SizedBox(height: 8.0),
+                  Text('Downloaded Date: $formattedDate'),
+                  const SizedBox(height: 8.0),
+                  Text('Downloaded Time: $formattedTime'),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
+
   void _showMoreOptions(BuildContext context, String fileName, String filePath, String downloadDate) {
     showModalBottomSheet(
       context: context,
@@ -664,7 +664,6 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
               title: const Text('Details'),
               onTap: () {
                 _showFileInfo(context, filePath, downloadDate);
-                
               },
             ),
           ],
@@ -675,6 +674,9 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Downloads'),
@@ -683,14 +685,14 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-           Navigator.pop(context);
+            Navigator.pop(context);
           },
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(screenWidth * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -720,90 +722,90 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
                             key: Key(fileName), // Ensure each item has a unique key
                             direction: DismissDirection.endToStart,
                             onDismissed: (direction) {
-                              _deleteFile(filePath, fileName);
-                            },
-                            background: Container(
-                              alignment: Alignment.centerRight,
-                              color: Colors.red,
-                              child: const Icon(Icons.delete, color: Colors.white),
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 16.0),
-                              padding: const EdgeInsets.all(16.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Row(
-                                children: [
-                                  // Icon & File Name
-                                  Expanded(
-                                    flex: 3, // Icon takes 3 parts of available space
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          _getIconForFile(filePath),
-                                          size: 48.0,
-                                          color: const Color.fromARGB(255, 237, 23, 23), // Adjust color as needed
-                                        ),
-                                        const SizedBox(width: 8.0),
-                                        Expanded(
-                                          child: Text(
-                                            '$fileName\n',
-                                            style: const TextStyle(fontSize: 16.0, ),
-                                            maxLines: 2, // Ensure filename doesn't overflow
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // More Button
-                                  Expanded(
-                                    flex: 1, // More button takes 1 part of available space
-                                    child: IconButton(
-                                      icon: const Icon(Icons.more_vert, color: Colors.black),
-                                      onPressed: () => _showMoreOptions(context, fileName, filePath, downloadDate),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+                              _deleteFile(filePath,fileName);
+},
+background: Container(
+alignment: Alignment.centerRight,
+color: Colors.red,
+child: const Icon(Icons.delete, color: Colors.white),
+),
+child: Container(
+margin: EdgeInsets.only(bottom: screenHeight * 0.02),
+padding: EdgeInsets.all(screenWidth * 0.04),
+decoration: BoxDecoration(
+borderRadius: BorderRadius.circular(screenWidth * 0.02),
+border: Border.all(color: Colors.grey),
+),
+child: Row(
+children: [
+// Icon & File Name
+Expanded(
+flex: 3, // Icon takes 3 parts of available space
+child: Row(
+children: [
+Icon(
+_getIconForFile(filePath),
+size: screenWidth * 0.1,
+color: const Color.fromARGB(255, 237, 23, 23), // Adjust color as needed
+),
+const SizedBox(width: 8.0),
+Expanded(
+child: Text(
+'$fileName\n',
+style: const TextStyle(fontSize: 16.0),
+maxLines: 2, // Ensure filename doesn't overflow
+overflow: TextOverflow.ellipsis,
+),
+),
+],
+),
+),
+// More Button
+Expanded(
+flex: 1, // More button takes 1 part of available space
+child: IconButton(
+icon: const Icon(Icons.more_vert, color: Colors.black),
+onPressed: () => _showMoreOptions(context, fileName, filePath, downloadDate),
+),
+),
+],
+),
+),
+),
+);
+},
+),
+],
+),
+),
+),
+);
+}
 
-  IconData _getIconForFile(String filePath) {
-    final fileExtension = extension(filePath).toLowerCase();
-    switch (fileExtension) {
-      case '.mp4':
-      case '.avi':
-      case '.mov':
-        return Icons.play_circle_fill;
-      case '.pdf':
-        return Icons.picture_as_pdf;
-      default:
-        return Icons.insert_drive_file;
-    }
-  }
+IconData _getIconForFile(String filePath) {
+final fileExtension = extension(filePath).toLowerCase();
+switch (fileExtension) {
+case '.mp4':
+case '.avi':
+case '.mov':
+return Icons.play_circle_fill;
+case '.pdf':
+return Icons.picture_as_pdf;
+default:
+return Icons.insert_drive_file;
+}
+}
 
-  String _getFileSize(String filePath) {
-    final file = File(filePath);
-    if (file.existsSync()) {
-      final bytes = file.lengthSync();
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB';
-    }
-    return 'Unknown size';
-  }
+String _getFileSize(String filePath) {
+final file = File(filePath);
+if (file.existsSync()) {
+final bytes = file.lengthSync();
+return '${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB';
+}
+return 'Unknown size';
+}
 
-  String _getFileExtension(String filePath) {
-    return extension(filePath).replaceAll('.', '').toUpperCase();
-  }
+String _getFileExtension(String filePath) {
+return extension(filePath).replaceAll('.', '').toUpperCase();
+}
 }
