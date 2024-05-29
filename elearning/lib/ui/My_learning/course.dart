@@ -30,7 +30,6 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       if (mounted) {
         setState(() {
           _courses = response;
-          
           _isLoading = false; // Update loading state
         });
       }
@@ -135,155 +134,138 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-Widget buildSingleCourseSection(BuildContext context, Course course) {
-  String course_id=course.getCourseIDWithToken(widget.token);
-  String course_name = course.getcoursenameWithToken(widget.token);
-  String Cprogress = course.getcourseProgressWithToken(widget.token);
-  String Cdiscrpition = course.getcourseDescriptionWithToken(widget.token);
-  String courseStartDate = course.getcourseStartDateWithToken(widget.token);
-  String courseEndDate = course.getcourseEndDateWithToken(widget.token);
-  String course_videourl = course.getcourseVideoUrlWithToken(widget.token);
-  String courseDuration = course.getcourseDurationWithToken(widget.token);
+  Widget buildSingleCourseSection(BuildContext context, Course course) {
+    String course_id = course.getCourseIDWithToken(widget.token);
+    String course_name = course.getcoursenameWithToken(widget.token);
+    String Cprogress = course.getcourseProgressWithToken(widget.token);
+    String Cdiscrpition = course.getcourseDescriptionWithToken(widget.token);
+    String courseStartDate = course.getcourseStartDateWithToken(widget.token);
+    String courseEndDate = course.getcourseEndDateWithToken(widget.token);
+    String course_videourl = course.getcourseVideoUrlWithToken(widget.token);
+    String courseDuration = course.getcourseDurationWithToken(widget.token);
 
-  return GestureDetector(
-    
-    onTap: () => showMLPopup(
-      context,
-      course_id,
-      course_name,
-      Cprogress,
-      Cdiscrpition,
-      courseStartDate,
-      courseEndDate,
-      course_videourl,
-      courseDuration,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
-          height: MediaQuery.of(context).size.height * 0.3, // 30% of screen height
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
+    return GestureDetector(
+      onTap: () => showMLPopup(
+        context,
+        course_id,
+        course_name,
+        Cprogress,
+        Cdiscrpition,
+        courseStartDate,
+        courseEndDate,
+        course_videourl,
+        courseDuration,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
+            height: MediaQuery.of(context).size.height * 0.3, // 30% of screen height
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.network(
+                  course.getImageUrlWithToken(widget.token),
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/coursedefaultimg.jpg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-          child: Stack(
-            alignment: Alignment.center,
+          const SizedBox(height: 8.0), // Add spacing between video section and other content
+          Text(
+            course.name, // Use course title dynamically
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8.0), // Add spacing between title and status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.network(
-                course.getImageUrlWithToken(widget.token),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/images/coursedefaultimg.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  );
-                },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Status', // Replace with actual status title
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color.fromARGB(255, 34, 34, 34),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  SizedBox(
+                    height: 8.0,
+                    width: 140.0, // Increased width for the progress bar
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 20.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        Container(
+                          height: 20.0,
+                          width: 140.0 *                          course.courseProgress / 100, // Dynamic width based on progress
+                          decoration: BoxDecoration(
+                            color: getProgressBarColor(course.courseProgress), // Change color based on progress
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              // IconButton(
-              //   icon: const Icon(Icons.play_circle_filled, size: 40.0, color: Colors.black),
-              //   tooltip: course_id = course.getCourseIDWithToken(widget.token),
-              //   onPressed: () => showMLPopup(
-              //     context,
-              //     course_id,
-              //     course_name,
-              //     Cprogress,
-              //     Cdiscrpition,
-              //     courseStartDate,
-              //     courseEndDate,
-              //     course_videourl,
-              //     courseDuration,
-              //   ),
-              // ),
+              const SizedBox(width: 16.0), // Add spacing between status and due date
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Due Date', // Replace with actual due date title
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: const Color.fromARGB(255, 48, 48, 48),
+                    ),
+                  ),
+                  Text(
+                    course.courseEndDate, // Use course due date dynamically
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-        ),
-        const SizedBox(height: 8.0), // Add spacing between video section and other content
-        Text(
-          course.name, // Use course title dynamically
-          style: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8.0), // Add spacing between title and status
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Status', // Replace with actual status title
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color.fromARGB(255, 34, 34, 34),
-                  ),
-                ),
-                const SizedBox(height: 8.0),
-                SizedBox(
-                  height: 8.0,
-                  width: 140.0, // Increased width for the progress bar
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      Container(
-                        height: 20.0,
-                        width: 140.0 * course.courseProgress / 100, // Dynamic width based on progress
-                        decoration: BoxDecoration(
-                          color: getProgressBarColor(course.courseProgress), // Change color based on progress
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 16.0), // Add spacing between status and due date
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Due Date', // Replace with actual due date title
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: const Color.fromARGB(255, 48, 48, 48),
-                  ),
-                ),
-                Text(
-                  course.courseEndDate, // Use course due date dynamically
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 8.0), // Add spacing between status and download/more options
-      ],
-    ),
-  );
-}
-
+          const SizedBox(height: 8.0), // Add spacing between status and download/more options
+        ],
+      ),
+    );
+  }
 
   Color getProgressBarColor(int progress) {
     if (progress >= 0 && progress <= 35) {
       return Colors.red; // Color for not started
-    } else if (progress >80) {
+    } else if (progress > 80) {
       return Colors.green; // Color for completed
     } else {
       return Colors.orange; // Color for in progress
@@ -295,17 +277,20 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MLPopup(context,
-            token: widget.token,
-            course_id: courseId,
-            course_name: course_name,
-            Cprogress: Cprogress,
-            Cdiscrpition: Cdiscrpition,
-            courseStartDate: courseStartDate,
-            courseEndDate: courseEndDate,
-            course_videourl: course_videourl,
-            courseDuration: courseDuration); // Create an instance of MLPopup without passing context
+        return MLPopup(
+          context,
+          token: widget.token,
+          course_id: courseId,
+          course_name: course_name,
+          Cprogress: Cprogress,
+          Cdiscrpition: Cdiscrpition,
+          courseStartDate: courseStartDate,
+          courseEndDate: courseEndDate,
+          course_videourl: course_videourl,
+          courseDuration: courseDuration,
+        ); // Create an instance of MLPopup without passing context
       },
     );
   }
 }
+

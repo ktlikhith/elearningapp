@@ -225,6 +225,8 @@ class _SpinWheelState extends State<SpinWheel> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Container(
       width: widget.width,
       padding: const EdgeInsets.all(10),
@@ -250,8 +252,8 @@ class _SpinWheelState extends State<SpinWheel> {
               image: Image.asset(
                 'assets/images/spinimgwebsite.png',
               ),
-              width: widget.width * 3.5,
-              height: widget.width * 3.5,
+              width: screenSize.width * 0.35,
+              height: screenSize.width * 0.35,
               initialSpinAngle: 0.0,
               spinResistance: 0.3,
               shouldStartOrStop: _wheelNotifier.stream,
@@ -265,15 +267,6 @@ class _SpinWheelState extends State<SpinWheel> {
                 
                 _addRewardPoints(selectedLabel);
               },
-              // secondaryImage: Image.asset(
-              //   'assets/images/roulette-center-300.png',
-              // ),
-              // secondaryImageHeight: widget.width * 1,
-              // secondaryImageWidth: widget.width * 1,
-              // secondaryImageLeft: widget.width * 1.3,
-              // secondaryImageTop: widget.width * 1.1,
-             
- 
             )
             ),
           ),
@@ -305,7 +298,7 @@ class _SpinWheelState extends State<SpinWheel> {
                 showShimmer: true,
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.1, vertical: screenSize.height * 0.02),
                 child: Text('SPIN'),
               ),
             )
@@ -357,8 +350,6 @@ class _SpinWheelState extends State<SpinWheel> {
     } catch (e) {
       print('Error adding reward points: $e');
     }
-    
-
   }
 
   void _showCongratsDialog(String label) {
@@ -382,8 +373,8 @@ class _SpinWheelState extends State<SpinWheel> {
     );
   }
 
-
-
   double _generateRandomVelocity() => (Random().nextDouble() * 6000) + 2000;
+
+
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;
 }

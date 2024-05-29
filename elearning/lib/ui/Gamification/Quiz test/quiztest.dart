@@ -84,16 +84,15 @@ class _QuizPageState extends State<QuizPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Quiz Result'),
-           
             content: Text('Successfully submitted the quiz!\nYour quiz score: $score'),
             actions: [
               TextButton(
                 onPressed: () {
-                try {
-  Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
-} catch (e) {
-  print('Navigation Error: $e');
-}
+                  try {
+                    Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
+                  } catch (e) {
+                    print('Navigation Error: $e');
+                  }
 
                   resetQuiz();
                 },
@@ -104,12 +103,11 @@ class _QuizPageState extends State<QuizPage> {
         },
       ).then((value) {
         // Go back to the previous screen after OK is pressed
-      try {
-  Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
-} catch (e) {
-  print('Navigation Error: $e');
-}
-
+        try {
+          Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
+        } catch (e) {
+          print('Navigation Error: $e');
+        }
       });
     }
   }
@@ -151,6 +149,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     bool isFirstQuestion = currentQuestionIndex == 0;
     bool isLastQuestion = currentQuestionIndex == sampleData.length - 1;
+    final screenSize = MediaQuery.of(context).size;
 
     return WillPopScope(
       // Handle back button press
@@ -161,17 +160,16 @@ class _QuizPageState extends State<QuizPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Quiz'),
-           centerTitle: false,
+          centerTitle: false,
           backgroundColor: Theme.of(context).primaryColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
-                try {
-  Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
-} catch (e) {
-  print('Navigation Error: $e');
-}
-
+              try {
+                Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
+              } catch (e) {
+                print('Navigation Error: $e');
+              }
             },
           ),
         ),
@@ -212,7 +210,6 @@ class _QuizPageState extends State<QuizPage> {
                       children: [
                         Text(
                           sampleData[currentQuestionIndex]['question'],
-                                                    
                           style: TextStyle(fontSize: 20),
                         ),
                         SizedBox(height: 20),
@@ -246,7 +243,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               Spacer(),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:                MainAxisAlignment.spaceBetween,
                 children: [
                   if (!isFirstQuestion)
                     Expanded(
@@ -271,7 +268,7 @@ class _QuizPageState extends State<QuizPage> {
                         onPressed: () {
                           isLastQuestion ? goToNextQuestion() : goToNextQuestion();
                         },
-                        child: Text(isLastQuestion ? 'Submit' : 'Next',style: TextStyle(color: Colors.white),),
+                        child: Text(isLastQuestion ? 'Submit' : 'Next', style: TextStyle(color: Colors.white),),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).secondaryHeaderColor,

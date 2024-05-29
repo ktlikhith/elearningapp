@@ -12,6 +12,9 @@ class RankLevel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth < 600 ? 24.0 : 40.0; // Adjust icon size based on screen width
+
     return FutureBuilder<RewardData>(
       future: RewardService().getUserRewardPoints(token),
       builder: (context, AsyncSnapshot<RewardData> snapshot) {
@@ -43,21 +46,20 @@ class RankLevel extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                  // _buildRow('Mail ID', mailid, 'assets/profilesvg/gmail-svgrepo-com.svg'),
-              _buildRow('Department', department, 'assets/profilesvg/open-an-account-svgrepo-com.svg'),
-              _buildRow('Current Level', currentRank, 'assets/profilesvg/verified-svgrepo-com.svg'),
-              _buildRow('Next Level', nextLevel, 'assets/profilesvg/vip-svgrepo-com.svg'),
-              _buildRow('Points to Next Level', pointsToNextLevel, 'assets/profilesvg/market-analysis-svgrepo-com.svg'),
-              _buildRow('Course Average % for Next Level', courseAverage, 'assets/profilesvg/risk-assessment-svgrepo-com.svg'),
+              // _buildRow('Mail ID', mailid, 'assets/profilesvg/gmail-svgrepo-com.svg', iconSize),
+              _buildRow('Department', department, 'assets/profilesvg/open-an-account-svgrepo-com.svg', iconSize),
+              _buildRow('Current Level', currentRank, 'assets/profilesvg/verified-svgrepo-com.svg', iconSize),
+              _buildRow('Next Level', nextLevel, 'assets/profilesvg/vip-svgrepo-com.svg', iconSize),
+              _buildRow('Points to Next Level', pointsToNextLevel, 'assets/profilesvg/market-analysis-svgrepo-com.svg', iconSize),
+              _buildRow('Course Average % for Next Level', courseAverage, 'assets/profilesvg/risk-assessment-svgrepo-com.svg', iconSize),
             ],
           ),
-          
         );
       },
     );
   }
 
-  Widget _buildRow(String label, String value, String iconPath) {
+  Widget _buildRow(String label, String value, String iconPath, double iconSize) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
@@ -66,8 +68,8 @@ class RankLevel extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                width: 40, // Adjust size based on your icon size
-                height: 40,
+                width: iconSize, // Adjust size based on your icon size
+                height: iconSize,
                 child: SvgPicture.asset(iconPath),
               ),
               SizedBox(width: 8),
@@ -83,7 +85,6 @@ class RankLevel extends StatelessWidget {
           ),
         ],
       ),
-      
     );
   }
 }

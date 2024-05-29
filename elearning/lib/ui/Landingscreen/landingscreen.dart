@@ -47,10 +47,15 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double paddingHorizontal = screenWidth * 0.04;
+    final double buttonHeight = screenHeight * 0.07;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04),
         child: Stack(
           children: [
             PageView.builder(
@@ -63,19 +68,20 @@ class _LandingPageState extends State<LandingPage> {
               },
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: EdgeInsets.all(screenWidth * 0.04),
                   child: _buildPage(
                     pagesData[index]['gif']!,
                     pagesData[index]['title']!,
                     pagesData[index]['subtitle']!,
                     isLastPage: index == pagesData.length - 1,
+                    screenHeight: screenHeight,
                   ),
                 );
               },
             ),
             Positioned(
-              top: 40,
-              right: 20,
+              top: screenHeight * 0.05,
+              right: screenWidth * 0.05,
               child: _currentPage < pagesData.length - 1
                   ? ElevatedButton(
                       onPressed: () {
@@ -96,21 +102,21 @@ class _LandingPageState extends State<LandingPage> {
                   : SizedBox(),
             ),
             Positioned(
-              bottom: 20,
+              bottom: screenHeight * 0.05,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   pagesData.length,
-                  (index) => _buildDot(index),
+                  (index) => _buildDot(index, screenWidth),
                 ),
               ),
             ),
             if (_currentPage == pagesData.length - 1)
               Positioned(
-                bottom: 20,
-                right: 20,
+                bottom: screenHeight * 0.05,
+                right: screenWidth * 0.05,
                 child: ElevatedButton(
                   onPressed: _isConnected
                       ? () {
@@ -121,7 +127,7 @@ class _LandingPageState extends State<LandingPage> {
                         }
                       : null, // Disable button if not connected
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1, vertical: buttonHeight * 0.3),
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     elevation: 6,
                   ),
@@ -153,42 +159,43 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _buildPage(String gifPath, String title, String subtitle,
-      {bool isLastPage = false}) {
+      {bool isLastPage = false, required double screenHeight}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
           gifPath,
           fit: BoxFit.fitWidth,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.6,
+          width: double.infinity,
+          height: screenHeight * 0.6,
         ),
-        SizedBox(height: 20),
+        SizedBox(height: screenHeight * 0.02),
         Text(
           title,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: screenHeight * 0.03,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: screenHeight * 0.01),
         Text(
           subtitle,
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 18,
-            color: const Color.fromARGB(255, 8, 8, 8),
+            fontSize: screenHeight * 0.02,
+            color: Colors.grey[600],
           ),
         ),
-        if (isLastPage) SizedBox(height: 100),
+        if (isLastPage) SizedBox(height: screenHeight * 0.1),
       ],
     );
   }
 
-  Widget _buildDot(int index) {
+  Widget _buildDot(int index, double screenWidth) {
     return Container(
-      width: 10,
-      height: 10,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      width: screenWidth * 0.025,
+      height: screenWidth * 0.025,
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _currentPage == index ? Colors.blue : Colors.grey,
