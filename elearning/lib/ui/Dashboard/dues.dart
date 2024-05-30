@@ -78,33 +78,21 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final sectionWidth = screenWidth * 0.5;
-    final sectionHeight = screenHeight * 0.2;
-    final sectionPadding = screenWidth * 0.05;
-
     return Padding(
-      padding: EdgeInsets.all(0.0),
+      padding: const EdgeInsets.all(0.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         child: Padding(
-          padding: EdgeInsets.all(0.0),
+          padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              _isLoading
-                  ? _buildShimmerItem(sectionWidth, sectionHeight)
-                  : buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
-                      'assets/dashboardicons/due past.png', sectionWidth, sectionHeight, sectionPadding),
-              _isLoading
-                  ? _buildShimmerItem(sectionWidth, sectionHeight)
-                  : buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
-                      'assets/dashboardicons/Due soon.png', sectionWidth, sectionHeight, sectionPadding),
-              _isLoading
-                  ? _buildShimmerItem(sectionWidth, sectionHeight)
-                  : buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
-                      'assets/dashboardicons/due later.png', sectionWidth, sectionHeight, sectionPadding),
+              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
+                  'assets/dashboardicons/due past.png'),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
+                  'assets/dashboardicons/Due soon.png'),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
+                  'assets/dashboardicons/due later.png'),
             ],
           ),
         ),
@@ -112,15 +100,15 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     );
   }
 
-  Widget _buildShimmerItem(double width, double height) {
+  Widget _buildShimmerItem() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Container(
-          width: width,
-          height: height,
+          width: 200,
+          height: 100,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12.0),
@@ -134,12 +122,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     );
   }
 
-  Widget buildSection(
-      String title, String number, Color color, String iconPath, double width, double height, double padding) {
+  Widget buildSection(String title, String number, Color color, String iconPath) {
     return Padding(
-      padding: EdgeInsets.all(padding),
+      padding: const EdgeInsets.all(10.0),
       child: Container(
-        padding: EdgeInsets.all(padding),
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.0),
@@ -151,8 +138,8 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
         child: Row(
           children: [
             Container(
-              width: width * 0.2,
-              height: height * 0.7,
+              width: 30,
+              height: 70,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: color,

@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:elearning/routes/routes.dart';
+
+import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Learning_path/learningpath.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:elearning/routes/routes.dart';
-import 'package:elearning/services/profile_service.dart';
 
 class MyMorePage extends StatefulWidget {
   final String token;
@@ -14,20 +18,20 @@ class MyMorePage extends StatefulWidget {
   _MyMorePageState createState() => _MyMorePageState();
 }
 
+ 
 class _MyMorePageState extends State<MyMorePage> {
-  late String _profilePictureUrl = '';
+   late String _profilePictureUrl = '';
 
-  @override
+   @override
   void initState() {
     super.initState();
     _fetchProfileData(widget.token);
   }
-
   Future<void> _clearToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    // Navigate back to the landing page or login screen if needed
-  }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+  // Navigate back to the landing page or login screen if needed
+}
 
   Future<void> _fetchProfileData(String token) async {
     try {
@@ -42,13 +46,11 @@ class _MyMorePageState extends State<MyMorePage> {
       print('Error fetching profile data: $e');
     }
   }
+  
+
 
   @override
   Widget build(BuildContext context) {
-    // Use MediaQuery to get the screen size
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -57,13 +59,13 @@ class _MyMorePageState extends State<MyMorePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('More Page'),
-          centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
-            },
-          ),
+           centerTitle: false,
+           leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(RouterManger.homescreen,arguments: widget.token);
+          },
+        ),
           backgroundColor: Theme.of(context).primaryColor,
           actions: <Widget>[
             Padding(
@@ -73,67 +75,71 @@ class _MyMorePageState extends State<MyMorePage> {
                   Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
                 },
                 child: CircleAvatar(
-                  radius: screenHeight * 0.025, // Adjust according to your preference
-                  backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
+                  radius: 20,
+                 backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
                 ),
               ),
             ),
           ],
         ),
         backgroundColor: Theme.of(context).backgroundColor,
-        body: ListView(
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token);
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.graduationCap),
-                title: Text('Learning Path'),
-              ),
+       body: ListView(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
+              leading: FaIcon(FontAwesomeIcons.graduationCap),
+              title: Text('Learning Path'),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.chartSimple),
-                title: Text('Reports'),
-              ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
+              leading: FaIcon(FontAwesomeIcons.chartSimple),
+              title: Text('Reports'),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: widget.token);
+          ),
+          InkWell(
+            onTap: () {
+                Navigator.of(context).pushReplacementNamed(RouterManger.downloads,arguments: widget.token);
                 print("download selected");
-                // Implement downloads functionality here
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.download),
-                title: Text('Downloads'),
-              ),
+              // Implement downloads functionality here
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
+              leading: FaIcon(FontAwesomeIcons.download),
+              title: Text('Downloads'),
             ),
-            InkWell(
-              onTap: () {
-                _clearToken();
-                Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: ListTile(
-                leading: FaIcon(FontAwesomeIcons.rightFromBracket),
-                title: Text('Logout'),
-              ),
+          ),
+          InkWell(
+            onTap: () {
+              _clearToken();
+              Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: ListTile(
+              leading: FaIcon(FontAwesomeIcons.rightFromBracket),
+              title: Text('Logout'),
             ),
-          ],
-        ),
+          ),
+          
+        ],
+      ),
+
       ),
     );
   }
-}
 
+
+  
+}

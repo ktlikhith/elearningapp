@@ -18,7 +18,7 @@ class LearningPathPage extends StatelessWidget {
       future: LearningPathApiService.fetchLearningPathData(token),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildLoadingSkeleton(context); // Show shimmer skeleton while loading
+          return _buildLoadingSkeleton(); // Show shimmer skeleton while loading
         } else if (snapshot.hasError) {
           return Center(
             child: Text('Error: ${snapshot.error}'),
@@ -31,10 +31,7 @@ class LearningPathPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingSkeleton(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final imageHeight = screenHeight * 0.2; // Adjust the percentage according to your preference
-
+  Widget _buildLoadingSkeleton() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -55,7 +52,7 @@ class LearningPathPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: imageHeight,
+                    height: 200,
                     color: Colors.grey, // Placeholder color for image
                   ),
                   SizedBox(height: 16.0),
@@ -93,9 +90,9 @@ class LearningPathPage extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+           onPressed: () {
+          Navigator.pop(context);
+        },
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -141,7 +138,8 @@ class LearningPathPage extends StatelessWidget {
                           SizedBox(height: 8.0),
                           Text(
                             removeHtmlTags(learningPathDetail['discriotion']),
-                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],),
                           ),
                           SizedBox(height: 8.0),
                           Padding(
@@ -199,15 +197,15 @@ class LearningPathPage extends StatelessWidget {
                             border: Border.all(color: Colors.grey[300]!),
                           ),
                           child: InkWell(
-                            // onTap: () {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           CourseDetailsPage(token, course.id,course.name),
-                            //     ),
-                            //   );
-                            // },
+                  //           onTap: () {
+                  //             Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         CourseDetailsPage(token, course.id,course.name),
+                  //   ),
+                  // );
+                  //           },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
@@ -229,7 +227,8 @@ class LearningPathPage extends StatelessWidget {
                                   SizedBox(height: 8.0),
                                   Text(
                                     removeHtmlTags(course['coursedec']),
-                                    style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
+                                    style: TextStyle(fontSize: 16.0,color: Colors.grey[600]),
+                                    
                                   ),
                                   SizedBox(height: 12.0),
                                   Container(
@@ -272,4 +271,3 @@ class LearningPathPage extends StatelessWidget {
     return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
   }
 }
-

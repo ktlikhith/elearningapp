@@ -11,10 +11,9 @@ int toIntValue(dynamic value) {
     throw ArgumentError('Value must be either int or double');
   }
 }
-
 Widget buildSection({
   required String iconPath,
-  required var number,
+  required  var number,
   required String title,
   bool isLoading = false,
 }) {

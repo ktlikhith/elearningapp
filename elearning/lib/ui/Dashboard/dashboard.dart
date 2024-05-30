@@ -6,6 +6,7 @@ import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert';
@@ -48,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
     _fetchUserInfo(widget.token);
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       _refreshNotificationCount();
+      
     });
   }
 
@@ -102,9 +104,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0.0),
       child: Scaffold(
@@ -114,11 +113,11 @@ class _DashboardPageState extends State<DashboardPage> {
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.all(screenWidth * 0.02),
+            padding: EdgeInsets.all(8.0),
             child: _tenantLogoBytes != null
                 ? SizedBox(
-                    width: screenWidth * 0.1,
-                    height: screenWidth * 0.1,
+                    width: 40,
+                    height: 40,
                     child: Image.memory(
                       _tenantLogoBytes!,
                       fit: BoxFit.cover,
@@ -130,8 +129,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         baseColor: Colors.grey[300]!,
                         highlightColor: Colors.grey[100]!,
                         child: SizedBox(
-                          width: screenWidth * 0.1,
-                          height: screenWidth * 0.1,
+                          width: 40,
+                          height: 40,
                           child: Container(color: Colors.white),
                         ),
                       ),
@@ -154,7 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   right: 0,
                   top: 0,
                   child: Container(
-                    padding: EdgeInsets.all(screenWidth * 0.01),
+                    padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.red,
@@ -163,7 +162,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       '$_notificationCount',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: screenWidth * 0.03,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -171,13 +170,14 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
                 },
                 child: CircleAvatar(
-                  radius: screenWidth * 0.05,
+                  radius: 20,
+                  
                   backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
                 ),
               ),
@@ -189,104 +189,113 @@ class _DashboardPageState extends State<DashboardPage> {
             ? SingleChildScrollView(
                 controller: _scrollController,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  padding: EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Text(
                           'Welcome, $_userName!',
                           style: TextStyle(
-                            fontSize: screenWidth * 0.06,
+                            fontSize: 24.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      Text(
-                        'Explore your courses and start learning.',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                        child: Text(
+                          'Explore your courses and start learning.',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.03),
-                      AutoScrollableSections(token: widget.token),
-                      SizedBox(height: screenHeight * 0.02),
+                      const SizedBox(height: 25.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: AutoScrollableSections(token: widget.token),
+                      ),
+                      const SizedBox(height: 15.0),
                       UpcomingEventsSection(token: widget.token),
-                      SizedBox(height: screenHeight * 0.02),
+                      const SizedBox(height: 15.0),
                       CustomDashboardWidget(token: widget.token),
                     ],
                   ),
                 ),
               )
-            : _buildLoadingSkeleton(screenWidth, screenHeight), // Show loading skeleton while data is loading
+            : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
+            
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+     
       ),
     );
   }
 
-  Widget _buildLoadingSkeleton(double screenWidth, double screenHeight) {
-    return !_isUserInfoLoaded
-        ? Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    height: screenHeight * 0.08,
-                    width: screenWidth * 0.9,
-                    color: Colors.white,
-                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+ Widget _buildLoadingSkeleton() {
+  return !_isUserInfoLoaded
+      ? Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: 65.0,
+                  width: 100,
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 16.0),
+                ),
+                SizedBox(height: 15.0),
+               
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height:  200.0,
+                      color: Colors.grey, // Placeholder color for status
+                    ),
+                    const SizedBox(height: 16.0), // Add spacing between status and due date
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height:  210.0,
+                      color: Colors.grey, // Placeholder color for due date
+                    ),
+                     const SizedBox(height: 16.0),
                       Container(
-                        width: screenWidth * 0.9,
-                        height: screenHeight * 0.25,
-                        color: Colors.grey, // Placeholder color for status
-                      ),
-                      SizedBox(height: screenHeight * 0.02), // Add spacing between status and due date
-                      Container(
-                        width: screenWidth * 0.9,
-                        height: screenHeight * 0.25,
-                        color: Colors.grey, // Placeholder color for due date
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Container(
-                        width: screenWidth * 0.9,
-                        height: screenHeight * 0.25,
-                        color: Colors.grey, // Placeholder color for due date
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                          color: const Color.fromARGB(255, 122, 121, 121),
-                        ),
-                        child: Shimmer.fromColors(
-                          baseColor: const Color.fromARGB(255, 175, 175, 175)!,
-                          highlightColor: const Color.fromARGB(255, 161, 160, 160)!,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                              color: Colors.grey[300],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height:  210.0,
+                      color: Colors.grey, // Placeholder color for due date
+                    ),
+                     const SizedBox(height: 16.0),
+                   Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: const Color.fromARGB(255, 122, 121, 121),
               ),
+              child: Shimmer.fromColors(
+                baseColor: const Color.fromARGB(255, 175, 175, 175)!,
+                highlightColor: Color.fromARGB(255, 161, 160, 160)!,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.grey[300],
+                  ),
+                ),
+              ),
+            )
+                  ],
+                ),
+              ],
             ),
-          )
-        : SizedBox(); // Return an empty SizedBox if user info is loaded
-  }
+          ),
+        )
+      : SizedBox(); // Return an empty SizedBox if user info is loaded
+}
 }
