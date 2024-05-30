@@ -87,9 +87,9 @@ class MLPopup extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today),
+                      // const Icon(Icons.calendar_today),
                       SizedBox(width: 2.0),
-                      Text('Start Date:${courseStartDate ?? "N/A"}',style: TextStyle( fontSize: 13.0,
+                      Text('Start :${courseStartDate ?? "N/A"}',style: TextStyle( fontSize: 13.0,
                fontWeight: FontWeight.bold),),
              
                     ],
@@ -97,9 +97,9 @@ class MLPopup extends StatelessWidget {
                   const SizedBox(height: 2.0),
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today),
+                    
                       SizedBox(width: 5.0),
-                      Text('End Date:${courseEndDate ?? "N/A"}',style: TextStyle( fontSize: 13.0,
+                      Text('End :${courseEndDate ?? "N/A"}',style: TextStyle( fontSize: 13.0,
                fontWeight: FontWeight.bold),),
                     ],
                   ),

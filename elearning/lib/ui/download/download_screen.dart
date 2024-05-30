@@ -520,6 +520,7 @@
 //   }
 // }
 import 'dart:convert';
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/download/download_view.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:flutter/material.dart';
@@ -683,7 +684,7 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-           Navigator.pop(context);
+          Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
           },
         ),
       ),

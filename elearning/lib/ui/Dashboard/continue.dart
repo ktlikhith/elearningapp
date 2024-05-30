@@ -101,8 +101,8 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
+              spreadRadius: 0,
+              blurRadius: 2,
               offset: Offset(0, 3),
             ),
           ],
