@@ -128,11 +128,21 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+           boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: Offset(0, 4),
+          ),
+        ],
+          
+          color: Color.fromARGB(255, 245, 244, 244),
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: const Color.fromARGB(255, 227, 236, 227),
             width: 2.0,
+          
           ),
         ),
         child: Row(

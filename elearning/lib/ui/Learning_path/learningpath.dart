@@ -176,6 +176,7 @@ class LearningPathPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 16.0),
+                    
                     // Learning Path Progress
                     Text(
                       'Learning Content',
@@ -197,15 +198,15 @@ class LearningPathPage extends StatelessWidget {
                             border: Border.all(color: Colors.grey[300]!),
                           ),
                           child: InkWell(
-                  //           onTap: () {
-                  //             Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         CourseDetailsPage(token, course.id,course.name),
-                  //   ),
-                  // );
-                  //           },
+                            onTap: () {
+                              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CourseDetailsPage(token, course['courseid'],course['coursename']),
+                    ),
+                  );
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(

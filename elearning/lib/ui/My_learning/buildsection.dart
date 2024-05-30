@@ -26,7 +26,15 @@ Widget buildSection({
             width: 130.0,
             margin: const EdgeInsets.only(right: 16.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+               boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: Offset(0, 4),
+          ),
+        ],
+              color: Color.fromARGB(255, 245, 244, 244),
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(
                 color: const Color.fromARGB(255, 227, 236, 227),

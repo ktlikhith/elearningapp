@@ -72,12 +72,12 @@ class ContinueWatchingScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),),
                     Text('Start Date: ${course.courseStartDate}', style: TextStyle(
-                            
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey[500],
                           ),),
                     Text('End Date: ${course.courseEndDate}', style: TextStyle(
-                           
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey[500],
                           ),),
