@@ -66,18 +66,16 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return FutureBuilder<List<EventData>>(
       future: _futureEventData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildShimmerEffect(screenWidth);
+          return _buildShimmerEffect(context); // Updated to pass context
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
@@ -86,7 +84,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 0),
                   child: Text(
                     'Upcoming Events',
                     style: TextStyle(
@@ -115,7 +113,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                           dateTime: event.dueDate,
                           title: event.name,
                           svgPath: svgPath,
-                          screenWidth: screenWidth,
+                          context: context,
                         );
                       },
                     ),
@@ -131,8 +129,8 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     );
   }
 
-  Widget _buildShimmerEffect(double screenWidth) {
-    final cardWidth = screenWidth * 0.8; // Adjust as needed
+  Widget _buildShimmerEffect(BuildContext context) {
+    final cardWidth = MediaQuery.of(context).size.width * 0.8; // Adjust as needed
 
     return SizedBox(
       height: 210,
@@ -158,70 +156,69 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       ),
     );
   }
-
-  Widget _buildEventCard({
-    required String dateTime,
-    required String title,
-    required String svgPath,
-    required double screenWidth,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-        child: Container(
-          width: screenWidth * 0.9, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: Offset(0, 2), // changes the position of shadow
+Widget _buildEventCard({
+  required String dateTime,
+  required String title,
+  required String svgPath,
+  required BuildContext context,
+}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
+    },
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: Offset(0, 2), // changes the position of shadow
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center, // Center vertically
+          children: [
+            // SVG image on the left
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 40,
+                height: 40,
+                child: SvgPicture.asset(
+                  svgPath,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center, // Center vertically
-            children: [
-              // SVG image on the left
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                    svgPath,
-                    fit: BoxFit.contain,
+            ),
+            SizedBox(width: 16.0), // Space between SVG and event details
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    dateTime,
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
               ),
-              SizedBox(width: 16.0), // Space between SVG and event details
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      dateTime,
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

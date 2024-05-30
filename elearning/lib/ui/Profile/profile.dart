@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.9, // Use media query for width
+                          width: 380,
                           //padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       alignment: Alignment.bottomRight,
                                       children: [
                                         CircleAvatar(
-                                          radius: MediaQuery.of(context).size.width * 0.2, // Use media query for radius
+                                          radius: 50,
                                           backgroundImage: _profilePictureUrl.isNotEmpty ? NetworkImage(_profilePictureUrl) : null,
                                         ),
                                       ],
@@ -166,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // Build your achievement UI here
     double screenWidth = MediaQuery.of(context).size.width;
   return Container(
-    width: MediaQuery.of(context).size.width * 0.95, // Use media query for width
+    width: 400,
     padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -192,125 +192,126 @@ class _ProfilePageState extends State<ProfilePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar,context),
-            buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved,context),
-            buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart,context),
+            buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar),
+            buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved),
+            buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
           ],
         ),
-                 SizedBox(height: 10), // Add some space below the achievements row
+         const SizedBox(height: 10), // Add some space below the achievements row
         Divider( // Add a divider
           height: 1, // Set the height of the divider
           thickness: 1, // Set the thickness of the divider line
           color: Colors.grey[300], // Set the color of the divider line
         ),
-        SizedBox(height: 35),
-        Text(
-          'Progress',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ), // Add some space below the existing row
-        buildProgressBar('Completioned', _completioned,context), 
-        buildProgressBar('InProgress', _inProgress,context),
-        buildProgressBar('Not Started', _totalNotStarted,context),
+        const SizedBox(height: 35),
+        const Text(
+            'Progress',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ), // Add some space below the existing row
+        buildProgressBar('Completioned', _completioned), 
+        buildProgressBar('InProgress', _inProgress),
+        buildProgressBar('TotalNotStarted', _totalNotStarted),
       ],
     ),
   );
 }
 
-Widget _buildLoadingSkeleton() {
-  return Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 50,
-          backgroundColor: Colors.white,
-        ),
-        SizedBox(height: 10),
-        Container(
-          width: 150,
-          height: 20,
-          color: Colors.white,
-        ),
-        SizedBox(height: 10),
-        Container(
-          width: 100,
-          height: 20,
-          color: Colors.white,
-        ),
-        SizedBox(height: 30),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
+
+  Widget _buildLoadingSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.white,
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: 150,
+            height: 20,
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 3,
-                offset: Offset(0, 2),
-              ),
-            ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Achievements',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.white,
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.white,
-                  ),
-                  Container(
-                    width: 50,
-                    height: 150,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ],
+          SizedBox(height: 10),
+          Container(
+            width: 100,
+            height: 20,
+            color: Colors.white,
           ),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Progress',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Container(
-          width: 400,
-          height: 20,
-          color: Colors.white,
-        ),
-        SizedBox(height: 10),
-        Container(
-          width: 400,
-          height: 20,
-          color: Colors.white,
-        ),
-        SizedBox(height: 10),
-        Container(
-          width: 400,
-          height: 20,
-          color: Colors.white,
-        ),
-      ],
-    ),
-  );
-}
+          SizedBox(height: 30),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Achievements',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.white,
+                    ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      color: Colors.white,
+                    ),
+                    Container(
+                      width: 50,
+                      height: 150,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Progress',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: 400,
+            height: 20,
+            color: Colors.white,
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: 400,
+            height: 20,
+            color: Colors.white,
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: 400,
+            height: 20,
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
 }

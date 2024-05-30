@@ -1,8 +1,8 @@
+import 'package:elearning/services/gamepoints_service.dart';
 import 'package:flutter/material.dart';
 import 'package:scratcher/widgets.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:elearning/services/scratchcard_service.dart';
-import 'package:elearning/services/gamepoints_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ScratchCardScreen extends StatefulWidget {
   final String token;
@@ -41,31 +41,27 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    final double screenHeight = screenSize.height;
-
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.05),
+      padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             'Available scratch cards:',
-            style: TextStyle(fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
             '${scratchCards.length}/${scratchCards.length}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: screenHeight * 0.02),
-          isLoading ? _buildShimmerSkeleton(screenWidth) : _buildScratchCards(screenWidth),
+          SizedBox(height: 10),
+          isLoading ? _buildShimmerSkeleton() : _buildScratchCards(),
         ],
       ),
     );
   }
 
-  Widget _buildShimmerSkeleton(double screenWidth) {
+  Widget _buildShimmerSkeleton() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -74,8 +70,8 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
         children: List.generate(
           3, // Number of shimmer items
           (index) => Container(
-            width: screenWidth * 0.25,
-            height: screenWidth * 0.25,
+            width: 100,
+            height: 100,
             color: Colors.white,
           ),
         ),
@@ -83,64 +79,68 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
     );
   }
 
-  Widget _buildScratchCards(double screenWidth) {
+  Widget _buildScratchCards() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: scratchCards.map((card) => _buildScratchCard(screenWidth, card)).toList(),
+      children: scratchCards.map((card) => _buildScratchCard(card)).toList(),
     );
   }
 
-  Widget _buildScratchCard(double screenWidth, ScratchCard card) {
+  Widget _buildScratchCard(ScratchCard card) {
     return Container(
-      width: screenWidth * 0.25,
-      height: screenWidth * 0.25,
+      width: 100,
+      height: 100,
       child: Stack(
         children: [
           // Scratch Card
           Scratcher(
-            brushSize: screenWidth * 0.06,
+            brushSize: 30,
             threshold: 100,
             image: Image.network(card.scratchImage), // Set the scratch image directly
             onChange: (value) {
               // Handle scratch progress change
             },
-            onThreshold: () async {
-              try {
-                // Call RewardPointService to add reward points
-                await RewardPointService().addReward(
-                  token: widget.token,
-                  type: 'scratchcard', // Set the type to 'scratch'
-                  points: card.point, // Pass the points from the scratch card
-                );
-                // Display the point and point image
-                showDialog(
-                  context: context,
-                  builder: (_) => Dialog(
-                    child: Container(
-                      // You can set width and height if you want to control the size of the dialog
-                      child: Image.network(
-                        card.pointImage,
-                        fit: BoxFit.cover, // This will ensure the image fits well in the dialog
-                      ),
-                    ),
-                  ),
-                );
-              } catch (e) {
-                // Handle error if needed
-                print('Error adding reward points: $e');
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('Error'),
-                    content: Text('Failed to add reward points. Please try again later.'),
-                  ),
-                );
-              }
-            },
+           // Inside _buildScratchCard method of ScratchCardScreen widget
+onThreshold: () async {
+  try {
+    // Call RewardPointService to add reward points
+    await RewardPointService().addReward(
+      token: widget.token,
+      type: 'scratchcard', // Set the type to 'scratch'
+      points: card.point, // Pass the points from the scratch card
+    );
+    // Display the point and point image
+    showDialog(
+  context: context,
+  builder: (_) => Dialog(
+    child: Container(
+      // You can set width and height if you want to control the size of the dialog
+      child: Image.network(
+        card.pointImage,
+        fit: BoxFit.cover, // This will ensure the image fits well in the dialog
+      ),
+    ),
+  ),
+);
+
+  } catch (e) {
+    // Handle error if needed
+    print('Error adding reward points: $e');
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Error'),
+        content: Text('Failed to add reward points. Please try again later.'),
+      ),
+    );
+  }
+},
+
+            
             child: Image.network(
-              card.pointImage,
-              fit: BoxFit.cover,
-            ),
+            card.pointImage,
+            fit: BoxFit.cover,
+          ),
           ),
         ],
       ),

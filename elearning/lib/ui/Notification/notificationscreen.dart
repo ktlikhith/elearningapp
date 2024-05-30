@@ -65,7 +65,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     }
   }
 
-  Widget _buildShimmerList(double screenWidth) {
+  Widget _buildShimmerList() {
     return ListView.builder(
       itemCount: 5, // Adjust the number of shimmer placeholders as needed
       itemBuilder: (context, index) {
@@ -90,7 +90,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
               title: Container(
                 color: Colors.grey[300],
                 height: 20,
-                width: screenWidth * 0.5, // Adjust width based on screen size
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,13 +97,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Container(
                     color: Colors.grey[300],
                     height: 16,
-                    width: screenWidth * 0.7, // Adjust width based on screen size
                   ),
                   SizedBox(height: 4),
                   Container(
                     color: Colors.grey[300],
                     height: 16,
-                    width: screenWidth * 0.6, // Adjust width based on screen size
                   ),
                 ],
               ),
@@ -117,8 +114,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     try {
       return Scaffold(
         appBar: AppBar(
@@ -190,7 +185,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     );
                   },
                 )
-              : _buildShimmerList(screenWidth), // Show shimmer skeleton while loading
+              : _buildShimmerList(), // Show shimmer skeleton while loading
         ),
       );
     } catch (e) {
@@ -199,7 +194,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         appBar: AppBar(
           title: Text('Notifications'),
         ),
-        body: _buildShimmerList(screenWidth), // Show shimmer skeleton while loading
+        body: _buildShimmerList(), // Show shimmer skeleton while loading
       );
     }
   }
@@ -266,24 +261,26 @@ class NotificationDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
-                    String moduleUrl = notification.contextUrl;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WebViewPage('Insights', moduleUrl),
-                      ),
-                    );
-                  }
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
-                ),
-                child: Text('View Insight', style: TextStyle(color: Colors.white)),
-              ),
+            child: ElevatedButton(
+              onPressed: () {
+                if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
+                  String moduleUrl = notification.contextUrl;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WebViewPage('Insights', moduleUrl),
+                    ),
+                  );
+                }
+              },
+              style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
+              
             ),
+              child: Text('View Insight',style: TextStyle(color: Colors.white)),
+            ),
+          ),
+
           ],
         ),
       ),
