@@ -64,7 +64,7 @@ class _RewardSectionState extends State<RewardSection> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: const Color.fromARGB(255, 204, 203, 203).withOpacity(0.3),
             spreadRadius: 0,
             blurRadius: 0,
             offset: Offset(0, 4),

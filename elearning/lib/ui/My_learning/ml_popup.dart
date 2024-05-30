@@ -223,7 +223,7 @@ class MLPopup extends StatefulWidget {
 
 class _MLPopupState extends State<MLPopup> {
   bool _isLoading = false;
-  Int? _userId;
+  int? _userId;
   String? _username;
   String? _firstname;
   String? _lastname;
