@@ -295,7 +295,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MLPopup(context,
+        return MLPopup(
             token: widget.token,
             course_id: courseId,
             course_name: course_name,
