@@ -70,7 +70,7 @@ class _RewardSectionState extends State<RewardSection> {
             offset: Offset(0, 4),
           ),
         ],
-        color: Color.fromARGB(255, 255, 252, 252),
+        color:Colors.grey[100],
         border: Border.all(
           color: const Color.fromARGB(255, 227, 236, 227), // Green border color
           width: 2.0,
