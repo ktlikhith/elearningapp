@@ -106,7 +106,7 @@ class CourseReportApiService {
       List<Course> courses = await fetchCourses(token);
       for (Course course in courses) {
         if (course.id == courseId) {
-          return course.getcourseDescriptionWithToken(token);
+          return course.courseDescription;
         }
       }
       throw Exception('Course not found');
@@ -122,7 +122,7 @@ class Course {
   final String name;
   final String courseImg;
   final int courseProgress;
-  final String? courseDescription;
+  final String courseDescription;
   final String courseStartDate;
   final String courseEndDate;
   final String courseVideoUrl;
@@ -133,7 +133,7 @@ class Course {
     required this.name,
     required this.courseImg,
     required this.courseProgress,
-    this.courseDescription,
+    required this.courseDescription,
     required this.courseStartDate,
     required this.courseEndDate,
     required this.courseVideoUrl,
@@ -158,35 +158,5 @@ class Course {
     return '$courseImg?token=$token';
   }
 
-  String getCourseIDWithToken(String token) {
-    return '$id';
-  }
-
-  String getcoursenameWithToken(String token) {
-    return '$name';
-  }
-
-  String getcourseProgressWithToken(String token) {
-    return '$courseProgress';
-  }
-
-  String getcourseDescriptionWithToken(String token) {
-    return '$courseDescription';
-  }
-
-  String getcourseStartDateWithToken(String token) {
-    return '$courseStartDate';
-  }
-
-  String getcourseEndDateWithToken(String token) {
-    return '$courseEndDate';
-  }
-
-  String getcourseVideoUrlWithToken(String token) {
-    return '$courseVideoUrl';
-  }
-
-  String getcourseDurationWithToken(String token) {
-    return '$courseDuration';
-  }
+ 
 }

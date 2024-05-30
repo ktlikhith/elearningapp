@@ -136,14 +136,14 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
   }
 
 Widget buildSingleCourseSection(BuildContext context, Course course) {
-  String course_id=course.getCourseIDWithToken(widget.token);
-  String course_name = course.getcoursenameWithToken(widget.token);
-  String Cprogress = course.getcourseProgressWithToken(widget.token);
-  String Cdiscrpition = course.getcourseDescriptionWithToken(widget.token);
-  String courseStartDate = course.getcourseStartDateWithToken(widget.token);
-  String courseEndDate = course.getcourseEndDateWithToken(widget.token);
-  String course_videourl = course.getcourseVideoUrlWithToken(widget.token);
-  String courseDuration = course.getcourseDurationWithToken(widget.token);
+  String course_id=course.id;
+  String course_name = course.name;
+  String Cprogress = course.courseProgress.toString();
+  String Cdiscrpition = course.courseDescription;
+  String courseStartDate = course.courseStartDate;
+  String courseEndDate = course.courseEndDate;
+  String course_videourl = course.courseVideoUrl;
+  String courseDuration = course.courseDuration;
 
   return GestureDetector(
     
