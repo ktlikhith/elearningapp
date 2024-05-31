@@ -1,4 +1,5 @@
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
+import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
@@ -111,15 +112,17 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
           borderRadius: BorderRadius.circular(8.0),
           color: Colors.white,
           child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CourseDetailsPage(widget.token, course.id, course.name),
+             onTap: () => showMLPopup(
+                  context,
+                  course.id,
+                  course.name,
+                  course.courseProgress.toString(),
+                  course.courseDescription,
+                  course.courseStartDate,
+                  course.courseEndDate,
+                  course.courseVideoUrl,
+                 course.courseDuration,
                 ),
-              );
-            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -286,6 +289,25 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
           ),
         ),
       ],
+    );
+  }
+
+  void showMLPopup(BuildContext context, String courseId, String course_name, String Cprogress, String Cdiscrpition,
+      String courseStartDate, String courseEndDate, String course_videourl, String courseDuration) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MLPopup(
+            token: widget.token,
+            course_id: courseId,
+            course_name: course_name,
+            Cprogress: Cprogress,
+            Cdiscrpition: Cdiscrpition,
+            courseStartDate: courseStartDate,
+            courseEndDate: courseEndDate,
+            course_videourl: course_videourl,
+            courseDuration: courseDuration); // Create an instance of MLPopup without passing context
+      },
     );
   }
 }

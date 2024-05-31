@@ -1,5 +1,6 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
+import 'package:elearning/services/tanentlogo_service.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
@@ -61,25 +62,27 @@ class _DashboardPageState extends State<DashboardPage> {
       final fullName = userInfo['fullname'];
       final userprofile = userInfo['userpictureurl'];
       final logoData = await TanentLogo.fetchTenantUserData(token);
-      final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
 
-      if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
-        final Uint8List tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
-        setState(() {
-          _notificationCount = count;
-          _userName = fullName;
-          _userprofile = userprofile;
-          _tenantLogoBytes = tenantLogoBytes;
-          _isUserInfoLoaded = true;
-        });
+      if (logoData['tenant'].isNotEmpty) {
+        final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
+        if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
+          final Uint8List tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
+          setState(() {
+            _tenantLogoBytes = tenantLogoBytes;
+          });
+        }
       } else {
         setState(() {
-          _userName = fullName;
-          _userprofile = userprofile;
           _tenantLogoBytes = null;
-          _isUserInfoLoaded = true;
         });
       }
+
+      setState(() {
+        _notificationCount = count;
+        _userName = fullName;
+        _userprofile = userprofile;
+        _isUserInfoLoaded = true;
+      });
     } catch (e) {
       print('Error fetching user information: $e');
     }
@@ -124,7 +127,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   )
                 : _isUserInfoLoaded
-                    ? SizedBox.shrink()
+                    ? SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Image.asset(
+                          'assets/logo/RAP_logo.jpeg',
+                          fit: BoxFit.fill,
+                        ),
+                      )
                     : Shimmer.fromColors(
                         baseColor: Colors.grey[300]!,
                         highlightColor: Colors.grey[100]!,
@@ -139,7 +149,10 @@ class _DashboardPageState extends State<DashboardPage> {
             Stack(
               children: [
                 IconButton(
-                  icon: FaIcon(FontAwesomeIcons.bell, color: Colors.white,),
+                  icon: FaIcon(
+                    FontAwesomeIcons.bell,
+                    color: Colors.white,
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -177,7 +190,6 @@ class _DashboardPageState extends State<DashboardPage> {
                 },
                 child: CircleAvatar(
                   radius: 20,
-                  
                   backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
                 ),
               ),
@@ -228,74 +240,71 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               )
             : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
-            
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
-     
       ),
     );
   }
 
- Widget _buildLoadingSkeleton() {
-  return !_isUserInfoLoaded
-      ? Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 65.0,
-                  width: 100,
-                  color: Colors.white,
-                  margin: EdgeInsets.symmetric(horizontal: 16.0),
-                ),
-                SizedBox(height: 15.0),
-               
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height:  200.0,
-                      color: Colors.grey, // Placeholder color for status
-                    ),
-                    const SizedBox(height: 16.0), // Add spacing between status and due date
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height:  210.0,
-                      color: Colors.grey, // Placeholder color for due date
-                    ),
-                     const SizedBox(height: 16.0),
-                      Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height:  210.0,
-                      color: Colors.grey, // Placeholder color for due date
-                    ),
-                     const SizedBox(height: 16.0),
-                   Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: const Color.fromARGB(255, 122, 121, 121),
-              ),
-              child: Shimmer.fromColors(
-                baseColor: const Color.fromARGB(255, 175, 175, 175)!,
-                highlightColor: Color.fromARGB(255, 161, 160, 160)!,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.grey[300],
+  Widget _buildLoadingSkeleton() {
+    return !_isUserInfoLoaded
+        ? Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 65.0,
+                    width: 100,
+                    color: Colors.white,
+                    margin: EdgeInsets.symmetric(horizontal: 16.0),
                   ),
-                ),
+                  SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 200.0,
+                        color: Colors.grey, // Placeholder color for status
+                      ),
+                      const SizedBox(height: 16.0), // Add spacing between status and due date
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 210.0,
+                        color: Colors.grey, // Placeholder color for due date
+                      ),
+                      const SizedBox(height: 16.0),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 210.0,
+                        color: Colors.grey, // Placeholder color for due date
+                      ),
+                      const SizedBox(height: 16.0),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: const Color.fromARGB(255, 122, 121, 121),
+                        ),
+                        child: Shimmer.fromColors(
+                          baseColor: const Color.fromARGB(255, 175, 175, 175)!,
+                          highlightColor: const Color.fromARGB(255, 161, 160, 160)!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            )
-                  ],
-                ),
-              ],
             ),
-          ),
-        )
-      : SizedBox(); // Return an empty SizedBox if user info is loaded
-}
+          )
+        : SizedBox(); // Return an empty SizedBox if user info is loaded
+  }
 }

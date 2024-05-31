@@ -1,4 +1,3 @@
-
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/notification_service.dart';
 import 'package:elearning/ui/Webview/webview.dart';
@@ -18,7 +17,7 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final NotificationService _notificationService = NotificationService();
-  late List<Notifications> _notifications; // Maintain a list of notifications in the state
+  late List<Notifications> _notifications = []; // Initialize the notifications list
 
   @override
   void initState() {
@@ -114,89 +113,81 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Notifications'),
-          backgroundColor: Theme.of(context).primaryColor,
-          centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notifications'),
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Container(
-          padding: EdgeInsets.all(8.0),
-          child: _notifications != null
-              ? ListView.builder(
-                  itemCount: _notifications!.length,
-                  itemBuilder: (context, index) {
-                    final notification = _notifications![index];
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey), // Example border style
-                        borderRadius: BorderRadius.circular(10), // Example border radius
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white,
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          notification.subject,
-                          style: TextStyle(
-                            fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
-                            color: notification.read ? Colors.black : Colors.blue,
-                          ),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(notification.timeCreatedPretty),
-                            TextButton(
-                              onPressed: () async {
-                                await _markNotificationAsRead(notification.id);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NotificationDetailsScreen(
-                                      token: widget.token,
-                                      notification: notification,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'View Full Notification',
-                                style: TextStyle(color: Colors.blue),
-                              ),
+      ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Container(
+        padding: EdgeInsets.all(8.0),
+        child: _notifications != null
+            ? _notifications.isEmpty
+                ? Center(child: Text('No notifications to read'))
+                : ListView.builder(
+                    itemCount: _notifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = _notifications[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey), // Example border style
+                          borderRadius: BorderRadius.circular(10), // Example border radius
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white,
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                )
-              : _buildShimmerList(), // Show shimmer skeleton while loading
-        ),
-      );
-    } catch (e) {
-      // If an error occurs (LateInitializationError), return a shimmer skeleton
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Notifications'),
-        ),
-        body: _buildShimmerList(), // Show shimmer skeleton while loading
-      );
-    }
+                        child: ListTile(
+                          title: Text(
+                            notification.subject,
+                            style: TextStyle(
+                              fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
+                              color: notification.read ? Colors.black : Colors.blue,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(notification.timeCreatedPretty),
+                              TextButton(
+                                onPressed: () async {
+                                  await _markNotificationAsRead(notification.id);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NotificationDetailsScreen(
+                                        token: widget.token,
+                                        notification: notification,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'View Full Notification',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+            : _buildShimmerList(), // Show shimmer skeleton while loading
+      ),
+    );
   }
 }
 
@@ -280,7 +271,6 @@ class NotificationDetailsScreen extends StatelessWidget {
               child: Text('View Insight',style: TextStyle(color: Colors.white)),
             ),
           ),
-
           ],
         ),
       ),

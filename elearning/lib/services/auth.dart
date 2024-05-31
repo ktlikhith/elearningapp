@@ -82,26 +82,7 @@ class SiteConfigApiService {
 // }
 
 
-class TanentLogo {
-  static Future<Map<String, dynamic>> fetchTenantUserData(String token) async {
-    try {
-      final data = await ProfileAPI.fetchProfileData(token);
-     
-        final response = await http.get(Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?moodlewsrestformat=json&wstoken=$token&wsfunction=tenent_users_data&tenant[0][username]=marryjosheph@gmail.com'));
 
-        if (response.statusCode == 200) {
-          Map<String, dynamic> responseData = json.decode(response.body);
-          return responseData;
-        } 
-       else {
-        throw Exception('No user information found');
-      }
-    } catch (e) {
-      throw Exception('Error fetching tenant user data: $e');
-    }
-  }
-  // Add other service methods as needed
-}
 
 
 class NotificationCount {
