@@ -42,25 +42,24 @@ class _GamificationPageState extends State<GamificationPage> {
           backgroundColor: Theme.of(context).primaryColor,
           title: FutureBuilder<RewardData>(
             future: _rewardDataFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                final totalPoints = snapshot.data!.totalPoints;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.5),
-                      child: Text(
-                        'My Points : $totalPoints',
-                      ),
-                    ),
-
-                  ],
-                );
-              } else {
-                return SizedBox.shrink(); // Hide the title while loading
+ builder: (context, snapshot) {
+            String pointsText = 'My Points : -';
+            if (snapshot.connectionState == ConnectionState.done) {
+              final totalPoints = snapshot.data?.totalPoints;
+              if (totalPoints != null) {
+                pointsText = 'My Points : $totalPoints';
               }
-            },
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.5),
+                  child: Text(pointsText),
+                ),
+              ],
+            );
+          },
           ),
           automaticallyImplyLeading: false,
         ),
