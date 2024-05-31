@@ -15,46 +15,81 @@ class RewardSection extends StatefulWidget {
 
 class _RewardSectionState extends State<RewardSection> {
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<RewardData>(
-      future: widget.rewardDataFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildShimmerSkeleton();
-        } else if (snapshot.hasError) {
-          return Text('Error loading points');
-        } else {
-          final _rewardData = snapshot.data;
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, _rewardData?.loginPoints),
-                          buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, _rewardData?.quizPoints),
-                          buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, _rewardData?.spinwheelPoints),
-                          buildPointsCategory('Reward Received', FontAwesomeIcons.gift, _rewardData?.rewardsReceivedPoints),
-                        ],
-                      ),
+Widget build(BuildContext context) {
+  return FutureBuilder<RewardData>(
+    future: widget.rewardDataFuture,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return _buildShimmerSkeleton();
+      } else if (snapshot.hasError) {
+        // Handle error by passing default value to buildPointsCategory
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, '0'),
+                        buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, '0'),
+                        buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, '0'),
+                        buildPointsCategory('Reward Received', FontAwesomeIcons.gift, '0'),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        }
-      },
-    );
-  }
+          ),
+        );
+      } else {
+        final _rewardData = snapshot.data;
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, _rewardData?.loginPoints?.toString() ?? '0'),
+                        buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, _rewardData?.quizPoints?.toString() ?? '0'),
+                        buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, _rewardData?.spinwheelPoints?.toString() ?? '0'),
+                        buildPointsCategory('Reward Received', FontAwesomeIcons.gift, _rewardData?.rewardsReceivedPoints?.toString() ?? '0'),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    },
+  );
+}
 
-  Widget buildPointsCategory(String title, IconData icon, int? points) {
+// Widget buildPointsCategory(String title, IconData icon, String? points) {
+//   return Column(
+//     children: [
+//       Icon(icon),
+//       Text(title),
+//       Text(points ?? '-'),
+//     ],
+//   );
+// }
+
+
+  Widget buildPointsCategory(String title, IconData icon, String? points) {
     return Container(
       height: 120,
       width: 120,
@@ -99,7 +134,7 @@ class _RewardSectionState extends State<RewardSection> {
                     child: SizedBox(height: 4),
                   ),
                   Text(
-                    points?.toString() ?? '0', // Replace with actual point value
+                    points?.toString() ?? '-', // Replace with actual point value
                     style: TextStyle(color: Color.fromARGB(255, 5, 5, 5), fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
