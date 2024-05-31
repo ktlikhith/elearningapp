@@ -890,9 +890,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (module['completiondata'] != null && module['completiondata']['state'] == 1)
-                                    Icon(Icons.check_circle, color: Colors.green),
+                                    Icon(Icons.check_circle, color: Colors.green,size: 18,),
                                   if (module['completiondata'] == null || module['completiondata']['state'] != 1)
-                                    Icon(Icons.radio_button_unchecked, color: Colors.grey),
+                                    Icon(Icons.radio_button_unchecked, color: Colors.grey,size: 18,),
                                   SizedBox(width: 8),
                                   _buildModuleIcon(module['modname']),
                                 ],
