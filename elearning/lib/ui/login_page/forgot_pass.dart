@@ -27,6 +27,7 @@
       },
     ),
   ),
+  backgroundColor: Colors.white,
   body: Stack(
     children: [
       Center(

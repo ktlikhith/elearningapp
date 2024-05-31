@@ -44,7 +44,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
 
         child: FloatingNavbar(
-          fontSize: 12,
+          fontSize: 10,
           iconSize: 26,
         
           backgroundColor: Colors.white,

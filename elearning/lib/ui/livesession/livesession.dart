@@ -5,7 +5,6 @@ import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -91,8 +90,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             'Live Session',
           ),
           centerTitle: false,
-           automaticallyImplyLeading: false,
-          
+          automaticallyImplyLeading: false,
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: FutureBuilder<List<LiveSession>>(
@@ -104,70 +102,80 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
               final List<LiveSession> sessions = snapshot.data!;
-              return ListView.builder(
-                padding: const EdgeInsets.all(8.0),
-                itemCount: sessions.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Set background color to white
-                      borderRadius: BorderRadius.circular(8.0), // Set border radius
-                      border: Border.all(color: Colors.grey[300]!), // Set border color
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          child: Image.network(
-                            sessions[index].imgUrl,
-                            fit: BoxFit.cover,
-                            height: 250,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        ListTile(
-                          title: Text(sessions[index].activityName, style: TextStyle(fontWeight: FontWeight.bold,)),
-                          subtitle: Text('Speaker: ${sessions[index].username}\nStart Time: ${sessions[index].startTime}\nMode: ${sessions[index].sessionMod}'),
-                        ),
-                        SizedBox(height: 8),
-                        Center(
-                          child: TextButton(
-                            onPressed: () {
-                              if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
-                        String moduleUrl = sessions[index].url;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                WebViewPage( 'Live Events', moduleUrl),
-                          ),
-                        );
-                      }
-                             
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
-                              children: [
-                                Icon(FontAwesomeIcons.play, color: Theme.of(context).backgroundColor,), // Add the Font Awesome icon
-                                SizedBox(width: 8), // Add some space between the icon and text
-                                Text(
-                                  'Join Now',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            style: TextButton.styleFrom(
-                              backgroundColor: Theme.of(context).secondaryHeaderColor, // Set button background color
+              if (sessions.isEmpty) {
+                return Center(child: Text('No data available'));
+              } else {
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: sessions.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Set background color to white
+                        borderRadius: BorderRadius.circular(8.0), // Set border radius
+                        border: Border.all(color: Colors.grey[300]!), // Set border color
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: Image.network(
+                              sessions[index].imgUrl,
+                              fit: BoxFit.cover,
+                              height: 250,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
+                          SizedBox(height: 8),
+                          ListTile(
+                            title: Text(
+                              sessions[index].activityName,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              'Speaker: ${sessions[index].username}\nStart Time: ${sessions[index].startTime}\nMode: ${sessions[index].sessionMod}',
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
+                                  String moduleUrl = sessions[index].url;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage('Live Events', moduleUrl),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.play,
+                                    color: Theme.of(context).backgroundColor,
+                                  ), // Add the Font Awesome icon
+                                  SizedBox(width: 8), // Add some space between the icon and text
+                                  Text(
+                                    'Join Now',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Theme.of(context).secondaryHeaderColor, // Set button background color
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
             } else {
               return Center(child: Text('No data available'));
             }
