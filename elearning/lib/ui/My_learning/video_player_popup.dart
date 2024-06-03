@@ -107,7 +107,7 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
         }
         Navigator.of(context).pop();
       },
-      child: Text('Close'),
+      child: Text('Close', style: TextStyle(color: Colors.red),),
     ),
   ],
 );
