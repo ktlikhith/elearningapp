@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -47,6 +46,10 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -68,6 +71,8 @@ class _LandingPageState extends State<LandingPage> {
                     pagesData[index]['gif']!,
                     pagesData[index]['title']!,
                     pagesData[index]['subtitle']!,
+                    screenHeight,
+                    screenWidth,
                     isLastPage: index == pagesData.length - 1,
                   ),
                 );
@@ -152,34 +157,34 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _buildPage(String gifPath, String title, String subtitle,
-      {bool isLastPage = false}) {
+  Widget _buildPage(String gifPath, String title, String subtitle, double screenHeight, double screenWidth, {bool isLastPage = false}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
           gifPath,
           fit: BoxFit.fitWidth,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.6,
+          width: screenWidth,
+          height: screenHeight * 0.6,
         ),
-        SizedBox(height: 20),
+        SizedBox(height: screenHeight * 0.03),
         Text(
           title,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: screenHeight * 0.03,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: screenHeight * 0.01),
         Text(
           subtitle,
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 18,
-            color: const Color.fromARGB(255, 8, 8, 8),
+            fontSize: screenHeight * 0.02,
+            color: Colors.grey[800],
           ),
         ),
-        if (isLastPage) SizedBox(height: 100),
+        if (isLastPage) SizedBox(height: screenHeight * 0.15),
       ],
     );
   }
