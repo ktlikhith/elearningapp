@@ -179,6 +179,7 @@ String? phoneValidator(String? value) {
         },
         ),
       ),
+      backgroundColor: Colors.white,
       body:  _isLoading
           ? _buildLoadingSkeleton() // Show shimmer loading skeleton while loading
           : SingleChildScrollView(

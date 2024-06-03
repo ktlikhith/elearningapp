@@ -174,6 +174,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ),
                                   );
                                 },
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                ),
                                 child: Text(
                                   'View Full Notification',
                                   style: TextStyle(color: Colors.blue),

@@ -184,21 +184,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
                   );
                 },
               ),
-              // IconButton(
-              //   icon: const Icon(Icons.play_circle_filled, size: 40.0, color: Colors.black),
-              //   tooltip: course_id = course.getCourseIDWithToken(widget.token),
-              //   onPressed: () => showMLPopup(
-              //     context,
-              //     course_id,
-              //     course_name,
-              //     Cprogress,
-              //     Cdiscrpition,
-              //     courseStartDate,
-              //     courseEndDate,
-              //     course_videourl,
-              //     courseDuration,
-              //   ),
-              // ),
+             
             ],
           ),
         ),

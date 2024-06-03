@@ -63,6 +63,7 @@ class _GamificationPageState extends State<GamificationPage> {
           ),
           automaticallyImplyLeading: false,
         ),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),

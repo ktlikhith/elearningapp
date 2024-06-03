@@ -13,6 +13,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:async';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter/services.dart';
 
 class DashboardScreen extends StatelessWidget {
   final String token;
@@ -50,7 +51,6 @@ class _DashboardPageState extends State<DashboardPage> {
     _fetchUserInfo(widget.token);
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       _refreshNotificationCount();
-      
     });
   }
 
@@ -107,140 +107,146 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0),
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('Dashboard'),
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: _tenantLogoBytes != null
-                ? SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.memory(
-                      _tenantLogoBytes!,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : _isUserInfoLoaded
-                    ? SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Image.asset(
-                          'assets/logo/RAP_logo.jpeg',
-                          fit: BoxFit.fill,
-                        ),
-                      )
-                    : Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: SizedBox(
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop(); // This will exit the app
+        return false; // Returning false prevents the default back button behavior
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0.0),
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text('Dashboard'),
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0,
+            leading: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: _tenantLogoBytes != null
+                  ? SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.memory(
+                        _tenantLogoBytes!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : _isUserInfoLoaded
+                      ? SizedBox(
                           width: 40,
                           height: 40,
-                          child: Container(color: Colors.white),
+                          child: Image.asset(
+                            'assets/logo/RAP_logo.jpeg',
+                            fit: BoxFit.fill,
+                          ),
+                        )
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: Container(color: Colors.white),
+                          ),
+                        ),
+            ),
+            actions: <Widget>[
+              Stack(
+                children: [
+                  IconButton(
+                    icon: FaIcon(
+                      FontAwesomeIcons.bell,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationScreen(token: widget.token),
+                        ),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: Text(
+                        '$_notificationCount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
                         ),
                       ),
-          ),
-          actions: <Widget>[
-            Stack(
-              children: [
-                IconButton(
-                  icon: FaIcon(
-                    FontAwesomeIcons.bell,
-                    color: Colors.white,
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NotificationScreen(token: widget.token),
-                      ),
-                    );
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
                   },
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                    child: Text(
-                      '$_notificationCount',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
-                },
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
                 ),
               ),
-            ),
-          ],
-        ),
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: _isUserInfoLoaded
-            ? SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Text(
-                          'Welcome, $_userName!',
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
+            ],
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          body: _isUserInfoLoaded
+              ? SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text(
+                            'Welcome, $_userName!',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                        child: Text(
-                          'Explore your courses and start learning.',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                          child: Text(
+                            'Explore your courses and start learning.',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 25.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: AutoScrollableSections(token: widget.token),
-                      ),
-                      const SizedBox(height: 15.0),
-                      UpcomingEventsSection(token: widget.token),
-                      const SizedBox(height: 15.0),
-                      CustomDashboardWidget(token: widget.token),
-                    ],
+                        const SizedBox(height: 25.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          child: AutoScrollableSections(token: widget.token),
+                        ),
+                        const SizedBox(height: 15.0),
+                        UpcomingEventsSection(token: widget.token),
+                        const SizedBox(height: 15.0),
+                        CustomDashboardWidget(token: widget.token),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
-        bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+                )
+              : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
+          bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+        ),
       ),
     );
   }
