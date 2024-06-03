@@ -88,7 +88,7 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
   }
 
  Widget _buildSection(BuildContext context, CourseData course) {
-  const double cardHeight = 300; // Define a constant height for the card
+  const double cardHeight = 260; // Define a constant height for the card
   const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
   return SizedBox(

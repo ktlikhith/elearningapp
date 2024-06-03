@@ -314,6 +314,7 @@ class _MLPopupState extends State<MLPopup> {
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(30.0),
       ),
+      child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -402,7 +403,10 @@ class _MLPopupState extends State<MLPopup> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,
                 ),
-                child: const Icon(Icons.videocam),
+                child: const FaIcon(
+                  FontAwesomeIcons.youtube,
+                  color: Color.fromARGB(255, 249, 2, 2),
+                ),
               ),
               ElevatedButton(
               //   onPressed: (){
@@ -463,6 +467,7 @@ class _MLPopupState extends State<MLPopup> {
             ],
           ),
         ],
+      ),
       ),
     );
   }

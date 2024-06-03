@@ -126,18 +126,18 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-           boxShadow: [
-          BoxShadow(
-            color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: Offset(0, 4),
-          ),
-        ],
+        //    boxShadow: [
+        //   BoxShadow(
+        //     color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
+        //     spreadRadius: 2,
+        //     blurRadius: 2,
+        //     offset: Offset(0, 4),
+        //   ),
+        // ],
           
-          color: Color.fromARGB(255, 245, 244, 244),
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: const Color.fromARGB(255, 227, 236, 227),
@@ -149,7 +149,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           children: [
             Container(
               width: 30,
-              height: 70,
+              height: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: color,
@@ -158,7 +158,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                 child: Image.asset(iconPath),
               ),
             ),
-            const SizedBox(width: 25.0),
+            const SizedBox(width: 20.0),
             Column(
               children: [
                 Text(
@@ -168,7 +168,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 7.0, width: 50.0),
+                const SizedBox(height: 6.0, width: 50.0),
                 Text(
                   number,
                   style: const TextStyle(
