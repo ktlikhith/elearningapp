@@ -25,7 +25,7 @@ Widget build(BuildContext context) {
         // Handle error by passing default value to buildPointsCategory
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -51,7 +51,7 @@ Widget build(BuildContext context) {
         final _rewardData = snapshot.data;
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

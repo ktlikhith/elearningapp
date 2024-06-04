@@ -150,6 +150,15 @@ class _LearningPathPageState extends State<LearningPathPage> {
                     '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
                     height: 200,
                     fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Return a default image when loading fails
+                              return Image.asset(
+                                'assets/images/coursedefaultimg.jpg',
+                                 height: 200,
+                    fit: BoxFit.cover,
+                              );
+                            },
+                          
                   ),
                   SizedBox(height: 16.0),
                   Container(
@@ -263,6 +272,14 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                     '${course['courseimg']}?token=${widget.token}',
                                     height: 200,
                                     fit: BoxFit.cover,
+                                     errorBuilder: (context, error, stackTrace) {
+                              // Return a default image when loading fails
+                              return Image.asset(
+                                'assets/images/coursedefaultimg.jpg',
+                                 height: 200,
+                    fit: BoxFit.cover,
+                              );
+                            },
                                   ),
                                 ),
                                 SizedBox(height: 8.0),

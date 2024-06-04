@@ -146,7 +146,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage('Live Events', moduleUrl),
+                                      builder: (context) => WebViewPage('Live Events', moduleUrl,widget.token),
                                     ),
                                   );
                                 }

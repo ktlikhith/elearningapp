@@ -378,7 +378,7 @@ class _MLPopupState extends State<MLPopup> {
                       const Icon(Icons.access_time),
                       SizedBox(width: 5.0),
                       Text(
-                        'Duration: ${widget.courseDuration.isEmpty ? "-" : widget.courseDuration}',
+                        'Duration: ${widget.courseDuration.isEmpty ? "-" : widget.courseDuration+'hr'}',
                         style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -408,7 +408,8 @@ class _MLPopupState extends State<MLPopup> {
                   color: Color.fromARGB(255, 249, 2, 2),
                 ),
               ),
-              ElevatedButton(onPressed: (){
+              ElevatedButton(
+                onPressed: (){
                  Navigator.push( context,
                     MaterialPageRoute(
                       builder: (context) =>
@@ -417,6 +418,7 @@ class _MLPopupState extends State<MLPopup> {
                   );
 
               },
+
   //               onPressed: () async {
   //                 final String url = "https://lxp-demo2.raptechsolutions.com/auth/token/index.php?user=$_username&token=${widget.token}&email=$_studentEmail&fn=$_firstname&ln=$_lastname";
   //                     try{

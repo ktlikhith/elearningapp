@@ -262,7 +262,7 @@ class NotificationDetailsScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => WebViewPage('Insights', moduleUrl),
+                      builder: (context) => WebViewPage('Insights', moduleUrl,token),
                     ),
                   );
                 }

@@ -728,7 +728,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               // Return a default image when loading fails
                               return Image.asset(
                                 'assets/images/coursedefaultimg.jpg',
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                                 width: double.infinity,
                               );
                             },
@@ -756,7 +756,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return _buildShimmerDescription();
                             } else if (snapshot.hasError) {
-                              return Center(child: Text('Error: ${snapshot.error}'));
+                              return Center(child: Text('No description available'));
                             } else {
                               final description = snapshot.data!;
                               return Text(
@@ -890,9 +890,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (module['completiondata'] != null && module['completiondata']['state'] == 1)
-                                    Icon(Icons.check_circle, color: Colors.green),
+                                    Icon(Icons.check_circle, color: Colors.green,size: 18,),
                                   if (module['completiondata'] == null || module['completiondata']['state'] != 1)
-                                    Icon(Icons.radio_button_unchecked, color: Colors.grey),
+                                    Icon(Icons.radio_button_unchecked, color: Colors.grey,size: 18,),
                                   SizedBox(width: 8),
                                   _buildModuleIcon(module['modname']),
                                 ],
@@ -907,7 +907,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (module['contents'] != null || module['modname'] == 'customcert')
+                                  if (module['contents'] != null )
                                     IconButton(
                                       icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
                                       onPressed: () {
@@ -943,37 +943,45 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       builder: (context) => VideoPlayerScreen(vidurl: vidurl),
                                     ),
                                   );
-                                } else if (module['modname'] == 'customcert' || module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
                                   final content = module['contents'][0];
                                   String getpdfUrlWithToken(String filePath1, String Token) {
                                     return '$filePath1&token=$Token';
                                   }
-                                  String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token);
+                                  String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => PDFViewScreen(pdfurl),
                                     ),
                                   );
-                                } else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
+                                } else if (module['modname'] == 'customcert' ){
+                                 Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'customcert', module['url'],widget.token),
+                                    ),
+                                  );
+                                }
+                                else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
                                     ),
                                   );
                                 } else if (module['modname'] == 'forum') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
                                     ),
                                   );
                                 } else if (module['modname'] == 'quiz') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
                                     ),
                                   );
                                 } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
@@ -981,7 +989,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                     ),
                                   );
                                 } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
@@ -989,14 +997,14 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
                                     ),
                                   );
                                 } else if (module['modname'] == 'assign') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url']),
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                     ),
                                   );
                                 } else {
@@ -1004,7 +1012,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url']),
+                                        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
                                       ),
                                     );
                                   }
