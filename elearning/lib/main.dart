@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthBloc(context: context,authRepository: AuthRepository()),
       child: GetMaterialApp(
-        title: 'Flutter Demo',
+        title: 'E learning',
         theme: ThemeData(
           primaryColor: Color.fromARGB(255, 10, 10, 10),
           secondaryHeaderColor: Colors.orange,

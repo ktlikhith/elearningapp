@@ -378,7 +378,7 @@ class _MLPopupState extends State<MLPopup> {
                       const Icon(Icons.access_time),
                       SizedBox(width: 5.0),
                       Text(
-                        'Duration: ${widget.courseDuration.isEmpty ? "-" : widget.courseDuration}',
+                        'Duration: ${widget.courseDuration.isEmpty ? "-" : widget.courseDuration+'hr'}',
                         style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -409,41 +409,41 @@ class _MLPopupState extends State<MLPopup> {
                 ),
               ),
               ElevatedButton(
-              //   onPressed: (){
-              //    Navigator.push( context,
-              //       MaterialPageRoute(
-              //         builder: (context) =>
-              //             CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
-              //       ),
-              //     );
-
-              // },
-
-                onPressed: () async {
-                  final String url = "https://lxp-demo2.raptechsolutions.com/auth/token/index.php?user=$_username&token=${widget.token}&email=$_studentEmail&fn=$_firstname&ln=$_lastname";
-                      try{
-                         final response = await http.post(    Uri.parse(url),);
-
-                          if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, navigate to the next page
-                    Navigator.push( context,
+                onPressed: (){
+                 Navigator.push( context,
                     MaterialPageRoute(
                       builder: (context) =>
                           CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
                     ),
                   );
-                          }else {
-      // Handle the case where the server returns an error
-      print('Failed to send the request. Status code: ${response.statusCode}');
-      // You might want to show an error message to the user here
-    }
-  } catch (e) {
-    // Handle any exceptions
-    print('An error occurred: $e');
-    // You might want to show an error message to the user here
-  }
+
+              },
+
+  //               onPressed: () async {
+  //                 final String url = "https://lxp-demo2.raptechsolutions.com/auth/token/index.php?user=$_username&token=${widget.token}&email=$_studentEmail&fn=$_firstname&ln=$_lastname";
+  //                     try{
+  //                        final response = await http.post(    Uri.parse(url),);
+
+  //                         if (response.statusCode == 200) {
+  //     // If the server returns a 200 OK response, navigate to the next page
+  //                   Navigator.push( context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) =>
+  //                         CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
+  //                   ),
+  //                 );
+  //                         }else {
+  //     // Handle the case where the server returns an error
+  //     print('Failed to send the request. Status code: ${response.statusCode}');
+  //     // You might want to show an error message to the user here
+  //   }
+  // } catch (e) {
+  //   // Handle any exceptions
+  //   print('An error occurred: $e');
+  //   // You might want to show an error message to the user here
+  // }
                  
-                },
+  //               },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).secondaryHeaderColor,
                 ),

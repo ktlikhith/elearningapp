@@ -66,7 +66,7 @@ class _GamificationPageState extends State<GamificationPage> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
             child: Column(
               children: [
                
@@ -84,25 +84,25 @@ class _GamificationPageState extends State<GamificationPage> {
                         child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
-                        },
-                        style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).secondaryHeaderColor,
-                ),
-                        child: Text('QUIZ',style: TextStyle(color: Colors.white),),
-                      ),
+                //       ElevatedButton(
+                //         onPressed: () {
+                //           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
+                //         },
+                //         style: ElevatedButton.styleFrom(
+                //   backgroundColor: Theme.of(context).secondaryHeaderColor,
+                // ),
+                //         child: Text('QUIZ',style: TextStyle(color: Colors.white),),
+                //       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 20),
                 ScratchCardScreen(token: widget.token),
                 SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Leaderboard(token: widget.token),
-                ),
+                
+                  
+                   Leaderboard(token: widget.token),
+                
                 SizedBox(height: 20),
               ],
             ),

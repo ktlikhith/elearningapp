@@ -163,7 +163,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 0.9, // 80% of screen width
-          height: MediaQuery.of(context).size.height * 0.3, // 30% of screen height
+          height: MediaQuery.of(context).size.height * 0.22, // 30% of screen height
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
           ),
@@ -188,7 +188,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
             ],
           ),
         ),
-        const SizedBox(height: 8.0), // Add spacing between video section and other content
+        const SizedBox(height: 6.0), // Add spacing between video section and other content
         Text(
           course.name, // Use course title dynamically
           style: TextStyle(
@@ -196,7 +196,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 8.0), // Add spacing between title and status
+        const SizedBox(height: 6.0), // Add spacing between title and status
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -210,7 +210,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
                     color: Color.fromARGB(255, 34, 34, 34),
                   ),
                 ),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 6.0),
                 SizedBox(
                   height: 8.0,
                   width: 140.0, // Increased width for the progress bar
@@ -259,7 +259,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
             ),
           ],
         ),
-        const SizedBox(height: 8.0), // Add spacing between status and download/more options
+        const SizedBox(height: 6.0), // Add spacing between status and download/more options
       ],
     ),
   );
