@@ -231,12 +231,19 @@ class _SpinWheelState extends State<SpinWheel> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            color: Colors.grey[300]!,
+            width: 2.0,
+          ),
+        
+        
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color:Theme.of(context).secondaryHeaderColor.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 4,
-            offset: Offset(0, 4),
+            offset: Offset(2, 6),
+            
           ),
         ],
       ),
@@ -299,8 +306,8 @@ class _SpinWheelState extends State<SpinWheel> {
                     }
                   : null, // Disable onTapUp when spinButton is false
               decoration: NeoPopTiltedButtonDecoration(
-                color: Colors.orange,
-                plunkColor: Colors.orange,
+                color: Theme.of(context).secondaryHeaderColor,
+                plunkColor: Theme.of(context).secondaryHeaderColor,
                 shadowColor: Color.fromRGBO(181, 177, 177, 1),
                 showShimmer: true,
               ),

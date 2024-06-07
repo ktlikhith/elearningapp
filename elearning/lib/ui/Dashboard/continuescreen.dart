@@ -1,16 +1,57 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
-import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ContinueWatchingScreen extends StatelessWidget {
+class ContinueWatchingScreen extends StatefulWidget {
   final String token;
-  final List<CourseData> courses;
+  final List<CourseData> initialCourses;
 
-  const ContinueWatchingScreen({Key? key, required this.token, required this.courses})
+  const ContinueWatchingScreen({Key? key, required this.token, required this.initialCourses})
       : super(key: key);
+
+  @override
+  _ContinueWatchingScreenState createState() => _ContinueWatchingScreenState();
+}
+
+class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
+  late List<CourseData> courses;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    courses = widget.initialCourses;
+    if (courses.isEmpty) {
+      _fetchCourses();
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchCourses() async {
+    try {
+      // Simulating network request
+      await Future.delayed(Duration(seconds: 2));
+      // Fetch courses here
+      // courses = await fetchCourses(widget.token);
+
+      setState(() {
+        courses = []; // Assign the fetched courses here
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle errors appropriately
+      print('Failed to load courses: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,91 +63,113 @@ class ContinueWatchingScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-           Navigator.pop(context);
+            Navigator.pop(context);
           },
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: ListView.builder(
-        itemCount: courses.isEmpty ? 5 : courses.length, // Use 5 shimmer items if courses list is empty
-        itemBuilder: (context, index) {
-          if (courses.isEmpty) {
-            return _buildShimmerItem();
-          }
-          final CourseData course = courses[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              side: BorderSide(color: Colors.grey[400]!),
-            ),
-            child: Container(
-              color: Colors.white,
-              child: ListTile(
-                contentPadding: EdgeInsets.all(8.0),
-                leading: Container(
-                  width: 60.0,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
+      body: isLoading ? _buildShimmerList() : _buildCourseList(),
+    );
+  }
+
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _buildShimmerItem();
+      },
+    );
+  }
+
+  Widget _buildCourseList() {
+    return ListView.builder(
+      itemCount: courses.length,
+      itemBuilder: (context, index) {
+        final CourseData course = courses[index];
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(color: Color.fromARGB(255, 11, 11, 11)!),
+          ),
+          child: Container(
+            color: Colors.white,
+            child: ListTile(
+              contentPadding: EdgeInsets.all(8.0),
+              leading: Container(
+                width: 100.0,
+                height: 60.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.grey[300],
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: course.getImageUrlWithToken(widget.token),
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                    ),
                   ),
-                  child:  Image.network(
-                              course.getImageUrlWithToken(token),
-                             fit: BoxFit.cover,
-                              width: double.infinity,
-                              //height: double.infinity,
-                              errorBuilder: (context, error, stackTrace) {
-                                // Return a default image when loading fails
-                                return Image.asset(
-                                  'assets/images/coursedefaultimg.jpg',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                );
-                              },
-                            ),
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(course.name, style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),),
-                    Text('Start Date: ${course.courseStartDate}', style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
-                          ),),
-                    Text('End Date: ${course.courseEndDate}', style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
-                          ),),
-                  ],
-                ),
-                trailing: Text(
-                  _getStatusText(course.courseProgress),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: _getStatusColor(course.courseProgress),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/coursedefaultimg.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                   ),
-                ),
-                 onTap: () => showMLPopup(
-                  context,
-                  course.id,
-                  course.name,
-                  course.courseProgress.toString(),
-                  course.courseDescription,
-                  course.courseStartDate,
-                  course.courseEndDate,
-                  course.courseVideoUrl,
-                 course.courseDuration,
                 ),
               ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    course.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    'Start Date: ${course.courseStartDate}',
+                    style: TextStyle(
+                      fontSize: 11.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  Text(
+                    'End Date: ${course.courseEndDate}',
+                    style: TextStyle(
+                      fontSize: 11.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+              trailing: Text(
+                _getStatusText(course.courseProgress),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: _getStatusColor(course.courseProgress),
+                ),
+              ),
+              onTap: () => showMLPopup(
+                context,
+                course.id,
+                course.name,
+                course.courseProgress.toString(),
+                course.courseDescription,
+                course.courseStartDate,
+                course.courseEndDate,
+                course.courseVideoUrl,
+                course.courseDuration,
+              ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -129,7 +192,7 @@ class ContinueWatchingScreen extends StatelessWidget {
               height: 60.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey[300], // Placeholder color for shimmer effect
+                color: Colors.grey[300],
               ),
             ),
             title: Column(
@@ -138,26 +201,26 @@ class ContinueWatchingScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   height: 10.0,
-                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                  color: Colors.grey[300],
                 ),
                 SizedBox(height: 8.0),
                 Container(
                   width: double.infinity,
                   height: 10.0,
-                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                  color: Colors.grey[300],
                 ),
                 SizedBox(height: 8.0),
                 Container(
                   width: double.infinity,
                   height: 10.0,
-                  color: Colors.grey[300], // Placeholder color for shimmer effect
+                  color: Colors.grey[300],
                 ),
               ],
             ),
             trailing: Container(
               width: 60.0,
               height: 10.0,
-              color: Colors.grey[300], // Placeholder color for shimmer effect
+              color: Colors.grey[300],
             ),
           ),
         ),
@@ -185,21 +248,31 @@ class ContinueWatchingScreen extends StatelessWidget {
     }
   }
 
-   void showMLPopup(BuildContext context, String courseId, String course_name, String Cprogress, String Cdiscrpition,
-      String courseStartDate, String courseEndDate, String course_videourl, String courseDuration) {
+  void showMLPopup(
+    BuildContext context,
+    String courseId,
+    String courseName,
+    String courseProgress,
+    String courseDescription,
+    String courseStartDate,
+    String courseEndDate,
+    String courseVideoUrl,
+    String courseDuration,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return MLPopup(
-            token: token,
-            course_id: courseId,
-            course_name: course_name,
-            Cprogress: Cprogress,
-            Cdiscrpition: Cdiscrpition,
-            courseStartDate: courseStartDate,
-            courseEndDate: courseEndDate,
-            course_videourl: course_videourl,
-            courseDuration: courseDuration); // Create an instance of MLPopup without passing context
+          token: widget.token,
+          course_id: courseId,
+          course_name: courseName,
+          Cprogress: courseProgress,
+          Cdiscrpition: courseDescription,
+          courseStartDate: courseStartDate,
+          courseEndDate: courseEndDate,
+          course_videourl: courseVideoUrl,
+          courseDuration: courseDuration,
+        );
       },
     );
   }

@@ -1,9 +1,11 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/report_service.dart';
+import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart'; 
 
 class LearningScreen extends StatelessWidget {
@@ -137,12 +139,13 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 18.0),
           SingleChildScrollView(
+            
             scrollDirection: Axis.horizontal,
             child: Row(
               children: <Widget>[
@@ -150,21 +153,24 @@ class _MyLearningAppBodyState extends State<MyLearningAppBody> {
                   iconPath: 'assets/learning icons/total activity.png',
                   number: reportData?.totalNoActivity ?? 0,
                   title: 'Totalactivity',
+                  context:context,
                 ),
                 buildSection(
                   iconPath: 'assets/learning icons/Completed Activity.png',
                   number: reportData?.completedActivity ?? 0,
                   title: 'Completed',
+                      context:context,
                 ),
                 buildSection(
                   iconPath: 'assets/learning icons/Average.png',
                   number: reportData?.averageGrade ?? 0,
-                  title: 'Grade',
+                  title: 'Avg_Grade',
+                      context:context,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 24.0), // Add some space between sections
+          const SizedBox(height: 12.0), // Add some space between sections
           // Shimmer effect while loading BuildCourseSections
           _isLoading
               ? _buildLoadingShimmer()

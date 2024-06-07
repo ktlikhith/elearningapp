@@ -117,7 +117,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 
   Widget buildCourseContainer(BuildContext context, Course course) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 12.0,horizontal: 12),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),

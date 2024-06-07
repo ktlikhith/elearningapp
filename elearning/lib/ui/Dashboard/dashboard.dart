@@ -38,54 +38,62 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+  late Future<void> _fetchUserInfoFuture;
+  late Future<void> _fetchOtherSectionsFuture;
   String _userName = '';
   String _userprofile = '';
   Uint8List? _tenantLogoBytes;
   int _notificationCount = 0;
   late Timer _timer;
-  bool _isUserInfoLoaded = false; // Flag to track if user info is loaded
 
   @override
   void initState() {
     super.initState();
-    _fetchUserInfo(widget.token);
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+    _fetchOtherSectionsFuture = _fetchOtherSections();
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       _refreshNotificationCount();
     });
   }
 
   Future<void> _fetchUserInfo(String token) async {
     try {
-      // Fetch user data from the server
-      final count = await NotificationCount.getUnreadNotificationCount(token);
-      final userInfo = await SiteConfigApiService.getUserId(token);
+      // Fetch data in parallel
+      final results = await Future.wait([
+        NotificationCount.getUnreadNotificationCount(token),
+        SiteConfigApiService.getUserId(token),
+        TanentLogo.fetchTenantUserData(token),
+      ]);
+
+      final count = results[0] as int;
+      final userInfo = results[1] as Map<String, dynamic>;
+      final logoData = results[2] as Map<String, dynamic>;
+
       final fullName = userInfo['fullname'];
       final userprofile = userInfo['userpictureurl'];
-      final logoData = await TanentLogo.fetchTenantUserData(token);
 
+      Uint8List? tenantLogoBytes;
       if (logoData['tenant'].isNotEmpty) {
         final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
         if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
-          final Uint8List tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
-          setState(() {
-            _tenantLogoBytes = tenantLogoBytes;
-          });
+          tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
         }
-      } else {
-        setState(() {
-          _tenantLogoBytes = null;
-        });
       }
 
       setState(() {
         _notificationCount = count;
         _userName = fullName;
         _userprofile = userprofile;
-        _isUserInfoLoaded = true;
+        _tenantLogoBytes = tenantLogoBytes;
       });
     } catch (e) {
       print('Error fetching user information: $e');
     }
+  }
+
+  Future<void> _fetchOtherSections() async {
+    // This method can be used to load data for other sections if necessary
+    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
   }
 
   Future<void> _refreshNotificationCount() async {
@@ -131,24 +139,31 @@ class _DashboardPageState extends State<DashboardPage> {
                         fit: BoxFit.cover,
                       ),
                     )
-                  : _isUserInfoLoaded
-                      ? SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Image.asset(
-                            'assets/logo/RAP_logo.jpeg',
-                            fit: BoxFit.fill,
-                          ),
-                        )
-                      : Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: SizedBox(
+                  : FutureBuilder(
+                      future: _fetchUserInfoFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Container(color: Colors.white),
+                            ),
+                          );
+                        } else {
+                          return SizedBox(
                             width: 40,
                             height: 40,
-                            child: Container(color: Colors.white),
-                          ),
-                        ),
+                            child: Image.asset(
+                              'assets/logo/RAP_logo.jpeg',
+                              fit: BoxFit.fill,
+                            ),
+                          );
+                        }
+                      },
+                    ),
             ),
             actions: <Widget>[
               Stack(
@@ -202,115 +217,122 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           backgroundColor: Theme.of(context).backgroundColor,
-          body: _isUserInfoLoaded
-              ? SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text(
-                            'Welcome, $_userName!',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+          body: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FutureBuilder<void>(
+                  future: _fetchUserInfoFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return _buildUserInfoSkeleton();
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error loading user info'));
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome, $_userName!',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                          child: Text(
-                            'Explore your courses and start learning.',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[600],
+                            Text(
+                              'Explore your courses and start learning.',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600],
+                              ),
                             ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 25.0),
+                FutureBuilder<void>(
+                  future: _fetchOtherSectionsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Column(
+                        children: [
+                          _buildLoadingSkeleton(),
+                          const SizedBox(height: 15.0),
+                          _buildLoadingSkeleton(),
+                          const SizedBox(height: 15.0),
+                          _buildLoadingSkeleton(),
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error loading sections'));
+                    } else {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                            child: AutoScrollableSections(token: widget.token),
                           ),
-                        ),
-                        const SizedBox(height: 25.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: AutoScrollableSections(token: widget.token),
-                        ),
-                        const SizedBox(height: 15.0),
-                        UpcomingEventsSection(token: widget.token),
-                        const SizedBox(height: 15.0),
-                        CustomDashboardWidget(token: widget.token),
-                      ],
-                    ),
-                  ),
-                )
-              : _buildLoadingSkeleton(), // Show loading skeleton while data is loading
+                          const SizedBox(height: 15.0),
+                          UpcomingEventsSection(token: widget.token),
+                          const SizedBox(height: 15.0),
+                          CustomDashboardWidget(token: widget.token),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
           bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
         ),
       ),
     );
   }
 
-  Widget _buildLoadingSkeleton() {
-    return !_isUserInfoLoaded
-        ? Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    height: 65.0,
-                    width: 100,
-                    color: Colors.white,
-                    margin: EdgeInsets.symmetric(horizontal: 16.0),
-                  ),
-                  SizedBox(height: 15.0),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 200.0,
-                        color: Colors.grey, // Placeholder color for status
-                      ),
-                      const SizedBox(height: 16.0), // Add spacing between status and due date
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 210.0,
-                        color: Colors.grey, // Placeholder color for due date
-                      ),
-                      const SizedBox(height: 16.0),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 210.0,
-                        color: Colors.grey, // Placeholder color for due date
-                      ),
-                      const SizedBox(height: 16.0),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: const Color.fromARGB(255, 122, 121, 121),
-                        ),
-                        child: Shimmer.fromColors(
-                          baseColor: const Color.fromARGB(255, 175, 175, 175)!,
-                          highlightColor: const Color.fromARGB(255, 161, 160, 160)!,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.grey[300],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+  Widget _buildUserInfoSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 20.0,
+              width: 150.0,
+              color: Colors.white,
             ),
-          )
-        : SizedBox(); // Return an empty SizedBox if user info is loaded
+            const SizedBox(height: 10.0),
+            Container(
+              height: 20.0,
+              width: 250.0,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 200.0,
+        width: double.infinity,
+        color: Colors.white,
+        margin: EdgeInsets.symmetric(horizontal: 16.0),
+      ),
+    );
   }
 }

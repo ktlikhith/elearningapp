@@ -299,9 +299,9 @@ class _MLPopupState extends State<MLPopup> {
         borderRadius: BorderRadius.circular(30.0),
       ),
       elevation: 0.0,
-      backgroundColor: Color.fromARGB(60, 252, 249, 249),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       child: contentBox(context).asGlass(
-        tintColor: Color.fromARGB(255, 248, 244, 244),
+        // tintColor: Color.fromARGB(255, 255, 255, 255),
         clipBorderRadius: BorderRadius.circular(30.0),
       ),
     );

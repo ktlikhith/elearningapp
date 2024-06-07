@@ -1,7 +1,9 @@
 import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:async';
 
 class RewardSection extends StatefulWidget {
   final String token;
@@ -14,135 +16,157 @@ class RewardSection extends StatefulWidget {
 }
 
 class _RewardSectionState extends State<RewardSection> {
+  final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
+
   @override
-Widget build(BuildContext context) {
-  return FutureBuilder<RewardData>(
-    future: widget.rewardDataFuture,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return _buildShimmerSkeleton();
-      } else if (snapshot.hasError) {
-        // Handle error by passing default value to buildPointsCategory
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, '0'),
-                        buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, '0'),
-                        buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, '0'),
-                        buildPointsCategory('Reward Received', FontAwesomeIcons.gift, '0'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      } else {
-        final _rewardData = snapshot.data;
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        buildPointsCategory('Login Points', FontAwesomeIcons.laptopMedical, _rewardData?.loginPoints?.toString() ?? '0'),
-                        buildPointsCategory('Daily Quiz Points', FontAwesomeIcons.brain, _rewardData?.quizPoints?.toString() ?? '0'),
-                        buildPointsCategory('Spin Wheel Points', FontAwesomeIcons.dharmachakra, _rewardData?.spinwheelPoints?.toString() ?? '0'),
-                        buildPointsCategory('Reward Received', FontAwesomeIcons.gift, _rewardData?.rewardsReceivedPoints?.toString() ?? '0'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      if (_scrollController.hasClients) {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels) {
+          _scrollController.animateTo(
+            0,
+            duration: Duration(seconds: 1),
+            curve: Curves.ease,
+          );
+        } else {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: Duration(seconds: 1),
+            curve: Curves.ease,
+          );
+        }
       }
-    },
-  );
-}
+    });
+  }
 
-// Widget buildPointsCategory(String title, IconData icon, String? points) {
-//   return Column(
-//     children: [
-//       Icon(icon),
-//       Text(title),
-//       Text(points ?? '-'),
-//     ],
-//   );
-// }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<RewardData>(
+      future: widget.rewardDataFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildShimmerSkeleton();
+        } else if (snapshot.hasError) {
+          return _buildDefaultPointsCategories();
+        } else {
+          final _rewardData = snapshot.data;
+          return _buildRewardPointsCategories(_rewardData);
+        }
+      },
+    );
+  }
 
-  Widget buildPointsCategory(String title, IconData icon, String? points) {
-    return Container(
-      height: 120,
-      width: 120,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 204, 203, 203).withOpacity(0.3),
-            spreadRadius: 0,
-            blurRadius: 0,
-            offset: Offset(0, 4),
-          ),
-        ],
-        color:Colors.grey[100],
-        border: Border.all(
-          color: const Color.fromARGB(255, 227, 236, 227), // Green border color
-          width: 2.0,
+  Widget _buildDefaultPointsCategories() {
+    return _buildPointsCategories(
+      loginPoints: '0',
+      quizPoints: '0',
+      spinwheelPoints: '0',
+      rewardsReceivedPoints: '0',
+    );
+  }
+
+  Widget _buildRewardPointsCategories(RewardData? rewardData) {
+    return _buildPointsCategories(
+      loginPoints: rewardData?.loginPoints?.toString() ?? '0',
+      quizPoints: rewardData?.quizPoints?.toString() ?? '0',
+      spinwheelPoints: rewardData?.spinwheelPoints?.toString() ?? '0',
+      rewardsReceivedPoints: rewardData?.rewardsReceivedPoints?.toString() ?? '0',
+    );
+  }
+
+  Widget _buildPointsCategories({
+    required String loginPoints,
+    required String quizPoints,
+    required String spinwheelPoints,
+    required String rewardsReceivedPoints,
+  }) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            buildPointsCategory(context, 'Login Points', FontAwesomeIcons.laptopMedical, loginPoints),
+            buildPointsCategory(context, 'Daily Quiz Points', FontAwesomeIcons.brain, quizPoints),
+            buildPointsCategory(context, 'Spin Wheel Points', FontAwesomeIcons.dharmachakra, spinwheelPoints),
+            buildPointsCategory(context, 'Reward Received', FontAwesomeIcons.gift, rewardsReceivedPoints),
+          ],
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 25, color: Color.fromARGB(255, 10, 10, 10)),
-          SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(color: Color.fromARGB(255, 9, 9, 9), fontSize: 15),
-                    textAlign: TextAlign.center,
-                    maxLines: 2, // Limiting to 2 lines to prevent overflow
-                    overflow: TextOverflow.ellipsis, // Ellipsis for overflow
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0),
-                    child: SizedBox(height: 4),
-                  ),
-                  Text(
-                    points?.toString() ?? '-', // Replace with actual point value
-                    style: TextStyle(color: Color.fromARGB(255, 5, 5, 5), fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+    );
+  }
+
+  Widget buildPointsCategory(BuildContext context, String title, IconData icon, String points) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: 220,
+        height: 100,
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: Colors.grey[100],
+          border: Border.all(
+            color: Theme.of(context).secondaryHeaderColor,
+            width: 2.0,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color.fromARGB(255, 243, 244, 243),
+              ),
+              child: Center(
+                child: Icon(icon, size: 25,  color: Colors.black87),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 20.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+                const SizedBox(height: 4.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: Text(
+                    points,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -150,74 +174,30 @@ Widget build(BuildContext context) {
   Widget _buildShimmerSkeleton() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      controller: _scrollController,
       child: Row(
-        children: List.generate(
-          4, // Adjust the number of shimmer items as needed
-          (index) => _buildShimmerItem(),
-        ),
+        children: List.generate(4, (index) => _buildShimmerItem(context)),
       ),
     );
   }
 
-  Widget _buildShimmerItem() {
-    return Container(
-      height: 120,
-      width: 120,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 3,
-            offset: Offset(0, 3),
-          ),
-        ],
-        color: Colors.white,
-        border: Border.all(
-          color: const Color.fromARGB(255, 227, 236, 227), // Green border color
-          width: 2.0,
-        ),
-      ),
+  Widget _buildShimmerItem(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
       child: Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(20),
-              ),
+        child: Container(
+          width: 200,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).secondaryHeaderColor,
+              width: 2.0,
             ),
-            SizedBox(height: 8),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 12,
-                      color: Colors.grey[300],
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                      width: 30,
-                      height: 12,
-                      color: Colors.grey[300],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
