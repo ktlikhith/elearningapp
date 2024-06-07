@@ -40,16 +40,16 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     _pageController = PageController(initialPage: 0);
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) async {
       final eventData = await _futureEventData;
-      setState(() {
-        if (eventData != null && eventData.isNotEmpty) {
+      if (eventData != null && eventData.isNotEmpty) {
+        setState(() {
           _currentPage = (_currentPage + 1) % eventData.length;
           _pageController.animateToPage(
             _currentPage,
             duration: Duration(milliseconds: 300),
             curve: Curves.easeIn,
           );
-        }
-      });
+        });
+      }
     });
 
     // Initialize _futureEventData here
@@ -70,12 +70,14 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       future: _futureEventData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildShimmerEffect(context); // Updated to pass context
+          return _buildShimmerEffect(context);
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+            
+          );
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return Container(
-            padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
@@ -84,7 +86,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     'Upcoming Events',
                     style: TextStyle(
@@ -96,44 +98,36 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 const SizedBox(height: 15.0),
                 SizedBox(
                   height: 150,
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (notification) {
-                      if (notification is OverscrollNotification) {
-                        // Handle overscroll if needed
-                      }
-                      return false;
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final event = snapshot.data![index];
+                      String svgPath = svgAssets[index % svgAssets.length];
+                      return _buildEventCard(
+                        dateTime: event.dueDate,
+                        title: event.name,
+                        svgPath: svgPath,
+                        context: context,
+                      );
                     },
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final event = snapshot.data![index];
-                        String svgPath = svgAssets[index % svgAssets.length]; // Assign SVG based on event index
-                        return _buildEventCard(
-                          dateTime: event.dueDate,
-                          title: event.name,
-                          svgPath: svgPath,
-                          context: context,
-                        );
-                      },
-                    ),
                   ),
                 ),
               ],
             ),
           );
         } else {
-          return SizedBox.shrink(); // Empty widget if no events available
+          return SizedBox.shrink();
         }
       },
     );
   }
 
   Widget _buildShimmerEffect(BuildContext context) {
-    final cardWidth = MediaQuery.of(context).size.width * 0.8; // Adjust as needed
+    final cardWidth = MediaQuery.of(context).size.width * 0.8;
 
     return SizedBox(
-      height: 210,
+      height: 150,
       child: Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
@@ -156,69 +150,68 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       ),
     );
   }
-Widget _buildEventCard({
-  required String dateTime,
-  required String title,
-  required String svgPath,
-  required BuildContext context,
-}) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
-    },
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 0,
-              blurRadius: 2,
-              offset: Offset(0, 2), // changes the position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center, // Center vertically
-          children: [
-            // SVG image on the left
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 40,
-                height: 40,
-                child: SvgPicture.asset(
-                  svgPath,
-                  fit: BoxFit.contain,
+
+  Widget _buildEventCard({
+    required String dateTime,
+    required String title,
+    required String svgPath,
+    required BuildContext context,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  child: SvgPicture.asset(
+                    svgPath,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 16.0), // Space between SVG and event details
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    dateTime,
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
+              SizedBox(width: 16.0),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      dateTime,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

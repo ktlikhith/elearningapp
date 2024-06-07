@@ -129,7 +129,7 @@ Widget buildLeaderBoard() {
     child: Padding(
       padding: const EdgeInsets.only(left: 8),
       child: DataTable(
-        headingRowColor: MaterialStateColor.resolveWith((states) => Colors.orange), // Set the color for the heading row
+        headingRowColor: MaterialStateColor.resolveWith((states) => Theme.of(context).secondaryHeaderColor), // Set the color for the heading row
         columnSpacing: 20,
         columns: [
           DataColumn(

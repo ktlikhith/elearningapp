@@ -44,11 +44,11 @@ class RankLevel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // _buildRow('Mail ID', mailid, 'assets/profilesvg/gmail-svgrepo-com.svg'),
-              _buildRow('Department', department, 'assets/profilesvg/open-an-account-svgrepo-com.svg'),
-              _buildRow('Current Level', currentRank, 'assets/profilesvg/verified-svgrepo-com.svg'),
-              _buildRow('Next Level', nextLevel, 'assets/profilesvg/vip-svgrepo-com.svg'),
-              _buildRow('Points to Next Level', pointsToNextLevel, 'assets/profilesvg/market-analysis-svgrepo-com.svg'),
-              _buildRow('Course Average % for Next Level', courseAverage, 'assets/profilesvg/risk-assessment-svgrepo-com.svg'),
+              _buildRow('Department', department, 'assets/profileicons/Department.png'),
+              _buildRow('Current Level', currentRank, 'assets/profileicons/Current Level.png'),
+              _buildRow('Next Level', nextLevel, 'assets/profileicons/Next Level.png'),
+              _buildRow('Points to Next Level', pointsToNextLevel, 'assets/profileicons/Points to Next Level.png'),
+              _buildRow('Course Average % for Next Level', courseAverage, 'assets/profileicons/Course Average.png'),
             ],
           ),
         );
@@ -65,11 +65,11 @@ class RankLevel extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                width: 40, // Adjust size based on your icon size
-                height: 40,
-                child: SvgPicture.asset(iconPath),
+                width: 30, // Adjust size based on your icon size
+                height: 30,
+                child: Image.asset(iconPath),
               ),
-              SizedBox(width: 10), // Adjusted for better spacing
+              SizedBox(width: 15), // Adjusted for better spacing
               Text(
                 label,
                 style: TextStyle(

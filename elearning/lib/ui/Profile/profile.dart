@@ -151,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                    ],
                           ),
                         ), // Use RankLevel widget here
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 5),
                               buildAchievementUI(),
                       ],
                     ),
@@ -166,14 +166,14 @@ class _ProfilePageState extends State<ProfilePage> {
   // Build your achievement UI here
     double screenWidth = MediaQuery.of(context).size.width;
   return Container(
-    width: 400,
-    padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+    width: 370,
+    padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 10),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.2),
+          color: Theme.of(context).secondaryHeaderColor.withOpacity(2),
           spreadRadius: 1,
           blurRadius: 3,
           offset: Offset(0, 2),
@@ -192,9 +192,9 @@ class _ProfilePageState extends State<ProfilePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            buildAchievement(_userPoints, 'Points', FontAwesomeIcons.rankingStar),
-            buildAchievement(_badgesEarn.toString(), 'Badges', FontAwesomeIcons.shieldHalved),
-            buildAchievement(_userLevel, 'Level', FontAwesomeIcons.lineChart),
+            buildAchievement(_userPoints, 'Points', 'assets/profileicons/Points.png'),
+            buildAchievement(_badgesEarn.toString(), 'Badges', 'assets/profileicons/Badges.png'),
+            buildAchievement(_userLevel, 'Level', 'assets/profileicons/Level.png'),
           ],
         ),
          const SizedBox(height: 10), // Add some space below the achievements row
@@ -208,9 +208,9 @@ class _ProfilePageState extends State<ProfilePage> {
             'Progress',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ), // Add some space below the existing row
-        buildProgressBar('Completioned', _completioned), 
-        buildProgressBar('InProgress', _inProgress),
-        buildProgressBar('TotalNotStarted', _totalNotStarted),
+        buildProgressBar('Completed', _completioned), 
+        buildProgressBar('In Progress', _inProgress),
+        buildProgressBar('Total Not Started', _totalNotStarted),
       ],
     ),
   );
