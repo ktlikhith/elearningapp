@@ -207,7 +207,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                         SizedBox(height: 12.0),
                         LinearPercentIndicator(
                           barRadius: Radius.circular(30),
-                          lineHeight: 14.0,
+                          lineHeight: 18.0,
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           percent: learningPathDetail['progress'] / 100,
                           backgroundColor: Color.fromARGB(255, 204, 205, 205),
@@ -311,7 +311,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                       SizedBox(height: 12.0),
                                       LinearPercentIndicator(
                                         barRadius: Radius.circular(30),
-                                        lineHeight: 14.0,
+                                        lineHeight: 18.0,
                                         linearStrokeCap: LinearStrokeCap.roundAll,
                                         percent: course['courseprogressbar'] / 100,
                                         backgroundColor: Color.fromARGB(255, 204, 205, 205),

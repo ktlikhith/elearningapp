@@ -97,6 +97,7 @@ class _WebViewPageState extends State<WebViewPage> {
           },
         ),
       ),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: [
           WebView(

@@ -68,109 +68,132 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
         ),
       ),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: isLoading ? _buildShimmerList() : _buildCourseList(),
-    );
-  }
-
-  Widget _buildShimmerList() {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return _buildShimmerItem();
-      },
-    );
-  }
-
-  Widget _buildCourseList() {
-    return ListView.builder(
-      itemCount: courses.length,
-      itemBuilder: (context, index) {
-        final CourseData course = courses[index];
-        return Card(
-          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            side: BorderSide(color: Color.fromARGB(255, 11, 11, 11)!),
-          ),
-          child: Container(
-            color: Colors.white,
-            child: ListTile(
-              contentPadding: EdgeInsets.all(8.0),
-              leading: Container(
-                width: 100.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.grey[300],
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: course.getImageUrlWithToken(widget.token),
+      body: ListView.builder(
+  itemCount: courses.isEmpty ? 5 : courses.length, // Use 5 shimmer items if courses list is empty
+  itemBuilder: (context, index) {
+    if (courses.isEmpty) {
+      return _buildShimmerItem();
+    }
+    final CourseData course = courses[index];
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      shape: RoundedRectangleBorder(
+        //borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(color: Colors.grey[400]!),
+      ),
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          contentPadding: EdgeInsets.all(8.0),
+          leading: Container(
+            width: 100.0,
+            height: 120.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Image.network(
+              course.getImageUrlWithToken(widget.token),
+              fit: BoxFit.cover,
+              width: double.infinity,
+              // height: double.infinity,
+              errorBuilder: (context, error, stackTrace) {
+                // Return a default image when loading fails
+                return Image.asset(
+                  'assets/images/coursedefaultimg.jpg',
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      width: double.infinity,
-                      color: Colors.grey[300],
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/coursedefaultimg.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                  width: double.infinity,
+                  height: double.infinity,
+                );
+              },
+            ),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                course.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    course.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  SizedBox(height: 4.0),
-                  Text(
-                    'Start Date: ${course.courseStartDate}',
-                    style: TextStyle(
-                      fontSize: 11.0,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  Text(
-                    'End Date: ${course.courseEndDate}',
-                    style: TextStyle(
-                      fontSize: 11.0,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
+              Text(
+                'Start Date: ${course.courseStartDate}',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[500],
+                ),
               ),
-              trailing: Text(
+              Text(
+                'End Date: ${course.courseEndDate}',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[500],
+                ),
+              ),
+            ],
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
                 _getStatusText(course.courseProgress),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: _getStatusColor(course.courseProgress),
                 ),
               ),
-              onTap: () => showMLPopup(
-                context,
-                course.id,
-                course.name,
-                course.courseProgress.toString(),
-                course.courseDescription,
-                course.courseStartDate,
-                course.courseEndDate,
-                course.courseVideoUrl,
-                course.courseDuration,
+              SizedBox(height: 6), // Add some space between the text and the progress indicator
+              SizedBox(
+                width: 32, // Set the width of the circular progress indicator
+                height: 32, // Set the height of the circular progress indicator
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CircularProgressIndicator(
+                      value: course.courseProgress / 100,
+                      strokeWidth: 3,
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        _getStatusColor(course.courseProgress),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        '${course.courseProgress}%',
+                        style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      },
+          onTap: () => showMLPopup(
+            context,
+            course.id,
+            course.name,
+            course.courseProgress.toString(),
+            course.courseDescription,
+            course.courseStartDate,
+            course.courseEndDate,
+            course.courseVideoUrl,
+            course.courseDuration,
+          ),
+        ),
+      ),
     );
+  },
+),
+
+            );
+        
+      
   }
 
   Widget _buildShimmerItem() {
