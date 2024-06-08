@@ -140,8 +140,8 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
-            color: Theme.of(context).secondaryHeaderColor,
-            width: 2.0,
+           color: Colors.grey.withOpacity(0.5),
+            width: 1.0,
           
           ),
         ),

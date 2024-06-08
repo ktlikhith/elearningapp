@@ -47,10 +47,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           fontSize: 10,
           iconSize: 26,
         
-          backgroundColor: Colors.white,
+          backgroundColor:Theme.of(context).backgroundColor,
           selectedItemColor: const Color.fromARGB(255, 17, 17, 17),
           unselectedItemColor: Color.fromARGB(255, 149, 147, 147),
-          // selectedBackgroundColor: Theme.of(context).secondaryHeaderColor,
+           selectedBackgroundColor: Theme.of(context).backgroundColor,
           onTap: _handleTabPressed,
           currentIndex: _selectedIndex,
           itemBorderRadius: 9,

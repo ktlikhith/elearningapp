@@ -393,12 +393,15 @@ class _MLPopupState extends State<MLPopup> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => VideoPlayerPopup(
-                      course_videourl: widget.course_videourl,
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen(courseVideourl: widget.course_videourl),
                     ),
                   );
+
+                 
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,

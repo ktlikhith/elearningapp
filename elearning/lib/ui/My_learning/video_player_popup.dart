@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class VideoPlayerPopup extends StatefulWidget {
-  final String course_videourl;
+class VideoPlayerScreen extends StatefulWidget {
+  final String courseVideourl;
 
-  VideoPlayerPopup( {required this.course_videourl});
+  VideoPlayerScreen({required this.courseVideourl});
 
   @override
-  _VideoPlayerPopupState createState() => _VideoPlayerPopupState();
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
-class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late Widget _playerWidget;
   late VideoPlayerController _videoController;
   late bool _isPlaying = true;
+  late bool _isFullScreen = false;
 
   @override
   void initState() {
@@ -23,11 +25,11 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
   }
 
   void _initializePlayer() {
-    if (widget.course_videourl.contains('youtube.com') ||
-        widget.course_videourl.contains('youtu.be')) {
+    if (widget.courseVideourl.contains('youtube.com') ||
+        widget.courseVideourl.contains('youtu.be')) {
       _playerWidget = YoutubePlayer(
         controller: YoutubePlayerController(
-          initialVideoId: YoutubePlayer.convertUrlToId(widget.course_videourl)!,
+          initialVideoId: YoutubePlayer.convertUrlToId(widget.courseVideourl)!,
           flags: YoutubePlayerFlags(autoPlay: true, mute: false),
         ),
         showVideoProgressIndicator: true,
@@ -36,9 +38,12 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
           playedColor: Colors.amber,
           handleColor: Colors.amberAccent,
         ),
+        onReady: () {
+          setState(() {});
+        },
       );
     } else {
-      _videoController = VideoPlayerController.network(widget.course_videourl);
+      _videoController = VideoPlayerController.network(widget.courseVideourl);
       _playerWidget = Stack(
         alignment: Alignment.center,
         children: [
@@ -59,6 +64,16 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
               });
             },
           ),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: IconButton(
+              icon: Icon(Icons.fullscreen),
+              onPressed: () {
+                _toggleFullScreen();
+              },
+            ),
+          ),
         ],
       );
       _videoController.initialize().then((_) {
@@ -67,10 +82,29 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
     }
   }
 
+  void _toggleFullScreen() {
+    if (_isFullScreen) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } else {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
+    setState(() {
+      _isFullScreen = !_isFullScreen;
+    });
+  }
+
   @override
   void dispose() {
-    if (widget.course_videourl.contains('youtube.com') ||
-        widget.course_videourl.contains('youtu.be')) {
+    if (widget.courseVideourl.contains('youtube.com') ||
+        widget.courseVideourl.contains('youtu.be')) {
       final YoutubePlayerController controller =
           (_playerWidget as YoutubePlayer).controller;
       controller.pause();
@@ -78,39 +112,41 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
     } else {
       _videoController.dispose();
     }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-   return AlertDialog(
-  backgroundColor: Colors.transparent, 
-  elevation: 0, // Remove elevation
-  contentPadding: EdgeInsets.zero, // Remove content padding
-  content: SizedBox(
-    width: MediaQuery.of(context).size.width, // Set width to screen width
-    child: SingleChildScrollView(child: _playerWidget),
-  ),
-  
-  actions: <Widget>[
-    TextButton(
-      onPressed: () {
-        // Dispose video players when closing the dialog
-        if (widget.course_videourl.contains('youtube.com') ||
-            widget.course_videourl.contains('youtu.be')) {
-          final YoutubePlayerController controller =
-              (_playerWidget as YoutubePlayer).controller;
-          controller.pause();
-          controller.dispose();
-        } else {
-          _videoController.dispose();
-        }
-        Navigator.of(context).pop();
-      },
-      child: Text('Close', style: TextStyle(color: Colors.red),),
-    ),
-  ],
-);
-
+    return Scaffold(
+      backgroundColor: Colors.black, // Black background
+      body: Stack(
+        children: [
+          Center(
+            child: _playerWidget,
+          ),
+          if (!_isFullScreen) // Show close button only when not in full screen
+            Positioned(
+              top: 40,
+              right: 20,
+              child: TextButton(
+                onPressed: () {
+                  if (_isFullScreen) {
+                    _toggleFullScreen();
+                  }
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Close',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

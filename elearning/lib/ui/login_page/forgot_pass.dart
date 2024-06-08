@@ -27,7 +27,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         children: [
           Expanded(

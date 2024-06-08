@@ -143,11 +143,11 @@ Widget buildSection({
             width: 180.0, // Adjusted width to match the design
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Colors.white, // Background color
+              color: Colors.grey[200], // Background color
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(
-                color: Theme.of(context ).secondaryHeaderColor,
-                width: 2.0,
+                color: Colors.grey.withOpacity(0.5),
+                width: 1.0,
               ),
               boxShadow: [
                 BoxShadow(

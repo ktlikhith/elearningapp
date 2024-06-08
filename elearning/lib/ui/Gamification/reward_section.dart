@@ -120,10 +120,10 @@ class _RewardSectionState extends State<RewardSection> {
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          color: Colors.grey[100],
+          color: Colors.grey[200],
           border: Border.all(
-            color: Theme.of(context).secondaryHeaderColor,
-            width: 2.0,
+            color: Colors.grey.withOpacity(0.5),
+            width: 1.0,
           ),
         ),
         child: Row(
@@ -149,7 +149,7 @@ class _RewardSectionState extends State<RewardSection> {
                   style: const TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
+                   
                   ),
                 ),
                 const SizedBox(height: 4.0),

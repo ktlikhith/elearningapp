@@ -87,131 +87,140 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
     );
   }
 
-  Widget _buildSection(BuildContext context, CourseData course) {
-    const double cardHeight = 240;
-    const double titleMaxHeight = 36;
+Widget _buildSection(BuildContext context, CourseData course) {
+  const double cardHeight = 240; // Define a constant height for the card
+  const double cardWidth = 300; // Define a constant width for the card
+  const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
-    return SizedBox(
-      width: 240,
-      height: cardHeight,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 0,
-                blurRadius: 2,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Material(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.white,
-            child: InkWell(
-              onTap: () => showMLPopup(
-                context,
-                course.id,
-                course.name,
-                course.courseProgress.toString(),
-                course.courseDescription,
-                course.courseStartDate,
-                course.courseEndDate,
-                course.courseVideoUrl,
-                course.courseDuration,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        double availableHeight = constraints.maxHeight - titleMaxHeight - 80;
-                        return Container(
-                          height: availableHeight,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8.0),
-                              topRight: Radius.circular(8.0),
-                            ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8.0),
-                              topRight: Radius.circular(8.0),
-                            ),
-                            child: Image.network(
-                              course.getImageUrlWithToken(widget.token),
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/coursedefaultimg.jpg',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                );
-                              },
-                            ),
-                          ),
+  return SizedBox(
+    width: cardWidth,
+    height: cardHeight, // Set the card height to a constant value
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 0,
+              blurRadius: 2,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white,
+          child: InkWell(
+            onTap: () => showMLPopup(
+              context,
+              course.id,
+              course.name,
+              course.courseProgress.toString(),
+              course.courseDescription,
+              course.courseStartDate,
+              course.courseEndDate,
+              course.courseVideoUrl,
+              course.courseDuration,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: cardHeight * 0.5, // Adjust image height
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image.network(
+                      course.getImageUrlWithToken(widget.token),
+                      fit: BoxFit.fill,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Return a default image when loading fails
+                        return Image.asset(
+                          'assets/images/coursedefaultimg.jpg',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
                         );
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          course.name,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(height: 6),
-                        Text(
-                          'End Date: ${course.courseEndDate}',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'End Date: ${course.courseEndDate}',
+                        style: TextStyle(
+                          color: Colors.grey[600],
                         ),
-                        SizedBox(height: 8),
-                        Container(
-                          height: 10,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: FractionallySizedBox(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: course.courseProgress / 100,
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
                             child: Container(
+                              height: 10,
                               decoration: BoxDecoration(
-                                color: getProgressBarColor(course.courseProgress),
+                                color: Colors.grey[300],
                                 borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: FractionallySizedBox(
+                                alignment: Alignment.centerLeft,
+                                widthFactor: course.courseProgress / 100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: getProgressBarColor(course.courseProgress),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                          SizedBox(width: 8),
+                          Text(
+                            '${course.courseProgress}%',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Color getProgressBarColor(int progress) {
     if (progress >= 0 && progress <= 35) {
