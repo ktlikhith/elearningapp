@@ -29,14 +29,17 @@ Widget buildProgressBar(String title, value) {
         SizedBox(height: 8), // Add some space between the title and progress bar
         LinearPercentIndicator(
           barRadius: Radius.circular(30),
-          lineHeight: 18.0,
+          lineHeight: 16.5,
           linearStrokeCap: LinearStrokeCap.roundAll,
           percent: intValue / 100,
           backgroundColor: Color.fromARGB(255, 204, 205, 205),
           progressColor: Colors.orange,
-          center: Text(
-            "$intValue%",
-            style: TextStyle(fontSize: 12, color: Colors.black),
+          center: Padding(
+            padding: const EdgeInsets.only(bottom: 2.0),
+            child: Text(
+              "$intValue%",
+              style: TextStyle(fontSize: 12, color: Colors.black),
+            ),
           ),
         ),
       ],

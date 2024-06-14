@@ -35,7 +35,7 @@ class RankLevel extends StatelessWidget {
         }
 
         return Container(
-           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
           // decoration: BoxDecoration(
           //   color: Colors.grey[200],
           //   borderRadius: BorderRadius.circular(10), // Adjusted for consistency

@@ -128,7 +128,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: cardHeight * 0.5, // Adjust image height
+                  height: cardHeight * 0.6, // Adjust image height
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -143,7 +143,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                     ),
                     child: Image.network(
                       course.getImageUrlWithToken(widget.token),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       width: double.infinity,
                       errorBuilder: (context, error, stackTrace) {
                         // Return a default image when loading fails
@@ -157,7 +157,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -166,18 +166,18 @@ Widget _buildSection(BuildContext context, CourseData course) {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 15.5,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 4),
                       Text(
                         'End Date: ${course.courseEndDate}',
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 4),
                       Row(
                         children: [
                           Expanded(
@@ -199,7 +199,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                               ),
                             ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 4),
                           Text(
                             '${course.courseProgress}%',
                             style: TextStyle(

@@ -87,11 +87,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', const Color.fromARGB(255, 240, 37, 33),
+              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', Color.fromARGB(255, 242, 26, 23),
                   'assets/dashboardicons/due past.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', const Color.fromARGB(255, 240, 222, 64),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', Color.fromARGB(255, 238, 219, 41),
                   'assets/dashboardicons/Due soon.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 107, 243, 80),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 83, 244, 51),
                   'assets/dashboardicons/due later.png'),
             ],
           ),
@@ -124,62 +124,86 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
 
   Widget buildSection(String title, String number, Color color, String iconPath) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-        //    boxShadow: [
-        //   BoxShadow(
-        //     color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
-        //     spreadRadius: 2,
-        //     blurRadius: 2,
-        //     offset: Offset(0, 4),
-        //   ),
-        // ],
-          
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(
-           color: Colors.grey.withOpacity(0.5),
-            width: 1.0,
-          
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        clipBehavior: Clip.antiAlias,
+        children: [
+          Container(
+            width: 200,
+            height: 80,
+            padding: const EdgeInsets.only(bottom: 10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9.0),
+              border: Border.all(
+                color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
+              ),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 18.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    number,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color,
-              ),
-              child: Center(
-                child: Image.asset(iconPath),
-              ),
-            ),
-            const SizedBox(width: 20.0),
-            Column(
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+          Positioned(
+            right: -10,
+            top: -30,
+            bottom: 0,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(45.0),
+                    bottomRight: Radius.circular(45.0),
+                    bottomLeft: Radius.circular(45.0),
                   ),
                 ),
-                const SizedBox(height: 6.0, width: 50.0),
-                Text(
-                  number,
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+                child: Center(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.9),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: Center(
+                      child: Image.asset(iconPath, width: 30, height: 30, ),
+                    ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

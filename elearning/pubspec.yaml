@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.2.6
   pie_chart: ^5.4.0
   webview_flutter: ^2.8.0
+ 
   connectivity_plus: ^6.0.3
   shimmer: ^3.0.0
   path_provider: ^2.0.11
@@ -68,6 +69,11 @@ dependencies:
   intl: ^0.17.0
   persistent_bottom_nav_bar_v2: 4.2.8
   floating_bottom_navigation_bar: ^1.5.2
+  open_file: ^3.2.1
+  image: ^3.0.1
+  clay_containers: ^0.3.4
+  confetti: ^0.7.0
+  
   
   # androidx_multidex: ^1.1.0
 

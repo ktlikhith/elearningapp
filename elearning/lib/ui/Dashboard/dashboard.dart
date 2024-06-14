@@ -6,6 +6,7 @@ import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -223,40 +224,67 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FutureBuilder<void>(
-                  future: _fetchUserInfoFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return _buildUserInfoSkeleton();
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error loading user info'));
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Welcome, $_userName!',
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Explore your courses and start learning.',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
+  future: _fetchUserInfoFuture,
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return _buildUserInfoSkeleton();
+    } else if (snapshot.hasError) {
+      return Center(child: Text('Error loading user info'));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        child: Container(
+          height: MediaQuery.of(context).size.height*0.09,
+          color: Colors.grey[300], // Set the desired background color here
+          padding: const EdgeInsets.all(0.0), // Add some padding if needed
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0,top: 8),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Welcome, ',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).secondaryHeaderColor, 
                         ),
-                      );
-                    }
-                  },
+                      ),
+                      TextSpan(
+                        text: '$_userName!',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black, // Set the color for the username
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 25.0),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Text(
+                  'Explore your courses and start learning.',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  },
+),
+
+                const SizedBox(height: 12.0),
                 FutureBuilder<void>(
                   future: _fetchOtherSectionsFuture,
                   builder: (context, snapshot) {

@@ -113,7 +113,6 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart';
 
 int toIntValue(dynamic value) {
@@ -130,8 +129,8 @@ Widget buildSection({
   required String iconPath,
   required var number,
   required String title,
-  required context,
-
+  required BuildContext context,
+  required Color1,
   bool isLoading = false,
 }) {
   int intValue = toIntValue(number);
@@ -139,68 +138,93 @@ Widget buildSection({
     padding: const EdgeInsets.all(8.0),
     child: isLoading
         ? _buildShimmerEffect()
-        : Container(
-            width: 180.0, // Adjusted width to match the design
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[200], // Background color
-              borderRadius: BorderRadius.circular(12.0),
-              border: Border.all(
-                color: Colors.grey.withOpacity(0.5),
-                width: 1.0,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 2,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, // Circle background color
+        : Stack(
+            clipBehavior: Clip.antiAlias,
+            children: [
+              Container(
+                width: 200,
+                height: 80,
+                padding: const EdgeInsets.only(bottom: 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9.0),
+                  border: Border.all(
+                    color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
                   ),
-                  child: Center(
-                    child: Image.asset(
-                      iconPath,
-                      width: 35.0,
-                      height: 35.0,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Text(
-                        '$intValue',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14.0,fontWeight: FontWeight.bold,color: Colors.grey[700],
-                      ),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-              ],
-            ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$intValue',
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueGrey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                right: -10,
+                top: -30,
+                bottom: 0,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Color1.withOpacity(0.2),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(45.0),
+                        bottomRight: Radius.circular(45.0),
+                        bottomLeft: Radius.circular(45.0),
+                      ),
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Color1.withOpacity(0.9),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            bottomRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(20.0),
+                          ),
+                        ),
+                        child: Center(
+                          child: Image.asset(iconPath, width: 30, height: 30),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
   );
 }
@@ -209,43 +233,19 @@ Widget _buildShimmerEffect() {
   return Shimmer.fromColors(
     baseColor: Colors.grey[300]!,
     highlightColor: Colors.grey[100]!,
-    child: Container(
-      width: 150.0, // Adjusted width to match the design
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: const Color.fromARGB(255, 227, 236, 227),
-          width: 2.0,
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: 200,
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(
+            color: const Color.fromARGB(255, 227, 236, 227),
+            width: 2.0,
+          ),
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 40.0,
-            height: 40.0,
-            color: Colors.grey,
-          ),
-          SizedBox(width: 16.0),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 40.0,
-                height: 16.0,
-                color: Colors.grey,
-              ),
-              SizedBox(height: 8.0),
-              Container(
-                width: 100.0,
-                height: 16.0,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-        ],
       ),
     ),
   );
