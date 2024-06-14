@@ -191,6 +191,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glass/glass.dart'; // Import the glass package
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 
 class MLPopup extends StatefulWidget {
@@ -214,7 +215,7 @@ class MLPopup extends StatefulWidget {
       required this.courseStartDate,
       required this.courseEndDate,
       required this.course_videourl,
-      required this.courseDuration})
+      required this.courseDuration, })
       : super(key: key);
 
   @override
@@ -300,10 +301,10 @@ class _MLPopupState extends State<MLPopup> {
       ),
       elevation: 0.0,
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      child: contentBox(context).asGlass(
-        // tintColor: Color.fromARGB(255, 255, 255, 255),
-        clipBorderRadius: BorderRadius.circular(30.0),
-      ),
+      child: contentBox(context)
+      //   // tintColor: Color.fromARGB(255, 255, 255, 255),
+      //   clipBorderRadius: BorderRadius.circular(30.0),
+      
     );
   }
 
@@ -321,8 +322,9 @@ class _MLPopupState extends State<MLPopup> {
           const SizedBox(height: 10.0),
           Text(
             widget.course_name,
-            style: const TextStyle(
-              fontSize: 18.0,
+            
+            style:  TextStyle(
+              fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -337,9 +339,11 @@ class _MLPopupState extends State<MLPopup> {
             widget.Cdiscrpition.isNotEmpty
                 ? removeHtmlTags(widget.Cdiscrpition)
                 : 'No description available',
-            style: const TextStyle(
+            style:  TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+              
             ),
           ),
           const SizedBox(height: 20.0),

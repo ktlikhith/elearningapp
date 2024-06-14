@@ -308,3 +308,4 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
     );
   }
 }
+

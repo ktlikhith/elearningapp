@@ -88,88 +88,111 @@ class _RewardSectionState extends State<RewardSection> {
     );
   }
 
-  Widget _buildPointsCategories({
-    required String loginPoints,
-    required String quizPoints,
-    required String spinwheelPoints,
-    required String rewardsReceivedPoints,
-  }) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            buildPointsCategory(context, 'Login Points', FontAwesomeIcons.laptopMedical, loginPoints),
-            buildPointsCategory(context, 'Daily Quiz Points', FontAwesomeIcons.brain, quizPoints),
-            buildPointsCategory(context, 'Spin Wheel Points', FontAwesomeIcons.dharmachakra, spinwheelPoints),
-            buildPointsCategory(context, 'Reward Received', FontAwesomeIcons.gift, rewardsReceivedPoints),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildPointsCategory(BuildContext context, String title, IconData icon, String points) {
-    return Padding(
+Widget _buildPointsCategories({
+  required String loginPoints,
+  required String quizPoints,
+  required String spinwheelPoints,
+  required String rewardsReceivedPoints,
+}) {
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Container(
-        width: 220,
-        height: 100,
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-          color: Colors.grey[200],
-          border: Border.all(
-            color: Colors.grey.withOpacity(0.5),
-            width: 1.0,
+      child: Row(
+        children: [
+          buildPointsCategory(context, 'Login Points', FontAwesomeIcons.laptopMedical, loginPoints, Color.fromARGB(255, 49, 205, 54)),
+          buildPointsCategory(context, 'Daily Quiz Points', FontAwesomeIcons.brain, quizPoints, const Color.fromARGB(255, 32, 126, 204)),
+          buildPointsCategory(context, 'Spin Wheel Points', FontAwesomeIcons.dharmachakra, spinwheelPoints, const Color.fromARGB(255, 255, 0, 0)),
+          buildPointsCategory(context, 'Reward Received', FontAwesomeIcons.gift, rewardsReceivedPoints, Color.fromARGB(255, 244, 54, 117)),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildPointsCategory(BuildContext context, String title, IconData icon, String points, Color backgroundColor) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Stack(
+      clipBehavior: Clip.antiAlias, children: [
+        Container(
+          width: 220,
+          height: 90,
+          padding: const EdgeInsets.only(bottom: 10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(9.0),
+            border: Border.all(color: Theme.of(context).secondaryHeaderColor.withOpacity(.4),),
+            color: Colors.white,
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color.fromARGB(255, 243, 244, 243),
-              ),
-              child: Center(
-                child: Icon(icon, size: 25,  color: Colors.black87),
-              ),
-            ),
-            const SizedBox(width: 20.0),
-            Column(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 18.0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  points,
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4.0),
                 Text(
                   title,
                   style: const TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
-                   
-                  ),
-                ),
-                const SizedBox(height: 4.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0),
-                  child: Text(
-                    points,
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    color: Colors.blueGrey,
                   ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+        Positioned(
+          right: -10,
+          top: -30,
+          bottom: 0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: backgroundColor.withOpacity(0.2),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(45.0),
+                  bottomRight: Radius.circular(45.0),
+                  bottomLeft: Radius.circular(45.0),
+                ),
+              ),
+              child: Center(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: backgroundColor.withOpacity(0.9),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                      bottomLeft: Radius.circular(20.0),
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(icon, size: 20, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildShimmerSkeleton() {
     return SingleChildScrollView(
