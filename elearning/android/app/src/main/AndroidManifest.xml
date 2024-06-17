@@ -4,9 +4,9 @@
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     
     <!-- <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
@@ -21,8 +21,11 @@
         android:name="${applicationName}"
         android:allowBackup="true"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
          android:theme="@style/AppTheme"
+         android:requestLegacyExternalStorage="true"
         android:icon="@drawable/eapplogo">
+        
         
     
     
@@ -33,6 +36,7 @@
             android:exported="true"
             android:enableOnBackInvokedCallback="true"
              android:requestLegacyExternalStorage="true"
+             
             
            
             android:launchMode="singleTop"
@@ -61,11 +65,11 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility?hl=en and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+    <!-- Required to query activities that can process text, see: -->
+         <!-- https://developer.android.com/training/package-visibility?hl=en and
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT. -->
 
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+         <!-- In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

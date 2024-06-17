@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event_service.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -143,12 +144,12 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                               onPressed: () {
                                 if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
                                   String moduleUrl = sessions[index].url;
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage('Live Events', moduleUrl,widget.token),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => WebViewPage('Live Events', moduleUrl,widget.token),
+                                  //   ),
+                                  // );
                                 }
                               },
                               child: Row(

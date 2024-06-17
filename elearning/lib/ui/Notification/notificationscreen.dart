@@ -1,5 +1,6 @@
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/notification_service.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -259,12 +260,12 @@ class NotificationDetailsScreen extends StatelessWidget {
               onPressed: () {
                 if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
                   String moduleUrl = notification.contextUrl;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WebViewPage('Insights', moduleUrl,token),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => WebViewPage('Insights', moduleUrl,token),
+                  //   ),
+                  // );
                 }
               },
               style: ButtonStyle(
