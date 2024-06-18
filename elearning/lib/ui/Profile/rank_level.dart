@@ -74,7 +74,7 @@ class RankLevel extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16, // Increased font size for better readability
+                  fontSize: 14.7, // Increased font size for better readability
                 ),
               ),
             ],

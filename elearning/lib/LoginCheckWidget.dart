@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginCheckWidget extends StatefulWidget {
@@ -25,7 +25,9 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
     });
 
     if (_isLoggedIn) {
-      // Token exists, navigate directly to HomeScreen
+      // Perform SSO login and store session data
+
+      // Navigate to HomeScreen
       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
     } else {
       // No token, navigate to LandingPage
@@ -35,6 +37,20 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(); // Placeholder widget, not used for UI
+    return Scaffold(
+      body: SplashScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Image.asset('assets/images/eapplogo.png'), // Replace with your splash screen image
+      ),
+    );
   }
 }

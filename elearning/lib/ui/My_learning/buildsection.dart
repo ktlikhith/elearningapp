@@ -150,7 +150,7 @@ Widget buildSection({
                   border: Border.all(
                     color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
                   ),
-                  color: Colors.white,
+                  color: Color1.withOpacity(0.1),
                   boxShadow: [
                     BoxShadow(
                       color: const Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),

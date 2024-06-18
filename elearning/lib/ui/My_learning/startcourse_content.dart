@@ -553,6 +553,7 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/course_content.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/My_learning/video_player_screen.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:flutter/material.dart';
@@ -930,7 +931,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'customcert', certificateurl,widget.token),
+                                      builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
                                     ),
                                   );
                                 }

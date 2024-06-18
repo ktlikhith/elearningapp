@@ -122,7 +122,7 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(9.0),
             border: Border.all(color: Theme.of(context).secondaryHeaderColor.withOpacity(.4),),
-            color: Colors.white,
+            color: backgroundColor.withOpacity(0.1),
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 18.0),
