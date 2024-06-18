@@ -444,41 +444,46 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ClayContainer(
-                      color: const Color.fromARGB(255, 227, 241, 240),
-                      height: screenHeight * 0.23,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      borderRadius: MediaQuery.of(context).size.height * 1,
-                      customBorderRadius: const BorderRadius.only(
-                        topRight: Radius.elliptical(150, 150),
-                        bottomLeft: Radius.circular(50),
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          Stack(
-                            alignment: Alignment.bottomRight,
-                            children: [
-                              CircleAvatar(
-                                radius: 50,
-                                backgroundImage: data['profilePictureUrl'].isNotEmpty
-                                    ? CachedNetworkImageProvider(data['profilePictureUrl'])
-                                    : null,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            data['studentName'],
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            data['studentEmail'],
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
+                  ClayContainer(
+  color: const Color.fromARGB(255, 227, 241, 240),
+  height: screenHeight * 0.23,
+  width: MediaQuery.of(context).size.width * 0.9,
+  borderRadius: MediaQuery.of(context).size.height * 1,
+  customBorderRadius: const BorderRadius.only(
+    topRight: Radius.elliptical(150, 150),
+    bottomLeft: Radius.circular(50),
+  ),
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      return Column(
+        children: [
+          const SizedBox(height: 30),
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              CircleAvatar(
+                radius: constraints.maxHeight * 0.2, // Adjust radius based on available height
+                backgroundImage: data['profilePictureUrl'].isNotEmpty
+                    ? CachedNetworkImageProvider(data['profilePictureUrl'])
+                    : null,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            data['studentName'],
+            style: TextStyle(fontSize: constraints.maxHeight * 0.1, fontWeight: FontWeight.bold), // Adjust font size
+          ),
+          Text(
+            data['studentEmail'],
+            style: TextStyle(fontSize: constraints.maxHeight * 0.08), // Adjust font size
+          ),
+        ],
+      );
+    },
+  ),
+),
+
                     const SizedBox(height: 10),
                     RankLevel(token: widget.token),
                   ],
@@ -492,58 +497,84 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  Widget _buildAchievementUI(Map<String, dynamic> data) {
-    return Container(
-      width: 370,
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).secondaryHeaderColor.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 2),
+Widget _buildAchievementUI(Map<String, dynamic> data) {
+  return Container(
+    width: 370,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: Theme.of(context).secondaryHeaderColor.withOpacity(0.2),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 2),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(15),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'Achievements',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
             children: [
-              buildAchievement(data['userPoints'], 'Points', 'assets/profileicons/Points.png'),
-              buildAchievement(data['badgesEarn'].toString(), 'Badges', 'assets/profileicons/Badges.png'),
-              buildAchievement(data['userLevel'], 'Level', 'assets/profileicons/Level.png'),
+              const Text(
+                'Achievements',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  buildAchievement(data['userPoints'], 'Points', 'assets/profileicons/Points.png'),
+                  buildAchievement(data['badgesEarn'].toString(), 'Badges', 'assets/profileicons/Badges.png'),
+                  buildAchievement(data['userLevel'], 'Level', 'assets/profileicons/Level.png'),
+                ],
+              ),
             ],
           ),
-          const SizedBox(height: 10),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey[300],
+        ),
+        const SizedBox(height: 20),
+        // Divider(
+        //   height: 1,
+        //   thickness: 1,
+        //   color: Colors.grey[300],r
+        // ),
+        // const SizedBox(height: 25),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 0),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(15),
           ),
-          const SizedBox(height: 25),
-          const Text(
-            'Progress',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              children: [
+                const Text(
+                  'Progress',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                buildProgressBar('Completed', data['completioned']),
+                buildProgressBar('In Progress', data['inProgress']),
+                buildProgressBar('Total Not Started', data['totalNotStarted']),
+              ],
+            ),
           ),
-          const SizedBox(height: 10),
-          buildProgressBar('Completed', data['completioned']),
-          buildProgressBar('In Progress', data['inProgress']),
-          buildProgressBar('Total Not Started', data['totalNotStarted']),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
+
 
   Widget _buildLoadingSkeleton() {
     return Shimmer.fromColors(

@@ -132,7 +132,7 @@ class MyLearningAppBody extends StatelessWidget {
                   number: reportData?.completedActivity ?? 0,
                   title: 'Completed',
                   context: context,
-                    Color1:Color.fromARGB(255, 243, 37, 126),
+                    Color1:Color.fromARGB(255, 61, 243, 37),
                 ),
                 buildSection(
                   iconPath: 'assets/learning icons/Average.png',

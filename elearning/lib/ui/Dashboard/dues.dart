@@ -137,7 +137,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
               border: Border.all(
                 color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
               ),
-              color: Colors.white,
+              color: color.withOpacity(0.1),
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 18.0),

@@ -88,7 +88,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
-            'Live Session',
+            'Live Event',
           ),
           centerTitle: false,
           automaticallyImplyLeading: false,
@@ -113,43 +113,73 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                     return Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: Colors.white, // Set background color to white
-                        borderRadius: BorderRadius.circular(8.0), // Set border radius
-                        border: Border.all(color: Colors.grey[300]!), // Set border color
+                        color: const Color.fromARGB(255, 227, 241, 240), // Set background color to white
+                        borderRadius: BorderRadius.circular(12.0), // Set border radius
+                        border: Border.all(color: Color.fromARGB(255, 173, 172, 172)!), // Set border color
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                     
                           Container(
+                             
                             width: double.infinity,
+                                child:ClipRRect(
+                                  borderRadius: BorderRadius.circular(9),
                             child: Image.network(
                               sessions[index].imgUrl,
                               fit: BoxFit.cover,
-                              height: 250,
+                              height: 200,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          ),
+                          SizedBox(height: 4),
                           ListTile(
                             title: Text(
                               sessions[index].activityName,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
                             ),
-                            subtitle: Text(
-                              'Speaker: ${sessions[index].username}\nStart Time: ${sessions[index].startTime}\nMode: ${sessions[index].sessionMod}',
-                            ),
+                           subtitle: Text.rich(
+  TextSpan(
+    children: [
+      const TextSpan(
+        text: 'Speaker: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+      ),
+      TextSpan(
+        text: '${sessions[index].username}\n',
+        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+      ),
+      const TextSpan(
+        text: 'Start Time: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+      ),
+      TextSpan(
+        text: '${sessions[index].startTime}\n',
+        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+      ),
+      const TextSpan(
+        text: 'Mode: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+      ),
+      TextSpan(
+        text: '${sessions[index].sessionMod}',
+        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+      ),
+    ],
+  ),
+),
+
                           ),
-                          SizedBox(height: 8),
+                          SizedBox(height: 2),
                           Center(
                             child: TextButton(
                               onPressed: () {
                                 if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
                                   String moduleUrl = sessions[index].url;
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => WebViewPage('Live Events', moduleUrl,widget.token),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage('Live Event', moduleUrl,widget.token),
+                                    ),
+                                  );
                                 }
                               },
                               child: Row(

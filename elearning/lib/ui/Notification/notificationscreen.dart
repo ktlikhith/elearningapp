@@ -260,12 +260,12 @@ class NotificationDetailsScreen extends StatelessWidget {
               onPressed: () {
                 if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
                   String moduleUrl = notification.contextUrl;
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => WebViewPage('Insights', moduleUrl,token),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WebViewPage('Insights', moduleUrl,token),
+                    ),
+                  );
                 }
               },
               style: ButtonStyle(

@@ -57,7 +57,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Continue Watching'),
+        title: Text('Continue Learning'),
         centerTitle: false,
         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
@@ -78,8 +78,8 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(
-        //borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: Colors.grey[400]!),
+        borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(color: const Color.fromARGB(255, 16, 16, 16)!),
       ),
       child: Container(
         color: Colors.white,
@@ -89,8 +89,10 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
             width: 100.0,
             height: 120.0,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10.0),
             ),
+            child:ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
               course.getImageUrlWithToken(widget.token),
               fit: BoxFit.cover,
@@ -107,11 +109,12 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
               },
             ),
           ),
+          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                course.name,
+                course.name,maxLines: 2,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

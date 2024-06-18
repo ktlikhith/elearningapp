@@ -59,6 +59,7 @@ dependencies:
   webview_flutter_android: ^3.16.3
   webview_flutter_platform_interface: ^2.10.0
   webview_flutter_wkwebview: 
+  flutter_local_notifications: ^9.0.0+1
  
   connectivity_plus: ^6.0.3
   shimmer: ^3.0.0

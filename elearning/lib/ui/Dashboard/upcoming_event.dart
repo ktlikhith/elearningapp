@@ -79,7 +79,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
           return Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Column(
@@ -97,7 +97,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 ),
                 const SizedBox(height: 15.0),
                 SizedBox(
-                  height: 150,
+                  height: 115,
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: snapshot.data!.length,
@@ -162,10 +162,10 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color.fromARGB(255, 227, 241, 240),
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
@@ -197,10 +197,10 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      title,maxLines: 1,
                       style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 4.0),
                     Text(
                       dateTime,
                       style: TextStyle(fontSize: 16.0),

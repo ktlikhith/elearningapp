@@ -69,7 +69,7 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
         if (state is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Authentication failed. Please check your credentials.'),
+              content: Text('Authentication failed. Please check your credentials/INTERNET CONNECTION.'),
             ),
           );
         }

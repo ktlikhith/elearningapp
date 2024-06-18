@@ -207,7 +207,6 @@
   
   
 // }
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -218,8 +217,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DownloadManager {
+  static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   static Future<Directory> getDownloadDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
     final downloadDirectory = Directory('${directory.path}/Download');
@@ -330,14 +332,48 @@ class DownloadManager {
         return;
       }
 
+      int notificationId = 0;
+      await _flutterLocalNotificationsPlugin.show(
+        notificationId,
+        'Downloading $fileName',
+        'Download started...',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'download_channel',
+            'Download',
+            channelDescription: 'Downloading file',
+            importance: Importance.low,
+            priority: Priority.low,
+          ),
+        ),
+      );
+
       await dio.download(
         url,
         filePath,
-        onReceiveProgress: (receivedBytes, totalBytes) {
+        onReceiveProgress: (receivedBytes, totalBytes) async {
           if (totalBytes != -1) {
             double progress = (receivedBytes / totalBytes) * 100;
             print('Download progress: $progress%');
-            // Update UI with download progress if needed
+            // Update notification with download progress
+            await _flutterLocalNotificationsPlugin.show(
+              notificationId,
+              'Downloading $fileName',
+              'Download progress: ${progress.toStringAsFixed(0)}%',
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  'download_channel',
+                  'Download',
+                  channelDescription: 'Downloading file',
+                  importance: Importance.low,
+                  priority: Priority.low,
+                  ongoing: true,
+                  showProgress: true,
+                  maxProgress: 100,
+                  progress: progress.toInt(),
+                ),
+              ),
+            );
           }
         },
       );
@@ -374,6 +410,21 @@ class DownloadManager {
 
       // Example of post-download operation
       print('Download complete. Showing message to user.');
+      await _flutterLocalNotificationsPlugin.show(
+        notificationId,
+        'Download Complete',
+        'The file $fileName has been downloaded successfully.',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'download_channel',
+            'Download',
+            channelDescription: 'Downloading file',
+            importance: Importance.high,
+            priority: Priority.high,
+          ),
+        ),
+      );
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

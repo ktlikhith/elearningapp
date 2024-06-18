@@ -260,11 +260,10 @@ class _LeaderboardState extends State<Leaderboard> {
     try {
       final leaderboardUsers = await LeaderboardService.fetchLeaderboard(widget.token);
       setState(() {
-        users = List<User>.from(leaderboardUsers); // Ensure types match
+        users = List<User>.from(leaderboardUsers);
       });
     } catch (e) {
       print('Error fetching leaderboard: $e');
-      // Handle error
     } finally {
       setState(() {
         isLoading = false;
@@ -283,11 +282,12 @@ class _LeaderboardState extends State<Leaderboard> {
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Shimmer.fromColors(
-                              baseColor: Colors.black,
-                          highlightColor: Theme.of(context).secondaryHeaderColor,child:  Text(
-              'Leaderboard',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+              baseColor: Colors.black,
+              highlightColor: Theme.of(context).secondaryHeaderColor,
+              child: Text(
+                'Leaderboard',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           SizedBox(height: 16),
@@ -306,13 +306,13 @@ class _LeaderboardState extends State<Leaderboard> {
 
   Widget _buildShimmerSkeleton() {
     return SizedBox(
-      height: 300, // Adjust height as needed
+      height: 300,
       child: Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: 5, // Adjust the number of shimmer items as needed
+          itemCount: 5,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
@@ -358,6 +358,10 @@ class _LeaderboardState extends State<Leaderboard> {
         ),
       ),
     );
+  }
+
+  String imageWithToken(String imgUrl) {
+    return '$imgUrl?token=${widget.token}';
   }
 
   Widget buildLeaderBoard() {
@@ -412,8 +416,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 DataCell(
                   index < 3
                       ? Shimmer.fromColors(
-                        
-                        baseColor: Colors.black,
+                          baseColor: Colors.black,
                           highlightColor: Theme.of(context).secondaryHeaderColor,
                           child: Center(
                             child: Text('${index + 1}'),
@@ -428,13 +431,13 @@ class _LeaderboardState extends State<Leaderboard> {
                       ? Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(user.image),
+                              backgroundImage: NetworkImage(imageWithToken(user.image)),
                             ),
                             SizedBox(width: 10),
                             Expanded(
                               child: Shimmer.fromColors(
-                              baseColor: Colors.black,
-                          highlightColor: Theme.of(context).secondaryHeaderColor,
+                                baseColor: Colors.black,
+                                highlightColor: Theme.of(context).secondaryHeaderColor,
                                 child: Text(user.name),
                               ),
                             ),
@@ -443,7 +446,7 @@ class _LeaderboardState extends State<Leaderboard> {
                       : Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(user.image),
+                              backgroundImage: NetworkImage(imageWithToken(user.image)),
                             ),
                             SizedBox(width: 10),
                             Expanded(
@@ -458,14 +461,14 @@ class _LeaderboardState extends State<Leaderboard> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Shimmer.fromColors(
-                          baseColor: Colors.black,
-                          highlightColor: Theme.of(context).secondaryHeaderColor,
+                              baseColor: Colors.black,
+                              highlightColor: Theme.of(context).secondaryHeaderColor,
                               child: Text(user.rank),
                             ),
                             SizedBox(width: 10),
                             CircleAvatar(
                               radius: 18,
-                              backgroundImage: NetworkImage(user.rank_icon),
+                              backgroundImage: NetworkImage(imageWithToken(user.rank_icon)),
                             ),
                           ],
                         )
@@ -476,7 +479,7 @@ class _LeaderboardState extends State<Leaderboard> {
                             SizedBox(width: 10),
                             CircleAvatar(
                               radius: 18,
-                              backgroundImage: NetworkImage(user.rank_icon),
+                              backgroundImage: NetworkImage(imageWithToken(user.rank_icon)),
                             ),
                           ],
                         ),
@@ -484,7 +487,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 DataCell(
                   index < 3
                       ? Shimmer.fromColors(
-                       baseColor: Colors.black,
+                          baseColor: Colors.black,
                           highlightColor: Theme.of(context).secondaryHeaderColor,
                           child: Center(
                             child: Text(user.points),

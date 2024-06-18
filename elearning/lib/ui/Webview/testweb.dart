@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
@@ -150,7 +149,7 @@ String? _extractWebUrlFromIntent(String intentUrl) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text(widget.title),backgroundColor: Colors.black,),
       body: WebViewWidget(controller: _controller),
     );
   }

@@ -167,6 +167,8 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
       ),
+           child: ClipRRect(
+            borderRadius: BorderRadius.circular(9.0),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -186,6 +188,7 @@ Widget buildSingleCourseSection(BuildContext context, Course course) {
           ),
         ],
       ),
+           ),
     ),
     const SizedBox(height: 6.0), // Add spacing between video section and other content
     Text(
