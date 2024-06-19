@@ -209,6 +209,7 @@
 // }
 import 'dart:convert';
 import 'dart:io';
+// import 'dart:js';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:path/path.dart';
@@ -406,7 +407,9 @@ class DownloadManager {
       DateTime downloadDate = DateTime.now();
       await _saveMetadata(fileName, url, actualChecksum, downloadDate);
 
-      Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: token);
+      // Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: token);
+  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: token);
+
 
       // Example of post-download operation
       print('Download complete. Showing message to user.');

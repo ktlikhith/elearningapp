@@ -109,7 +109,7 @@ class _MyMorePageState extends State<MyMorePage> {
           ),
           InkWell(
             onTap: () {
-                Navigator.of(context).pushReplacementNamed(RouterManger.downloads,arguments: widget.token);
+                Navigator.of(context).pushNamed(RouterManger.downloads,arguments: widget.token);
                 print("download selected");
               // Implement downloads functionality here
             },

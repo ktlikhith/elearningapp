@@ -676,6 +676,7 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Downloads'),
@@ -684,7 +685,8 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-          Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
+          // Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
+          Navigator.pop(context,true);
           },
         ),
       ),
