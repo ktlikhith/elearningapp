@@ -60,6 +60,7 @@ dependencies:
   webview_flutter_platform_interface: ^2.10.0
   webview_flutter_wkwebview: 
   flutter_local_notifications: ^9.0.0+1
+  persistent_bottom_nav_bar: ^5.0.2
  
   connectivity_plus: ^6.0.3
   shimmer: ^3.0.0
@@ -78,6 +79,9 @@ dependencies:
   image: ^4.2.0
   clay_containers: ^0.3.4
   confetti: ^0.7.0
+  circle_nav_bar: ^2.0.1+1
+  
+
   
   
   # androidx_multidex: ^1.1.0

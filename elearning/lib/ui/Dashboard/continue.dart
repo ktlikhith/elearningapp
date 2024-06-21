@@ -111,7 +111,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
         ),
         child: Material(
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          color: Color.fromARGB(255, 227, 241, 240),
           child: InkWell(
             onTap: () => showMLPopup(
               context,
@@ -245,7 +245,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
               child: Text(
                 'Continue Learning',
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),

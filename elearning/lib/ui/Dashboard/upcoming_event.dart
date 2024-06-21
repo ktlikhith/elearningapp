@@ -97,7 +97,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 ),
                 const SizedBox(height: 15.0),
                 SizedBox(
-                  height: 115,
+                  height: 100,
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: snapshot.data!.length,
