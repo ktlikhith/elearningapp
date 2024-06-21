@@ -99,7 +99,7 @@ class _WebViewPageState extends State<WebViewPage> {
   bool _isExternalUrl(String url) {
     // Add your logic to determine if the URL is an external link
     // For example, checking if it is a Google Meet link or a certificate link
-    return url.contains('googlemeet') || url.contains('mod/customcert/view.php?id=267&downloadown=1');
+    return url.contains('googlemeet') || url.contains('mod/customcert/view.php')||url.contains('downloadown=1');
   }
 
   void _launchURL(String url) async {

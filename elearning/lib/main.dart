@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Color.fromARGB(255, 10, 10, 10),
           secondaryHeaderColor: Colors.orange,
-          backgroundColor: Colors.grey[100], // Set the background color for all pages
+          backgroundColor: Color.fromARGB(255, 245, 250, 249), // Set the background color for all pages
           textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
           appBarTheme: AppBarTheme(
             titleTextStyle: GoogleFonts.nunito(

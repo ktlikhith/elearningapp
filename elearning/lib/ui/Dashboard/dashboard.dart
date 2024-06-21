@@ -234,21 +234,21 @@ class _DashboardPageState extends State<DashboardPage> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: Container(
-          height: MediaQuery.of(context).size.height*0.09,
+          height: MediaQuery.of(context).size.height*0.08,
           color: Colors.grey[300], // Set the desired background color here
           padding: const EdgeInsets.all(0.0), // Add some padding if needed
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 16.0,top: 8),
+                padding: const EdgeInsets.only(left: 16.0,top: 12),
                 child: RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
                         text: 'Welcome, ',
                         style: TextStyle(
-                          fontSize: 24.0,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).secondaryHeaderColor, 
                         ),
@@ -256,7 +256,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       TextSpan(
                         text: '$_userName!',
                         style: TextStyle(
-                          fontSize: 24.0,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black, // Set the color for the username
                         ),
@@ -270,7 +270,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Text(
                   'Explore your courses and start learning.',
                   style: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 14.5,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[600],
                   ),
@@ -319,7 +319,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+          bottomNavigationBar:  Container(color: Colors.grey[300], child: CustomBottomNavigationBar(initialIndex: 0, token: widget.token)),
         ),
       ),
     );
