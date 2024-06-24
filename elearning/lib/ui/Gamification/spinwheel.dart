@@ -52,13 +52,24 @@ class _SpinWheelState extends State<SpinWheel> {
 
   @override
   Widget build(BuildContext context) {
-    return  ClayContainer(
+    return  Container(
      width: widget.width,
-          color: Color.fromARGB(255, 234, 246, 246),
+          color: Theme.of(context).cardColor,
+          decoration: BoxDecoration( color:Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ],
+            ),
 
           // height: MediaQuery.of(context).size.height*0.23,
           // width: MediaQuery.of(context).size.width*0.9,
-          borderRadius: MediaQuery.of(context).size.width*.1,
+          //borderRadius: MediaQuery.of(context).size.width*.1,
     // Container(
       // width: widget.width,
       // padding: const EdgeInsets.all(10),
@@ -125,7 +136,7 @@ class _SpinWheelState extends State<SpinWheel> {
               child: Text(
                 spinButton?
                 'Spin the wheel and luck your chance to get points benefit and redeem.':'You have won todays luck on wheel, try next day',
-                textAlign: TextAlign.center,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold), 
+                textAlign: TextAlign.center,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor), 
               ),
             ),
           ),
@@ -143,14 +154,14 @@ class _SpinWheelState extends State<SpinWheel> {
                     }
                   : null, // Disable onTapUp when spinButton is false
               decoration: NeoPopTiltedButtonDecoration(
-                color: Theme.of(context).secondaryHeaderColor,
-                plunkColor: Theme.of(context).secondaryHeaderColor,
-                shadowColor: Color.fromRGBO(181, 177, 177, 1),
+                color: Theme.of(context).primaryColor,
+                plunkColor: Theme.of(context).primaryColor,
+                shadowColor: Theme.of(context).primaryColor,
                 showShimmer: true,
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
-                child: Text('SPIN'),
+                child: Text('SPIN' , style: TextStyle(color: Theme.of(context).highlightColor),),
               ),
             )
           else
@@ -164,7 +175,7 @@ class _SpinWheelState extends State<SpinWheel> {
     final String label = _getLabel(selected);
     return Text(spinButton?
       label:'',
-      style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0),
+      style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0,color: Theme.of(context).highlightColor),
     );
   }
 
@@ -187,8 +198,7 @@ class _SpinWheelState extends State<SpinWheel> {
   }
 
   Future<void> _addRewardPoints(String label) async {
-    print("Adding reward points: $label");
-    print(spinButton);
+    
     
     try {
       final response = await RewardPointService().addReward(

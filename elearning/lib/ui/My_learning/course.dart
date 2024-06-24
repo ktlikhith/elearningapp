@@ -428,11 +428,12 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 
   Widget buildCourseContainer(BuildContext context, Course course) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12),
-      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+      //padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),
-        color: Color.fromARGB(255, 227, 241, 240),
+        // border: Border.all(color: Theme.of(context).primaryColor,width: 1.5),
+       // color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -468,124 +469,146 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
         videoUrl,
         duration,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.22,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(9.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.network(
-                    course.getImageUrlWithToken(widget.token),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/coursedefaultimg.jpg',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      );
-                    },
-                  ),
-                ],
+      child: Container(
+        decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Theme.of(context).cardColor,
+              ),
+
+       
+        
+        child: Column(
+          
+          
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+               width: MediaQuery.of(context).size.width * 1.0,
+               height: MediaQuery.of(context).size.height * 0.22,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8),topRight: Radius.circular(8)),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.network(
+                      course.getImageUrlWithToken(widget.token),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/coursedefaultimg.jpg',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 6.0),
-          Text(
-            course.name,
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 6.0),
+             Padding(
+                    padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+            Text(
+              course.name,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).highlightColor
+              ),
             ),
-          ),
-          const SizedBox(height: 6.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Status',
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color.fromARGB(255, 34, 34, 34),
-                    ),
-                  ),
-                  const SizedBox(height: 6.0),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 8.0,
-                        width: 100.0,
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 8.0,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            Container(
-                              height: 8.0,
-                              width: 100.0 * course.courseProgress / 100,
-                              decoration: BoxDecoration(
-                                color: getProgressBarColor(course.courseProgress),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ],
-                        ),
+            const SizedBox(height: 6.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Status',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Theme.of(context).hintColor,
+                        
                       ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        '${course.courseProgress}%',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                    ),
+                    const SizedBox(height: 6.0),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 8.0,
+                          width: 100.0,
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 8.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              Container(
+                                height: 8.0,
+                                width: 100.0 * course.courseProgress / 100,
+                                decoration: BoxDecoration(
+                                  color: getProgressBarColor(course.courseProgress),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          '${course.courseProgress}%',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Due Date',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                       color: Theme.of(context).hintColor,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(width: 16.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Due Date',
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: const Color.fromARGB(255, 48, 48, 48),
                     ),
-                  ),
-                  Text(
-                    course.courseEndDate,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      course.courseEndDate,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                         color: Theme.of(context).highlightColor,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 6.0),
-        ],
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 6.0),
+                      ],
+                      ),
+                      ),
+          ],
+        ),
       ),
     );
   }

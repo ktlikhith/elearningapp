@@ -143,27 +143,31 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: CircleNavBar(
           activeIcons: [
-            Icon(FontAwesomeIcons.house, color: Colors.black),
-            Icon(FontAwesomeIcons.graduationCap, color: Colors.black),
-            Icon(FontAwesomeIcons.bookOpen, color: Colors.black),
-            Icon(FontAwesomeIcons.trophy, color: Colors.black),
-            Icon(FontAwesomeIcons.ellipsis, color: Colors.black),
+            Icon(FontAwesomeIcons.house, color: Colors.white),
+            Icon(FontAwesomeIcons.graduationCap, color: Colors.white),
+            Icon(FontAwesomeIcons.bookOpen, color: Colors.white),
+            Icon(FontAwesomeIcons.trophy, color: Colors.white),
+            Icon(FontAwesomeIcons.chartSimple, color: Colors.white),
+            Icon(FontAwesomeIcons.ellipsis, color: Colors.white),
+             
           ],
           inactiveIcons: [
             _buildInactiveItem(FontAwesomeIcons.house, "Home"),
             _buildInactiveItem(FontAwesomeIcons.graduationCap, "Learning"),
             _buildInactiveItem(FontAwesomeIcons.bookOpen, "Live"),
             _buildInactiveItem(FontAwesomeIcons.trophy, "Game"),
+             _buildInactiveItem(FontAwesomeIcons.chartLine, "Report"), // Added icon
             _buildInactiveItem(FontAwesomeIcons.ellipsis, "More"),
+           
           ],
-          color: Colors.grey[300]!,
-          circleColor: Colors.grey[300],
+          color: Colors.white,
+          circleColor: Theme.of(context).primaryColor,
           height: 60,
           circleWidth: 60,
           onTap: _handleTabPressed,
@@ -183,8 +187,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(icon, size: 20),
-        SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 10)),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.black)),
       ],
     );
   }
@@ -210,7 +213,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         Navigator.of(context).pushReplacementNamed(RouterManger.Gamification, arguments: widget.token);
         break;
       case 4:
-        Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
+      Navigator.of(context).pushReplacementNamed(RouterManger.Report, arguments: widget.token);
+        
+        break;
+      case 5: // Added case for the new icon
+       Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
         break;
     }
   }

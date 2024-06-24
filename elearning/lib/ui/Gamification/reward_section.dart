@@ -121,8 +121,8 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
           padding: const EdgeInsets.only(bottom: 10.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(9.0),
-            border: Border.all(color: Theme.of(context).secondaryHeaderColor.withOpacity(.4),),
-            color: backgroundColor.withOpacity(0.1),
+            border: Border.all(color: Theme.of(context).primaryColor,),
+            color: Theme.of(context).hintColor.withOpacity(0.1),
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 18.0),
@@ -141,10 +141,10 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
                 const SizedBox(height: 4.0),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
+                    color:Colors.grey[600],
                   ),
                 ),
               ],
@@ -161,7 +161,7 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: backgroundColor.withOpacity(0.2),
+                color: Theme.of(context).hintColor.withOpacity(0.2),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(45.0),
                   bottomRight: Radius.circular(45.0),

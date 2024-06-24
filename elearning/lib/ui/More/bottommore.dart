@@ -374,11 +374,11 @@ class _MyMorePageState extends State<MyMorePage> {
               text: 'Learning Path',
               onTap: () => Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token),
             ),
-            _buildCard(
-                   icon: FontAwesomeIcons.chartSimple,
-              text: 'Reports',
-              onTap: () => Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token),
-            ),
+            // _buildCard(
+            //        icon: FontAwesomeIcons.chartSimple,
+            //   text: 'Reports',
+            //   onTap: () => Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token),
+            // ),
             _buildCard(
                           icon: FontAwesomeIcons.download,
               text: 'Downloads',
@@ -405,12 +405,13 @@ class _MyMorePageState extends State<MyMorePage> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       margin: EdgeInsets.symmetric(vertical: 10),
+      color: Theme.of(context).cardColor,
       elevation: 3,
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon, color: Theme.of(context).primaryColor),
-        title: Text(text, style: TextStyle(fontSize: 16)),
-        trailing: CircleAvatar(     radius: 13,backgroundColor: Theme.of(context).backgroundColor,child:Icon(Icons.arrow_forward_ios,size: 15 ,color: Colors.grey,)),
+        leading: Icon(icon, color:Theme.of(context).highlightColor),
+        title: Text(text, style: TextStyle(fontSize: 16,color: Theme.of(context).highlightColor)),
+        trailing: CircleAvatar(     radius: 13,backgroundColor: Theme.of(context).hintColor,child:Icon(Icons.arrow_forward_ios,size: 15 ,color: Colors.white,)),
       ),
     );
   }

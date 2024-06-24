@@ -111,9 +111,9 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                   itemCount: sessions.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding: const EdgeInsets.all(16.0),
+                      //padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 227, 241, 240), // Set background color to white
+                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12.0), // Set border radius
                         border: Border.all(color: Color.fromARGB(255, 173, 172, 172)!), // Set border color
                       ),
@@ -137,31 +137,31 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                           ListTile(
                             title: Text(
                               sessions[index].activityName,
-                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).highlightColor),
                             ),
                            subtitle: Text.rich(
   TextSpan(
     children: [
-      const TextSpan(
-        text: 'Speaker: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+       TextSpan(
+        text: 'Speaker: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
       ),
       TextSpan(
         text: '${sessions[index].username}\n',
-        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
       ),
-      const TextSpan(
-        text: 'Start Time: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+       TextSpan(
+        text: 'Start Time: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
       ),
       TextSpan(
         text: '${sessions[index].startTime}\n',
-        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
       ),
-      const TextSpan(
-        text: 'Mode: ',style: TextStyle(color: Color.fromARGB(255, 68, 68, 68),fontWeight: FontWeight.w700),
+       TextSpan(
+        text: 'Mode: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
       ),
       TextSpan(
         text: '${sessions[index].sessionMod}',
-        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
       ),
     ],
   ),
@@ -183,24 +183,28 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                                 }
                               },
                               child: Row(
+                                
                                 mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
                                 children: [
                                   Icon(
                                     FontAwesomeIcons.play,
-                                    color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).highlightColor,
                                   ), // Add the Font Awesome icon
                                   SizedBox(width: 8), // Add some space between the icon and text
                                   Text(
                                     'Join Now',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color:  Theme.of(context).highlightColor,),
                                   ),
                                 ],
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: Theme.of(context).secondaryHeaderColor, // Set button background color
+                                backgroundColor: Theme.of(context).primaryColor, 
+                                // Set button background color
                               ),
                             ),
+                            
                           ),
+                          SizedBox(height: 8),
                         ],
                       ),
                     );
