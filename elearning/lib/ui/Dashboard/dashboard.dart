@@ -235,7 +235,7 @@ class _DashboardPageState extends State<DashboardPage> {
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         child: Container(
           height: MediaQuery.of(context).size.height*0.08,
-          color: Colors.grey[300], // Set the desired background color here
+          color: Colors.grey[100], // Set the desired background color here
           padding: const EdgeInsets.all(0.0), // Add some padding if needed
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +250,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).secondaryHeaderColor, 
+                          color: Colors.black
+                           
                         ),
                       ),
                       TextSpan(
@@ -258,7 +259,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black, // Set the color for the username
+                          color: Theme.of(context).primaryColor, // Set the color for the username
                         ),
                       ),
                     ],
@@ -319,7 +320,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
-          bottomNavigationBar:  Container(color: Colors.grey[300], child: CustomBottomNavigationBar(initialIndex: 0, token: widget.token)),
+          bottomNavigationBar:  Container( child: CustomBottomNavigationBar(initialIndex: 0, token: widget.token)),
         ),
       ),
     );

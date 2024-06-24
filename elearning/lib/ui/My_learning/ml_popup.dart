@@ -332,7 +332,7 @@ class _MLPopupState extends State<MLPopup> {
           LinearProgressIndicator(
             value: double.parse(widget.Cprogress.replaceAll('%', '')) / 100,
             backgroundColor: Colors.grey[300],
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor:  AlwaysStoppedAnimation<Color>(Theme.of(context).secondaryHeaderColor),
           ),
           const SizedBox(height: 10.0),
           Text(

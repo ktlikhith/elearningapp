@@ -2,6 +2,7 @@ import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -92,127 +93,154 @@ Widget _buildSection(BuildContext context, CourseData course) {
   const double cardWidth = 300; // Define a constant width for the card
   const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
-  return SizedBox(
-    width: cardWidth,
-    height: cardHeight, // Set the card height to a constant value
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
+  return Padding(
+    padding: const EdgeInsets.all(4.0),
+    child: Container(
+      width: cardWidth,
+      height: cardHeight,
+      
+       
+       
+      
+      
+      
+      
+       // Set the card height to a constant value
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 0,
-              blurRadius: 2,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Material(
-          borderRadius: BorderRadius.circular(8.0),
-          color: Color.fromARGB(255, 227, 241, 240),
-          child: InkWell(
-            onTap: () => showMLPopup(
-              context,
-              course.id,
-              course.name,
-              course.courseProgress.toString(),
-              course.courseDescription,
-              course.courseStartDate,
-              course.courseEndDate,
-              course.courseVideoUrl,
-              course.courseDuration,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: cardHeight * 0.6, // Adjust image height
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      topRight: Radius.circular(8.0),
+        padding: const EdgeInsets.all(8.0),
+        
+      
+        
+      //  decoration: BoxDecoration( borderRadius: BorderRadius.circular(8.0),border: Border.all(color:Theme.of(context).primaryColor)),
+        
+        
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+           
+            //border: Border.all(color: Theme.of(context).cardColor,width: 2),
+             
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Material(
+            borderRadius: BorderRadius.circular(8.0),
+          
+          //  BoxDecoration(border: Border.all(color: Colors.black))
+            color: Theme.of(context).cardColor,
+            child: InkWell(
+              onTap: () => showMLPopup(
+                context,
+                course.id,
+                course.name,
+                course.courseProgress.toString(),
+                course.courseDescription,
+                course.courseStartDate,
+                course.courseEndDate,
+                course.courseVideoUrl,
+                course.courseDuration,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: cardHeight * 0.6, // Adjust image height
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
+                      
+                      ),
+                     
+                    ),
+                    child: ClipRRect(
+                      
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(6.0),
+                        topRight: Radius.circular(6.0),
+                        
+                      ),
+                      child: Image.network(
+                        course.getImageUrlWithToken(widget.token),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Return a default image when loading fails
+                          return Image.asset(
+                            'assets/images/coursedefaultimg.jpg',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      topRight: Radius.circular(8.0),
-                    ),
-                    child: Image.network(
-                      course.getImageUrlWithToken(widget.token),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      errorBuilder: (context, error, stackTrace) {
-                        // Return a default image when loading fails
-                        return Image.asset(
-                          'assets/images/coursedefaultimg.jpg',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        course.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          course.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).highlightColor
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'End Date: ${course.courseEndDate}',
-                        style: TextStyle(
-                          color: Colors.grey[600],
+                        SizedBox(height: 4),
+                        Text(
+                          'End Date: ${course.courseEndDate}',
+                          style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: FractionallySizedBox(
-                                alignment: Alignment.centerLeft,
-                                widthFactor: course.courseProgress / 100,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: getProgressBarColor(course.courseProgress),
-                                    borderRadius: BorderRadius.circular(5.0),
+                        SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: FractionallySizedBox(
+                                  alignment: Alignment.centerLeft,
+                                  widthFactor: course.courseProgress / 100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: getProgressBarColor(course.courseProgress),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${course.courseProgress}%',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(width: 4),
+                            Text(
+                              '${course.courseProgress}%',
+                              style: TextStyle(
+                                color: Theme.of(context).hintColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -272,7 +300,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).secondaryHeaderColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],

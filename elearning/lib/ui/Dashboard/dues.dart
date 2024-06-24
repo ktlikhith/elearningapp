@@ -135,9 +135,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(9.0),
               border: Border.all(
-                color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
+                // color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
+                color:Theme.of(context).cardColor,
               ),
-              color: color.withOpacity(0.1),
+              // color: color.withOpacity(0.1),
+              color: Theme.of(context).hintColor.withOpacity(0.1),
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 18.0),
@@ -156,10 +158,10 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                   const SizedBox(height: 4.0),
                   Text(
                     title,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blueGrey,
+                      color: Colors.grey[600],
                     ),
                   ),
                 ],
@@ -176,7 +178,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: Theme.of(context).hintColor.withOpacity(0.2),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(45.0),
                     bottomRight: Radius.circular(45.0),

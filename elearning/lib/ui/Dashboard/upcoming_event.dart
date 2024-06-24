@@ -165,7 +165,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
         child: Container(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 227, 241, 240),
+            color:Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
@@ -198,12 +198,12 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                   children: [
                     Text(
                       title,maxLines: 1,
-                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                     SizedBox(height: 4.0),
                     Text(
                       dateTime,
-                      style: TextStyle(fontSize: 16.0),
+                      style: TextStyle(fontSize: 16.0,color: Colors.blue[200]),
                     ),
                   ],
                 ),

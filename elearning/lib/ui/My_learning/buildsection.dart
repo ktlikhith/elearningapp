@@ -148,9 +148,9 @@ Widget buildSection({
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(9.0),
                   border: Border.all(
-                    color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
+                    color: Theme.of(context).primaryColor,
                   ),
-                  color: Color1.withOpacity(0.1),
+                  color: Theme.of(context).hintColor.withOpacity(.1),
                   boxShadow: [
                     BoxShadow(
                       color: const Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
@@ -177,10 +177,10 @@ Widget buildSection({
                       const SizedBox(height: 4.0),
                       Text(
                         title,
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
+                          color: Colors.grey[600],
                         ),
                       ),
                     ],
@@ -197,7 +197,7 @@ Widget buildSection({
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: Color1.withOpacity(0.2),
+                      color: Theme.of(context).hintColor.withOpacity(.2),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(45.0),
                         bottomRight: Radius.circular(45.0),

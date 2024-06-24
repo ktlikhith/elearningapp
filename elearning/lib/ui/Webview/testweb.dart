@@ -1,4 +1,5 @@
 
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
@@ -149,7 +150,14 @@ String? _extractWebUrlFromIntent(String intentUrl) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title),backgroundColor: Colors.black,),
+      appBar: AppBar(title: Text(widget.title),backgroundColor: Theme.of(context).primaryColor,
+       leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),),
+      
       body: WebViewWidget(controller: _controller),
     );
   }

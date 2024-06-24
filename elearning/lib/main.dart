@@ -34,9 +34,16 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'E learning',
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 10, 10, 10),
-          secondaryHeaderColor: Colors.orange,
-          backgroundColor: Color.fromARGB(255, 245, 250, 249), // Set the background color for all pages
+         // primaryColor:Color.fromARGB(255, 10, 36, 114) ,
+         primaryColor: Color(0xFF0A2472),
+          //secondaryHeaderColor: Color.fromARGB(255, 26, 67, 191),
+          secondaryHeaderColor:Color(0xFF0A2472) ,
+          //cardColor:Color.fromARGB(255, 26, 67, 191),
+          cardColor: Color(0xFF1A43BF),
+          highlightColor:Colors.white,
+          hintColor: Colors.blue[200],
+
+          backgroundColor: Colors.white, // Set the background color for all pages
           textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
           appBarTheme: AppBarTheme(
             titleTextStyle: GoogleFonts.nunito(
