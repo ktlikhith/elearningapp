@@ -54,9 +54,9 @@ class _SpinWheelState extends State<SpinWheel> {
   Widget build(BuildContext context) {
     return  Container(
      width: widget.width,
-          color: Theme.of(context).cardColor,
+          
           decoration: BoxDecoration( color:Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(30.0),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -154,9 +154,9 @@ class _SpinWheelState extends State<SpinWheel> {
                     }
                   : null, // Disable onTapUp when spinButton is false
               decoration: NeoPopTiltedButtonDecoration(
-                color: Theme.of(context).primaryColor,
-                plunkColor: Theme.of(context).primaryColor,
-                shadowColor: Theme.of(context).primaryColor,
+                color: Theme.of(context).hintColor,
+                plunkColor: Theme.of(context).hintColor,
+               // shadowColor: Theme.of(context).primaryColor,
                 showShimmer: true,
               ),
               child: Padding(

@@ -162,7 +162,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             _buildInactiveItem(FontAwesomeIcons.graduationCap, "Learning"),
             _buildInactiveItem(FontAwesomeIcons.bookOpen, "Live"),
             _buildInactiveItem(FontAwesomeIcons.trophy, "Game"),
-             _buildInactiveItem(FontAwesomeIcons.chartLine, "Report"), // Added icon
+             _buildInactiveItem(FontAwesomeIcons.chartSimple, "Report"), // Added icon
             _buildInactiveItem(FontAwesomeIcons.ellipsis, "More"),
            
           ],

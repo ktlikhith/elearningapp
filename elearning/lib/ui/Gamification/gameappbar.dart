@@ -61,6 +61,7 @@ class _GamificationPageState extends State<GamificationPage> {
             );
           },
           ),
+          centerTitle: false,
           automaticallyImplyLeading: false,
         ),
         backgroundColor:Theme.of(context).backgroundColor,
