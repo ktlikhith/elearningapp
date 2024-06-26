@@ -230,6 +230,7 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:elearning/services/leaderboardservice.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -272,9 +273,10 @@ class _LeaderboardState extends State<Leaderboard> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -290,11 +292,17 @@ class _LeaderboardState extends State<Leaderboard> {
               ),
             ),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           isLoading
               ? _buildShimmerSkeleton()
               : users.isNotEmpty
-                  ? buildLeaderBoard()
+                  ? Column(
+                      children: [
+                        buildTop3Members(context),
+                         SizedBox(height: 16),
+                        buildLeaderBoard(),
+                      ],
+                    )
                   : Text(
                       'Will get back to you once Leaderboard is updated',
                       textAlign: TextAlign.center,
@@ -364,25 +372,141 @@ class _LeaderboardState extends State<Leaderboard> {
     return '$imgUrl?token=${widget.token}';
   }
 
+ Widget buildTop3Members(BuildContext context) {
+  if (users.length < 3) {
+    return SizedBox.shrink();
+  }
+
+  User top1User = users[0];
+  User top2User = users[1];
+  User top3User = users[2];
+
+  return Container(
+   
+    margin: EdgeInsets.all(8),
+    padding: EdgeInsets.all(14),
+
+     decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+           
+            color: Theme.of(context).hintColor.withOpacity(0.3),
+          ),
+           
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+         
+        buildUserWidget(context, top2User, 2, 30, Color.fromARGB(255, 207, 207, 207)),
+        buildUserWidget(context, top1User, 1, 0, Color.fromARGB(255, 247, 195, 24), isCenter: true),
+        buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 205, 145, 25)),
+      ],
+    ),
+  );
+}
+
+Widget buildUserWidget(BuildContext context, User user, int rank, double topMargin, Color backgroundColor, {bool isCenter = false}) {
+  return Column(
+    children: [
+      Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: topMargin),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: isCenter ? 40 : 20),  // Extra space for the crown
+                CircleAvatar(
+                  radius: isCenter ? 60 : 40,
+                  backgroundImage: NetworkImage(imageWithToken(user.image)),
+                ),
+                SizedBox(height: 8),
+                Flexible(
+                  child: Text(
+                    user.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).highlightColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                ),
+                Text(
+                  '${user.points}',
+                  style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor),
+                ),
+              ],
+            ),
+          ),
+          if (rank == 1)
+            Positioned(
+              top: 0,
+              child: FaIcon(
+                FontAwesomeIcons.crown,
+                size: 40,
+                color: Colors.yellow,
+              ),
+            ),
+          if (rank != 1)
+            Positioned(
+              top: 100,
+              left: 0,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.white,
+                child: Text(
+                  '$rank',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    ],
+  );
+}
+
+
+
+
+
+
+
+
+
+
   Widget buildLeaderBoard() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
         padding: const EdgeInsets.only(left: 8),
         child: DataTable(
-          headingRowColor: MaterialStateColor.resolveWith((states) => Theme.of(context).secondaryHeaderColor),
+          headingRowColor: MaterialStateColor.resolveWith((states) => Theme.of(context).primaryColor),
+          dataRowColor: MaterialStateColor.resolveWith((states) => Theme.of(context).hintColor.withOpacity(0.2)),
           columnSpacing: 20,
           columns: [
             DataColumn(
               label: Center(
-                child: Text('#No', style: GoogleFonts.lobster(fontSize: 20, color: Colors.white)),
+                child: Text('#No', style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor)),
               ),
             ),
             DataColumn(
               label: Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 60),
-                  child: Text('Name', style: GoogleFonts.lobster(fontSize: 18, color: Colors.white)),
+                  child: Text('Name', style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor)),
                 ),
               ),
             ),
@@ -390,27 +514,28 @@ class _LeaderboardState extends State<Leaderboard> {
               label: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text('Rank', style: GoogleFonts.lobster(fontSize: 18, color: Colors.white)),
+                  child: Text('Rank', style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor)),
                 ),
               ),
             ),
             DataColumn(
               label: Center(
-                child: Text('Points', style: GoogleFonts.lobster(fontSize: 18, color: Colors.white)),
+                child: Text('Points', style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor)),
               ),
             ),
             DataColumn(
               label: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text('Department', style: GoogleFonts.lobster(fontSize: 18, color: Colors.white)),
+                  child: Text('Department', style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor)),
                 ),
               ),
             ),
           ],
           rows: users.asMap().entries.map((entry) {
-            int index = entry.key; // Get the current index
+            int index = entry.key;
             User user = entry.value;
+
             return DataRow(
               cells: [
                 DataCell(

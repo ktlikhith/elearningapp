@@ -312,6 +312,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
                   style: TextStyle(color: Colors.white, fontSize: 16.0),
                 )
               : const Text('My Learning'),
+              centerTitle: false,
           actions: [
             IconButton(
               icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
