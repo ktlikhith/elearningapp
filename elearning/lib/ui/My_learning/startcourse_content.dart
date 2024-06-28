@@ -811,7 +811,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                   // color: Colors.grey[200],
+                   color: Theme.of(context).hintColor.withOpacity(0.4),
                     borderRadius: section['expanded'] ?? false ? BorderRadius.vertical(top: Radius.circular(10)) : BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
@@ -844,7 +845,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
               if (section['expanded'] ?? false)
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                   // color: Colors.grey[100],
+                   color: Theme.of(context).hintColor.withOpacity(0.2),
                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),

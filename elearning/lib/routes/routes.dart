@@ -10,6 +10,9 @@ import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
+import 'package:elearning/ui/Reports/My_course_progress/each_course_progress.dart';
+import 'package:elearning/ui/Reports/My_course_progress/my_course_progress.dart';
+
 import 'package:elearning/ui/Reports/reports_chart.dart';
 import 'package:elearning/ui/download/download_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +33,8 @@ class RouterManger{
   static const String Quiz = 'Quiz test/quiztest.dart';
   static const String quizscore ='/score_screen.dart';
   static const String learningpath= '/learningpath.dart';
+  static const String mycourseprogress='/my_course_progress.dart';
+  static const String eachcourseprogress='/each_course_progress.dart';
 
 
 
@@ -81,11 +86,11 @@ class RouterManger{
             builder: (context) => LearningPathPage(token: token ),
       );
 
-      // case Report:
-      //   final token = settings.arguments as String;
-      // return MaterialPageRoute(
-      //   builder:(context) => ReportPage(token: token)
-      // ,);
+      case Report:
+        final token = settings.arguments as String;
+      return MaterialPageRoute(
+        builder:(context) => ReportPage(token: token)
+      ,);
 
       case Gamification:
       final token = settings.arguments as String; // Retrieve the token from settings.arguments
@@ -94,12 +99,22 @@ class RouterManger{
           builder: (context) => GamificationPage(token: token),
         
       );
-     
-
-case Quiz:
+      case mycourseprogress:
 final token = settings.arguments as String; 
       return MaterialPageRoute(
-        builder:(context) => QuizPage(token: token)
+        builder:(context) => Coursereport(token: token)
+      ,);
+     
+
+// case Quiz:
+// final token = settings.arguments as String; 
+//       return MaterialPageRoute(
+//         builder:(context) => QuizPage(token: token)
+//       ,);
+case eachcourseprogress:
+final token = settings.arguments as String; 
+      return MaterialPageRoute(
+        builder:(context) => CourseProgressPage(token: token)
       ,);
 
       case landingpage:

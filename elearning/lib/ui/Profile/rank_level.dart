@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:elearning/services/reward_service.dart';
 
@@ -75,7 +76,8 @@ class RankLevel extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.7, // Increased font size for better readability
-                ),
+                  color:Colors.black,
+                  ),
               ),
             ],
           ),
@@ -84,8 +86,10 @@ class RankLevel extends StatelessWidget {
               value,
               textAlign: TextAlign.end,
               style: TextStyle(
+                 fontWeight: FontWeight.bold,
                 fontSize: 16, // Increased font size for better readability
-                color: Colors.black, // Ensured text color for visibility
+                color:Color(0xFF1A43BF,
+               ), // Ensured text color for visibility
               ),
             ),
           ),

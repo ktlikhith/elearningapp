@@ -99,18 +99,10 @@ Widget _buildSection(BuildContext context, CourseData course) {
       width: cardWidth,
       height: cardHeight,
       
-       
-       
-      
-      
-      
-      
        // Set the card height to a constant value
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        
       
-        
       //  decoration: BoxDecoration( borderRadius: BorderRadius.circular(8.0),border: Border.all(color:Theme.of(context).primaryColor)),
         
         
