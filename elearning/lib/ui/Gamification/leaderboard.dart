@@ -125,6 +125,7 @@
 //       ),
 //     );
 //   }
+
 // Widget buildLeaderBoard() {
 //   return SingleChildScrollView(
 //     scrollDirection: Axis.horizontal,
@@ -228,6 +229,7 @@
 
 
 // }
+
 import 'package:flutter/material.dart';
 import 'package:elearning/services/leaderboardservice.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -372,111 +374,214 @@ class _LeaderboardState extends State<Leaderboard> {
     return '$imgUrl?token=${widget.token}';
   }
 
- Widget buildTop3Members(BuildContext context) {
-  if (users.length < 3) {
-    return SizedBox.shrink();
-  }
+  Widget buildTop3Members(BuildContext context) {
+    if (users.length < 3) {
+      return SizedBox.shrink();
+    }
 
-  User top1User = users[0];
-  User top2User = users[1];
-  User top3User = users[2];
+    User top1User = users[0];
+    User top2User = users[1];
+    User top3User = users[2];
 
-  return Container(
-   
-    margin: EdgeInsets.all(8),
-    padding: EdgeInsets.all(14),
-
-     decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-           
-            color: Theme.of(context).hintColor.withOpacity(0.3),
-          ),
-           
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-         
-        buildUserWidget(context, top2User, 2, 30, Color.fromARGB(255, 207, 207, 207)),
-        buildUserWidget(context, top1User, 1, 0, Color.fromARGB(255, 247, 195, 24), isCenter: true),
-        buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 205, 145, 25)),
-      ],
-    ),
-  );
-}
-
-Widget buildUserWidget(BuildContext context, User user, int rank, double topMargin, Color backgroundColor, {bool isCenter = false}) {
-  return Column(
-    children: [
-      Stack(
-        alignment: Alignment.topCenter,
+    return Container(
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).hintColor.withOpacity(0.3),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            margin: EdgeInsets.only(top: topMargin),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: isCenter ? 40 : 20),  // Extra space for the crown
-                CircleAvatar(
-                  radius: isCenter ? 60 : 40,
-                  backgroundImage: NetworkImage(imageWithToken(user.image)),
-                ),
-                SizedBox(height: 8),
-                Flexible(
-                  child: Text(
-                    user.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).highlightColor,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    softWrap: false,
-                  ),
-                ),
-                Text(
-                  '${user.points}',
-                  style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor),
-                ),
-              ],
-            ),
-          ),
-          if (rank == 1)
-            Positioned(
-              top: 0,
-              child: FaIcon(
-                FontAwesomeIcons.crown,
-                size: 40,
-                color: Colors.yellow,
-              ),
-            ),
-          if (rank != 1)
-            Positioned(
-              top: 100,
-              left: 0,
-              child: CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.white,
-                child: Text(
-                  '$rank',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-            ),
+          buildUserWidget(context, top2User, 2, 30, Color.fromARGB(255, 207, 207, 207)),
+          buildUserWidget(context, top1User, 1, 0, Color.fromARGB(255, 247, 195, 24), isCenter: true),
+          buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 205, 145, 25)),
         ],
       ),
-    ],
-  );
-}
+    );
+  }
+
+  Widget buildUserWidget(BuildContext context, User user, int rank, double topMargin, Color backgroundColor, {bool isCenter = false}) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: topMargin),
+              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: isCenter ? 40 : 20), // Extra space for the crown
+                  CircleAvatar(
+                    radius: isCenter ? 50 : 30,
+                    backgroundImage: NetworkImage(imageWithToken(user.image)),
+                  ),
+                  SizedBox(height: 8),
+                  SizedBox(
+                    width: 93, // Set a fixed width to prevent overflow
+                    child: Text(
+                      user.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).highlightColor,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: true,
+                      textAlign: TextAlign.center, // Center align text
+                    ),
+                  ),
+                  Text(
+                    '${user.points}',
+                    style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor),
+                  ),
+                ],
+              ),
+            ),
+            if (rank == 1)
+              Positioned(
+                top: 15,
+                child: FaIcon(
+                  FontAwesomeIcons.crown,
+                  size: 30,
+                  color: Colors.yellow,
+                ),
+              ),
+            if (rank != 1)
+              Positioned(
+                top: 100,
+                left: 20,
+                child: CircleAvatar(
+                  radius: 10,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    '$rank',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+//  Widget buildTop3Members(BuildContext context) {
+//   if (users.length < 3) {
+//     return SizedBox.shrink();
+//   }
+
+//   User top1User = users[0];
+//   User top2User = users[1];
+//   User top3User = users[2];
+
+//   return Container(
+   
+//     margin: EdgeInsets.all(8),
+//     padding: EdgeInsets.all(14),
+
+//      decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(10),
+           
+//             color: Theme.of(context).hintColor.withOpacity(0.3),
+//           ),
+           
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       crossAxisAlignment: CrossAxisAlignment.end,
+//       children: [
+         
+//         buildUserWidget(context, top2User, 2, 30, Color.fromARGB(255, 207, 207, 207)),
+//         buildUserWidget(context, top1User, 1, 0, Color.fromARGB(255, 247, 195, 24), isCenter: true),
+//         buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 205, 145, 25)),
+//       ],
+//     ),
+//   );
+// }
+
+// Widget buildUserWidget(BuildContext context, User user, int rank, double topMargin, Color backgroundColor, {bool isCenter = false}) {
+//   return Column(
+//     children: [
+//       Stack(
+//         alignment: Alignment.topCenter,
+//         children: [
+//           Container(
+//             margin: EdgeInsets.only(top: topMargin),
+//             padding: EdgeInsets.all(8),
+//             decoration: BoxDecoration(
+//               color: backgroundColor,
+//               borderRadius: BorderRadius.circular(8),
+//             ),
+//             child: Column(
+//               children: [
+//                 SizedBox(height: isCenter ? 40 : 20),  // Extra space for the crown
+//                 CircleAvatar(
+//                   radius: isCenter ? 60 : 40,
+//                   backgroundImage: NetworkImage(imageWithToken(user.image)),
+//                 ),
+//                 SizedBox(height: 8),
+//                 Flexible(
+//                   child: Text(
+//                     user.name,
+//                     style: TextStyle(
+//                       fontSize: 16,
+//                       fontWeight: FontWeight.bold,
+//                       color: Theme.of(context).highlightColor,
+//                     ),
+//                     overflow: TextOverflow.ellipsis,
+//                     maxLines: 1,
+//                     softWrap: false,
+//                   ),
+//                 ),
+//                 Text(
+//                   '${user.points}',
+//                   style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           if (rank == 1)
+//             Positioned(
+//               top: 0,
+//               child: FaIcon(
+//                 FontAwesomeIcons.crown,
+//                 size: 40,
+//                 color: Colors.yellow,
+//               ),
+//             ),
+//           if (rank != 1)
+//             Positioned(
+//               top: 100,
+//               left: 0,
+//               child: CircleAvatar(
+//                 radius: 15,
+//                 backgroundColor: Colors.white,
+//                 child: Text(
+//                   '$rank',
+//                   style: TextStyle(
+//                     fontSize: 16,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.blue,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//         ],
+//       ),
+//     ],
+//   );
+// }
 
 
 

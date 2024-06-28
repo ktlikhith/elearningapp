@@ -283,11 +283,15 @@
 //     );
 //   }
 // }
+
+
 import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -368,26 +372,40 @@ class _MyMorePageState extends State<MyMorePage> {
         body: ListView(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           children: <Widget>[
+              _buildCard(
+             color:Color(0xFF3ACBE8),
+           icon: Icons.person,
+              text: 'My Profile',
+              onTap: () => Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token),
+            ),
          
             _buildCard(
+             color:Color(0xFF1CA3DE),
            icon: FontAwesomeIcons.graduationCap,
               text: 'Learning Path',
               onTap: () => Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token),
             ),
-            // _buildCard(
-            //        icon: FontAwesomeIcons.chartSimple,
-            //   text: 'Reports',
-            //   onTap: () => Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token),
-            // ),
+        
             _buildCard(
+               color:Color(0xFF0D85D8),
                           icon: FontAwesomeIcons.download,
               text: 'Downloads',
               onTap: () {
                 Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
-                print("download selected");
+              
+              },
+            ),
+             _buildCard(
+               color:Color(0xFF0160C9),
+                          icon: FontAwesomeIcons.certificate,
+              text: 'Certificates',
+              onTap: () {
+               // Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
+              
               },
             ),
             _buildCard(
+               color:Color(0xFF0041C7),
              icon: FontAwesomeIcons.rightFromBracket,
               text: 'Logout',
               onTap: () {
@@ -401,18 +419,58 @@ class _MyMorePageState extends State<MyMorePage> {
     );
   }
 
-  Widget _buildCard({required IconData icon, required String text, required VoidCallback onTap}) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.symmetric(vertical: 10),
-      color: Theme.of(context).cardColor,
-      elevation: 3,
-      child: ListTile(
-        onTap: onTap,
-        leading: Icon(icon, color:Theme.of(context).highlightColor),
-        title: Text(text, style: TextStyle(fontSize: 16,color: Theme.of(context).highlightColor)),
-        trailing: CircleAvatar(     radius: 13,backgroundColor: Theme.of(context).hintColor,child:Icon(Icons.arrow_forward_ios,size: 15 ,color: Colors.white,)),
+// Widget _buildCard({required IconData icon, required String text,  required VoidCallback onTap}) {
+//   return Container(
+    
+//     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//     decoration: BoxDecoration(border: Border.all(color: Theme.of(context).cardColor),borderRadius: BorderRadius.circular(8), color:Theme.of(context).hintColor.withOpacity(0.2)),
+//     margin: EdgeInsets.symmetric(vertical: 10),
+//     // color: Colors.grey[100],
+//     //elevation: 3,
+//     child:SizedBox(
+//       height: 80,
+//     child: ListTile(
+//       contentPadding: EdgeInsets.symmetric(vertical: 13,horizontal: 10),
+//       onTap: onTap,
+//       leading: Icon(icon, color: Theme.of(context).cardColor),
+//       title: Text(text, style: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor)),
+//       //subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Theme.of(context).hintColor)),
+//       trailing: 
+//       //CircleAvatar(
+//         //radius: 13,
+//         //backgroundColor: Theme.of(context).hintColor,
+//         //child:
+//          Icon(Icons.arrow_forward_ios, size: 20, color: Theme.of(context).cardColor),
+//      // ),
+//     ),
+//     ),
+   
+//   );
+// }
+
+Widget _buildCard({required Color color, required IconData icon, required String text, required VoidCallback onTap}) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 0),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+    ),
+    child:SizedBox( height: 80,
+    child: ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+      onTap: onTap,
+      leading: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: Colors.white),
       ),
-    );
-  }
+      title: Text(text, style: TextStyle(fontSize: 16, color: Colors.white)),
+      trailing: Icon(Icons.more_horiz, color: Colors.white),
+    ),
+    ),
+  );
+}
 }

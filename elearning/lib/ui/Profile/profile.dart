@@ -385,7 +385,7 @@ class _ProfilePageState extends State<ProfilePage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('User Profile'),
+        title: const Text('Profile'),
         titleTextStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         centerTitle: false,
         leading: IconButton(
@@ -407,7 +407,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).highlightColor,
       body: FutureBuilder<Map<String, dynamic>>(
         future: _profileDataFuture,
         builder: (context, snapshot) {
@@ -444,15 +444,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                  ClayContainer(
-  color: const Color.fromARGB(255, 227, 241, 240),
+                  Container(
+  //color: const Color.fromARGB(255, 227, 241, 240),
+
   height: screenHeight * 0.23,
-  width: MediaQuery.of(context).size.width * 0.9,
-  borderRadius: MediaQuery.of(context).size.height * 1,
-  customBorderRadius: const BorderRadius.only(
+  width: MediaQuery.of(context).size.width * 0.83,
+  
+  decoration: BoxDecoration( borderRadius:
+ BorderRadius.only(
     topRight: Radius.elliptical(150, 150),
     bottomLeft: Radius.circular(50),
-  ),
+  ),  //color: Theme.of(context).hintColor.withOpacity(0.3),
+   color:Theme.of(context).cardColor,
+   ),
+ 
   child: LayoutBuilder(
     builder: (context, constraints) {
       return Column(
@@ -472,7 +477,7 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 10),
           Text(
             data['studentName'],
-            style: TextStyle(fontSize: constraints.maxHeight * 0.1, fontWeight: FontWeight.bold), // Adjust font size
+            style: TextStyle(fontSize: constraints.maxHeight * 0.1, fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor), // Adjust font size
           ),
           Text(
             data['studentEmail'],
@@ -499,27 +504,28 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 Widget _buildAchievementUI(Map<String, dynamic> data) {
   return Container(
-    width: 370,
+     width: 370,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: Theme.of(context).secondaryHeaderColor.withOpacity(0.2),
-          spreadRadius: 1,
-          blurRadius: 3,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
+    // decoration: BoxDecoration(
+    //   color:Theme.of(context).cardColor,
+    //   borderRadius: BorderRadius.circular(20),
+    //   boxShadow: [
+    //     BoxShadow(
+    //       color: Theme.of(context).secondaryHeaderColor.withOpacity(0.2),
+    //       spreadRadius: 1,
+    //       blurRadius: 3,
+    //       offset: const Offset(0, 2),
+    //     ),
+    //   ],
+    // ),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      //crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 2),
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+           // color: Theme.of(context).hintColor.withOpacity(0.3),
+           color:Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
@@ -550,7 +556,9 @@ Widget _buildAchievementUI(Map<String, dynamic> data) {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 0),
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+           // color: Colors.grey[200],
+          // color: Theme.of(context).hintColor.withOpacity(0.3),
+          color:Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

@@ -332,7 +332,7 @@ class _MLPopupState extends State<MLPopup> {
           LinearProgressIndicator(
             value: double.parse(widget.Cprogress.replaceAll('%', '')) / 100,
             backgroundColor: Colors.grey[300],
-            valueColor:  AlwaysStoppedAnimation<Color>(Theme.of(context).secondaryHeaderColor),
+            valueColor:  AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
           ),
           const SizedBox(height: 10.0),
           Text(
@@ -408,7 +408,7 @@ class _MLPopupState extends State<MLPopup> {
                  
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Theme.of(context).hintColor,
                 ),
                 child: const FaIcon(
                   FontAwesomeIcons.youtube,
@@ -468,7 +468,7 @@ class _MLPopupState extends State<MLPopup> {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Theme.of(context).hintColor,
                 ),
               ),
             ],
