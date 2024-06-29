@@ -132,6 +132,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/gamificatinn/
     - assets/images/
     - assets/learning icons/
     - assets/dashboardicons/

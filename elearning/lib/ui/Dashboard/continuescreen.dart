@@ -79,7 +79,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: const Color.fromARGB(255, 16, 16, 16)!),
+        side: BorderSide(color: Theme.of(context).primaryColor),
       ),
       child: Container(
         color: Colors.white,
@@ -116,7 +116,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
               Text(
                 course.name,maxLines: 2,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor,
                 ),
               ),
               Text(

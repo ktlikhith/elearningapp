@@ -40,6 +40,11 @@ class _GamificationPageState extends State<GamificationPage> {
         appBar: AppBar(
           toolbarHeight: 65,
           backgroundColor: Theme.of(context).primaryColor,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0,right: 0),
+            child: Image.asset('assets/gamificatinn/crown.png',),
+          ),
+          leadingWidth: 40,
           title: FutureBuilder<RewardData>(
             future: _rewardDataFuture,
  builder: (context, snapshot) {

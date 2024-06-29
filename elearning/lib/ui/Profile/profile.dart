@@ -481,7 +481,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Text(
             data['studentEmail'],
-            style: TextStyle(fontSize: constraints.maxHeight * 0.08), // Adjust font size
+            style: TextStyle(fontSize: constraints.maxHeight * 0.08,color: Theme.of(context).highlightColor), // Adjust font size
           ),
         ],
       );
@@ -530,9 +530,9 @@ Widget _buildAchievementUI(Map<String, dynamic> data) {
           ),
           child: Column(
             children: [
-              const Text(
+               Text(
                 'Achievements',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor),
               ),
               const SizedBox(height: 10),
               Row(
@@ -565,9 +565,9 @@ Widget _buildAchievementUI(Map<String, dynamic> data) {
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
               children: [
-                const Text(
+                 Text(
                   'Progress',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor),
                 ),
                 const SizedBox(height: 10),
                 buildProgressBar('Completed', data['completioned']),

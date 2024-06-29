@@ -23,7 +23,7 @@ Widget buildProgressBar(String title, value) {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         SizedBox(height: 8), // Add some space between the title and progress bar

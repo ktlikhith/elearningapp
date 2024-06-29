@@ -161,17 +161,17 @@ class _CoursePageState extends State<Coursereport> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text('Course Progress', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 20),
+                  SizedBox(height: 75),
                   PieChart(
                     
                     dataMap: dataMap,
                     animationDuration: Duration(milliseconds: 800),
-                    chartLegendSpacing: 35,
-                    chartRadius: MediaQuery.of(context).size.width / 2.3,
+                    chartLegendSpacing: 70,
+                    chartRadius: MediaQuery.of(context).size.width / 1.6,
                     colorList: colorList,
                     initialAngleInDegree: 0,
                     chartType: ChartType.ring,
-                    ringStrokeWidth: 35,
+                    ringStrokeWidth: 60,
                     // centerText: "Courses",
                     legendOptions: LegendOptions(
                       showLegendsInRow: true,
@@ -193,10 +193,11 @@ class _CoursePageState extends State<Coursereport> {
                       decimalPlaces: 0,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 90),
                   Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                
                 child: ElevatedButton(
                   onPressed: () {
                       // Implement view more functionality here
@@ -211,6 +212,7 @@ class _CoursePageState extends State<Coursereport> {
                   ).copyWith(
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                   ),
+                  
                   child: Text(
                     'View More',
                     style: TextStyle(

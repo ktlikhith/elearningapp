@@ -137,7 +137,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: Theme.of(context).hintColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(color: Colors.grey[300]!),
             ),
@@ -166,7 +166,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                       children: [
                         Text(
                           learningPathDetail['learningpathname'],
-                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
                         ),
                         SizedBox(height: 4.0),
                         Text(
@@ -261,8 +261,8 @@ class _LearningPathPageState extends State<LearningPathPage> {
                             }
                             return Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8.0),
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(9.0),
                                 border: Border.all(color: Colors.grey[300]!),
                               ),
                               child: InkWell(
@@ -283,7 +283,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius: BorderRadius.circular(9.0),
                                         child: Image.network(
                                           '${course['courseimg']}?token=${widget.token}',
                                           height: 200,
@@ -301,12 +301,12 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                       SizedBox(height: 8.0),
                                       Text(
                                         removeHtmlTags(course['coursename']),
-                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor),
                                       ),
                                       SizedBox(height: 8.0),
                                       Text(
                                         removeHtmlTags(course['coursedec']),
-                                        style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
+                                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).hintColor),
                                       ),
                                       SizedBox(height: 12.0),
                                       LinearPercentIndicator(
