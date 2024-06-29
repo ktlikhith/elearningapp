@@ -397,10 +397,10 @@ class _MyMorePageState extends State<MyMorePage> {
             ),
              _buildCard(
                color:Color(0xFF0160C9),
-                          icon: FontAwesomeIcons.certificate,
-              text: 'Certificates',
+                          icon: FontAwesomeIcons.chartSimple,
+              text: 'Reports',
               onTap: () {
-               // Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
+                 Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
               
               },
             ),

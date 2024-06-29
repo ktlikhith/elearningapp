@@ -388,23 +388,46 @@ class _LeaderboardState extends State<Leaderboard> {
       padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).hintColor.withOpacity(0.3),
+        color: Theme.of(context).primaryColor,
       ),
-      child: Row(
+      child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          "Current Table Toppers",
+          style: TextStyle(
+            color: Colors.white, // Adjust the color as needed
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+
+     
+       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,
+
         children: [
-          buildUserWidget(context, top2User, 2, 30, Color.fromARGB(255, 207, 207, 207)),
-          buildUserWidget(context, top1User, 1, 0, Color.fromARGB(255, 247, 195, 24), isCenter: true),
-          buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 205, 145, 25)),
+          
+          buildUserWidget(context, top2User, 2, 30, Color(0xFF1CA3DE)),
+          buildUserWidget(context, top1User, 1, 0, Color(0xFF3ACBE8), isCenter: true),
+          buildUserWidget(context, top3User, 3, 30, Color.fromARGB(255, 19, 139, 225),),
         ],
       ),
+    ],
+      ),
     );
+    
+  
   }
 
   Widget buildUserWidget(BuildContext context, User user, int rank, double topMargin, Color backgroundColor, {bool isCenter = false}) {
     return Column(
       children: [
+        
         Stack(
           alignment: Alignment.topCenter,
           children: [
@@ -419,7 +442,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 children: [
                   SizedBox(height: isCenter ? 40 : 20), // Extra space for the crown
                   CircleAvatar(
-                    radius: isCenter ? 50 : 30,
+                    radius: isCenter ? 40 : 30,
                     backgroundImage: NetworkImage(imageWithToken(user.image)),
                   ),
                   SizedBox(height: 8),
@@ -440,7 +463,7 @@ class _LeaderboardState extends State<Leaderboard> {
                   ),
                   Text(
                     '${user.points}',
-                    style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor),
+                    style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -448,11 +471,12 @@ class _LeaderboardState extends State<Leaderboard> {
             if (rank == 1)
               Positioned(
                 top: 15,
-                child: FaIcon(
-                  FontAwesomeIcons.crown,
-                  size: 30,
-                  color: Colors.yellow,
-                ),
+                child:Image.asset('assets/gamificatinn/crown.png',width: 30,height: 30,)
+                //  FaIcon(
+                //   FontAwesomeIcons.crown,
+                //   size: 30,
+                //   color: Colors.yellow,
+                // ),
               ),
             if (rank != 1)
               Positioned(
