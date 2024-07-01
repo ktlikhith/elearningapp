@@ -228,7 +228,7 @@ Widget build(BuildContext context) {
                         "123 mmHg",
                         "123",
                         () {
-                          Navigator.of(context).pushReplacementNamed(RouterManger.mycourseprogress, arguments: widget.token);
+                          Navigator.of(context).pushNamed(RouterManger.mycourseprogress, arguments: widget.token);
                         },
                       ),
                       SizedBox(width: 16),
@@ -242,7 +242,7 @@ Widget build(BuildContext context) {
                         "79 mmHg",
                         "79",
                         () {
-                          Navigator.pushNamed(context, '/learningPath', arguments: widget.token);
+                          Navigator.of(context).pushNamed(RouterManger.learningprogress, arguments: widget.token);
                         },
                       ),
                       SizedBox(width: 16),
