@@ -103,7 +103,7 @@ class CourseProgressBar extends StatelessWidget {
                 children: [
                   Container(
                     height: 20,
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.75,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
@@ -117,7 +117,7 @@ class CourseProgressBar extends StatelessWidget {
                   ),
                   Container(
                     height: 20,
-                    width: MediaQuery.of(context).size.width * 0.8 * (progress / 100),
+                    width: MediaQuery.of(context).size.width * 0.75 * (progress / 100),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
@@ -132,7 +132,7 @@ class CourseProgressBar extends StatelessWidget {
                   ),
                   if (progress > 0 )
                     Positioned(
-                      left: MediaQuery.of(context).size.width * 0.8 * (progress / 100) - 20,
+                      left: MediaQuery.of(context).size.width * 0.75 * (progress / 100) - 20,
                       child: Container(
                         width: 20,
                         height: 20,
