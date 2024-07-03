@@ -404,6 +404,15 @@ class _MyMorePageState extends State<MyMorePage> {
               
               },
             ),
+              _buildCard(
+               color:Color.fromARGB(255, 16, 79, 204),
+                          icon: FontAwesomeIcons.certificate,
+              text: 'Certificates',
+              onTap: () {
+                // Navigator.of(context).pushNamed(RouterManger., arguments: widget.token);
+              
+              },
+            ),
             _buildCard(
                color:Color(0xFF0041C7),
              icon: FontAwesomeIcons.rightFromBracket,

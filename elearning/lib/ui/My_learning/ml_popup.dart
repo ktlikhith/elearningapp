@@ -326,6 +326,7 @@ class _MLPopupState extends State<MLPopup> {
             style:  TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor
             ),
           ),
           const SizedBox(height: 10.0),

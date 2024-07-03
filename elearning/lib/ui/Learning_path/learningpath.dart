@@ -137,7 +137,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).hintColor.withOpacity(0.1),
+              color: Theme.of(context).hintColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8.0),
               border: Border.all(color: Colors.grey[300]!),
             ),

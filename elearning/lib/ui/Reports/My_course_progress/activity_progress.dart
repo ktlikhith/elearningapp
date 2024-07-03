@@ -277,6 +277,7 @@
 //   }
 // }
 
+
 import 'dart:io';
 
 import 'package:elearning/services/allcourse_service.dart';
@@ -341,53 +342,76 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        
         children: [
           Text(
-        'Activity Status',
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-
-        ),
-      ),
-          Row(
-  children: [
-    Expanded(
-      child: Text(
-        'Completed: $completed',
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-    //SizedBox(width: 8),
-    Expanded(
-      child: Text(
-        'In Progress: $inProgress',
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-   // SizedBox(width: 8),
-    Expanded(
-      child: Text(
-        'Total: $total',
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  ],
-),
-
+            'Activity Status',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+        
+          SizedBox(height: 10),
+          _buildProgressBar('Completed', completed, total, const Color.fromARGB(255, 47, 208, 52)),
+          SizedBox(height: 8),
+          _buildProgressBar('In Progress', inProgress, total, Color.fromARGB(255, 241, 143, 6)),
+          SizedBox(height:10 ,),
+            Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Completed: $completed',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'In Progress: $inProgress',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Total: $total',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildProgressBar(String label, int value, int total, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label: $value/$total',
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4),
+        LinearProgressIndicator(
+          value: value / total,
+          backgroundColor: Colors.grey[200],
+          color: color,
+          minHeight: 16,
+        ),
+      ],
     );
   }
 
@@ -582,12 +606,10 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            
             SizedBox(height: 10),
             _activityStatus == null
                 ? _buildShimmerCourseContent()
                 : _buildActivityStatusText(),
-            SizedBox(height: 10),
             _courseContentData == null
                 ? _buildShimmerCourseContent()
                 : _buildCourseContent(),

@@ -38,14 +38,9 @@ class LearningPathDetailScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
+                        color: Theme.of(context).hintColor.withOpacity(0.2),
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            offset: Offset(0, 3),
-                          ),
+                        
                         ],
                       ),
                       child: Padding(
@@ -64,7 +59,7 @@ class LearningPathDetailScreen extends StatelessWidget {
                                   children: [
                                     Container(
                                       height: 20,
-                                      width: MediaQuery.of(context).size.width * 0.8,
+                                      width: MediaQuery.of(context).size.width * 0.7,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         gradient: LinearGradient(
@@ -78,7 +73,7 @@ class LearningPathDetailScreen extends StatelessWidget {
                                     ),
                                     Container(
                                       height: 20,
-                                      width: MediaQuery.of(context).size.width * 0.8 * (course.progress / 100),
+                                      width: MediaQuery.of(context).size.width * 0.7 * (course.progress / 100),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         gradient: LinearGradient(
@@ -93,7 +88,7 @@ class LearningPathDetailScreen extends StatelessWidget {
                                     ),
                                     if (course.progress > 0)
                                       Positioned(
-                                        left: MediaQuery.of(context).size.width * 0.8 * (course.progress / 100) - 20,
+                                        left: MediaQuery.of(context).size.width * 0.7* (course.progress / 100) - 20,
                                         child: Container(
                                           width: 20,
                                           height: 20,

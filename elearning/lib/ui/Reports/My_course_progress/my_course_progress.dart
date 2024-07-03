@@ -150,9 +150,9 @@ class _CoursePageState extends State<Coursereport> {
             };
 
             final List<Color> colorList = [
-              const Color.fromARGB(255, 7, 244, 14),  // Completed
-              Color.fromARGB(255, 248, 240, 10), // In Progress
-              Color.fromARGB(255, 247, 6, 6),    // Not Started
+              Color.fromARGB(255, 7, 154, 14),  // Completed
+              Color.fromARGB(255, 248, 147, 5), // In Progress
+              Color.fromARGB(255, 241, 25, 25),    // Not Started
             ];
 
             return Padding(

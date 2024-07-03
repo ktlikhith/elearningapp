@@ -70,15 +70,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                 // color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
                 color:Theme.of(context).cardColor,
               ),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: Offset(0, 3),
-              ),
-            ],
+            color: Theme.of(context).hintColor.withOpacity(0.2),
+            
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +81,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                   learningPath.name,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 20,
+                    color: Theme.of(context).primaryColor
                   ),
                 ),
               ),
@@ -106,12 +100,13 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                           children: [
                             CircularProgressIndicator(
                               value: learningPath.progress / 100,
-                              strokeWidth: 10,
+                              strokeWidth: 20,
                               backgroundColor: Colors.grey[300],
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 _getStatusColor(learningPath.progress),
                               ),
                             ),
+                          
                             Center(
                               child: Text(
                                 '${learningPath.progress}%',
@@ -125,7 +120,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 15),
                       Text(
                         _getStatusText(learningPath.progress),
                         style: TextStyle(

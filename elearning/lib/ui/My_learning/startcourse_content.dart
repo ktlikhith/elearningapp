@@ -731,9 +731,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               final description = snapshot.data!;
                               return Text(
                                 description.isNotEmpty ? removeHtmlTags(description) : 'No description available',
-                                style: const TextStyle(
+                                style:  TextStyle(
                                   fontSize: 16.0,
-                                  color: Colors.grey,
+                                  color: Theme.of(context).hintColor,
                                 ),
                               );
                             }
