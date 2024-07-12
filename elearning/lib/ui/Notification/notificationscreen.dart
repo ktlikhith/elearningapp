@@ -454,7 +454,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
         padding: EdgeInsets.all(8.0),
         child: _notifications != null
@@ -543,7 +543,7 @@ class NotificationDetailsScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

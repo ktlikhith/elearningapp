@@ -22,7 +22,7 @@ class LearningPathDetailScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: courses.isEmpty
           ? Center(child: Text('No courses available'))
           : ListView.builder(

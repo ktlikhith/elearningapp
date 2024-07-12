@@ -79,7 +79,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
           return Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Column(

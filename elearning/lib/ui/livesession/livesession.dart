@@ -93,7 +93,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
           centerTitle: false,
           automaticallyImplyLeading: false,
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: FutureBuilder<List<LiveSession>>(
           future: _futureData,
           builder: (context, snapshot) {

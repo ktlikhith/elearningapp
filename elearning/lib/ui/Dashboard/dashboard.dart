@@ -217,7 +217,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ],
           ),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SingleChildScrollView(
             controller: _scrollController,
             child: Column(

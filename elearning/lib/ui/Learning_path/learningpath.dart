@@ -58,7 +58,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder<Map<String, dynamic>>(
         future: learningPathData,
         builder: (context, snapshot) {

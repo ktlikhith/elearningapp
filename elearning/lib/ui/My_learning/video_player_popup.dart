@@ -22,6 +22,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
     _initializePlayer();
+    
+   
   }
 
   void _initializePlayer() {
@@ -29,9 +31,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         widget.courseVideourl.contains('youtu.be')) {
       _playerWidget = YoutubePlayer(
         controller: YoutubePlayerController(
+          
           initialVideoId: YoutubePlayer.convertUrlToId(widget.courseVideourl)!,
+          
           flags: YoutubePlayerFlags(autoPlay: true, mute: false),
         ),
+        
         showVideoProgressIndicator: true,
         progressIndicatorColor: Colors.amber,
         progressColors: ProgressBarColors(
@@ -39,10 +44,15 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           handleColor: Colors.amberAccent,
         ),
         onReady: () {
-          setState(() {});
+          // await Future.delayed(Duration(milliseconds: 1000));
+          
+      setState(() {});
+    
+    
         },
       );
     } else {
+      print('hoi');
       _videoController = VideoPlayerController.network(widget.courseVideourl);
       _playerWidget = Stack(
         alignment: Alignment.center,

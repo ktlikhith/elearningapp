@@ -75,7 +75,7 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
         }
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Column(
             children: [
