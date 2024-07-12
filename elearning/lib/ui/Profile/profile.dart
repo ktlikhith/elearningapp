@@ -396,7 +396,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit, color: Theme.of(context).backgroundColor),
+            icon: Icon(Icons.edit, color: Theme.of(context).scaffoldBackgroundColor),
             onPressed: () async {
               // Navigate to the EditProfilePage and refresh data on return
               await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));

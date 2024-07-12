@@ -67,7 +67,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView.builder(
   itemCount: courses.isEmpty ? 5 : courses.length, // Use 5 shimmer items if courses list is empty
   itemBuilder: (context, index) {

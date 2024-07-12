@@ -320,7 +320,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
             ),
           ],
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Consumer<ReportProvider>(
           builder: (context, reportProvider, _) {
             return SingleChildScrollView(

@@ -33,7 +33,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FutureBuilder<Map<String, dynamic>>(
         future: _learningPathData,
         builder: (context, snapshot) {

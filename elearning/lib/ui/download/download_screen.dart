@@ -690,7 +690,7 @@ void _showFileInfo(BuildContext context, String filePath, String date) {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

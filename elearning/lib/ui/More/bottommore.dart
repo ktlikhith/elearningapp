@@ -368,7 +368,7 @@ class _MyMorePageState extends State<MyMorePage> {
             ),
           ],
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: ListView(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           children: <Widget>[
