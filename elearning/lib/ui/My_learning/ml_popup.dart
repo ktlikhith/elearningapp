@@ -185,6 +185,7 @@ import 'dart:ffi';
 
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/My_learning/test_videopopup.dart';
 import 'package:elearning/ui/My_learning/video_player_popup.dart';
 import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:flutter/material.dart';
@@ -403,7 +404,7 @@ class _MLPopupState extends State<MLPopup> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VideoPlayerScreen(courseVideourl: widget.course_videourl),
+                      builder: (context) => YouTubePlayerScreen(videoUrl: widget.course_videourl),
                     ),
                   );
 
