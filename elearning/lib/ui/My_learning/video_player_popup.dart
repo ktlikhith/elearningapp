@@ -1,162 +1,92 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-class VideoPlayerScreen extends StatefulWidget {
-  final String courseVideourl;
+class YouTubePlayerScreen extends StatefulWidget {
+  final String videoUrl;
 
-  VideoPlayerScreen({required this.courseVideourl});
+  YouTubePlayerScreen({required this.videoUrl});
 
   @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+  _YouTubePlayerScreenState createState() => _YouTubePlayerScreenState();
 }
 
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late Widget _playerWidget;
-  late VideoPlayerController _videoController;
-  late bool _isPlaying = true;
-  late bool _isFullScreen = false;
+class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _initializePlayer();
-    
-   
-  }
+    print(widget.videoUrl);
+    final videoId = YoutubePlayerController.convertUrlToId(widget.videoUrl);
+     _controller = YoutubePlayerController.fromVideoId(
+  videoId: videoId!,
+  autoPlay: true,
+  params: const YoutubePlayerParams(showFullscreenButton: true,strictRelatedVideos:true),
+);
 
-  void _initializePlayer() {
-    if (widget.courseVideourl.contains('youtube.com') ||
-        widget.courseVideourl.contains('youtu.be')) {
-      _playerWidget = YoutubePlayer(
-        controller: YoutubePlayerController(
-          
-          initialVideoId: YoutubePlayer.convertUrlToId(widget.courseVideourl)!,
-          
-          flags: YoutubePlayerFlags(autoPlay: true, mute: false),
-        ),
-        
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.amber,
-        progressColors: ProgressBarColors(
-          playedColor: Colors.amber,
-          handleColor: Colors.amberAccent,
-        ),
-        onReady: () {
-          // await Future.delayed(Duration(milliseconds: 1000));
-          
-      setState(() {});
-    
-    
-        },
-      );
-    } else {
-      print('hoi');
-      _videoController = VideoPlayerController.network(widget.courseVideourl);
-      _playerWidget = Stack(
-        alignment: Alignment.center,
-        children: [
-          AspectRatio(
-            aspectRatio: _videoController.value.aspectRatio,
-            child: VideoPlayer(_videoController),
-          ),
-          IconButton(
-            icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-            onPressed: () {
-              setState(() {
-                if (_isPlaying) {
-                  _videoController.pause();
-                } else {
-                  _videoController.play();
-                }
-                _isPlaying = !_isPlaying;
-              });
-            },
-          ),
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: IconButton(
-              icon: Icon(Icons.fullscreen),
-              onPressed: () {
-                _toggleFullScreen();
-              },
-            ),
-          ),
-        ],
-      );
-      _videoController.initialize().then((_) {
-        setState(() {});
-      });
-    }
   }
-
-  void _toggleFullScreen() {
-    if (_isFullScreen) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    }
-    setState(() {
-      _isFullScreen = !_isFullScreen;
-    });
-  }
+  
 
   @override
   void dispose() {
-    if (widget.courseVideourl.contains('youtube.com') ||
-        widget.courseVideourl.contains('youtu.be')) {
-      final YoutubePlayerController controller =
-          (_playerWidget as YoutubePlayer).controller;
-      controller.pause();
-      controller.dispose();
-    } else {
-      _videoController.dispose();
-    }
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    _controller.close();
     super.dispose();
   }
 
+  
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black, // Black background
-      body: Stack(
+Widget build(BuildContext context) {
+  final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+  return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop();
+        return true;
+      },
+  
+  child:  Scaffold(
+    backgroundColor: Colors.black,
+    body: Center(
+      child: Stack(
         children: [
-          Center(
-            child: _playerWidget,
+          Padding(
+            padding: EdgeInsets.only(top: isPortrait ? MediaQuery.of(context).size.height * 0.35 : 0),
+            child: YoutubePlayerScaffold(
+              controller: _controller,
+              aspectRatio: 16 / 9,
+              builder: (BuildContext context, Widget player) {
+                return Column(
+                  children: [
+                    player,
+                  ],
+                );
+              },
+            ),
           ),
-          if (!_isFullScreen) // Show close button only when not in full screen
+          if (isPortrait)
             Positioned(
-              top: 40,
-              right: 20,
-              child: TextButton(
-                onPressed: () {
-                  if (_isFullScreen) {
-                    _toggleFullScreen();
-                  }
+              top: MediaQuery.of(context).padding.top + 10,
+              right: 10,
+              child: GestureDetector(
+                onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Text(
-                  'Close',
-                  style: TextStyle(color: Colors.red),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color:Colors.red, fontSize: 16),
+                  ),
                 ),
               ),
             ),
         ],
       ),
-    );
-  }
+    ),
+  ),
+  );
+  
+}
+
 }
