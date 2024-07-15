@@ -126,46 +126,54 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
-            title: Text('Dashboard'),
+            title:  Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 20.0,left: 0),
+                  child: _tenantLogoBytes != null
+                      ? Container(
+                       
+                          width: 90,
+                          height: 35,
+                          color:Colors.white,
+                          child: Image.memory(
+                            _tenantLogoBytes!,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        )
+                      : FutureBuilder(
+                          future: _fetchUserInfoFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: SizedBox(
+                                  width: 90,
+                                  height: 35,
+                                  child: Container(color: Colors.white),
+                                ),
+                              );
+                            } else {
+                              return SizedBox(
+                                width: 90,
+                                height: 35,
+                                child: Image.asset(
+                                  'assets/logo/RAP_logo.jpeg',
+                                  fit: BoxFit.fill,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                    
+                ),
+                Text('Dashboard'),
+              ],
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             elevation: 0,
-            leading: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: _tenantLogoBytes != null
-                  ? SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.memory(
-                        _tenantLogoBytes!,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : FutureBuilder(
-                      future: _fetchUserInfoFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: Container(color: Colors.white),
-                            ),
-                          );
-                        } else {
-                          return SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: Image.asset(
-                              'assets/logo/RAP_logo.jpeg',
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-            ),
+            
             actions: <Widget>[
               Stack(
                 children: [
