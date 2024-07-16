@@ -61,10 +61,19 @@ class _ReportPageState extends State<ReportPage> {
       },
     child:  Scaffold(
       appBar: AppBar(
-        title: Text('Report Page'),
+         title: Padding(
+           padding: const EdgeInsets.only(left: 0.0),
+           child: Text('Report Page'),
+         ),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: false,
         automaticallyImplyLeading: false,
+         leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0,right: 0),
+            child: SvgPicture.asset('assets/appbarsvg/statistics-svgrepo-com.svg'),
+          ),
+          leadingWidth: 48,
+       
      
       ),
       body: isLoading

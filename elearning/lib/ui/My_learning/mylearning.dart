@@ -245,6 +245,7 @@ import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart'; 
 import 'package:provider/provider.dart';
@@ -301,6 +302,12 @@ class _MyLearningPageState extends State<MyLearningPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
+          automaticallyImplyLeading: false,
+           leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0,right: 0),
+            child: SvgPicture.asset('assets/appbarsvg/graduate-student-svgrepo-com.svg'),
+          ),
+          leadingWidth: 52,
           title: _isSearching
               ? TextField(
                   onChanged: _updateSearchQuery,
