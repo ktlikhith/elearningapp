@@ -682,7 +682,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildShimmerImage(imageHeight);
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text(''));//Error: ${snapshot.error}
           } else {
             final imageUrl = snapshot.data!;
             return SingleChildScrollView(

@@ -5,6 +5,7 @@ import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
@@ -91,6 +92,11 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             'Live Event',
           ),
           centerTitle: false,
+           leading: Padding(
+            padding: const EdgeInsets.only(left: 10.0,right: 0),
+            child: SvgPicture.asset('assets/appbarsvg/world-internet-svgrepo-com.svg'),
+          ),
+          leadingWidth: 48,
           automaticallyImplyLeading: false,
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -100,7 +106,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _buildShimmerEffect(); // Show shimmer effect while loading
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(child: Text(''));//Error: ${snapshot.error}
             } else if (snapshot.hasData) {
               final List<LiveSession> sessions = snapshot.data!;
               if (sessions.isEmpty) {

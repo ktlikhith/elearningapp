@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class CourseProgressPage extends StatefulWidget {
   final String token;
+  final String filter;
 
-  CourseProgressPage({required this.token});
+  CourseProgressPage({required this.token, required this.filter});
 
   @override
   _CourseProgressPageState createState() => _CourseProgressPageState();
@@ -20,12 +21,25 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
     _homePageData = HomePageService.fetchHomePageData(widget.token);
   }
 
+  List<CourseData> filterCourses(List<CourseData> courses, String filter) {
+    switch (filter) {
+      case 'not started':
+        return courses.where((course) => course.courseProgress == 0).toList();
+      case 'in progress':
+        return courses.where((course) => course.courseProgress > 0 && course.courseProgress < 100).toList();
+      case 'completed':
+        return courses.where((course) => course.courseProgress == 100).toList();
+      default:
+        return courses;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Course Progress'),
-         backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -42,20 +56,21 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.allCourses.length,
-              itemBuilder: (context, index) {
-                final course = snapshot.data!.allCourses[index];
-                return GestureDetector(
-                  onTap: (){
-                 Navigator.push( context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ActivityDetailsPage(widget.token, course.id, course.name),
-                    ),
-                  );
+            final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
 
-              },
+            return ListView.builder(
+              itemCount: filteredCourses.length,
+              itemBuilder: (context, index) {
+                final course = filteredCourses[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActivityDetailsPage(widget.token, course.id, course.name),
+                      ),
+                    );
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CourseProgressBar(
@@ -87,7 +102,7 @@ class CourseProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -98,7 +113,6 @@ class CourseProgressBar extends StatelessWidget {
           SizedBox(height: 8),
           Row(
             children: [
-              
               Stack(
                 children: [
                   Container(
@@ -130,7 +144,7 @@ class CourseProgressBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (progress > 0 )
+                  if (progress > 0)
                     Positioned(
                       left: MediaQuery.of(context).size.width * 0.75 * (progress / 100) - 20,
                       child: Container(
@@ -138,14 +152,14 @@ class CourseProgressBar extends StatelessWidget {
                         height: 20,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF3ACBE8),
-                          Color(0xFF0D85D8),
-                          Color(0xFF0041C7),
-                        ],
-                        stops: [0.0, 0.5, 1.0], // Defining the stops for the gradient
-                      ),
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF3ACBE8),
+                              Color(0xFF0D85D8),
+                              Color(0xFF0041C7),
+                            ],
+                            stops: [0.0, 0.5, 1.0], // Defining the stops for the gradient
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
@@ -163,13 +177,10 @@ class CourseProgressBar extends StatelessWidget {
                 '${progress.toInt()}%',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
-              
             ],
           ),
-         
         ],
       ),
     );
   }
 }
-

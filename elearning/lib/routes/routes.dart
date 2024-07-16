@@ -114,10 +114,22 @@ final token = settings.arguments as String;
       ,);
 
 case eachcourseprogress:
-final token = settings.arguments as String; 
-      return MaterialPageRoute(
-        builder:(context) => CourseProgressPage(token: token)
-      ,);
+  final args = settings.arguments;
+ 
+       if (args is Map<String, dynamic>) {
+          return MaterialPageRoute(
+            builder: (context) => CourseProgressPage(
+              token: args['token'],
+              filter: args['filter'],
+            ),
+          );
+        } else  if (args is Map<String, dynamic>) {
+            token: args['token'];
+           } return
+         MaterialPageRoute(
+          
+            builder: (context) => DashboardScreen(token: 'token', ), // Pass the token to DashboardScreen
+  );
 
       case landingpage:
       return MaterialPageRoute(

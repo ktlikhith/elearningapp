@@ -126,10 +126,11 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title:  Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(right: 20.0,left: 0),
+                  padding: EdgeInsets.only(right: 10.0,left: 0),
                   child: _tenantLogoBytes != null
                       ? Container(
                        
@@ -168,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                     
                 ),
-                Text('Dashboard'),
+               
               ],
             ),
             backgroundColor: Theme.of(context).primaryColor,

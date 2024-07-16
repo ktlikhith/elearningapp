@@ -66,7 +66,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
             return _buildLoadingSkeleton();
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Error: ${snapshot.error}'),
+              
             );
           } else if (snapshot.hasData && snapshot.data!['learningpathdetail'].isEmpty) {
             return Center(
