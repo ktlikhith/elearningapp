@@ -135,11 +135,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       ? Container(
                        
                           width: 90,
-                          height: 35,
+                          height: 40,
                           color:Colors.white,
                           child: Image.memory(
                             _tenantLogoBytes!,
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.contain,
                           ),
                         )
                       : FutureBuilder(
@@ -151,14 +151,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                 highlightColor: Colors.grey[100]!,
                                 child: SizedBox(
                                   width: 90,
-                                  height: 35,
+                                  height: 40,
                                   child: Container(color: Colors.white),
                                 ),
                               );
                             } else {
                               return SizedBox(
                                 width: 90,
-                                height: 35,
+                                height: 40,
                                 child: Image.asset(
                                   'assets/logo/RAP_logo.jpeg',
                                   fit: BoxFit.fill,

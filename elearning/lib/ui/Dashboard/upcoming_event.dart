@@ -165,7 +165,15 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
         child: Container(
           decoration: BoxDecoration(
-            color:Theme.of(context).cardColor,
+            //color:Theme.of(context).cardColor,
+             gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF0041C7), // Start color with opacity
+                          Color(0xFF0D85D8), // Mid color with opacity
+                          Color(0xFF3ACBE8), // End color with opacity
+                        ],
+                     
+                      ),
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
