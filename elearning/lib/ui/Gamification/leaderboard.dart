@@ -388,7 +388,16 @@ class _LeaderboardState extends State<Leaderboard> {
       padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).primaryColor,
+        // color: Theme.of(context).primaryColor,
+         gradient: LinearGradient(
+                        colors: [
+                           Color.fromARGB(255, 5, 97, 162), // Mid color with opacity
+                          Color(0xFF0041C7),
+                          Color(0xFF3ACBE8), // Start color with opacity
+                          // End color with opacity
+                        ],
+                     
+                      ),
       ),
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
