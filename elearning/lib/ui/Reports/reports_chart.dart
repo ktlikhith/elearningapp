@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
@@ -92,26 +93,28 @@ class _ReportPageState extends State<ReportPage> {
                     //   ),
                     // ),
                     SizedBox(height: 20),
-                    Row(
+                    Column(
                       children: [
                         _buildCard(
                           "Course Progress Report",
-                          "123 mmHg",
+                          "Your Progress at a Glance.",
+                          "Track your progress through each course module and see how close you are to completion.",
                           "assets/Reportsicon/graphics-graph-svgrepo-com.svg",
-                            100,330,
+                            80,200,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.mycourseprogress, arguments: widget.token);
                           },
                         ),
                         
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
+                    //   ],
+                    // ),
+                    // SizedBox(height: 16),
+                    // Row(
+                    //   children: [
                         _buildCard(
                           "Learning Path",
-                          "79 mmHg",
+                          "Your Personalized Learning Path.",
+                          "Step-by-step guide through your personalized learning pathway, ensuring you reach your goals.",
                           "assets/Reportsicon/undraw_progressive_app_m-9-ms.svg",
                           80,200,
                           () {
@@ -121,7 +124,8 @@ class _ReportPageState extends State<ReportPage> {
                         SizedBox(width: 16),
                         _buildCard(
                           "Certification",
-                          "122 BPM",
+                          "Achievements Unlocked.",
+                          "A record of your accomplishments, highlighting the certifications that validate your expertise.",
                           "assets/Reportsicon/undraw_certificate_re_yadi.svg",
                             80,200,
                           () {
@@ -145,49 +149,95 @@ class _ReportPageState extends State<ReportPage> {
       );
   }
 
-  Widget _buildCard(String title, String value, String svgPath,double widthsvg,double heightsvg, VoidCallback onTap) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: widthsvg,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).hintColor.withOpacity(0.3),),
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.circular(16),
-          // ),
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
+Widget _buildCard(String title, String subtitle, String info, String svgPath, double widthsvg, double heightsvg, VoidCallback onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          //topLeft: Radius.circular(16),
+               // bottomRight: Radius.circular(16),
+               topRight: Radius.circular(42),
+                bottomLeft: Radius.circular(42)
+        ),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                //topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              color: Colors.orange,
+            ),
+            child: Text(
+              title,
+              style: GoogleFonts.lato(
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+           SizedBox(height: 16),
+                
+                   Center(
+                     
+                     child: SvgPicture.asset(
+                      svgPath,
+                      height: heightsvg,
+                      width: widthsvg,
+                      
+                                       
+                                     ),
+                   ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
+                AnimatedTextKit(
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            subtitle,
+                            textStyle: GoogleFonts.lato(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                                color: Theme.of(context).highlightColor,
+                      
+                            ),
+                         cursor:'.',
+                            speed: Duration(milliseconds: 120),
+                          ),
+                        ],
+                        isRepeatingAnimation: true,
+                        displayFullTextOnTap: true,
+                        stopPauseOnTap: true,
+                        repeatForever: true,
+                      ),
                 Text(
-                  title,
+                  info,
                   style: GoogleFonts.lato(
-                    color:Theme.of(context).cardColor,
-                    fontSize: 20,
+                    color: Theme.of(context).hintColor,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
-                  
                   ),
                 ),
-                SizedBox(height: 8),
-                Center(
-                  child: SvgPicture.asset(
-                    svgPath,
-                    height: heightsvg, 
-                    width: widthsvg,// Adjust size as needed
-                  ),
-                ),
-              
-                
+               
+               
               ],
             ),
           ),
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
 
   // Widget _buildPieChart() {

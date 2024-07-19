@@ -455,16 +455,9 @@ class _ProfilePageState extends State<ProfilePage> {
     topRight: Radius.elliptical(150, 150),
     bottomLeft: Radius.circular(50),
   ),  //color: Theme.of(context).hintColor.withOpacity(0.3),
-   //color:Theme.of(context).cardColor,
+   color:Theme.of(context).cardColor,
    
-               gradient: LinearGradient(
-                        colors: [
-                         Color.fromARGB(255, 0, 20, 199), // Start color with opacity
-                          Color(0xFF0D85D8), // Mid color with opacity
-                           Color(0xFF3ACBE8), // End color with opacity
-                        ],
-                     
-                      ),
+          
    ),
  
   child: LayoutBuilder(
