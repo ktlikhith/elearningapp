@@ -254,13 +254,24 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
+
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
+import 'package:confetti/confetti.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
+import 'package:neopop/neopop.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 
 class SpinWheel extends StatefulWidget {
@@ -284,6 +295,8 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<double> _wheelNotifier = StreamController<double>();
   late bool spinButton = false;
   String selectedLabel = '';
+  bool isconfettiplaying=false;
+  final confettiController=ConfettiController();
 
   @override
   void initState() {
@@ -291,6 +304,12 @@ class _SpinWheelState extends State<SpinWheel> {
     widget.rewardDataFuture.then((rewardData) {
       setState(() {
         spinButton = rewardData.spinButton;
+      });
+    });
+    ///listen to states: play the confitt animation
+    confettiController.addListener((){
+      setState(() {
+        isconfettiplaying=confettiController.state==ConfettiControllerState.playing;
       });
     });
   }
@@ -307,15 +326,7 @@ class _SpinWheelState extends State<SpinWheel> {
     return Container(
       width: widget.width,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF3ACBE8),
-            Color(0xFF0D85D8),
-            Color(0xFF0041C7),
-          ],
-          // begin:Alignment.topRight,
-          // end:  Alignment.bottomLeft,
-        ),
+     color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: [
           BoxShadow(
@@ -377,7 +388,7 @@ class _SpinWheelState extends State<SpinWheel> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 spinButton
-                    ? 'Spin the wheel and luck your chance to get points benefit and redeem.'
+                    ? 'Spin the wheel and try your luck to get points benefit and redeem.'
                     : 'You have won todays luck on wheel, try next day',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -393,7 +404,7 @@ class _SpinWheelState extends State<SpinWheel> {
             builder: (context, snapshot) =>
                 snapshot.hasData ? rouletteScore(snapshot.data!) : Container(),
           ),
-          if (spinButton != null)
+          spinButton ?
             NeoPopTiltedButton(
               isFloating: true,
               onTapUp: spinButton
@@ -410,12 +421,12 @@ class _SpinWheelState extends State<SpinWheel> {
                 padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 8),
                 child: Text(
                   'SPIN',
-                  style: TextStyle(color: Theme.of(context).highlightColor),
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
               ),
-            )
-          else
-            CircularProgressIndicator(),
+            ):Container(),
+          // else
+          //   CircularProgressIndicator(),
         ],
       ),
     );
@@ -458,35 +469,197 @@ class _SpinWheelState extends State<SpinWheel> {
         type: 'spinwheel',
         points: label,
       );
+      
       _showCongratsDialog(label);
+      if(!isconfettiplaying){
+        confettiController.play();
+      }
     } catch (e) {
       print('Error adding reward points: $e');
     }
   }
 
-  void _showCongratsDialog(String label) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Congratulations!'),
-          content: Text('You won spin wheel points: $label'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushReplacementNamed(
-                  RouterManger.Gamification,
-                  arguments: widget.token,
-                );
-              },
+  // void _showCongratsDialog(String label) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //  shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //       ),
+  //         title:  Row(
+  //         children: [
+  //           Icon(Icons.celebration, color: Colors.green,size: 40,),
+  //           SizedBox(width: 10),
+  //           Text('Congratulations!'),
+  //         ],
+  //       ),
+  //         content: Text('You won spin wheel points: $label'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //               Navigator.of(context).pushReplacementNamed(
+  //                 RouterManger.Gamification,
+  //                 arguments: widget.token,
+  //               );
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+void _showCongratsDialog(String label) {
+  showDialog(
+    context: context,
+    barrierDismissible: true, // Allows tapping outside the dialog to dismiss it
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async {
+          if(isconfettiplaying){
+            confettiController.stop();
+          }          // Perform the navigation action when the back button is pressed
+          Navigator.of(context).pushReplacementNamed(
+            RouterManger.Gamification,
+            arguments: widget.token,
+          );
+          return false;
+        },
+        child: GestureDetector(
+          onTap: () {
+             if(isconfettiplaying){
+            confettiController.stop();
+          }  
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed(
+              RouterManger.Gamification,
+              arguments: widget.token,
+            );
+          },
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
             ),
-          ],
-        );
-      },
-    );
-  }
+            contentPadding: EdgeInsets.zero, // To remove the default padding
+            content: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF3ACBE8),
+                        Color(0xFF0D85D8),
+                        Color(0xFF0041C7),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  padding: EdgeInsets.all(20.0), // Adjust padding as needed
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10),
+                      Center(
+                     child: ConfettiWidget(
+                               confettiController: confettiController,
+                               shouldLoop: true,
+                               blastDirectionality: BlastDirectionality.explosive,
+                              // blastDirection: -pi / 2,//blast all the direction
+                               numberOfParticles: 20,
+                               emissionFrequency: 0.10,
+                               minBlastForce: 10,
+                               maxBlastForce: 50,
+                               gravity: 1.0,
+                               colors: [
+                                 Color.fromARGB(255, 249, 2, 2),
+                                 Color.fromARGB(255, 238, 85, 3),
+                                 Color.fromARGB(255, 240, 244, 11),
+                                 Color.fromARGB(255, 99, 245, 8),
+                                 Color.fromARGB(255, 9, 222, 212),
+                                 Color.fromARGB(255, 34, 7, 241),
+                                 Color.fromARGB(255, 241, 9, 241),
+                                 
+                               ],
+                             ),
+                   ),
+                      Row(
+                        children: [
+                          
+                          Icon(Icons.celebration, color: Color.fromARGB(255, 13, 10, 221), size: 40),
+                          SizedBox(width: 5),
+                          AnimatedTextKit(
+                            animatedTexts: [
+                              FadeAnimatedText(
+                                'Congratulations!',
+                                textStyle: GoogleFonts.lato(
+                                  fontSize: 26.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                duration: Duration(milliseconds: 2000),
+                              ),
+                            ],
+                            isRepeatingAnimation: true,
+                            displayFullTextOnTap: true,
+                            stopPauseOnTap: true,
+                            repeatForever: true,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        'You won spin wheel points:',
+                        style: GoogleFonts.lato(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      AnimatedTextKit(
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            label,
+                            textStyle: TextStyle(
+                              fontSize: 35.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                            colors: [
+                              Color.fromARGB(255, 242, 244, 244),
+                              Color.fromARGB(255, 16, 13, 216),
+                              Color.fromARGB(255, 0, 10, 199),
+                            ],
+                            textDirection: TextDirection.ltr,
+                            speed: Duration(milliseconds: 1000),
+                          ),
+                        ],
+                        isRepeatingAnimation: true,
+                        displayFullTextOnTap: true,
+                        stopPauseOnTap: true,
+                        repeatForever: true,
+                      ),
+                       
+                    ],
+                  ),
+                  
+                ),
+                  
+              ],
+             
+            ),
+          ),
+          
+        ),
+     
+      );
+    },
+  );
+}
+
+
 
   double _generateRandomVelocity() => (Random().nextDouble() * 6000) + 2000;
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;

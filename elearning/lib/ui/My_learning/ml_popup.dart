@@ -24,6 +24,7 @@ class MLPopup extends StatefulWidget {
   final String courseEndDate;
   final String course_videourl;
   final String courseDuration;
+ 
 
   const MLPopup(
       {Key? key,
@@ -44,6 +45,7 @@ class MLPopup extends StatefulWidget {
 
 class _MLPopupState extends State<MLPopup> {
   bool _isLoading = false;
+   bool is_course_videourl=false;
   int? _userId;
   String? _username;
   String? _firstname;
@@ -60,6 +62,9 @@ class _MLPopupState extends State<MLPopup> {
     super.initState();
     _fetchUserId();
     _fetchProfileData(widget.token);
+     if(widget.course_videourl!=""){
+        is_course_videourl=true;
+      }
   }
 
   
@@ -90,6 +95,7 @@ class _MLPopupState extends State<MLPopup> {
 
   void _fetchUserId() async {
     setState(() {
+     
       _isLoading = true; // Start loading
     });
     try {
@@ -217,7 +223,8 @@ class _MLPopupState extends State<MLPopup> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                onPressed: () {
+               
+                onPressed:  is_course_videourl?() {
                    
 
                   Navigator.push(
@@ -228,6 +235,8 @@ class _MLPopupState extends State<MLPopup> {
                   );
 
                  
+                }:  () {
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).hintColor,

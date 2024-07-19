@@ -304,10 +304,10 @@ class _MyLearningPageState extends State<MyLearningPage> {
           backgroundColor: Theme.of(context).primaryColor,
           automaticallyImplyLeading: false,
            leading: Padding(
-            padding: const EdgeInsets.only(left: 10.0,right: 0),
+            padding: const EdgeInsets.only(left: 5.0,right: 0),
             child: SvgPicture.asset('assets/appbarsvg/graduate-student-svgrepo-com.svg'),
           ),
-          leadingWidth: 52,
+          leadingWidth: 60,
           title: _isSearching
               ? TextField(
                   onChanged: _updateSearchQuery,
