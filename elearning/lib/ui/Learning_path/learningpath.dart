@@ -21,7 +21,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
   late Future<Map<String, dynamic>> learningPathData;
   final CourseReportApiService _apiService = CourseReportApiService();
   List<Course> _courses = [];
-  bool _isContentVisible = false; // State variable to track visibility of content
+  int? _expandedIndex;
 
   @override
   void initState() {
@@ -66,16 +66,16 @@ class _LearningPathPageState extends State<LearningPathPage> {
             return _buildLoadingSkeleton();
           } else if (snapshot.hasError) {
             return Center(
-              
+              child: Text('Error loading data'),
             );
           } else if (snapshot.hasData && snapshot.data!['learningpathdetail'].isEmpty) {
             return Center(
               child: Text('No Data to Show'),
             );
           } else {
-            final learningPathDetail = snapshot.data!['learningpathdetail'][0];
+            final learningPathDetails = snapshot.data!['learningpathdetail'];
             final List<dynamic> courseProgress = snapshot.data!['learningpath_progress'];
-            return _buildLearningPathPage(context, learningPathDetail, courseProgress, _courses);
+            return _buildLearningPathPage(context, learningPathDetails, courseProgress, _courses);
           }
         },
       ),
@@ -130,12 +130,16 @@ class _LearningPathPageState extends State<LearningPathPage> {
     );
   }
 
-  Widget _buildLearningPathPage(BuildContext context, Map<String, dynamic> learningPathDetail, List<dynamic> courseProgress, List<Course> courses) {
+  Widget _buildLearningPathPage(BuildContext context, List<dynamic> learningPathDetails, List<dynamic> courseProgress, List<Course> courses) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(8.0),
       child: Column(
-        children: [
-          Container(
+        children: learningPathDetails.asMap().entries.map<Widget>((entry) {
+          final index = entry.key;
+          final learningPathDetail = entry.value;
+          final relevantCourses = courseProgress.where((course) => course['learningpath'] == learningPathDetail['learningpathid']).toList();
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
               color: Theme.of(context).hintColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8.0),
@@ -149,83 +153,78 @@ class _LearningPathPageState extends State<LearningPathPage> {
                   Image.network(
                     '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
                     height: 200,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     errorBuilder: (context, error, stackTrace) {
-                      // Return a default image when loading fails
                       return Image.asset(
                         'assets/images/coursedefaultimg.jpg',
                         height: 200,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                       );
                     },
                   ),
                   SizedBox(height: 16.0),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    learningPathDetail['learningpathname'],
+                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    removeHtmlTags(learningPathDetail['discriotion']),
+                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                  ),
+                  SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
                       children: [
-                        Text(
-                          learningPathDetail['learningpathname'],
-                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          removeHtmlTags(learningPathDetail['discriotion']),
-                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                        FaIcon(
+                          FontAwesomeIcons.clock,
+                          size: 16.0,
+                          color: Colors.black,
                         ),
                         SizedBox(width: 8.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.clock,
-                                size: 16.0,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 8.0),
-                              Expanded(
-                                child: Text(
-                                  'Duration: ${learningPathDetail['duration']}',
-                                  style: TextStyle(fontSize: 16.0),
-                                ),
-                              ),
-                              SizedBox(width: 30.0),
-                              FaIcon(
-                                FontAwesomeIcons.book,
-                                size: 16.0,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 8.0),
-                              Text(
-                                'No.Courses: ${learningPathDetail['nocourses']}',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ],
+                        Expanded(
+                          child: Text(
+                            'Duration: ${learningPathDetail['duration']}',
+                            style: TextStyle(fontSize: 16.0),
                           ),
                         ),
-                        SizedBox(height: 12.0),
-                        LinearPercentIndicator(
-                          barRadius: Radius.circular(30),
-                          lineHeight: 18.0,
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          percent: learningPathDetail['progress'] / 100,
-                          backgroundColor: Color.fromARGB(255, 204, 205, 205),
-                          progressColor: getProgressBarColor(learningPathDetail['progress']),
-                          center: Text(
-                            "${learningPathDetail['progress']}%",
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                          ),
+                        SizedBox(width: 30.0),
+                        FaIcon(
+                          FontAwesomeIcons.book,
+                          size: 16.0,
+                          color: Colors.black,
                         ),
                         SizedBox(width: 8.0),
+                        Text(
+                          'No. Courses: ${learningPathDetail['nocourses']}',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
                       ],
+                    ),
+                  ),
+                  SizedBox(height: 12.0),
+                  LinearPercentIndicator(
+                    barRadius: Radius.circular(30),
+                    lineHeight: 18.0,
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                    percent: learningPathDetail['progress'] / 100,
+                    backgroundColor: Color.fromARGB(255, 204, 205, 205),
+                    progressColor: getProgressBarColor(learningPathDetail['progress']),
+                    center: Text(
+                      "${learningPathDetail['progress']}%",
+                      style: TextStyle(fontSize: 12, color: Colors.black),
                     ),
                   ),
                   SizedBox(height: 16.0),
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _isContentVisible = !_isContentVisible;
+                        if (_expandedIndex == index) {
+                          _expandedIndex = null; // Collapse if the same card is tapped
+                        } else {
+                          _expandedIndex = index; // Expand the new card
+                        }
                       });
                     },
                     child: Row(
@@ -236,21 +235,21 @@ class _LearningPathPageState extends State<LearningPathPage> {
                           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                         ),
                         Icon(
-                          _isContentVisible ? Icons.expand_less : Icons.expand_more,
+                          _expandedIndex == index ? Icons.expand_less : Icons.expand_more,
                           size: 24.0,
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: 8.0),
-                  _isContentVisible
+                  _expandedIndex == index
                       ? ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: courseProgress.length,
+                          itemCount: relevantCourses.length,
                           separatorBuilder: (context, index) => SizedBox(height: 16.0),
                           itemBuilder: (context, index) {
-                            final course = courseProgress[index];
+                            final course = relevantCourses[index];
                             Course? coursedes;
 
                             for (Course c in _courses) {
@@ -289,7 +288,6 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                           height: 200,
                                           fit: BoxFit.cover,
                                           errorBuilder: (context, error, stackTrace) {
-                                            // Return a default image when loading fails
                                             return Image.asset(
                                               'assets/images/coursedefaultimg.jpg',
                                               height: 200,
@@ -301,7 +299,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                       SizedBox(height: 8.0),
                                       Text(
                                         removeHtmlTags(course['coursename']),
-                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,color: Theme.of(context).highlightColor),
+                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).highlightColor),
                                       ),
                                       SizedBox(height: 8.0),
                                       Text(
@@ -332,8 +330,8 @@ class _LearningPathPageState extends State<LearningPathPage> {
                 ],
               ),
             ),
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
@@ -367,7 +365,6 @@ class _LearningPathPageState extends State<LearningPathPage> {
     );
   }
 
-  // Function to remove HTML tags from strings
   String removeHtmlTags(String htmlString) {
     final RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
     return htmlString.replaceAll(exp, '');
