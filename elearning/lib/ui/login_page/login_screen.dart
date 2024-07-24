@@ -62,16 +62,43 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
     }
   }
 
+  void _showErrorDialog(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text('Authentication Error', style: TextStyle(color: Colors.black)),
+        content: Text(message, style: TextStyle(color: Colors.black)),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+             shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+            ),
+            child: Text('OK' , style: TextStyle(
+                      color: Colors.white,
+                    ),),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Authentication failed. Please check your credentials/INTERNET CONNECTION.'),
-            ),
-          );
+          _showErrorDialog(context, 'Authentication failed. Please check your credentials or internet connection.');
         }
       },
       child: Scaffold(
