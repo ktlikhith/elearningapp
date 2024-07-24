@@ -1,3 +1,4 @@
+import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
@@ -12,6 +13,7 @@ class LearningPathScreen extends StatefulWidget {
 
 class _LearningPathScreenState extends State<LearningPathScreen> {
   late Future<Map<String, dynamic>> _learningPathData;
+  
 
   @override
   void initState() {
@@ -57,7 +59,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => LearningPathDetailScreen(learningPath: learningPath),
+              builder: (context) => LearningPathDetailScreen(learningPath: learningPath,token: widget.token,),
             ),
           );
         },
