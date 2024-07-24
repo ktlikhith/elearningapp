@@ -25,6 +25,7 @@ class LearningPathApiService {
 }
 
 class LearningPathDetail {
+  final String id;
   final String name;
   final String imageUrl;
   final String description;
@@ -33,6 +34,7 @@ class LearningPathDetail {
   final List<LearningPathProgress> learningpathProgress;
 
   LearningPathDetail({
+    required this.id,
     required this.name,
     required this.imageUrl,
     required this.description,
@@ -42,9 +44,13 @@ class LearningPathDetail {
   });
 
   factory LearningPathDetail.fromJson(Map<String, dynamic> json, List<dynamic> progressJson) {
-    List<LearningPathProgress> learningpathProgress = progressJson.map((i) => LearningPathProgress.fromJson(i)).toList();
+    List<LearningPathProgress> learningpathProgress = progressJson
+        .where((i) => i['learningpath'] == json['learningpathid'])
+        .map((i) => LearningPathProgress.fromJson(i))
+        .toList();
 
     return LearningPathDetail(
+      id: json['learningpathid'],
       name: json['learningpathname'],
       imageUrl: json['learningpathimage'],
       description: json['discriotion'],
@@ -56,12 +62,14 @@ class LearningPathDetail {
 }
 
 class LearningPathProgress {
+  final String learningPathId;
   final String name;
   final String description;
   final String imageUrl;
   final int progress;
 
   LearningPathProgress({
+    required this.learningPathId,
     required this.name,
     required this.description,
     required this.imageUrl,
@@ -70,6 +78,7 @@ class LearningPathProgress {
 
   factory LearningPathProgress.fromJson(Map<String, dynamic> json) {
     return LearningPathProgress(
+      learningPathId: json['learningpath'],
       name: json['coursename'],
       description: json['coursedec'],
       imageUrl: json['courseimg'],

@@ -238,7 +238,27 @@ class _CoursePageState extends State<Coursereport> {
       'Not Started': 0,
     };
 
-    return Row(
+    // return Wrap(
+    //   spacing: 16,
+    //   runSpacing: 8,
+    //   children: dataMap.entries.map((entry) {
+    //     final color = colorList[dataMap.keys.toList().indexOf(entry.key)];
+    //     return GestureDetector(
+    //       onTap: () => _handlePieChartTap(entry.key),
+    //       child: Row(
+    //         children: [
+    //           Container(
+    //             width: 16,
+    //             height: 16,
+    //             color: color,
+    //           ),
+    //           SizedBox(width: 8),
+    //           Text(entry.key),
+    //         ],
+    //       ),
+    //     );
+    //   }).toList(),
+     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: dataMap.entries.map((entry) {
         final color = colorList[dataMap.keys.toList().indexOf(entry.key)];
@@ -265,6 +285,7 @@ class _CoursePageState extends State<Coursereport> {
     return Scaffold(
       appBar: AppBar(
         title: Text('MY Course Progress', style: TextStyle(color: Theme.of(context).highlightColor)),
+        centerTitle: false,
         backgroundColor: Theme.of(context).primaryColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -279,7 +300,7 @@ class _CoursePageState extends State<Coursereport> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text(''));//'Error: ${snapshot.error}
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final data = snapshot.data!;
             final completedCount = getCompletedCoursesCount(data.allCourses);
@@ -304,48 +325,47 @@ class _CoursePageState extends State<Coursereport> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text('Course Progress', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 75),
-                  GestureDetector(
-                    onTapUp: (details) {
-                      final localPosition = details.localPosition;
-                      final centerX = MediaQuery.of(context).size.width / 2;
-                      final centerY = MediaQuery.of(context).size.width / 3.2;
-                      final angle = calculateAngle(localPosition.dx, localPosition.dy, centerX, centerY);
-                      final section = getSectionByAngle(angle, dataMap.entries.toList());
-                      if (section.isNotEmpty) {
-                        _handlePieChartTap(section);
-                      }
-                    },
-                    child: PieChart(
-                      dataMap: dataMap,
-                      animationDuration: Duration(milliseconds: 800),
-                      chartLegendSpacing: 70,
-                      chartRadius: MediaQuery.of(context).size.width / 1.6,
-                      colorList: colorList,
-                      initialAngleInDegree: 0,
-                      chartType: ChartType.ring,
-                      ringStrokeWidth: 60,
-                      legendOptions: LegendOptions(
-                        showLegends: false, // Disable the default legend
-                      ),
-                      chartValuesOptions: ChartValuesOptions(
-                        showChartValueBackground: true,
-                        showChartValues: true,
-                        showChartValuesInPercentage: true,
-                        showChartValuesOutside: false,
-                        decimalPlaces: 0,
+                  SizedBox(height: 16),
+                  Expanded(
+                    child: GestureDetector(
+                      onTapUp: (details) {
+                        final localPosition = details.localPosition;
+                        final centerX = MediaQuery.of(context).size.width / 2;
+                        final centerY = MediaQuery.of(context).size.width / 3.2;
+                        final angle = calculateAngle(localPosition.dx, localPosition.dy, centerX, centerY);
+                        final section = getSectionByAngle(angle, dataMap.entries.toList());
+                        if (section.isNotEmpty) {
+                          _handlePieChartTap(section);
+                        }
+                      },
+                      child: PieChart(
+                        dataMap: dataMap,
+                        animationDuration: Duration(milliseconds: 800),
+                        chartLegendSpacing: 70,
+                        chartRadius: MediaQuery.of(context).size.width / 1.6,
+                        colorList: colorList,
+                        initialAngleInDegree: 0,
+                        chartType: ChartType.ring,
+                        ringStrokeWidth: 60,
+                        legendOptions: LegendOptions(
+                          showLegends: false, // Disable the default legend
+                        ),
+                        chartValuesOptions: ChartValuesOptions(
+                          showChartValueBackground: true,
+                          showChartValues: true,
+                          showChartValuesInPercentage: true,
+                          showChartValuesOutside: false,
+                          decimalPlaces: 0,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
-                    child: buildCustomLegend(),
-                  ), // Add the custom legend here
+                  buildCustomLegend(), // Add the custom legend here
                   SizedBox(height: 24),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {

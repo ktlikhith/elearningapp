@@ -521,10 +521,10 @@ void _showCongratsDialog(String label) {
           if(isconfettiplaying){
             confettiController.stop();
           }          // Perform the navigation action when the back button is pressed
-          Navigator.of(context).pushReplacementNamed(
-            RouterManger.Gamification,
-            arguments: widget.token,
-          );
+          // Navigator.of(context).pushReplacementNamed(
+          //   RouterManger.Gamification,
+          //   arguments: widget.token,
+          // );
           return false;
         },
         child: GestureDetector(

@@ -227,109 +227,95 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FutureBuilder<void>(
-  future: _fetchUserInfoFuture,
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return _buildUserInfoSkeleton();
-    } else if (snapshot.hasError) {
-      return Center(child: Text('Error loading user info'));
-    } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-        child: Container(
-          height: MediaQuery.of(context).size.height*0.08,
-          color: Colors.grey[100], // Set the desired background color here
-          padding: const EdgeInsets.all(0.0), // Add some padding if needed
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0,top: 12),
-                child: RichText(
-                  text: TextSpan(
+         body: SingleChildScrollView(
+      controller: _scrollController,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FutureBuilder<void>(
+            future: _fetchUserInfoFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return _buildUserInfoSkeleton();
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error loading user info'));
+              } else {
+                return Container(
+                  color: Colors.grey[100],
+                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextSpan(
-                        text: 'Welcome, ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                           
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Welcome, ',
+                              style: TextStyle(
+                                fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$_userName!',
+                              style: TextStyle(
+                                fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: '$_userName!',
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Explore your courses and start learning.',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.04, // Responsive font size
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor, // Set the color for the username
+                          color: Colors.grey[600],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Text(
-                  'Explore your courses and start learning.',
-                  style: TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ),
-            ],
+                );
+              }
+            },
           ),
-        ),
-      );
-    }
-  },
-),
-
-                const SizedBox(height: 12.0),
-                FutureBuilder<void>(
-                  future: _fetchOtherSectionsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Column(
-                        children: [
-                          _buildLoadingSkeleton(),
-                          const SizedBox(height: 15.0),
-                          _buildLoadingSkeleton(),
-                          const SizedBox(height: 15.0),
-                          _buildLoadingSkeleton(),
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error loading sections'));
-                    } else {
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                            child: AutoScrollableSections(token: widget.token),
-                          ),
-                          const SizedBox(height: 15.0),
-                          UpcomingEventsSection(token: widget.token),
-                          const SizedBox(height: 15.0),
-                          CustomDashboardWidget(token: widget.token),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+          SizedBox(height: 12.0),
+          FutureBuilder<void>(
+            future: _fetchOtherSectionsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: [
+                    _buildLoadingSkeleton(),
+                    SizedBox(height: 15.0),
+                    _buildLoadingSkeleton(),
+                    SizedBox(height: 15.0),
+                    _buildLoadingSkeleton(),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error loading sections'));
+              } else {
+                return Column(
+                  children: [
+                    AutoScrollableSections(token: widget.token),
+                    SizedBox(height: 15.0),
+                    UpcomingEventsSection(token: widget.token),
+                    SizedBox(height: 15.0),
+                    CustomDashboardWidget(token: widget.token),
+                  ],
+                );
+              }
+            },
           ),
-          bottomNavigationBar:  Container( child: CustomBottomNavigationBar(initialIndex: 0, token: widget.token)),
+        ],
+      ),
+    ),
+    bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
         ),
       ),
     );
