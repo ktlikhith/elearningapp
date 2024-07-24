@@ -1,18 +1,59 @@
+import 'package:elearning/services/allcourse_service.dart';
+import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
 
-class LearningPathDetailScreen extends StatelessWidget {
+class LearningPathDetailScreen extends StatefulWidget {
   final LearningPathDetail learningPath;
+  final String token;
 
-  LearningPathDetailScreen({required this.learningPath});
+
+  LearningPathDetailScreen({Key? key, required this.token,required this.learningPath}) : super(key: key);
+
+  @override
+  _LearningPathDetailScreenState createState() => _LearningPathDetailScreenState();
+}
+
+class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
+
+  
+  final CourseReportApiService _apiService = CourseReportApiService();
+  List<Course> _courses = [];
+
+ @override
+  void initState() {
+    super.initState();
+    
+    _fetchCourses(widget.token);
+  }
+
+  Future<void> _fetchCourses(String token) async {
+    try {
+      final List<Course> response = await _apiService.fetchCourses(token);
+      if (mounted) {
+        setState(() {
+          _courses = response;
+        });
+      }
+    } catch (e) {
+      print('Error fetching courses: $e');
+      // Handle error here
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
-    List<LearningPathProgress> courses = learningPath.learningpathProgress;
+    List<LearningPathProgress> courses = widget.learningPath.learningpathProgress;
+    List<Course> allcourses= _courses;
+    
+    
+  
+    
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(learningPath.name),
+        title: Text(widget.learningPath.name),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: false,
         leading: IconButton(
@@ -29,10 +70,27 @@ class LearningPathDetailScreen extends StatelessWidget {
               itemCount: courses.length,
               itemBuilder: (context, index) {
                 var course = courses[index];
+
+                Course? coursedes;
+
+                            for (Course c in _courses) {
+                              if (c.id == course.courseid) {
+                                coursedes = c;
+                                break;
+                              }
+                            }
                 return GestureDetector(
-                  onTap: () {
-                    // Navigate to course details screen if needed
-                  },
+                 onTap: () => showMLPopup(
+                                  context,
+                                  course.courseid ?? '',
+                                  course.name?? '',
+                                  course.progress.toString() ?? '',
+                                  coursedes?.courseDescription ?? '',
+                                  coursedes?.courseStartDate ?? '',
+                                  coursedes?.courseEndDate ?? '',
+                                  coursedes?.courseVideoUrl ?? '',
+                                  coursedes?.courseDuration ?? '',
+                                ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Container(
@@ -141,5 +199,23 @@ class LearningPathDetailScreen extends StatelessWidget {
     } else {
       return Colors.orange;
     }
+  }
+  void showMLPopup(BuildContext context, String courseId, String course_name, String Cprogress, String Cdiscrpition,
+      String courseStartDate, String courseEndDate, String course_videourl, String courseDuration) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MLPopup(
+            token: widget.token,
+            course_id: courseId,
+            course_name: course_name,
+            Cprogress: Cprogress,
+            Cdiscrpition: Cdiscrpition,
+            courseStartDate: courseStartDate,
+            courseEndDate: courseEndDate,
+            course_videourl: course_videourl,
+            courseDuration: courseDuration); // Create an instance of MLPopup without passing context
+      },
+    );
   }
 }
