@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/Reports/My_course_progress/activity_progress.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +16,71 @@ class CourseProgressPage extends StatefulWidget {
 
 class _CourseProgressPageState extends State<CourseProgressPage> {
   late Future<HomePageData> _homePageData;
+   OverlayEntry? _overlayEntry;
+  bool _isTooltipVisible = false;
+  Timer? _tooltipTimer;
+ 
 
   @override
   void initState() {
     super.initState();
     _homePageData = HomePageService.fetchHomePageData(widget.token);
+    
+
   }
+   @override
+  void dispose() {
+    _hideTooltip(); // Ensure tooltip is hidden when the screen is disposed
+    super.dispose();
+  }
+ 
+  void _showTooltip(BuildContext context) {
+    if (_isTooltipVisible) return;
+
+    setState(() {
+      _isTooltipVisible = true;
+    });
+
+    _overlayEntry = _createOverlayEntry(context);
+    Overlay.of(context)?.insert(_overlayEntry!);
+
+    _tooltipTimer = Timer(Duration(seconds: 3), () {
+      _hideTooltip();
+    });
+  }
+
+  void _hideTooltip() {
+    _tooltipTimer?.cancel();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    setState(() {
+      _isTooltipVisible = false;
+    });
+  }
+
+  OverlayEntry _createOverlayEntry(BuildContext context) {
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        top: kToolbarHeight + MediaQuery.of(context).padding.top + 8.0,
+        right: 16.0,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Text(
+              'Tap on the Course to view Activity Status.',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   List<CourseData> filterCourses(List<CourseData> courses, String filter) {
     switch (filter) {
@@ -34,6 +95,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +109,18 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
             Navigator.pop(context);
           },
         ),
+         actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline, color: Colors.white),
+            onPressed: () {
+              if (_isTooltipVisible) {
+                _hideTooltip();
+              } else {
+                _showTooltip(context);
+              }
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<HomePageData>(
         future: _homePageData,
@@ -54,15 +128,17 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center();//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData) {
             final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
-
+             
             return ListView.builder(
               itemCount: filteredCourses.length,
               itemBuilder: (context, index) {
                 final course = filteredCourses[index];
+             
                 return GestureDetector(
+                  
                   onTap: () {
                     Navigator.push(
                       context,
@@ -80,12 +156,21 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
                   ),
                 );
               },
+              
+             
             );
-          } else {
+              
+  
+          }
+          
+           else {
             return Center(child: Text('No data found'));
           }
         },
+        
       ),
+      
+      
     );
   }
 }

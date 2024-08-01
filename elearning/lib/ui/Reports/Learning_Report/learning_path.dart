@@ -42,7 +42,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center();//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData && (snapshot.data!['learningpathdetail'] as List).isEmpty) {
             return Center(child: Text('No learning paths available'));
           } else {

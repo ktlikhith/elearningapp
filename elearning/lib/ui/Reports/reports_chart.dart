@@ -92,15 +92,15 @@ class _ReportPageState extends State<ReportPage> {
                     //     fontWeight: FontWeight.bold,
                     //   ),
                     // ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Column(
                       children: [
                         _buildCard(
                           "Course Progress Report",
                           "Your Progress at a Glance.",
                           "Track your progress through each course module and see how close you are to completion.",
-                          "assets/Reportsicon/graphics-graph-svgrepo-com.svg",
-                            80,200,
+                          "assets/Reportsicon/amnsadaXFu_1200x1200.png",
+                            330,280,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.mycourseprogress, arguments: widget.token);
                           },
@@ -108,7 +108,7 @@ class _ReportPageState extends State<ReportPage> {
                         
                     //   ],
                     // ),
-                    // SizedBox(height: 16),
+                    SizedBox(height: 16),
                     // Row(
                     //   children: [
                         _buildCard(
@@ -116,12 +116,12 @@ class _ReportPageState extends State<ReportPage> {
                           "Your Personalized Learning Path.",
                           "Step-by-step guide through your personalized learning pathway, ensuring you reach your goals.",
                           "assets/Reportsicon/undraw_progressive_app_m-9-ms.svg",
-                          80,200,
+                          80,180,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.learningprogress, arguments: widget.token);
                           },
                         ),
-                        SizedBox(width: 16),
+                       SizedBox(height: 16),
                         _buildCard(
                           "Certification",
                           "Achievements Unlocked.",
@@ -185,49 +185,87 @@ Widget _buildCard(String title, String subtitle, String info, String svgPath, do
             ),
           ),
            SizedBox(height: 16),
-                
-                   Center(
+           Center(
+             child: 
+              
+             svgPath.contains('.png')?
+                       
+                       
+                       Image.asset(
+                        svgPath,
+                        height: heightsvg,
+                        width: widthsvg,
+                        
+                                         
+                                       ):
                      
-                     child: SvgPicture.asset(
-                      svgPath,
-                      height: heightsvg,
-                      width: widthsvg,
-                      
-                                       
-                                     ),
-                   ),
+              
+                        SvgPicture.asset(
+                        svgPath,
+                        height: heightsvg,
+                        width: widthsvg,
+                        
+                                         
+                                       ),
+             
+           ),
+                   
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedTextKit(
-                        animatedTexts: [
-                          TypewriterAnimatedText(
-                            subtitle,
-                            textStyle: GoogleFonts.lato(
+                Text(subtitle,
+                            style: GoogleFonts.lato(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                                color: Theme.of(context).highlightColor,
-                      
-                            ),
-                         cursor:'.',
-                            speed: Duration(milliseconds: 120),
-                          ),
-                        ],
-                        isRepeatingAnimation: true,
-                        displayFullTextOnTap: true,
-                        stopPauseOnTap: true,
-                        repeatForever: true,
-                      ),
-                Text(
-                  info,
-                  style: GoogleFonts.lato(
-                    color: Theme.of(context).hintColor,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                                color: Theme.of(context).highlightColor,)
                 ),
+                 Row(
+                   children: [
+                     Text('Click to Visualize your progress.',
+                                style: GoogleFonts.lato(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).hintColor,)
+                                     ),
+                                      SizedBox(width: 10),
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  child: SvgPicture.asset(
+                                    'assets/Reportsicon/backhand-index-pointing-right-svgrepo-com.svg',
+                                  ),
+                                ),
+                   ],
+                 ),
+                // AnimatedTextKit(
+                //         animatedTexts: [
+                //           TypewriterAnimatedText(
+                //             subtitle,
+                //             textStyle: GoogleFonts.lato(
+                //               fontSize: 20.0,
+                //               fontWeight: FontWeight.bold,
+                //                 color: Theme.of(context).highlightColor,
+                      
+                //             ),
+                //          cursor:'.',
+                //             speed: Duration(milliseconds: 120),
+                //           ),
+                //         ],
+                //         isRepeatingAnimation: true,
+                //         displayFullTextOnTap: true,
+                //         stopPauseOnTap: true,
+                //         repeatForever: true,
+                //       ),
+                // Text(
+                //   info,
+                //   style: GoogleFonts.lato(
+                //     color: Theme.of(context).hintColor,
+                //     fontSize: 17,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                
                
               ],

@@ -1,5 +1,9 @@
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
+import 'package:elearning/ui/Reports/Certificate_report/certificateDetail.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CertificateListPage extends StatefulWidget {
   final String token;
@@ -69,35 +73,78 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+     return GestureDetector(
+    onTap:()=>Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Certificatedetail(token: token, courseNmae: course.name, certificatename: course.certificatename, issuedDate: course.awarddate, certificateurl: course.certificateurl, ),
+                                      ),
+    ),
+    child:Container(
+      
+      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Theme.of(context).hintColor.withOpacity(0.6),),
       margin: EdgeInsets.all(10.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Text(
-              course.name,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              'Award Date: ${course.awarddate}',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey[600],
-              ),
-            ),
-            SizedBox(height: 8.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                   decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                  color: Theme.of(context).cardColor,
+                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      course.name,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).highlightColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 4.0),
+                Text(
+                  'Issued : ${course.awarddate}',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                
             
+              ],
+            ),
+             if (course.certificateurl!= null )
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.08),
+                                      child: IconButton(
+                                        icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 22),
+                                        onPressed: () {
+                                            Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => WebViewPage('Certificate',course.certificateurl,token, ),
+                                      ),
+                                                                        );
+                                      
+                                        },
+                                      ),
+                                    ),
+
           ],
         ),
       ),
-    );
+    ),
+     );
   }
 
-  
+
 }

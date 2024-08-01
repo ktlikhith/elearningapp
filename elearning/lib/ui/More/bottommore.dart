@@ -408,8 +408,10 @@ class _MyMorePageState extends State<MyMorePage> {
                color:Color.fromARGB(255, 16, 79, 204),
                           icon: FontAwesomeIcons.certificate,
               text: 'Certificates',
-              onTap: () {
-                // Navigator.of(context).pushNamed(RouterManger., arguments: widget.token);
+              onTap: 
+                 () {
+                            Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
+                          
               
               },
             ),

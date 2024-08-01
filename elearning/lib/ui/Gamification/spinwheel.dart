@@ -473,6 +473,10 @@ class _SpinWheelState extends State<SpinWheel> {
       _showCongratsDialog(label);
       if(!isconfettiplaying){
         confettiController.play();
+        Future.delayed(Duration(seconds: 5),(){
+             confettiController.stop();
+
+        });
       }
     } catch (e) {
       print('Error adding reward points: $e');
@@ -528,6 +532,7 @@ void _showCongratsDialog(String label) {
           return false;
         },
         child: GestureDetector(
+          
           onTap: () {
              if(isconfettiplaying){
             confettiController.stop();
@@ -538,118 +543,186 @@ void _showCongratsDialog(String label) {
               arguments: widget.token,
             );
           },
-          child: AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            contentPadding: EdgeInsets.zero, // To remove the default padding
-            content: Stack(
+          child: Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF3ACBE8),
-                        Color(0xFF0D85D8),
-                        Color(0xFF0041C7),
-                      ],
-                    ),
+            Stack(
+                    children: [
+          
+              
+              Padding(
+                padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height*0.4),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  padding: EdgeInsets.all(20.0), // Adjust padding as needed
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: 10),
-                      Center(
-                     child: ConfettiWidget(
-                               confettiController: confettiController,
-                               shouldLoop: true,
-                               blastDirectionality: BlastDirectionality.explosive,
-                              // blastDirection: -pi / 2,//blast all the direction
-                               numberOfParticles: 20,
-                               emissionFrequency: 0.10,
-                               minBlastForce: 10,
-                               maxBlastForce: 50,
-                               gravity: 1.0,
-                               colors: [
-                                 Color.fromARGB(255, 249, 2, 2),
-                                 Color.fromARGB(255, 238, 85, 3),
-                                 Color.fromARGB(255, 240, 244, 11),
-                                 Color.fromARGB(255, 99, 245, 8),
-                                 Color.fromARGB(255, 9, 222, 212),
-                                 Color.fromARGB(255, 34, 7, 241),
-                                 Color.fromARGB(255, 241, 9, 241),
-                                 
-                               ],
-                             ),
-                   ),
-                      Row(
-                        children: [
-                          
-                          Icon(Icons.celebration, color: Color.fromARGB(255, 13, 10, 221), size: 40),
-                          SizedBox(width: 5),
-                          AnimatedTextKit(
-                            animatedTexts: [
-                              FadeAnimatedText(
-                                'Congratulations!',
-                                textStyle: GoogleFonts.lato(
-                                  fontSize: 26.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                                duration: Duration(milliseconds: 2000),
-                              ),
-                            ],
-                            isRepeatingAnimation: true,
-                            displayFullTextOnTap: true,
-                            stopPauseOnTap: true,
-                            repeatForever: true,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'You won spin wheel points:',
-                        style: GoogleFonts.lato(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      AnimatedTextKit(
-                        animatedTexts: [
-                          ColorizeAnimatedText(
-                            label,
-                            textStyle: TextStyle(
-                              fontSize: 35.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
+                  contentPadding: EdgeInsets.zero, // To remove the default padding
+                  content: 
+                      
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
                             colors: [
-                              Color.fromARGB(255, 242, 244, 244),
-                              Color.fromARGB(255, 16, 13, 216),
-                              Color.fromARGB(255, 0, 10, 199),
+                              Color(0xFF3ACBE8),
+                              Color(0xFF0D85D8),
+                              Color(0xFF0041C7),
                             ],
-                            textDirection: TextDirection.ltr,
-                            speed: Duration(milliseconds: 1000),
                           ),
-                        ],
-                        isRepeatingAnimation: true,
-                        displayFullTextOnTap: true,
-                        stopPauseOnTap: true,
-                        repeatForever: true,
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        padding: EdgeInsets.all(20.0), // Adjust padding as needed
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                          //   SizedBox(height: 10),
+                          //   Center(
+                          //  child: ConfettiWidget(
+                          //            confettiController: confettiController,
+                          //            shouldLoop: true,
+                          //            blastDirectionality: BlastDirectionality.explosive,
+                          //           // blastDirection: -pi / 2,//blast all the direction
+                          //            numberOfParticles: 20,
+                          //            emissionFrequency: 0.10,
+                          //            minBlastForce: 10,
+                          //            maxBlastForce: 50,
+                          //            gravity: 1.0,
+                          //            colors: [
+                          //              Color.fromARGB(255, 249, 2, 2),
+                          //              Color.fromARGB(255, 238, 85, 3),
+                          //              Color.fromARGB(255, 240, 244, 11),
+                          //              Color.fromARGB(255, 99, 245, 8),
+                          //              Color.fromARGB(255, 9, 222, 212),
+                          //              Color.fromARGB(255, 34, 7, 241),
+                          //              Color.fromARGB(255, 241, 9, 241),
+                                       
+                          //            ],
+                          //          ),
+                        //  ),
+                            Row(
+                              children: [
+                                
+                                Icon(Icons.celebration, color: Color.fromARGB(255, 13, 10, 221), size: 40),
+                                SizedBox(width: 5),
+                                AnimatedTextKit(
+                                  animatedTexts: [
+                                    FadeAnimatedText(
+                                      'Congratulations!',
+                                      textStyle: GoogleFonts.lato(
+                                        fontSize: 26.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      duration: Duration(milliseconds: 2000),
+                                    ),
+                                  ],
+                                  isRepeatingAnimation: true,
+                                  displayFullTextOnTap: true,
+                                  stopPauseOnTap: true,
+                                  repeatForever: true,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'You won spin wheel points:',
+                              style: GoogleFonts.lato(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            AnimatedTextKit(
+                              animatedTexts: [
+                                ColorizeAnimatedText(
+                                  label,
+                                  textStyle: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                  colors: [
+                                    Color.fromARGB(255, 242, 244, 244),
+                                    Color.fromARGB(255, 16, 13, 216),
+                                    Color.fromARGB(255, 0, 10, 199),
+                                  ],
+                                  textDirection: TextDirection.ltr,
+                                  speed: Duration(milliseconds: 1000),
+                                ),
+                              ],
+                              isRepeatingAnimation: true,
+                              displayFullTextOnTap: true,
+                              stopPauseOnTap: true,
+                              repeatForever: true,
+                            ),
+                             
+                          ],
+                        ),
+                        
                       ),
-                       
-                    ],
-                  ),
                   
                 ),
-                  
-              ],
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding:  EdgeInsets.only(right:MediaQuery.of(context).size.width*1),
+                    child: ConfettiWidget(
+                                         confettiController: confettiController,
+                                         shouldLoop: false,
+                                         blastDirectionality: BlastDirectionality.explosive,
+                                        // blastDirection: -pi / 2,//blast all the direction
+                                         numberOfParticles: 15,
+                                         emissionFrequency: 0.15,
+                                         minBlastForce: 10,
+                                         maxBlastForce: 35,
+                                         gravity: 1.0,
+                                         colors: [
+                                           Color.fromARGB(255, 249, 2, 2),
+                                           Color.fromARGB(255, 238, 85, 3),
+                                           Color.fromARGB(255, 240, 244, 11),
+                                           Color.fromARGB(255, 99, 245, 8),
+                                           Color.fromARGB(255, 9, 222, 212),
+                                           Color.fromARGB(255, 34, 7, 241),
+                                           Color.fromARGB(255, 241, 9, 241),
+                                           
+                                         ],
+                                       ),
+                  ),
+                                     Padding(
+                                       padding:  EdgeInsets.only(left:MediaQuery.of(context).size.width*1),
+                                       child: ConfettiWidget(
+                                         confettiController: confettiController,
+                                         shouldLoop: false,
+                                         blastDirectionality: BlastDirectionality.explosive,
+                                        // blastDirection: -pi / 2,//blast all the direction
+                                         numberOfParticles: 15,
+                                         emissionFrequency: 0.15,
+                                         minBlastForce: 10,
+                                         maxBlastForce: 35,
+                                         gravity: 1.0,
+                                         colors: [
+                                           Color.fromARGB(255, 249, 2, 2),
+                                           Color.fromARGB(255, 238, 85, 3),
+                                           Color.fromARGB(255, 240, 244, 11),
+                                           Color.fromARGB(255, 99, 245, 8),
+                                           Color.fromARGB(255, 9, 222, 212),
+                                           Color.fromARGB(255, 34, 7, 241),
+                                           Color.fromARGB(255, 241, 9, 241),
+                                           
+                                         ],
+                                       ),
+                                     ),
+                ],
+              ),
+          
              
-            ),
+                             
+                    
+                    ],
+                   
+                  ),
+            ],
+
           ),
           
         ),
