@@ -129,7 +129,7 @@ class _ReportPageState extends State<ReportPage> {
                           "assets/Reportsicon/undraw_certificate_re_yadi.svg",
                             80,200,
                           () {
-                            Navigator.pushNamed(context, '/certification', arguments: widget.token);
+                            Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
                           },
                         ),
                       ],
