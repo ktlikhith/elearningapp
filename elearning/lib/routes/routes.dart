@@ -10,6 +10,7 @@ import 'package:elearning/ui/Livesession/livesession.dart';
 import 'package:elearning/ui/More/bottommore.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Profile/profile.dart';
+import 'package:elearning/ui/Reports/Certificate_report/certification_progress.dart';
 import 'package:elearning/ui/Reports/Learning_Report/learning_path.dart';
 import 'package:elearning/ui/Reports/My_course_progress/each_course_progress.dart';
 import 'package:elearning/ui/Reports/My_course_progress/my_course_progress.dart';
@@ -37,6 +38,8 @@ class RouterManger{
   static const String mycourseprogress='/my_course_progress.dart';
   static const String eachcourseprogress='/each_course_progress.dart';
   static const String learningprogress='/learning_path.dart';
+  static const String certificatereport='/certification_progress.dart';
+
 
 
 
@@ -113,6 +116,11 @@ final token = settings.arguments as String;
         builder:(context) => LearningPathScreen(token: token)
       ,);
 
+case certificatereport:
+final token = settings.arguments as String; 
+      return MaterialPageRoute(
+        builder:(context) => CertificateListPage(token: token)
+      ,);
 case eachcourseprogress:
   final args = settings.arguments;
  

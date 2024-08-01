@@ -121,6 +121,9 @@ class CourseData {
   final String courseEndDate;
   final String courseVideoUrl;
   final String courseDuration;
+  final String certificatename;
+  final String awarddate;
+  final String certificateurl;
 
   CourseData({
     required this.id,
@@ -132,6 +135,11 @@ class CourseData {
     required this.courseEndDate,
     required this.courseVideoUrl,
     required this.courseDuration,
+    required this.certificatename,
+    required this.awarddate,
+    required this.certificateurl,
+
+
   });
 
   factory CourseData.fromJson(Map<String, dynamic> json) {
@@ -145,6 +153,10 @@ class CourseData {
     courseEndDate: json['courseendate'] ?? '',
     courseVideoUrl: json['course_videourl'] ?? '',
     courseDuration: json['course_duration'] ?? '',
+    certificatename: json['certificatename'] ?? '',
+    awarddate: json['awarddate'] ?? '',
+    certificateurl: json['certificateurl'] ?? '',
+
   );
 }
  String getImageUrlWithToken(String token) {
