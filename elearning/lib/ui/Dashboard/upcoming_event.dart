@@ -21,17 +21,16 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
   int _currentPage = 0;
   Future<List<EventData>>? _futureEventData;
   List<String> svgAssets = [
-    'assets/liveeventsvg/event2.svg',
-    'assets/liveeventsvg/event3.svg',
-    'assets/liveeventsvg/event4.svg',
-    'assets/liveeventsvg/event8.svg',
-    'assets/liveeventsvg/event9.svg',
-    'assets/liveeventsvg/event10.svg',
-    'assets/liveeventsvg/event11.svg',
-    'assets/liveeventsvg/event12.svg',
-    'assets/liveeventsvg/event13.svg',
-    'assets/liveeventsvg/event14.svg',
-    'assets/liveeventsvg/event15.svg',
+    'assets/liveeventsvg/b (2).png',
+    'assets/liveeventsvg/-books-96 (1).png',
+    'assets/liveeventsvg/calander.png',
+    'assets/liveeventsvg/b.png',
+    'assets/liveeventsvg/books-80.png',
+    'assets/liveeventsvg/calander1 (2).png',
+    'assets/liveeventsvg/b (3).png',
+    'assets/liveeventsvg/books-96.png',
+    'assets/liveeventsvg/calander1.png',
+  
   ]; // Add your SVG asset paths here
 
   @override
@@ -192,7 +191,9 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 child: Container(
                   width: 40,
                   height: 40,
-                  child: SvgPicture.asset(
+                  child: 
+                  svgPath.contains('.png')?Image.asset(svgPath,fit: BoxFit.contain,)
+                  : SvgPicture.asset(
                     svgPath,
                     fit: BoxFit.contain,
                   ),

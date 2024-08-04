@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shimmer/shimmer.dart';
@@ -31,6 +32,8 @@ class _ReportPageState extends State<ReportPage> {
     super.initState();
     fetchData(widget.token);
   }
+
+ 
 
   // Fetch report data from the API
   Future<void> fetchData(String token) async {
@@ -81,7 +84,7 @@ class _ReportPageState extends State<ReportPage> {
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(top: 10.0,bottom: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -92,15 +95,18 @@ class _ReportPageState extends State<ReportPage> {
                     //     fontWeight: FontWeight.bold,
                     //   ),
                     // ),
-                    SizedBox(height: 20),
+                  
                     Column(
                       children: [
                         _buildCard(
                           "Course Progress Report",
                           "Your Progress at a Glance.",
                           "Track your progress through each course module and see how close you are to completion.",
-                          "assets/Reportsicon/graphics-graph-svgrepo-com.svg",
-                            80,200,
+                          "assets/Reportsicon/reports/flat-interface-with-charts-and-graphs.png",
+                          MediaQuery.of(context).size.width*0.9,
+                           MediaQuery.of(context).size.width*0.6,
+                          260,180,
+                            // 330,280,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.mycourseprogress, arguments: widget.token);
                           },
@@ -108,38 +114,37 @@ class _ReportPageState extends State<ReportPage> {
                         
                     //   ],
                     // ),
-                    // SizedBox(height: 16),
+                    SizedBox(height: 12),
                     // Row(
                     //   children: [
                         _buildCard(
                           "Learning Path",
                           "Your Personalized Learning Path.",
                           "Step-by-step guide through your personalized learning pathway, ensuring you reach your goals.",
-                          "assets/Reportsicon/undraw_progressive_app_m-9-ms.svg",
-                          80,200,
+                          "assets/Reportsicon/Downloads/office-working-with-a-neural-network01.png",
+                            MediaQuery.of(context).size.width*0.9,
+                           MediaQuery.of(context).size.width*0.5,
+                          275,250,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.learningprogress, arguments: widget.token);
                           },
                         ),
-                        SizedBox(width: 16),
+                       SizedBox(height: 12),
                         _buildCard(
                           "Certification",
                           "Achievements Unlocked.",
                           "A record of your accomplishments, highlighting the certifications that validate your expertise.",
-                          "assets/Reportsicon/undraw_certificate_re_yadi.svg",
-                            80,200,
+                          "assets/Reportsicon/cert/colors-students-at-graduation-ceremony.png",
+                            MediaQuery.of(context).size.width*0.9,
+                           MediaQuery.of(context).size.width*0.5,
+                            275,200,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
                           },
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      // child: _buildPieChart(),
-                    ),
-                    SizedBox(height: 20),
+                   
                   ],
                 ),
               ),
@@ -149,10 +154,14 @@ class _ReportPageState extends State<ReportPage> {
       );
   }
 
-Widget _buildCard(String title, String subtitle, String info, String svgPath, double widthsvg, double heightsvg, VoidCallback onTap) {
+Widget _buildCard(String title, String subtitle, String info, String svgPath,double boxwidth,double boxheight, double widthsvg, double heightsvg, VoidCallback onTap) {
+  double topadding=svgPath.contains('assets/Reportsicon/reports/report.png') ? 30.0 : 0.0;
   return GestureDetector(
+      
     onTap: onTap,
     child: Container(
+      height:boxheight,
+      width: boxwidth,
       margin: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -166,68 +175,122 @@ Widget _buildCard(String title, String subtitle, String info, String svgPath, do
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          Stack(children: [
+            
+          
+           Container(
+            height: boxheight- MediaQuery.of(context).size.width*0.14,
+            width: boxwidth,
+       
+             child: Padding(
+               padding:  EdgeInsets.only(top:topadding ),
+               child: Center(
+                 child: 
+                  
+                 svgPath.contains('.png')?
+                           
+                           
+                           Image.asset(
+                            svgPath,
+                            height: heightsvg,
+                            width: widthsvg,
+                            alignment:Alignment.topCenter,
+                            fit: BoxFit.fitWidth,
+                            
+                                             
+                                           ):
+                         
+                  
+                            SvgPicture.asset(
+                            svgPath,
+                            height: heightsvg,
+                            width: widthsvg,
+                            
+                                             
+                                           ),
+                 
+               ),
+             ),
+           ),
+           
+           Container(
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 //topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              color: Colors.orange,
+              color: Theme.of(context).primaryColor,
             ),
             child: Text(
               title,
               style: GoogleFonts.lato(
                 color: Colors.white,
-                fontSize: 17,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-           SizedBox(height: 16),
-                
-                   Center(
-                     
-                     child: SvgPicture.asset(
-                      svgPath,
-                      height: heightsvg,
-                      width: widthsvg,
-                      
-                                       
-                                     ),
-                   ),
+          
+          ],
+          ),
+                   
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedTextKit(
-                        animatedTexts: [
-                          TypewriterAnimatedText(
-                            subtitle,
-                            textStyle: GoogleFonts.lato(
-                              fontSize: 20.0,
+                Text(subtitle,
+                            style: GoogleFonts.lato(
+                              fontSize: 17.0,
                               fontWeight: FontWeight.bold,
-                                color: Theme.of(context).highlightColor,
-                      
-                            ),
-                         cursor:'.',
-                            speed: Duration(milliseconds: 120),
-                          ),
-                        ],
-                        isRepeatingAnimation: true,
-                        displayFullTextOnTap: true,
-                        stopPauseOnTap: true,
-                        repeatForever: true,
-                      ),
-                Text(
-                  info,
-                  style: GoogleFonts.lato(
-                    color: Theme.of(context).hintColor,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                                color: Theme.of(context).highlightColor,)
                 ),
+                 Row(
+                   children: [
+                     Text('Click to Visualize your progress.',
+                                style: GoogleFonts.lato(
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).hintColor,)
+                                     ),
+                                      SizedBox(width: 10),
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  child: SvgPicture.asset(
+                                    'assets/Reportsicon/backhand-index-pointing-right-svgrepo-com.svg',
+                                  ),
+                                ),
+                   ],
+                 ),
+                // AnimatedTextKit(
+                //         animatedTexts: [
+                //           TypewriterAnimatedText(
+                //             subtitle,
+                //             textStyle: GoogleFonts.lato(
+                //               fontSize: 20.0,
+                //               fontWeight: FontWeight.bold,
+                //                 color: Theme.of(context).highlightColor,
+                      
+                //             ),
+                //          cursor:'.',
+                //             speed: Duration(milliseconds: 120),
+                //           ),
+                //         ],
+                //         isRepeatingAnimation: true,
+                //         displayFullTextOnTap: true,
+                //         stopPauseOnTap: true,
+                //         repeatForever: true,
+                //       ),
+                // Text(
+                //   info,
+                //   style: GoogleFonts.lato(
+                //     color: Theme.of(context).hintColor,
+                //     fontSize: 17,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                
                
               ],

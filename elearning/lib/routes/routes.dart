@@ -39,6 +39,9 @@ class RouterManger{
   static const String eachcourseprogress='/each_course_progress.dart';
   static const String learningprogress='/learning_path.dart';
   static const String certificatereport='/certification_progress.dart';
+  static const String certificatedetails='/certificateDetail.dart';
+
+  
 
 
 
@@ -143,6 +146,13 @@ case eachcourseprogress:
       return MaterialPageRoute(
         builder:(context) => LandingPage()
       ,);
+
+      case certificatedetails:
+      final token = settings.arguments as String; 
+      return MaterialPageRoute(
+        builder:(context) =>CertificateListPage(token: token,)
+
+      );
 
       default:
       throw const FormatException("Page Not found!!!");

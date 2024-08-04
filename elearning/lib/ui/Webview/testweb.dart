@@ -68,7 +68,7 @@ class _WebViewPageState extends State<WebViewPage> {
           onNavigationRequest: (NavigationRequest request) {
             print("Navigation request: ${request.url}");
             if (_isExternalUrl(request.url)) {
-              _launchURL(request.url);
+             _launchURL(request.url);
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -100,7 +100,7 @@ class _WebViewPageState extends State<WebViewPage> {
   bool _isExternalUrl(String url) {
     // Add your logic to determine if the URL is an external link
     // For example, checking if it is a Google Meet link or a certificate link
-    return url.contains('googlemeet') || url.contains('mod/customcert/view.php')||url.contains('downloadown=1');
+    return url.contains('googlemeet') || url.contains('mod/customcert/view.php')||url.contains('downloadown=1')||url.contains('customcert');
   }
 
   void _launchURL(String url) async {

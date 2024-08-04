@@ -151,6 +151,9 @@ flutter:
     - assets/profileicons/
     - assets/Reportsicon/
     - assets/appbarsvg/
+    - assets/Reportsicon/cert/
+    - assets/Reportsicon/Downloads/
+    - assets/Reportsicon/reports/
     
     
    
