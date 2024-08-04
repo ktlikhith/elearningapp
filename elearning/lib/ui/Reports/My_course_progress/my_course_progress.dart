@@ -386,6 +386,7 @@ import 'dart:async';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'dart:math';
 
@@ -403,6 +404,7 @@ class _CoursePageState extends State<Coursereport> {
   OverlayEntry? _overlayEntry;
   bool _isTooltipVisible = false;
   Timer? _tooltipTimer;
+    bool timertoshowhint=false;
 
   @override
   void initState() {
@@ -579,13 +581,24 @@ class _CoursePageState extends State<Coursereport> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(); //child: Text('Error: ${snapshot.error}')
-          } else if (snapshot.hasData) {
+            return Center(); 
+             //child: Text('Error: ${snapshot.error}')
+          }  if (snapshot.hasData) {
+           
               
             final data = snapshot.data!;
             final completedCount = getCompletedCoursesCount(data.allCourses);
             final inProgressCount = getInProgressCoursesCount(data.allCourses);
             final notStartedCount = getNotStartedCoursesCount(data.allCourses);
+            if(timertoshowhint!=true)
+               Future.delayed(Duration(seconds: 3),(){
+             _showTooltip(context);
+             timertoshowhint=true;
+             
+
+        });
+          
+          
 
             final Map<String, double> dataMap = {
               "Completed": completedCount.toDouble(),
@@ -676,9 +689,12 @@ class _CoursePageState extends State<Coursereport> {
               ),
             );
           
-          } else {
+          } 
+          
+          else {
             return Center(child: Text('No data available'));
           }
+          
         },
         
       ),

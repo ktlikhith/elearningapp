@@ -19,6 +19,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
    OverlayEntry? _overlayEntry;
   bool _isTooltipVisible = false;
   Timer? _tooltipTimer;
+  bool timertoshowhint=false;
  
 
   @override
@@ -130,6 +131,13 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           } else if (snapshot.hasError) {
             return Center();//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData) {
+             if(timertoshowhint!=true)
+               Future.delayed(Duration(seconds: 3),(){
+             _showTooltip(context);
+             timertoshowhint=true;
+             
+
+        });
             final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
              
             return ListView.builder(
