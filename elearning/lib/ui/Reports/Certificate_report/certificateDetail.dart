@@ -160,6 +160,7 @@
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Certificatedetail extends StatefulWidget {
   final String token;
@@ -177,11 +178,20 @@ class Certificatedetail extends StatefulWidget {
     required this.certificateurl,
   }) : super(key: key);
 
+  
+
   @override
   _CertificatedetailState createState() => _CertificatedetailState();
 }
 
 class _CertificatedetailState extends State<Certificatedetail> {
+    void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,16 +264,17 @@ class _CertificatedetailState extends State<Certificatedetail> {
                   SizedBox(height: 40.0),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WebViewPage(
-                            'Certificate',
-                            widget.certificateurl,
-                            widget.token,
-                          ),
-                        ),
-                      );
+                      _launchURL(widget.certificateurl);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => WebViewPage(
+                      //       'Certificate',
+                      //       widget.certificateurl,
+                      //       widget.token,
+                      //     ),
+                      //   ),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.8),

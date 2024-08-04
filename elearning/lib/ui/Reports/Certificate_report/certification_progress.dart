@@ -175,6 +175,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CertificateListPage extends StatefulWidget {
   final String token;
@@ -200,6 +201,7 @@ class _CertificateListPageState extends State<CertificateListPage> {
         .where((course) => course.certificatename.isNotEmpty)
         .toList();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +248,14 @@ class CourseCard extends StatelessWidget {
   final String token;
 
   CourseCard({required this.course, required this.token});
+
+    void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +318,7 @@ class CourseCard extends StatelessWidget {
                                   maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 20.0,
+                                      fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),
@@ -347,7 +357,7 @@ class CourseCard extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05 ,top: 4),
+                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,top: 4),
                     child: Row(
                       children: [
                         ElevatedButton(onPressed: () {  Navigator.push(
@@ -365,18 +375,19 @@ class CourseCard extends StatelessWidget {
                         child: Text('Click For more Details',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
                                           ),
                                           Padding(
-                                            padding:  EdgeInsets.only(left:  MediaQuery.of(context).size.width*0.04),
+                                            padding:  EdgeInsets.only(left:  MediaQuery.of(context).size.width*0.01),
                                             child: ElevatedButton(  onPressed: () {if (course.certificateurl != null)
-                                                                  Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => WebViewPage(
-                                                                        'Certificate',
-                                                                        course.certificateurl,
-                                                                        token,
-                                                                      ),
-                                                                    ),
-                                                                  );
+                                                                           _launchURL(course.certificateurl);
+                                                                  // Navigator.push(
+                                                                  //   context,
+                                                                  //   MaterialPageRoute(
+                                                                  //     builder: (context) => WebViewPage(
+                                                                  //       'Certificate',
+                                                                  //       course.certificateurl,
+                                                                  //       token,
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // );
                                                                 },child: Row(
                                                                   children: [
                                                                     Text('Download',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
