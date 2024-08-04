@@ -104,8 +104,10 @@ class _ReportPageState extends State<ReportPage> {
                           "Track your progress through each course module and see how close you are to completion.",
                           "assets/Reportsicon/reports/flat-interface-with-charts-and-graphs.png",
                           MediaQuery.of(context).size.width*0.9,
-                           MediaQuery.of(context).size.width*0.6,
-                          260,180,
+                           MediaQuery.of(context).size.width*0.55,
+                             MediaQuery.of(context).size.width*0.5,
+                              MediaQuery.of(context).size.height*0.38,
+                          // 260,180,
                             // 330,280,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.mycourseprogress, arguments: widget.token);
@@ -124,7 +126,9 @@ class _ReportPageState extends State<ReportPage> {
                           "assets/Reportsicon/Downloads/office-working-with-a-neural-network01.png",
                             MediaQuery.of(context).size.width*0.9,
                            MediaQuery.of(context).size.width*0.5,
-                          275,250,
+                              MediaQuery.of(context).size.width*0.6,
+                              MediaQuery.of(context).size.height*0.16,
+                          // 275,250,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.learningprogress, arguments: widget.token);
                           },
@@ -137,7 +141,9 @@ class _ReportPageState extends State<ReportPage> {
                           "assets/Reportsicon/cert/colors-students-at-graduation-ceremony.png",
                             MediaQuery.of(context).size.width*0.9,
                            MediaQuery.of(context).size.width*0.5,
-                            275,200,
+                              MediaQuery.of(context).size.width*0.6,
+                              MediaQuery.of(context).size.height*0.16,
+                            // 275,200,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
                           },
@@ -155,7 +161,7 @@ class _ReportPageState extends State<ReportPage> {
   }
 
 Widget _buildCard(String title, String subtitle, String info, String svgPath,double boxwidth,double boxheight, double widthsvg, double heightsvg, VoidCallback onTap) {
-  double topadding=svgPath.contains('assets/Reportsicon/reports/report.png') ? 30.0 : 0.0;
+  double topadding=svgPath.contains('assets/Reportsicon/reports/flat-interface-with-charts-and-graphs.png') ? 20.0 : 0.0;
   return GestureDetector(
       
     onTap: onTap,

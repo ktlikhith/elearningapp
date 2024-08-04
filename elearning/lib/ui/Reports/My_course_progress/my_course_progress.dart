@@ -581,7 +581,7 @@ class _CoursePageState extends State<Coursereport> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(); 
+            return Center(child:Text('Something went wrong')); 
              //child: Text('Error: ${snapshot.error}')
           }  if (snapshot.hasData) {
            
@@ -652,12 +652,12 @@ class _CoursePageState extends State<Coursereport> {
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .15),
+                  SizedBox(height: MediaQuery.of(context).size.height * .1),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
                     child: buildCustomLegend(),
                   ), // Add the custom legend here
-                  SizedBox(height: MediaQuery.of(context).size.height * .015),
+                  SizedBox(height: MediaQuery.of(context).size.height * .01),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
