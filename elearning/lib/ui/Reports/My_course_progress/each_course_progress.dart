@@ -132,7 +132,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
             return Center();//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData) {
              if(timertoshowhint!=true)
-               Future.delayed(Duration(seconds: 3),(){
+               Future.delayed(Duration(seconds: 1),(){
              _showTooltip(context);
              timertoshowhint=true;
              

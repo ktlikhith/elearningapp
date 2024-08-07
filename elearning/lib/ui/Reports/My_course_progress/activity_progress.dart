@@ -681,7 +681,16 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
       fit: BoxFit.cover,
     );
   }
-
+  Future<void> _refreshContent() async {
+    await _fetchCourseContent();
+    _activityStatus == null
+                ? _buildShimmerCourseContent()
+                : _buildActivityStatusText();
+            _courseContentData == null
+                ? _buildShimmerCourseContent()
+                : _buildCourseContent();
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -699,7 +708,12 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+         triggerMode:RefreshIndicatorTriggerMode.anywhere,
+      
+      onRefresh: _refreshContent,
+      child:SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: 10),
@@ -711,6 +725,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 : _buildCourseContent(),
           ],
         ),
+      ),
       ),
     );
   }
