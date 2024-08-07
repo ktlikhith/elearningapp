@@ -281,6 +281,9 @@
 import 'dart:io';
 
 import 'package:elearning/services/allcourse_service.dart';
+import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
+import 'package:elearning/ui/My_learning/video_player_screen.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -474,7 +477,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                     size: 18,
                                   ),
                                 if (module['completiondata'] == null ||
-                                    module['completiondata']['state'] != 1)
+                                    module['completiondata']['state'] != 0)
                                   Icon(
                                     Icons.radio_button_unchecked,
                                     color: Colors.grey,
@@ -491,6 +494,99 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                 fontSize: 17,
                               ),
                             ),
+                            
+                              onTap: () {
+                                if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                  final content = module['contents'][0];
+                                  String getdwnloadUrlWithToken(String filePath1, String Token) {
+                                    return '$filePath1&token=$Token';
+                                  }
+                                  String vidurl = getdwnloadUrlWithToken(module['contents'][0]['fileurl'], widget.token);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VideoPlayerScreen(vidurl: vidurl),
+                                    ),
+                                  );
+                                } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                  final content = module['contents'][0];
+                                  String getpdfUrlWithToken(String filePath1, String Token) {
+                                    return '$filePath1&token=$Token';
+                                  }
+                                  String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PDFViewScreen(pdfurl),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'customcert' ){
+                              String certificateurl=module['url']+'&forcedownload=1';
+
+                              
+                                 Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
+                                    ),
+                                  );
+                                }
+                                else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'forum') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'quiz') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                  final moduleContent = module['contents'][0];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                  final content = module['contents'][0];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
+                                    ),
+                                  );
+                                } else if (module['modname'] == 'assign') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
+                                    ),
+                                  );
+                                } else {
+                                  if (module['url'] != null && module['url'].isNotEmpty) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+
                           ),
                         ],
                       ),
