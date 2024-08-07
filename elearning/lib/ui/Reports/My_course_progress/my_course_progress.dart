@@ -506,7 +506,7 @@ class _CoursePageState extends State<Coursereport> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Text(
-              'Tap on the pie chart to view filtered courses.',
+              'Tap on the pie chart sections to view filtered courses.',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -591,7 +591,7 @@ class _CoursePageState extends State<Coursereport> {
             final inProgressCount = getInProgressCoursesCount(data.allCourses);
             final notStartedCount = getNotStartedCoursesCount(data.allCourses);
             if(timertoshowhint!=true)
-               Future.delayed(Duration(seconds: 3),(){
+               Future.delayed(Duration(seconds: 1),(){
              _showTooltip(context);
              timertoshowhint=true;
              

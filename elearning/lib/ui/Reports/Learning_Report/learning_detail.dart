@@ -129,6 +129,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                         ),
                                       ),
                                     ),
+                                    if(course.progress>7)
                                     Container(
                                       height: 20,
                                       width: MediaQuery.of(context).size.width * 0.7 * (course.progress / 100),
@@ -144,7 +145,33 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                         ),
                                       ),
                                     ),
-                                    if (course.progress > 0)
+                                    if (course.progress < 7 && course.progress>0)
+                                      Positioned(
+                                        left: MediaQuery.of(context).size.width * 0.75 *0.07-20,
+                                        child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color(0xFF3ACBE8),
+                                                Color(0xFF0D85D8),
+                                                Color(0xFF0041C7),
+                                              ],
+                                              stops: [0.0, 0.5, 1.0],
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.1),
+                                                blurRadius: 5,
+                                                offset: Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    if (course.progress >= 7)
                                       Positioned(
                                         left: MediaQuery.of(context).size.width * 0.7* (course.progress / 100) - 20,
                                         child: Container(
