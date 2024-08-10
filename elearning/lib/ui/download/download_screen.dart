@@ -495,13 +495,16 @@ Widget build(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: _files.isEmpty
-              ? [const Center(child: Text('No downloaded files found.'))]
+              ? [const Center(child: Text('No downloaded files.'))]
               : _files.map((courseData) {
                   final courseName = courseData['courseName'] as String;
                   final files = courseData['files'] as List<Map<String, dynamic>>;
 
                   return ExpansionTile(
-                    title: Text(courseName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(courseName, style:  TextStyle(fontWeight: FontWeight.bold,color:Theme.of(context).cardColor,),),
+                  collapsedBackgroundColor:Theme.of(context).hintColor.withOpacity(0.8),
+                  collapsedShape: Border.all(width: 0.5, ),
+                  
                     children: files.map<Widget>((file) {
                       final fileName = file['fileName'];
                       final url = file['url'];
@@ -534,6 +537,7 @@ Widget build(BuildContext context) {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
                               border: Border.all(color: Colors.grey),
+                              color: Theme.of(context).hintColor.withOpacity(0.6),
                             ),
                             child: Row(
                               children: [
