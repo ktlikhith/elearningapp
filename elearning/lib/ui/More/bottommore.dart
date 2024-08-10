@@ -289,6 +289,7 @@ import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -312,6 +313,29 @@ class _MyMorePageState extends State<MyMorePage> {
     super.initState();
     _fetchProfileData(widget.token);
   }
+ void ShowLogoutdialog(BuildContext context){
+  showDialog(context: context, 
+  builder:(context) {
+    return AlertDialog(
+      title: Text('Logout!!'),
+      content:  Text('Are you sure....'),
+      actions: [
+         TextButton(
+          onPressed: (){
+                _clearToken();
+              Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+            Navigator.of(context).pop();
+          }, child: Text('LOGOUT'),),
+           TextButton(
+          onPressed: (){
+            
+            Navigator.of(context).pop();
+          }, child: Text('Close'),),
+      ],
+    );
+    
+  },);
+}
 
   Future<void> _clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -420,8 +444,9 @@ class _MyMorePageState extends State<MyMorePage> {
              icon: FontAwesomeIcons.rightFromBracket,
               text: 'Logout',
               onTap: () {
-                _clearToken();
-                Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+            
+                ShowLogoutdialog(context);
+              
               }
             ),
           ],
