@@ -207,9 +207,10 @@
   
   
 // }
+
 import 'dart:convert';
 import 'dart:io';
-// import 'dart:js';
+
 
 import 'package:elearning/routes/routes.dart';
 import 'package:path/path.dart';
@@ -223,9 +224,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class DownloadManager {
   static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  static Future<Directory> getDownloadDirectory() async {
+  static Future<Directory> getDownloadDirectory(String courseName) async {
     final directory = await getApplicationDocumentsDirectory();
-    final downloadDirectory = Directory('${directory.path}/Download');
+    final downloadDirectory = Directory('${directory.path}/Download/');
 
     if (!await downloadDirectory.exists()) {
       await downloadDirectory.create(recursive: true);
@@ -244,12 +245,12 @@ class DownloadManager {
     return file;
   }
 
-  static Future<void> _saveMetadata(String fileName, String url, String checksum, DateTime downloadDate) async {
+  static Future<void> _saveMetadata(String fileName, String url, String checksum, DateTime downloadDate,String courseName) async {
     final file = await _getMetadataFile();
     final content = await file.readAsString();
     final List<dynamic> metadata = jsonDecode(content);
 
-    metadata.add({'fileName': fileName, 'url': url, 'checksum': checksum, 'downloadDate': downloadDate.toIso8601String()});
+    metadata.add({'fileName': fileName, 'url': url, 'checksum': checksum, 'downloadDate': downloadDate.toIso8601String(),'CourseName':courseName});
 
     await file.writeAsString(jsonEncode(metadata));
   }
@@ -302,7 +303,7 @@ class DownloadManager {
     return digest.toString();
   }
 
-  static Future<void> downloadFile(BuildContext context, String url, String fileName, String token, {String? expectedChecksum}) async {
+  static Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,{String? expectedChecksum}) async {
     try {
       final hasPermission = await requestStoragePermission(context);
       if (!hasPermission) {
@@ -311,7 +312,7 @@ class DownloadManager {
       }
 
       final dio = Dio();
-      final downloadDirectory = await getDownloadDirectory();
+      final downloadDirectory = await getDownloadDirectory(courseNmae);
       final filePath = '${downloadDirectory.path}/$fileName';
 
       final file = File(filePath);
@@ -321,7 +322,7 @@ class DownloadManager {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('File Already Downloaded'),
-            content: const Text('The file is already downloaded.'),
+            content: const Text('The file is already downloaded and avilable Offline.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -405,7 +406,7 @@ class DownloadManager {
 
       // Save metadata after download
       DateTime downloadDate = DateTime.now();
-      await _saveMetadata(fileName, url, actualChecksum, downloadDate);
+      await _saveMetadata(fileName, url, actualChecksum, downloadDate,courseNmae);
 
       // Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: token);
   Navigator.of(context).pushNamed(RouterManger.downloads, arguments: token);
@@ -424,6 +425,9 @@ class DownloadManager {
             channelDescription: 'Downloading file',
             importance: Importance.high,
             priority: Priority.high,
+            enableVibration:true,
+             icon:'@drawable/eapplogo',
+            
           ),
         ),
       );
@@ -463,7 +467,7 @@ class DownloadManager {
   static Future<List<Map<String, dynamic>>> getDownloadedFiles() async {
     final metadata = await _loadMetadata();
     final directory = await getApplicationDocumentsDirectory();
-    final downloadDirectory = Directory('${directory.path}/Download');
+    final downloadDirectory = Directory('${directory.path}/Download/');
 
     if (await downloadDirectory.exists()) {
       return metadata;

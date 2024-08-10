@@ -1,6 +1,12 @@
 
+import 'dart:io';
+
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
+import 'package:elearning/ui/download/downloadmanager.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'; // Import for iOS features
@@ -10,8 +16,9 @@ class WebViewPage extends StatefulWidget {
   final String title;
   final String url;
   final String token;
+  final String? fileurl;
 
-  const WebViewPage(this.title, this.url, this.token,);
+  const WebViewPage(this.title, this.url, this.token,[this.fileurl]);
 
   @override
   _WebViewPageState createState() => _WebViewPageState();
@@ -26,22 +33,55 @@ class _WebViewPageState extends State<WebViewPage> {
   void initState() {
     super.initState();
     _initializeWebViewController();
+    addFileSelectionListener();
   }
+  @override
+  void dispose() {
+ 
+    super.dispose();
+  }
+  void addFileSelectionListener() async {
+    if (Platform.isAndroid) {
+      final androidController = _controller.platform as AndroidWebViewController;
+      await androidController.setOnShowFileSelector(_androidFilePicker);
+    }
+  }
+  Future<List<String>> _androidFilePicker(final FileSelectorParams params) async {
+  final result = await FilePicker.platform.pickFiles();
+
+  if (result != null && result.files.single.path != null) {
+    final file = File(result.files.single.path!);
+    return [file.uri.toString()];
+  }
+  return [];
+}
+
+
 
   void _initializeWebViewController() async {
-    late final PlatformWebViewControllerCreationParams params;
+     PlatformWebViewControllerCreationParams params =const PlatformWebViewControllerCreationParams();
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+        
       );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
+    }  else if (WebViewPlatform.instance is AndroidWebViewPlatform) {
+  params = AndroidWebViewControllerCreationParams
+      .fromPlatformWebViewControllerCreationParams(
+    params,
+
+  );
+}else {
+      params =  PlatformWebViewControllerCreationParams();
+    
+      
     }
 
     _controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
+      
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
@@ -65,16 +105,51 @@ class _WebViewPageState extends State<WebViewPage> {
               _handleUnknownUrlScheme(error.url);
             } 
           },
+          
           onNavigationRequest: (NavigationRequest request) {
             print("Navigation request: ${request.url}");
             if (_isExternalUrl(request.url)) {
              _launchURL(request.url);
               return NavigationDecision.prevent;
             }
+            if(_ispdfURL!=false)
+            {
+                //  String getdwnloadUrlWithToken(String filePath1, String Token) {
+                //                               return '$filePath1&token=$Token';
+                //                             }
+                // String? filename=getfilename(request.url);
+                if(widget.fileurl!=null){
+                String filename=widget.fileurl ?? "";
+                
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PDFViewScreen(filename),
+                                    ),
+                                  );
+                                     return NavigationDecision.prevent;
+                
+                }
+              //  String getdwnloadUrlWithToken(String filePath1, String Token) {
+              //                                 return '$filePath1&token=$Token';
+              //                               }
+              //   String? filename=getfilename(request.url);
+              //   if(filename!=null){
+              //  String url = getdwnloadUrlWithToken( request.url,widget.token);
+              //                               DownloadManager.downloadFile(
+              //                                 context,
+              //                                 url,
+              //                                 filename,
+              //                                 widget.token,
+              //                               );
+              //                               Navigator.of(context).pop();
+                // }
+            }
             return NavigationDecision.navigate;
           },
         ),
       );
+       
 
     // Load SSO after _controller is fully initialized
     await _loadSSO();
@@ -93,7 +168,7 @@ class _WebViewPageState extends State<WebViewPage> {
     _isMainUrlLoaded = true;
   }
 
-  bool _isSSOUrl(String url) {
+   _isSSOUrl(String url) {
     return url.contains('auth/token/index.php');
   }
 
@@ -109,6 +184,27 @@ class _WebViewPageState extends State<WebViewPage> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+  static bool _ispdfURL(url){
+    return url.contains('.pdf');
+
+  }
+  String? getfilename(url){
+    
+  // Split the URI at the '#Intent;' part
+  final String filenameString = url.split('content/')[1];
+  // Split the intent parameters by ';'
+  final List<String> intentParams = filenameString.split('/');
+  // Loop through the parameters to find the 'url' parameter
+  for (String param in intentParams) {
+    if (param.endsWith('.pdf')) {
+      // Return the value after 'url='
+      print('param');
+      return param;
+    }
+  }
+  return null;
+
   }
 
   void _handleUnknownUrlScheme(String? url) {

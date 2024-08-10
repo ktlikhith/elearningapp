@@ -280,6 +280,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                 child: Container(
                   decoration: BoxDecoration(
                    // color: Colors.grey[200],
+                   
                    color: Theme.of(context).hintColor.withOpacity(0.4),
                     borderRadius: section['expanded'] ?? false ? BorderRadius.vertical(top: Radius.circular(10)) : BorderRadius.circular(10),
                   ),
@@ -299,6 +300,82 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                           ),
                         ),
                       ),
+                      
+                       SizedBox(
+                        
+                     
+                width: 32, // Set the width of the circular progress indicator
+                height: 32, // Set the height of the circular progress indicator
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    
+                    CircularProgressIndicator(
+                      
+                      value:      (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                            int totalModules = section['modules'].length;
+                           int sectionprogress = 0;
+                                  if (totalModules > 0) {
+                        sectionprogress = ((100 * completedModules) / totalModules).toInt();
+                                            }
+                              return sectionprogress/100;
+                                 })(), 
+                      strokeWidth: 3,
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        _getStatusColor(   (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                            int totalModules = section['modules'].length;
+                            int sectionprogress = 0;
+                   if (totalModules > 0) {
+                    sectionprogress = ((100 * completedModules) / totalModules).toInt();
+                          }
+                              return sectionprogress;
+                                 })(),),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                              (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                            int totalModules = section['modules'].length;
+                              return "($completedModules/$totalModules)";
+                                 })(),
+                        style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          color: _getStatusColor(   (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                            int totalModules = section['modules'].length;
+                            int sectionprogress = 0;
+                   if (totalModules > 0) {
+                    sectionprogress = ((100 * completedModules) / totalModules).toInt();
+                          }
+                              return sectionprogress;
+                                 })(),),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
                       Icon(
                         section['expanded'] ?? false
                             ? Icons.keyboard_arrow_up
@@ -317,12 +394,17 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                    color: Theme.of(context).hintColor.withOpacity(0.2),
                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
                   ),
+                
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                   child: Column(
+                    
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      
                       for (var module in section['modules'])
-
+                 
+                      
+                        
                         Column(
                           children: [
                             ListTile(
@@ -357,12 +439,13 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                             String getdwnloadUrlWithToken(String filePath1, String Token) {
                                               return '$filePath1&token=$Token';
                                             }
-                                            String vidurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
+                                            String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
                                             DownloadManager.downloadFile(
                                               context,
-                                              vidurl,
+                                              fileurl,
                                               content['filename'],
                                               widget.token,
+                                              widget.courseName
                                             );
                                           }
                                         }
@@ -372,39 +455,51 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               ),
                               onTap: () {
                                 if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
-                                  final content = module['contents'][0];
-                                  String getdwnloadUrlWithToken(String filePath1, String Token) {
-                                    return '$filePath1&token=$Token';
-                                  }
-                                  String vidurl = getdwnloadUrlWithToken(module['contents'][0]['fileurl'], widget.token);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => VideoPlayerScreen(vidurl: vidurl),
-                                    ),
-                                  );
+                                  // final content = module['contents'][0];
+                                  // String getdwnloadUrlWithToken(String filePath1, String Token) {
+                                  //   return '$filePath1&token=$Token';
+                                  // }
+                                  // String vidurl = getdwnloadUrlWithToken(module['contents'][0]['fileurl'], widget.token);
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => VideoPlayerScreen(vidurl: vidurl),
+                                  //   ),
+                                  // );
+                                   Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'],  module['url'], widget.token,))
+                              );
                                 } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
                                   final content = module['contents'][0];
                                   String getpdfUrlWithToken(String filePath1, String Token) {
                                     return '$filePath1&token=$Token';
                                   }
                                   String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PDFViewScreen(pdfurl),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => PDFViewScreen(pdfurl),
+                                  //   ),
+                                  // );
+                                   Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
+                              );
                                 } else if (module['modname'] == 'customcert' ){
-                              String certificateurl=module['url']+'&forcedownload=1';
+                              // String certificateurl=module['url']+'&forcedownload=1';
 
                               
-                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
-                                    ),
-                                  );
+                              //    Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
+                              //       ),
+                              //     );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'customcert',  module['url'], widget.token,))
+                              );
                                 }
                                 else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
                                   Navigator.push(
@@ -474,6 +569,15 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     );
   }
 
+  Color _getStatusColor(int progress) {
+    if (progress == 0) {
+      return Colors.red;
+    } else if (progress == 100) {
+      return Colors.green;
+    } else {
+      return Colors.orange;
+    }
+  }
   Widget _buildShimmerCourseContent() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
