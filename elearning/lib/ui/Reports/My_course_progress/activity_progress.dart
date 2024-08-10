@@ -470,14 +470,14 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (module['completiondata'] != null &&
-                                    module['completiondata']['state'] == 1)
+                                    module['completiondata']['state'] !=0)
                                   Icon(
                                     Icons.check_circle,
                                     color: Colors.green,
                                     size: 18,
                                   ),
                                 if (module['completiondata'] == null ||
-                                    module['completiondata']['state'] != 0)
+                                    module['completiondata']['state'] == 0)
                                   Icon(
                                     Icons.radio_button_unchecked,
                                     color: Colors.grey,
