@@ -7,6 +7,7 @@ import 'package:elearning/ui/Gamification/leaderboard.dart';
 import 'package:elearning/ui/Gamification/scratchscreen.dart';
 import 'package:elearning/ui/Gamification/spinwheel.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GamificationPage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _GamificationPageState extends State<GamificationPage> {
   void initState() {
     super.initState();
     _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom,]);
   }
 
   @override
