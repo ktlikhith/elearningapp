@@ -174,6 +174,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
            else {
             return Center(child: Text('No data found'));
           }
+    
         },
         
       ),
