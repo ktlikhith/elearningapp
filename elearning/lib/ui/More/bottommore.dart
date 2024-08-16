@@ -322,9 +322,10 @@ class _MyMorePageState extends State<MyMorePage> {
       actions: [
          TextButton(
           onPressed: (){
-                _clearToken();
+            
               Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
-            Navigator.of(context).pop();
+                  _clearToken();
+        
           }, child: Text('LOGOUT'),),
            TextButton(
           onPressed: (){
