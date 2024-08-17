@@ -199,7 +199,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                 description.isNotEmpty ? removeHtmlTags(description) : 'No description available',
                                 style:  TextStyle(
                                   fontSize: 16.0,
-                                  color: Theme.of(context).hintColor,
+                                  color: Theme.of(context).cardColor,
                                 ),
                               );
                             }
@@ -294,7 +294,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                             section['name'] ?? 'Section Name',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(220, 6, 6, 6),
+                              color: Theme.of(context).primaryColor,
                               fontSize: 18,
                             ),
                           ),

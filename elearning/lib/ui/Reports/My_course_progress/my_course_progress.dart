@@ -590,8 +590,12 @@ class _CoursePageState extends State<Coursereport> {
             final completedCount = getCompletedCoursesCount(data.allCourses);
             final inProgressCount = getInProgressCoursesCount(data.allCourses);
             final notStartedCount = getNotStartedCoursesCount(data.allCourses);
+            final total=completedCount+inProgressCount+notStartedCount;
+            final complete__=(completedCount*100)/total;
+             final progress__=(inProgressCount*100)/total;
+              final notstarted__=(notStartedCount*100)/total;
             if(timertoshowhint!=true)
-               Future.delayed(Duration(seconds: 1),(){
+               Future.delayed(Duration(seconds: 2),(){
              _showTooltip(context);
              timertoshowhint=true;
              
@@ -601,9 +605,9 @@ class _CoursePageState extends State<Coursereport> {
           
 
             final Map<String, double> dataMap = {
-              "Completed": completedCount.toDouble(),
-              "In Progress": inProgressCount.toDouble(),
-              "Not Started": notStartedCount.toDouble(),
+              "Completed": complete__,
+              "In Progress": progress__,
+              "Not Started": notstarted__,
             };
 
             final List<Color> colorList = [

@@ -372,7 +372,7 @@ class CourseCard extends StatelessWidget {
                                   ),
                                 ),
                               ); },
-                        child: Text('Click For more Details',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
+                        child: Text('More Details',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
                                           ),
                                           Padding(
                                             padding:  EdgeInsets.only(left:  MediaQuery.of(context).size.width*0.01),
