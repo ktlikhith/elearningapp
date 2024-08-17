@@ -28,7 +28,7 @@ class _GamificationPageState extends State<GamificationPage> {
   void initState() {
     super.initState();
     _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom,]);
+  
   }
 
   @override

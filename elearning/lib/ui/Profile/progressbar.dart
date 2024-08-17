@@ -31,7 +31,7 @@ Widget buildProgressBar(String title, value) {
           barRadius: Radius.circular(30),
           lineHeight: 16.5,
           linearStrokeCap: LinearStrokeCap.roundAll,
-          percent: intValue / 100,
+          percent: value ,
           backgroundColor: Color.fromARGB(255, 204, 205, 205),
           progressColor: Colors.orange,
           center: Padding(

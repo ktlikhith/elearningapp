@@ -220,7 +220,7 @@ class _MLPopupState extends State<MLPopup> {
           ),
           const SizedBox(height: 20.0),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
                
@@ -265,8 +265,8 @@ class _MLPopupState extends State<MLPopup> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              IconButton(
-                icon: const FaIcon(
+              ElevatedButton(
+               child:   FaIcon(
                   FontAwesomeIcons.close,
                   color: Color.fromARGB(255, 249, 2, 2),
                 ),
