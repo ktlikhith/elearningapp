@@ -14,6 +14,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //device nav bar and notification bar settings do not remove or comment this*****
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   const AndroidInitializationSettings initializationSettingsAndroid =
