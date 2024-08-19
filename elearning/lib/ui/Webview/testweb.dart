@@ -6,6 +6,7 @@ import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
@@ -32,12 +33,13 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   void initState() {
     super.initState();
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,overlays: [SystemUiOverlay.top]);
     _initializeWebViewController();
     addFileSelectionListener();
   }
   @override
   void dispose() {
- 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
     super.dispose();
   }
   void addFileSelectionListener() async {
