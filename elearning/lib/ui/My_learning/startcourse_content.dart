@@ -10,8 +10,12 @@ import 'package:elearning/ui/My_learning/video_player_screen.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/parse_route.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -264,6 +268,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   }
 
   Widget _buildCourseContent() {
+    int i=0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -396,169 +401,186 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                   ),
                 
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                  child: Column(
-                    
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  child: Stack(
+                    children:[ Padding(
+                      padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.0225),
+                      child: Container(width: 7,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                    ), Column(
                       
-                      for (var module in section['modules'])
-                 
-                      
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (module['completiondata'] != null && module['completiondata']['state'] != 0)
-                                    Icon(Icons.check_circle, color: Colors.green,size: 18,),
-                                  if (module['completiondata'] == null || module['completiondata']['state'] == 0)
-                                    Icon(Icons.radio_button_unchecked, color: Colors.grey,size: 18,),
-                                  SizedBox(width: 8),
-                                  _buildModuleIcon(module['modname']),
-                                ],
-                              ),
-                              title: Text(
-                                module['name'] ?? 'Module Name',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 6, 6, 6),
-                                  fontSize: 17,
-                                ),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (module['contents'] != null )
-                                    IconButton(
-                                      icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
-                                      onPressed: () {
-                                        if (module['contents'] != null && module['contents'].isNotEmpty) {
-                                          final content = module['contents'][0];
-                                          if (content['fileurl'] != null && content['filename'] != null) {
-                                            String getdwnloadUrlWithToken(String filePath1, String Token) {
-                                              return '$filePath1&token=$Token';
+                        for (var module in section['modules'])
+                          Column(
+                            children: [
+                             
+                                  ListTile(
+                                  leading: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                     
+                                      if (module['completiondata'] != null && module['completiondata']['state'] != 0)
+                                        Icon(Icons.check_circle, color: Colors.green,size: 18,),
+                                      if (module['completiondata'] == null || module['completiondata']['state'] == 0)
+                                        Icon(Icons.circle, color: Colors.grey,size: 18,),
+                                    
+                                      SizedBox(width: 8),
+                                      Container( height: 20,width: 20,child:_buildModuleIcon(module['modname'])),
+                                    ],
+                                  ),
+                                  title: Text(
+                                    module['name'] ?? 'Module Name',maxLines: 1,overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      
+                                      color: Color.fromARGB(255, 6, 6, 6),
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (module['contents'] != null )
+                                        IconButton(
+                                          icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
+                                          onPressed: () {
+                                            if (module['contents'] != null && module['contents'].isNotEmpty) {
+                                              final content = module['contents'][0];
+                                              if (content['fileurl'] != null && content['filename'] != null) {
+                                                String getdwnloadUrlWithToken(String filePath1, String Token) {
+                                                  return '$filePath1&token=$Token';
+                                                }
+                                                String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
+                                                DownloadManager.downloadFile(
+                                                  context,
+                                                  fileurl,
+                                                  content['filename'],
+                                                  widget.token,
+                                                  widget.courseName
+                                                );
+                                              }
+                                         
                                             }
-                                            String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
-                                            DownloadManager.downloadFile(
-                                              context,
-                                              fileurl,
-                                              content['filename'],
-                                              widget.token,
-                                              widget.courseName
-                                            );
-                                          }
-                                        }
-                                      },
-                                    ),
-                                ],
-                              ),
-                              onTap: () {
-                                if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
-                                  // final content = module['contents'][0];
-                                  // String getdwnloadUrlWithToken(String filePath1, String Token) {
-                                  //   return '$filePath1&token=$Token';
-                                  // }
-                                  // String vidurl = getdwnloadUrlWithToken(module['contents'][0]['fileurl'], widget.token);
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => VideoPlayerScreen(vidurl: vidurl),
-                                  //   ),
-                                  // );
-                                   Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'],  module['url'], widget.token,))
-                              );
-                                } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
-                                  final content = module['contents'][0];
-                                  String getpdfUrlWithToken(String filePath1, String Token) {
-                                    return '$filePath1&token=$Token';
-                                  }
-                                  String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => PDFViewScreen(pdfurl),
-                                  //   ),
-                                  // );
-                                   Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
-                              );
-                                } else if (module['modname'] == 'customcert' ){
-                              // String certificateurl=module['url']+'&forcedownload=1';
-
+                                          },
+                                        ),
+                                        
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                      // final content = module['contents'][0];
+                                      // String getdwnloadUrlWithToken(String filePath1, String Token) {
+                                      //   return '$filePath1&token=$Token';
+                                      // }
+                                      // String vidurl = getdwnloadUrlWithToken(module['contents'][0]['fileurl'], widget.token);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => VideoPlayerScreen(vidurl: vidurl),
+                                      //   ),
+                                      // );
+                                       Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context)=>WebViewPage(module['name'],  module['url'], widget.token,))
+                                  );
+                                    } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                      final content = module['contents'][0];
+                                      String getpdfUrlWithToken(String filePath1, String Token) {
+                                        return '$filePath1&token=$Token';
+                                      }
+                                      String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => PDFViewScreen(pdfurl),
+                                      //   ),
+                                      // );
+                                       Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
+                                  );
+                                    } else if (module['modname'] == 'customcert' ){
+                                  // String certificateurl=module['url']+'&forcedownload=1';
+                                
+                                  
+                                  //    Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
+                                  //       ),
+                                  //     );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'customcert',  module['url'], widget.token,))
+                                  );
+                                    }
+                                    else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
+                                        ),
+                                      );
+                                    } else if (module['modname'] == 'forum') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
+                                        ),
+                                      );
+                                    } else if (module['modname'] == 'quiz') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
+                                        ),
+                                      );
+                                    } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                      final moduleContent = module['contents'][0];
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
+                                        ),
+                                      );
+                                    } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
+                                      final content = module['contents'][0];
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
+                                        ),
+                                      );
+                                    } else if (module['modname'] == 'assign') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
+                                        ),
+                                      );
+                                    } else {
+                                      if (module['url'] != null && module['url'].isNotEmpty) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  
+                                ),
+                                
+                                
                               
-                              //    Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
-                              //       ),
-                              //     );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'customcert',  module['url'], widget.token,))
-                              );
-                                }
-                                else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
-                                    ),
-                                  );
-                                } else if (module['modname'] == 'forum') {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
-                                    ),
-                                  );
-                                } else if (module['modname'] == 'quiz') {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
-                                    ),
-                                  );
-                                } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
-                                  final moduleContent = module['contents'][0];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
-                                    ),
-                                  );
-                                } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
-                                  final content = module['contents'][0];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
-                                    ),
-                                  );
-                                } else if (module['modname'] == 'assign') {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
-                                    ),
-                                  );
-                                } else {
-                                  if (module['url'] != null && module['url'].isNotEmpty) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                             
+                              
+                            ],
+                          ),
+                      ],
+                      
+                    ),
+                   
                     ],
                   ),
                 ),
