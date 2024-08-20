@@ -31,13 +31,13 @@ Widget buildProgressBar(String title, value) {
           barRadius: Radius.circular(30),
           lineHeight: 16.5,
           linearStrokeCap: LinearStrokeCap.roundAll,
-          percent: value ,
+          percent: value/100 ,
           backgroundColor: Color.fromARGB(255, 204, 205, 205),
           progressColor: Colors.orange,
           center: Padding(
             padding: const EdgeInsets.only(bottom: 2.0),
             child: Text(
-              "$intValue%",
+              "$value%",
               style: TextStyle(fontSize: 12, color: Colors.black),
             ),
           ),

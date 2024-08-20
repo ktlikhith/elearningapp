@@ -459,7 +459,11 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                       BorderRadius.vertical(bottom: Radius.circular(10)),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                child: Column(
+                child: Stack(
+                    children:[ Padding(
+                      padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.023),
+                      child: Container(width: 6,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                    ),Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     for (var module in section['modules'])
@@ -472,14 +476,14 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                 if (module['completiondata'] != null &&
                                     module['completiondata']['state'] !=0)
                                   Icon(
-                                    Icons.check_circle,
+                                    Icons.circle,
                                     color: Colors.green,
                                     size: 18,
                                   ),
                                 if (module['completiondata'] == null ||
                                     module['completiondata']['state'] == 0)
                                   Icon(
-                                    Icons.radio_button_unchecked,
+                                    Icons.circle,
                                     color: Colors.grey,
                                     size: 18,
                                   ),
@@ -488,7 +492,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                               ],
                             ),
                             title: Text(
-                              module['name'] ?? 'Module Name',
+                              module['name'] ?? 'Module Name',maxLines: 1,overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Color.fromARGB(255, 6, 6, 6),
                                 fontSize: 17,
@@ -592,11 +596,14 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                       ),
                   ],
                 ),
+                    ]
+                )
               ),
               SizedBox(height: 10),
             ],
           ),
       ],
+  
     );
   }
 

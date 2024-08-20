@@ -292,146 +292,114 @@ class CourseCard extends StatelessWidget {
         margin: EdgeInsets.all(10.0),
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.15),
-                        child: Container(
-                          
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Theme.of(context).highlightColor,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.44,
-                                  child: Text(
-                                    course.name,
-                                  maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                  SizedBox(width: 3),
-                                    Stack(children: [ Padding(
-                                      padding: const EdgeInsets.only(top: 10,left: 10),
-                                      child: Image.asset("assets/Reportsicon/cert/3d-fluency-contract.png",width: 20,),
-                                    ),AnimatedCertificateIcon()]),
-                        // Icon(
-                        //   // FontAwesomeIcons.certificate,
-                        //   Icons.verified,
-                        //   color: Color.fromARGB(255, 246, 232, 30),
-                        // ),
-                              ],
-                            ),
-                            
-                          ),
-                        ),
-                      ),
+                  Padding(
+                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.15),
+                    child: Container(
                       
-                  
-                    
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  Padding(
-                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.105),
-                    child: Text(
-                      'Issued : ${course.awarddate}',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color:Theme.of(context).highlightColor,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Theme.of(context).highlightColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.44,
+                              child: Text(
+                                course.name,
+                              maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                              SizedBox(width: 3),
+                                Stack(children: [ Padding(
+                                  padding: const EdgeInsets.only(top: 10,left: 10),
+                                  child: Image.asset("assets/Reportsicon/cert/3d-fluency-contract.png",width: 20,),
+                                ),AnimatedCertificateIcon()]),
+                    // Icon(
+                    //   // FontAwesomeIcons.certificate,
+                    //   Icons.verified,
+                    //   color: Color.fromARGB(255, 246, 232, 30),
+                    // ),
+                          ],
+                        ),
+                        
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,top: 4),
-                    child: Row(
-                      children: [
-                        ElevatedButton(onPressed: () {  Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Certificatedetail(
-                                    token: token,
-                                    courseNmae: course.name,
-                                    certificatename: course.certificatename,
-                                    issuedDate: course.awarddate,
-                                    certificateurl: course.certificateurl,
-                                  ),
-                                ),
-                              ); },
-                        child: Text('More Details',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
-                                          ),
-                                          Padding(
-                                            padding:  EdgeInsets.only(left:  MediaQuery.of(context).size.width*0.01),
-                                            child: ElevatedButton(  onPressed: () {if (course.certificateurl != null)
-                                                                           _launchURL(course.certificateurl);
-                                                                  // Navigator.push(
-                                                                  //   context,
-                                                                  //   MaterialPageRoute(
-                                                                  //     builder: (context) => WebViewPage(
-                                                                  //       'Certificate',
-                                                                  //       course.certificateurl,
-                                                                  //       token,
-                                                                  //     ),
-                                                                  //   ),
-                                                                  // );
-                                                                },child: Row(
-                                                                  children: [
-                                                                    Text('Download',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
-                                                                    SizedBox(width: 8,),
-                                                                  
-                     FaIcon(
-                      FontAwesomeIcons.download,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                                                                    
-                                                                  ],
-                                                                )),
-                                          )
-                      ],
-                    )
-                  ),
+                  
+              
+                
                 ],
               ),
-                //  if (course.certificateurl != null)
-                // Padding(
-                //   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.00),
-                //   child: IconButton(
-                //     icon: const FaIcon(
-                //       FontAwesomeIcons.download,
-                //       color: Colors.black,
-                //       size: 28,
-                //     ),
-                    // onPressed: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => WebViewPage(
-                    //         'Certificate',
-                    //         course.certificateurl,
-                    //         token,
-                    //       ),
-                    //     ),
-                    //   );
-                    // },
-                //   ),
-                // ),
-              
-           
+              SizedBox(height: 8.0),
+              Padding(
+                padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.105),
+                child: Text(
+                  'Issued : ${course.awarddate}',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color:Theme.of(context).highlightColor,
+                  ),
+                ),
+              ),
+              Row(
+                
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        
+                children: [
+                  ElevatedButton(onPressed: () {  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Certificatedetail(
+                              token: token,
+                              courseNmae: course.name,
+                              certificatename: course.certificatename,
+                              issuedDate: course.awarddate,
+                              certificateurl: course.certificateurl,
+                            ),
+                          ),
+                        ); },
+                  child: Text('More Details',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
+                                    ),
+                                    ElevatedButton(  onPressed: () {if (course.certificateurl != null)
+                                                                   _launchURL(course.certificateurl);
+                                                          // Navigator.push(
+                                                          //   context,
+                                                          //   MaterialPageRoute(
+                                                          //     builder: (context) => WebViewPage(
+                                                          //       'Certificate',
+                                                          //       course.certificateurl,
+                                                          //       token,
+                                                          //     ),
+                                                          //   ),
+                                                          // );
+                                                        },child: Row(
+                                                          children: [
+                                                            Text('Download',style:TextStyle(fontWeight:  FontWeight.bold,color: Theme.of(context).primaryColor),),
+                                                            SizedBox(width: 8,),
+                                                          
+                                                         FaIcon(
+                                                          FontAwesomeIcons.download,
+                                                          color: Colors.black,
+                                                          size: 20,
+                                                        ),
+                                                            
+                                                          ],
+                                                        ),),
+                ],
+              ),
             ],
           ),
         ),
