@@ -1,5 +1,7 @@
 import 'package:elearning/services/allcourse_service.dart';
+import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
+import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
 
@@ -42,7 +44,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center();//child: Text('Error: ${snapshot.error}')
+            return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData && (snapshot.data!['learningpathdetail'] as List).isEmpty) {
             return Center(child: Text('No learning paths available'));
           } else {
@@ -78,31 +80,39 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Text(
-                  learningPath.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Theme.of(context).primaryColor
-                  ),
-                ),
-              ),
-              SizedBox(height: 12),
-              Row(
+                Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
+                  Text(
+                                   '${learningPath.name}',
+                                   style: TextStyle(
+                   fontWeight: FontWeight.bold,
+                   fontSize: 20,
+                   color: Theme.of(context).primaryColor
+                                   ),
+                                 ),
+                     SizedBox(width: 25),
+             
+                 
+                ],
+              ),
+               SizedBox(height: 15,),
+                    
+                
+         Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
                     children: [
                       SizedBox(
-                        width: 100,
-                        height: 100,
+                        width: 90,
+                        height: 90,
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
                             CircularProgressIndicator(
                               value: learningPath.progress / 100,
-                              strokeWidth: 20,
+                              strokeWidth: 13,
                               backgroundColor: Colors.grey[300],
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 _getStatusColor(learningPath.progress),
@@ -132,8 +142,28 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                         ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+            child: 
+                    Image.network(
+                      
+                          '${Constants.baseUrl}${learningPath.imageUrl}',
+                          height: 115,
+                          width: 225,
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'assets/images/coursedefaultimg.jpg',
+                                  height: 100,
+                          width: 200,
+                              fit: BoxFit.fill,
+                            );
+                          },
+                        ),
+                    ),
+                  ],
+                ),
+             
             ],
           ),
         ),

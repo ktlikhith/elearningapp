@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:elearning/services/homepage_service.dart'; // Import the HomePageService class
@@ -87,11 +88,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', Color.fromARGB(255, 242, 26, 23),
+              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', Color(0xFF0041C7),
                   'assets/dashboardicons/due past.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', Color.fromARGB(255, 238, 219, 41),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', Color(0xFF0041C7),
                   'assets/dashboardicons/Due soon.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later', Color.fromARGB(255, 83, 244, 51),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later',Color(0xFF0041C7),
                   'assets/dashboardicons/due later.png'),
             ],
           ),
@@ -122,26 +123,40 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     );
   }
 
-  Widget buildSection(String title, String number, Color color, String iconPath) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Stack(
-        clipBehavior: Clip.antiAlias,
-        children: [
-          Container(
-            width: 200,
-            height: 80,
-            padding: const EdgeInsets.only(bottom: 10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9.0),
-              border: Border.all(
-                // color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
-                color:Theme.of(context).cardColor,
-              ),
-              // color: color.withOpacity(0.1),
-              color: Theme.of(context).hintColor.withOpacity(0.1),
+ Widget buildSection(String title, String number, Color color, String iconPath) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Stack(
+      clipBehavior: Clip.antiAlias,
+      children: [
+       
+        Container(
+          
+          width: 200,
+          height: 80,
+          padding: const EdgeInsets.only(bottom: 10.0),
+          decoration: BoxDecoration(
+              boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
+            borderRadius: BorderRadius.circular(9.0),
+            border: Border.all(
+              color: Theme.of(context).cardColor,
             ),
-            child: Padding(
+            color: Theme.of(context).hintColor.withOpacity(0.1),
+          ),
+          child: Stack(
+            children:[
+               Padding(
               padding: const EdgeInsets.only(left: 18.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +173,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                   const SizedBox(height: 4.0),
                   Text(
                     title,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[600],
@@ -167,46 +182,147 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                 ],
               ),
             ),
-          ),
-          Positioned(
-            right: -10,
-            top: -30,
-            bottom: 0,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).hintColor.withOpacity(0.2),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(45.0),
-                    bottomRight: Radius.circular(45.0),
-                    bottomLeft: Radius.circular(45.0),
-                  ),
+              Positioned(
+          right: -10,
+          top: -15,
+          bottom: 0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Theme.of(context).hintColor.withOpacity(0.2),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(45.0),
+                  bottomRight: Radius.circular(45.0),
+                  bottomLeft: Radius.circular(45.0),
                 ),
-                child: Center(
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.9),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 19,
+                    top: 22,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.1),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
                       ),
                     ),
-                    child: Center(
-                      child: Image.asset(iconPath, width: 30, height: 30, ),
+                  ),
+                  Positioned(
+                    right: 20,
+                    top: 20,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.9),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            offset: const Offset(4, 4),
+                            blurRadius: 6,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Image.asset(iconPath, width: 30, height: 30),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+            ],
+          ),
+        ),
+           Container(
+          width: 200,
+          height: 80,
+          padding: const EdgeInsets.only(bottom: 10.0),
+            decoration: BoxDecoration(
+              
+            borderRadius: BorderRadius.circular(9.0),
+            border: Border.all(
+              color: Theme.of(context).cardColor,
+            ),
+           
+          ),
+          ),
+      
+      ],
+    ),
+  );
+}
+
+}
+
+class AnimatedCertificateIcon extends StatefulWidget {
+  String iconPath;
+  
+  AnimatedCertificateIcon(this.iconPath);
+  @override
+  _AnimatedCertificateIconState createState() => _AnimatedCertificateIconState();
+}
+
+class _AnimatedCertificateIconState extends State<AnimatedCertificateIcon> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+      
+    )..repeat(reverse: true);
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _animation,
+      child:  Image.asset(widget.iconPath,width: 40,color:Colors.black.withOpacity(0.4),),
+      // FaIcon(
+      //                 FontAwesomeIcons.forward,
+      //                 color:Theme.of(context).highlightColor ,
+      //                 size: 50,
+      //               ),
     );
   }
 }
