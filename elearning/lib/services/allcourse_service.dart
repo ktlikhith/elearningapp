@@ -83,9 +83,9 @@ class Course {
       name: json['name'],
       courseImg: json['courseimg'],
       courseProgress: json['courseprogress'] ?? 0,
-      courseDescription: json['coursedescription'],
-      courseStartDate: json['coursestartdate'],
-      courseEndDate: json['courseendate'],
+      courseDescription: json['coursedescription']??'',
+      courseStartDate: json['coursestartdate']??'',
+      courseEndDate: json['courseendate']??'',
       courseVideoUrl: json['course_videourl'] ?? '',
       courseDuration: json['course_duration'] ?? '',
     );

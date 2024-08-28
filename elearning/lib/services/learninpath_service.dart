@@ -34,6 +34,7 @@ class LearningPathDetail {
   final String startdate;
   final String enddate;
   final String duration;
+  final String nocourses;
   
   final List<LearningPathProgress> learningpathProgress;
 
@@ -48,6 +49,7 @@ class LearningPathDetail {
     required this.startdate,
     required this.enddate,
     required this.duration,
+    required this.nocourses,
   });
 
   factory LearningPathDetail.fromJson(Map<String, dynamic> json, List<dynamic> progressJson) {
@@ -66,6 +68,7 @@ class LearningPathDetail {
       startdate: json['startdate'],
       enddate: json['enddate'],
       duration: json['duration'],
+      nocourses: json['nocourses'].toString(),
       learningpathProgress: learningpathProgress,
     );
   }

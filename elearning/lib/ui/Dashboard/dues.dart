@@ -88,11 +88,11 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
           padding: const EdgeInsets.all(0.0),
           child: Row(
             children: [
-              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', Color(0xFF0041C7),
+              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', 
                   'assets/dashboardicons/due past.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon', Color(0xFF0041C7),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon',  
                   'assets/dashboardicons/Due soon.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later',Color(0xFF0041C7),
+              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later',
                   'assets/dashboardicons/due later.png'),
             ],
           ),
@@ -123,7 +123,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     );
   }
 
- Widget buildSection(String title, String number, Color color, String iconPath) {
+ Widget buildSection(String title, String number, String iconPath) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Stack(
@@ -236,7 +236,7 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.9),
+                        color:Theme.of(context).cardColor,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0),

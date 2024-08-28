@@ -482,10 +482,12 @@ class ReportProvider with ChangeNotifier {
     try {
       final data = await reportService.fetchReport(token);
       reportData = data;
+     
     } catch (e) {
       print('Error fetching data: $e');
     } finally {
       isLoading = false;
+       print(reportData);
       notifyListeners();
     }
   }

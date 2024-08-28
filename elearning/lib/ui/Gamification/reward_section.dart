@@ -116,10 +116,22 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
     child: Stack(
       clipBehavior: Clip.antiAlias, children: [
         Container(
-          width: 220,
-          height: 90,
+          width: 200,
+          height: 80,
           padding: const EdgeInsets.only(bottom: 10.0),
           decoration: BoxDecoration(
+              boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
             borderRadius: BorderRadius.circular(9.0),
             border: Border.all(color: Theme.of(context).primaryColor,),
             color: Theme.of(context).hintColor.withOpacity(0.1),
@@ -157,7 +169,24 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
           bottom: 0,
           child: Align(
             alignment: Alignment.centerRight,
-            child: Container(
+               child: Stack(
+                children: [
+                  Positioned(
+                    right: 18,
+                    top: 23,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.1),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                  ), Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
@@ -173,7 +202,19 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: backgroundColor.withOpacity(0.9),
+                       boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       bottomRight: Radius.circular(20.0),
@@ -186,8 +227,23 @@ Widget buildPointsCategory(BuildContext context, String title, IconData icon, St
                 ),
               ),
             ),
+                ],
+               ),
           ),
         ),
+          Container(
+          width: 200,
+          height: 80,
+          padding: const EdgeInsets.only(bottom: 10.0),
+            decoration: BoxDecoration(
+              
+            borderRadius: BorderRadius.circular(9.0),
+            border: Border.all(
+              color: Theme.of(context).cardColor,
+            ),
+           
+          ),
+          ),
       ],
     ),
   );

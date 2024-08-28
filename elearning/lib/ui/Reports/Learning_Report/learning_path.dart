@@ -4,6 +4,7 @@ import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class LearningPathScreen extends StatefulWidget {
   final String token;
@@ -27,7 +28,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Learning Paths'),
+        title: Text('Learning Path'),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: false,
         leading: IconButton(
@@ -74,7 +75,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                 // color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
                 color:Theme.of(context).cardColor,
               ),
-            color: Theme.of(context).hintColor.withOpacity(0.2),
+           // color: Theme.of(context).hintColor.withOpacity(0.2),
             
           ),
           child: Column(
@@ -96,60 +97,20 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                  
                 ],
               ),
-               SizedBox(height: 15,),
+             
                     
                 
          Row(
                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                    children: [
-                      SizedBox(
-                        width: 90,
-                        height: 90,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            CircularProgressIndicator(
-                              value: learningPath.progress / 100,
-                              strokeWidth: 13,
-                              backgroundColor: Colors.grey[300],
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                _getStatusColor(learningPath.progress),
-                              ),
-                            ),
-                          
-                            Center(
-                              child: Text(
-                                '${learningPath.progress}%',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        _getStatusText(learningPath.progress),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: _getStatusColor(learningPath.progress),
-                        ),
-                      ),
-                    ],
-                  ),
-                         ClipRRect(
+                    ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
             child: 
                     Image.network(
                       
                           '${Constants.baseUrl}${learningPath.imageUrl}',
-                          height: 115,
-                          width: 225,
+                          height: 60,
+                          width: 100,
                           fit: BoxFit.fill,
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
@@ -161,6 +122,75 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                           },
                         ),
                     ),
+                    Container(
+                     child: Column(
+                       children: [
+                         Text('Duration:${learningPath.duration}',style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),),
+                         Text('Courses:${learningPath.nocourses}',style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),)
+                       ],
+                     ),
+                     
+                    ),
+
+                         Column(
+                    children: [
+                      // Stack(
+                      //   fit: StackFit.expand,
+                      //   children: [
+                          Padding(
+                        padding:  EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
+                        child: Text(
+                          _getStatusText(learningPath.progress),
+                          style: TextStyle(fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: _getStatusColor(learningPath.progress),
+                          ),
+                        ),
+                      ),
+                        
+                        //   Center(
+                        //     child: Text(
+                        //       '${learningPath.progress}%',
+                        //       style: TextStyle(
+                        //         fontSize: 10,
+                        //         fontWeight: FontWeight.bold,
+                        //         color: Colors.black,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ],
+                      // ),
+                      SizedBox(height: 10),
+                      Row(
+                            children: [
+                              LinearPercentIndicator(
+                                barRadius:Radius.circular(10),
+                                percent: learningPath.progress / 100,
+                              width:100,
+                              lineHeight: 8,
+                                                       
+                                // strokeWidth: 13,
+                                backgroundColor: Color.fromARGB(255, 170, 167, 167),
+                                progressColor: 
+                                  _getStatusColor(learningPath.progress),
+                                
+                              ),
+                              
+                          Center(
+                            child: Text(
+                              '${learningPath.progress}%',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                            
+                          ),
+                    ],
+                  ),
                   ],
                 ),
              
