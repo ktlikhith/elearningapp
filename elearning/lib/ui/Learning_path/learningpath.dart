@@ -197,7 +197,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                         ),
                         SizedBox(width: 8.0),
                         Text(
-                          'No. Courses: ${learningPathDetail['nocourses']}',
+                          'No.Courses: ${learningPathDetail['nocourses']}',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ],

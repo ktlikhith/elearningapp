@@ -1,5 +1,6 @@
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:scratcher/widgets.dart';
 import 'package:elearning/services/scratchcard_service.dart';
 import 'package:shimmer/shimmer.dart';
@@ -55,7 +56,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
-          isLoading ? _buildShimmerSkeleton() : _buildScratchCards(),
+          isLoading ? _buildShimmerSkeleton() : _buildScratchCards(context),
         ],
       ),
     );
@@ -79,70 +80,141 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
     );
   }
 
-  Widget _buildScratchCards() {
+  Widget _buildScratchCards(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: scratchCards.map((card) => _buildScratchCard(card)).toList(),
+      children: scratchCards.map((card) => _buildScratchCard(card,context)).toList(),
     );
   }
 
-  Widget _buildScratchCard(ScratchCard card) {
-    return Container(
-      width: 100,
-      height: 100,
-      child: Stack(
-        children: [
-          // Scratch Card
-          Scratcher(
-            brushSize: 30,
-            threshold: 100,
-            image: Image.network(card.scratchImage), // Set the scratch image directly
-            onChange: (value) {
-              // Handle scratch progress change
-            },
-           // Inside _buildScratchCard method of ScratchCardScreen widget
-onThreshold: () async {
-  try {
-    // Call RewardPointService to add reward points
-    await RewardPointService().addReward(
-      token: widget.token,
-      type: 'scratchcard', // Set the type to 'scratch'
-      points: card.point, // Pass the points from the scratch card
-    );
-    // Display the point and point image
-    showDialog(
-  context: context,
-  builder: (_) => Dialog(
-    child: Container(
-      // You can set width and height if you want to control the size of the dialog
-      child: Image.network(
-        card.pointImage,
-        fit: BoxFit.cover, // This will ensure the image fits well in the dialog
+  Widget _buildScratchCard(ScratchCard card,context) {
+    return GestureDetector(
+      onTap: ()=>showDialog(context: context,
+     
+  builder:(_) {
+    return AlertDialog(
+      
+      // title: Text(ErrorTitle),
+      content:   Container(
+        width: MediaQuery.of(context).size.width*0.8,
+        height: MediaQuery.of(context).size.height*0.4,
+        child: Stack(
+          children: [
+            // Scratch Card
+            Scratcher(
+              brushSize: 30,
+              threshold: 75,
+              image: Image.network(card.scratchImage), // Set the scratch image directly
+              onChange: (value) {
+                // Handle scratch progress change
+              },
+             // Inside _buildScratchCard method of ScratchCardScreen widget
+      onThreshold: () async {
+        try {
+      // Call RewardPointService to add reward points
+      await RewardPointService().addReward(
+        token: widget.token,
+        type: 'scratchcard', // Set the type to 'scratch'
+        points: card.point, // Pass the points from the scratch card
+      );
+      Navigator.pop(context);
+      // Display the point and point image
+      showDialog(
+        context: context,
+        builder: (_) => Dialog(
+      child: Container(
+        // You can set width and height if you want to control the size of the dialog
+        child: Image.network(
+          card.pointImage,
+          fit: BoxFit.cover, // This will ensure the image fits well in the dialog
+        ),
       ),
-    ),
-  ),
-);
-
-  } catch (e) {
-    // Handle error if needed
-    print('Error adding reward points: $e');
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Error'),
-        content: Text('Failed to add reward points. Please try again later.'),
+        ),
+      );
+      
+        } catch (e) {
+      // Handle error if needed
+      print('Error adding reward points: $e');
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to add reward points. Please try again later.'),
+        ),
+      );
+        }
+      },
+      
+              
+              child: Image.network(
+              card.pointImage,
+              fit: BoxFit.cover,
+            ),
+            ),
+          ],
+        ),
       ),
+     
     );
-  }
-},
-
-            
-            child: Image.network(
-            card.pointImage,
-            fit: BoxFit.cover,
-          ),
-          ),
-        ],
+    
+  },),
+      child: Container(
+        width: 100,
+        height: 100,
+        child: Stack(
+          children: [
+            // Scratch Card
+            Scratcher(
+              brushSize: 30,
+              threshold: 100,
+              image: Image.network(card.scratchImage), // Set the scratch image directly
+              onChange: (value) {
+                // Handle scratch progress change
+              },
+             // Inside _buildScratchCard method of ScratchCardScreen widget
+      // onThreshold: () async {
+      //   try {
+      // // Call RewardPointService to add reward points
+      // await RewardPointService().addReward(
+      //   token: widget.token,
+      //   type: 'scratchcard', // Set the type to 'scratch'
+      //   points: card.point, // Pass the points from the scratch card
+      // );
+      // // Display the point and point image
+      // showDialog(
+      //   context: context,
+      //   builder: (_) => Dialog(
+      // child: Container(
+      //   // You can set width and height if you want to control the size of the dialog
+      //   child: Image.network(
+      //     card.pointImage,
+      //     fit: BoxFit.cover, // This will ensure the image fits well in the dialog
+      //   ),
+      // ),
+      //   ),
+      // );
+      
+      //   } catch (e) {
+      // // Handle error if needed
+      // print('Error adding reward points: $e');
+      // showDialog(
+      //   context: context,
+      //   builder: (_) => AlertDialog(
+      //     title: Text('Error'),
+      //     content: Text('Failed to add reward points. Please try again later.'),
+      //   ),
+      // );
+      //   }
+      // },
+      
+              
+              child: Image.network(
+              card.pointImage,
+              fit: BoxFit.cover,
+            ),
+            ),
+          ],
+        ),
       ),
     );
   }

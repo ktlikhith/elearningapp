@@ -268,6 +268,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   }
 
   Widget _buildCourseContent() {
+    bool _landscape=MediaQuery.of(context).orientation==Orientation.landscape;
     int i=0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -403,7 +404,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                   child: Stack(
                     children:[ Padding(
-                      padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.0225),
+                      padding:  EdgeInsets.all(!_landscape?MediaQuery.of(context).size.height*0.0225:MediaQuery.of(context).size.height*0.048),
                       child: Container(width: 7,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
                     ), Column(
                       

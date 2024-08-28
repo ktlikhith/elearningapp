@@ -419,6 +419,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
   }
 
   Widget _buildCourseContent() {
+    bool islandscape=MediaQuery.of(context).orientation==Orientation.landscape;
     if (_courseContentData == null) return SizedBox.shrink();
 
     return Column(
@@ -461,7 +462,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                 child: Stack(
                     children:[ Padding(
-                      padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.023),
+                      padding:  EdgeInsets.all(!islandscape?MediaQuery.of(context).size.height*0.0223:MediaQuery.of(context).size.height*0.048),
                       child: Container(width: 6,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
                     ),Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,11 +519,16 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                     return '$filePath1&token=$Token';
                                   }
                                   String pdfurl = getpdfUrlWithToken(module['contents'][0]['fileurl'], widget.token,);
-                                  Navigator.push(
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => PDFViewScreen(pdfurl),
+                                  //   ),
+                          //);
+                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PDFViewScreen(pdfurl),
-                                    ),
+                                    MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
+                                  
                                   );
                                 } else if (module['modname'] == 'customcert' ){
                               String certificateurl=module['url']+'&forcedownload=1';

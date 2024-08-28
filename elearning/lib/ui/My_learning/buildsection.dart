@@ -146,19 +146,24 @@ Widget buildSection({
                 height: 80,
                 padding: const EdgeInsets.only(bottom: 10.0),
                 decoration: BoxDecoration(
+                  
                   borderRadius: BorderRadius.circular(9.0),
                   border: Border.all(
                     color: Theme.of(context).primaryColor,
                   ),
                   color: Theme.of(context).hintColor.withOpacity(.1),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 232, 232, 232).withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 2,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                 boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 18.0),
@@ -187,6 +192,7 @@ Widget buildSection({
                   ),
                 ),
               ),
+              
               Positioned(
                 right: -10,
                 top: -30,
@@ -204,12 +210,42 @@ Widget buildSection({
                         bottomLeft: Radius.circular(45.0),
                       ),
                     ),
-                    child: Center(
+                     child: Stack(
+                children: [
+                  Positioned(
+                    right: 18,
+                    top: 23,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.1),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                     Center(
                       child: Container(
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Color1.withOpacity(0.9),
+                            boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
+                          color: Theme.of(context).cardColor,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20.0),
                             bottomRight: Radius.circular(20.0),
@@ -221,10 +257,26 @@ Widget buildSection({
                         ),
                       ),
                     ),
+                ]
+                     ),
                   ),
                 ),
               ),
+                Container(
+          width: 200,
+          height: 80,
+          padding: const EdgeInsets.only(bottom: 10.0),
+            decoration: BoxDecoration(
+              
+            borderRadius: BorderRadius.circular(9.0),
+            border: Border.all(
+              color: Theme.of(context).cardColor,
+            ),
+           
+          ),
+          ),
             ],
+            
           ),
   );
 }

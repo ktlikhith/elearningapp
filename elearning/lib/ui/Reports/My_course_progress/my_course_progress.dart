@@ -414,8 +414,10 @@ class _CoursePageState extends State<Coursereport> {
 
   @override
   void dispose() {
+    
     _hideTooltip(); // Ensure tooltip is hidden when the screen is disposed
-    super.dispose();
+     super.dispose();
+   
   }
 
   int getCompletedCoursesCount(List<CourseData> courses) {
@@ -595,7 +597,7 @@ class _CoursePageState extends State<Coursereport> {
              final progress__=(inProgressCount*100)/total;
               final notstarted__=(notStartedCount*100)/total;
             if(timertoshowhint!=true)
-               Future.delayed(Duration(seconds: 2),(){
+               Future.delayed(Duration(seconds: 1),(){
              _showTooltip(context);
              timertoshowhint=true;
              
