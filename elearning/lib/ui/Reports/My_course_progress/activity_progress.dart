@@ -462,8 +462,32 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                 child: Stack(
                     children:[ Padding(
-                      padding:  EdgeInsets.all(!islandscape?MediaQuery.of(context).size.height*0.0223:MediaQuery.of(context).size.height*0.048),
-                      child: Container(width: 6,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                      padding:  EdgeInsets.only(top:22,left:22.5 ),
+                      child: Stack(children:[ Container(width: 5,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                      Container(
+                    width: 5,
+                    height:   section['modules'].length==1?0: (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                                if(completedModules!=0){
+                                  if(completedModules== section['modules'].length)
+                              return (completedModules-1)*56.5;
+                              else
+                              return completedModules*56.5;
+                                }
+                              else {
+                                return 0.0;
+                              }
+                             
+                                 })(),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                     color: Colors.green,
+                    ),
+                  ),]),
                     ),Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

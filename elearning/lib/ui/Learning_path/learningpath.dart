@@ -2,6 +2,7 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
+import 'package:elearning/utilites/alertdialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -265,7 +266,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                 border: Border.all(color: Colors.grey[300]!),
                               ),
                               child: InkWell(
-                                onTap: () => showMLPopup(
+                               
+                                onTap: () =>{
+                                 if(course['courseprerequisite']!=null){ 
+                                  showMLPopup(
                                   context,
                                   course['courseid'] ?? '',
                                   course['coursename'] ?? '',
@@ -275,7 +279,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                   coursedes?.courseEndDate ?? '',
                                   coursedes?.courseVideoUrl ?? '',
                                   coursedes?.courseDuration ?? '',
-                                ),
+                                ),} else {
+                                  Showerrordialog(context,'This Course is Locked!!','Previous course in the Learning Path should be completed to access this course..!!'),
+                                },
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
