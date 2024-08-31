@@ -107,7 +107,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                 }
                               }
                   return GestureDetector(
-                   onTap: () {    if(course.courseprerequisite!='NULL'){ 
+                   onTap: () {    if(course.courseprerequisite=='NULL'){ 
                    showMLPopup(
                                     context,
                                     course.courseid ?? '',
@@ -118,9 +118,25 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                     coursedes?.courseEndDate ?? '',
                                     coursedes?.courseVideoUrl ?? '',
                                     coursedes?.courseDuration ?? '',
-                                  );}
+                                  );}else {
+                                     bool  openL=_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100);
+                                     if(openL==true){
+                                                         showMLPopup(
+                                    context,
+                                    course.courseid ?? '',
+                                    course.name?? '',
+                                    course.progress.toString() ?? '',
+                                    coursedes?.courseDescription ?? '',
+                                    coursedes?.courseStartDate ?? '',
+                                    coursedes?.courseEndDate ?? '',
+                                    coursedes?.courseVideoUrl ?? '',
+                                    coursedes?.courseDuration ?? '',
+                                  );
+                                     }
+                                  
                                       else {
                                     Showerrordialog(context,'This Course is Locked!!','Previous course in the Learning Path should be completed to access this course..!!');
+                                  }
                                   }
                    },
                     child: Padding(
@@ -131,10 +147,16 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 0.0),
                       child:Column(
                         children: [
-                       if(course.courseprerequisite=='NULL')
-                            Icon(Icons.lock, color: Theme.of(context).primaryColor,size: 18,),
-                       if(course.courseprerequisite!='NULL')
+                       if(course.courseprerequisite=='NULL'&&course.progress!=100)
+                        Icon(Icons.circle, color: Colors.grey,size: 18,),
+                           if(course.progress==100)
                         Icon(Icons.circle, color: Colors.green,size: 18,),
+                         if(_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)!=true&&course.courseprerequisite!='NULL')
+                         Icon(Icons.lock_rounded, color: Theme.of(context).cardColor,size: 18,),
+                          
+                     
+                     
+                       
                         ]
                       ),
                           ),

@@ -292,6 +292,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
             children: [
               GestureDetector(
                 onTap: () {
+                   if(section['modules'].length!=0)
                   setState(() {
                     section['expanded'] = !(section['expanded'] ?? false);
                   });
@@ -395,6 +396,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                   ],
                 ),
               ),
+                    
                       Icon(
                         section['expanded'] ?? false
                             ? Icons.keyboard_arrow_up
@@ -402,10 +404,12 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                         color: Color.fromARGB(255, 6, 6, 6),
                         size: 30,
                       ),
+                      
                     ],
                   ),
                 ),
               ),
+               
               if (section['expanded'] ?? false)
                 Container(
                   decoration: BoxDecoration(
