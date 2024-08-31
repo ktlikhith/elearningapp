@@ -2,6 +2,7 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
+import 'package:elearning/utilites/alertdialog.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -141,26 +142,28 @@ class _LearningPathPageState extends State<LearningPathPage> {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
-              color: Theme.of(context).hintColor.withOpacity(0.2),
+             // color: Theme.of(context).hintColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(color: Colors.grey[300]!),
+              border: Border.all(color: Theme.of(context).cardColor!),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(
-                    '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
-                    height: 200,
-                    fit: BoxFit.fill,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/coursedefaultimg.jpg',
-                        height: 200,
-                        fit: BoxFit.fill,
-                      );
-                    },
+                  Center(
+                    child: Image.network(
+                      '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
+                      height: 200,
+                      fit: BoxFit.fill,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/coursedefaultimg.jpg',
+                          height: 200,
+                          fit: BoxFit.fill,
+                        );
+                      },
+                    ),
                   ),
                   SizedBox(height: 16.0),
                   Text(
@@ -258,71 +261,93 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                 break;
                               }
                             }
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(9.0),
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: InkWell(
-                                onTap: () => showMLPopup(
-                                  context,
-                                  course['courseid'] ?? '',
-                                  course['coursename'] ?? '',
-                                  course['courseprogressbar'].toString() ?? '',
-                                  coursedes?.courseDescription ?? '',
-                                  coursedes?.courseStartDate ?? '',
-                                  coursedes?.courseEndDate ?? '',
-                                  coursedes?.courseVideoUrl ?? '',
-                                  coursedes?.courseDuration ?? '',
+                            return Stack(
+                              children:[
+                                  Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.grey[300]!),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(9.0),
-                                        child: Image.network(
-                                          '${course['courseimg']}?token=${widget.token}',
-                                          height: 200,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return Image.asset(
-                                              'assets/images/coursedefaultimg.jpg',
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
+                                child: InkWell(
+                                 
+                                  onTap: () =>{
+                                   if(course['courseprerequisite']!=null){ 
+                                    showMLPopup(
+                                    context,
+                                    course['courseid'] ?? '',
+                                    course['coursename'] ?? '',
+                                    course['courseprogressbar'].toString() ?? '',
+                                    coursedes?.courseDescription ?? '',
+                                    coursedes?.courseStartDate ?? '',
+                                    coursedes?.courseEndDate ?? '',
+                                    coursedes?.courseVideoUrl ?? '',
+                                    coursedes?.courseDuration ?? '',
+                                  ),} else {
+                                    Showerrordialog(context,'This Course is Locked!!','Previous course in this Learning Path should be completed...!!'),
+                                  },
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                         Center(
+                                            child:ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child:Image.network(
+                                            '${course['courseimg']}?token=${widget.token}',
+                                            height: 200,
+                                            width: 350,
+                                            fit: BoxFit.fill,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Image.asset(
+                                                'assets/images/coursedefaultimg.jpg',
+                                                height: 200,
+                                                fit: BoxFit.fill,
+                                              );
+                                            },
+                                           ),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 8.0),
-                                      Text(
-                                        removeHtmlTags(course['coursename']),
-                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).highlightColor),
-                                      ),
-                                      SizedBox(height: 8.0),
-                                      Text(
-                                        removeHtmlTags(course['coursedec']),
-                                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).hintColor),
-                                      ),
-                                      SizedBox(height: 12.0),
-                                      LinearPercentIndicator(
-                                        barRadius: Radius.circular(30),
-                                        lineHeight: 18.0,
-                                        linearStrokeCap: LinearStrokeCap.roundAll,
-                                        percent: course['courseprogressbar'] / 100,
-                                        backgroundColor: Color.fromARGB(255, 204, 205, 205),
-                                        progressColor: getProgressBarColor(course['courseprogressbar']),
-                                        center: Text(
-                                          "${course['courseprogressbar']}%",
-                                          style: TextStyle(fontSize: 12, color: Colors.black),
+                                        SizedBox(height: 8.0),
+                                        Text(
+                                          removeHtmlTags(course['coursename']),
+                                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).highlightColor),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 8.0),
+                                        Text(
+                                          removeHtmlTags(course['coursedec']),
+                                          style: TextStyle(fontSize: 16.0, color: Theme.of(context).hintColor),
+                                        ),
+                                        SizedBox(height: 12.0),
+                                        LinearPercentIndicator(
+                                          barRadius: Radius.circular(30),
+                                          lineHeight: 18.0,
+                                          linearStrokeCap: LinearStrokeCap.roundAll,
+                                          percent: course['courseprogressbar'] / 100,
+                                          backgroundColor: Color.fromARGB(255, 204, 205, 205),
+                                          progressColor: getProgressBarColor(course['courseprogressbar']),
+                                          center: Text(
+                                            "${course['courseprogressbar']}%",
+                                            style: TextStyle(fontSize: 12, color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
+                              if(course['courseprerequisite']==null)
+                                 Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: FaIcon(
+                                                             FontAwesomeIcons.lock,
+                                                             size: 40.0,
+                                                             color: Colors.black.withOpacity(0.7),
+                                                           ),
+                                 ),
+                              ],
                             );
                           },
                         )

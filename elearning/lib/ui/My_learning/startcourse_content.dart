@@ -10,11 +10,14 @@ import 'package:elearning/ui/My_learning/video_player_screen.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
+import 'package:elearning/utilites/alertdialog.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/parse_route.dart';
+import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -43,9 +46,19 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   @override
   void initState() {
     super.initState();
+     
     _fetchCourseContent();
     _courseImageUrlFuture = _fetchCourseImage();
     _courseDescriptionFuture = _fetchCourseDescription();
+  }
+    @override
+  void dispose() {
+   
+// to stop audio and video
+
+
+ setState(() {});
+    super.dispose();
   }
 
  Future<void> _refreshContent() async {
@@ -401,11 +414,37 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
                   ),
                 
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                  padding:  EdgeInsets.symmetric(vertical: 0, horizontal: MediaQuery.of(context).size.width*0.005),
                   child: Stack(
                     children:[ Padding(
-                      padding:  EdgeInsets.all(!_landscape?MediaQuery.of(context).size.height*0.0225:MediaQuery.of(context).size.height*0.048),
-                      child: Container(width: 7,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                      padding:  EdgeInsets.only(top:22,left:22.5 ),
+                      child: Stack(children:[Container(width: 5,height: section['modules'].length!=0?((section['modules'].length-1)*56.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
+                        Container(
+                    width: 5,
+                    height:   section['modules'].length==1?0: (() {
+                         int completedModules = section['modules']
+                                .where((module) =>
+                                    module['completiondata'] != null &&
+                                    module['completiondata']['state'] != 0)
+                                .length;
+                                if(completedModules!=0){
+                                  if(completedModules== section['modules'].length)
+                              return (completedModules-1)*56.5;
+                              else if(section['modules'].length!=1)
+                              return completedModules*56.5;
+                                }
+                              else {
+                                return 0.0;
+                              }
+                             
+                                 })(),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                     color: Colors.green,
+                    ),
+                  ),
+                    ]),
+                      
                     ), Column(
                       
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +460,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     children: [
                                      
                                       if (module['completiondata'] != null && module['completiondata']['state'] != 0)
-                                        Icon(Icons.check_circle, color: Colors.green,size: 18,),
+                                        Icon(Icons.circle, color: Colors.green,size: 18,),
                                       if (module['completiondata'] == null || module['completiondata']['state'] == 0)
                                         Icon(Icons.circle, color: Colors.grey,size: 18,),
                                     
@@ -467,6 +506,10 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     ],
                                   ),
                                   onTap: () {
+                                     bool uservisible =
+                                    module['uservisible'] ;
+                                    print(uservisible);
+                                    if(uservisible){
                                     if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       // final content = module['contents'][0];
                                       // String getdwnloadUrlWithToken(String filePath1, String Token) {
@@ -568,7 +611,11 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         );
                                       }
                                     }
-                                  },
+                                  }
+                                  else{
+                                    Showerrordialog(context,'No Access to this activity','Your not allowed to access this activity without completing the previous one...!!\n If your already completed then make sure that you marked it as completed..!! ');
+                                  }
+                                   }
                                   
                                 ),
                                 

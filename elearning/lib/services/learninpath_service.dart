@@ -35,6 +35,7 @@ class LearningPathDetail {
   final String enddate;
   final String duration;
   final String nocourses;
+ 
   
   final List<LearningPathProgress> learningpathProgress;
 
@@ -81,6 +82,7 @@ class LearningPathProgress {
   final String imageUrl;
   final int progress;
   final String courseid;
+   final String courseprerequisite;
 
   LearningPathProgress({
     required this.learningPathId,
@@ -89,6 +91,8 @@ class LearningPathProgress {
     required this.imageUrl,
     required this.progress,
     required this.courseid,
+    required this.courseprerequisite,
+
   });
 
   factory LearningPathProgress.fromJson(Map<String, dynamic> json) {
@@ -98,7 +102,8 @@ class LearningPathProgress {
       description: json['coursedec'],
       imageUrl: json['courseimg'],
       progress: json['courseprogressbar'],
-      courseid: json['courseid']
+      courseid: json['courseid'],
+      courseprerequisite: json['courseprerequisite']??'NULL',
     );
   }
 }

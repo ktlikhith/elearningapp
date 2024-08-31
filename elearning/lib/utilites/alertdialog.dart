@@ -5,8 +5,8 @@ void Showerrordialog(BuildContext context,String ErrorTitle,String errortext,[St
   showDialog(context: context, 
   builder:(context) {
     return AlertDialog(
-      title: Text(ErrorTitle),
-      content:  Text(errortext),
+      title: Center(child: Text(ErrorTitle,style: TextStyle(fontWeight: FontWeight.bold))),
+      content:  Text(errortext,style: TextStyle(fontWeight: FontWeight.bold),),
       actions: [
         if(callbackfunction!=null)
              TextButton(
