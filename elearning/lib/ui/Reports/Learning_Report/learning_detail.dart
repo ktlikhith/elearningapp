@@ -79,7 +79,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                   if(completedcourse!=0){
                                   if(completedcourse==courses.length)
                                 return (completedcourse-1)*100.0;
-                                else
+                                else if( courses.length!=1)
                                 return completedcourse*100.0;
                                 }else {
                                   return 0.0;

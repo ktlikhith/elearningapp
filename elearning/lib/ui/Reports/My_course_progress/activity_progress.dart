@@ -474,9 +474,9 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                 .length;
                                 if(completedModules!=0){
                                   if(completedModules== section['modules'].length)
-                              return (completedModules-1)*56.5;
-                              else
-                              return completedModules*56.5;
+                              return (completedModules-1)*57.5;
+                              else if(section['modules'].length!=1)
+                              return completedModules*57.5;
                                 }
                               else {
                                 return 0.0;

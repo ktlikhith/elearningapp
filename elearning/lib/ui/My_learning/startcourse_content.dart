@@ -430,7 +430,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                 if(completedModules!=0){
                                   if(completedModules== section['modules'].length)
                               return (completedModules-1)*56.5;
-                              else
+                              else if(section['modules'].length!=1)
                               return completedModules*56.5;
                                 }
                               else {
