@@ -104,7 +104,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
                   'assets/images/coursedefaultimg.jpg',
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: double.infinity,
+                //  height: double.infinity,
                 );
               },
             ),

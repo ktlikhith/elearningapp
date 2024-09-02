@@ -36,6 +36,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
   }
  
   void _showTooltip(BuildContext context) {
+    
     if (_isTooltipVisible) return;
 
     setState(() {
@@ -88,7 +89,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
       case 'not started':
         return courses.where((course) => course.courseProgress == 0).toList();
       case 'in progress':
-        return courses.where((course) => course.courseProgress > 0 && course.courseProgress < 100).toList();
+        return courses.where((course) => course.courseProgress>0&&course.courseProgress<100).toList();
       case 'completed':
         return courses.where((course) => course.courseProgress == 100).toList();
       default:
@@ -129,17 +130,19 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center();//child: Text('Error: ${snapshot.error}')
+            return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
           } else if (snapshot.hasData) {
              if(timertoshowhint!=true)
+              
                Future.delayed(Duration(seconds: 1),(){
+              
              _showTooltip(context);
              timertoshowhint=true;
              
 
         });
             final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
-             
+             if( filteredCourses.length!=0){
             return ListView.builder(
               itemCount: filteredCourses.length,
               itemBuilder: (context, index) {
@@ -167,6 +170,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
               
              
             );
+             }else   return Center(child: Text('No data found',style: TextStyle(fontWeight: FontWeight.bold),));
               
   
           }

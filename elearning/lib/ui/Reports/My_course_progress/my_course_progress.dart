@@ -596,6 +596,7 @@ class _CoursePageState extends State<Coursereport> {
             final complete__=(completedCount*100)/total;
              final progress__=(inProgressCount*100)/total;
               final notstarted__=(notStartedCount*100)/total;
+             
             if(timertoshowhint!=true)
                Future.delayed(Duration(seconds: 1),(){
              _showTooltip(context);

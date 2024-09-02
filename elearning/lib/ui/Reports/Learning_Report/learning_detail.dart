@@ -3,6 +3,7 @@ import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LearningPathDetailScreen extends StatefulWidget {
   final LearningPathDetail learningPath;
@@ -147,9 +148,9 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 0.0),
                       child:Column(
                         children: [
-                       if(course.courseprerequisite=='NULL'&&course.progress!=100)
+                       if(course.courseprerequisite=='NULL'&&course.progress!=100||_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)==true&&course.courseprerequisite!='NULL'&&course.progress!=100)
                         Icon(Icons.circle, color: Colors.grey,size: 18,),
-                           if(course.progress==100)
+                           if(course.progress==100&&course.courseprerequisite=='NULL'||_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)==true&&course.progress==100)
                         Icon(Icons.circle, color: Colors.green,size: 18,),
                          if(_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)!=true&&course.courseprerequisite!='NULL')
                          Icon(Icons.lock_rounded, color: Theme.of(context).cardColor,size: 18,),
@@ -177,6 +178,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: ClipRRect(
                                                     borderRadius: BorderRadius.circular(8.0),
+                                                    
                                                   child: 
                                                           Image.network(
                                                             
@@ -184,10 +186,11 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                                                 height: 40,
                                                                 width: 80,
                                                                 fit: BoxFit.fill,
+                                                              
                                                                 errorBuilder: (context, error, stackTrace) {
                                                                   return Image.asset(
                                                                     'assets/images/coursedefaultimg.jpg',
-                                        height: 40,
+                                                                height: 40,
                                                                 width: 80,
                                                                     fit: BoxFit.fill,
                                                                   );
@@ -198,9 +201,14 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      course.name,
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width*0.5,
+                                      child: Text(
+                                        course.name,
+                                        maxLines: 1,
+                                                                overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
+                                      ),
                                     ),
                                     SizedBox(height: 4),
                                     Row(
@@ -341,6 +349,18 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
             course_videourl: course_videourl,
             courseDuration: courseDuration); // Create an instance of MLPopup without passing context
       },
+    );
+  }
+    Widget _buildLoadingSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 40,
+        width: 80,
+        color: Colors.white,
+      //  margin: EdgeInsets.symmetric(horizontal: 16.0),
+      ),
     );
   }
 }

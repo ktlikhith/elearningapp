@@ -165,37 +165,39 @@ Widget buildSection({
                   ),
                 ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$intValue',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                child: Stack(
+                  children: [Padding(
+                    padding: const EdgeInsets.only(left: 18.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$intValue',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        title,
-                        style:  TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
+                        const SizedBox(height: 4.0),
+                        Text(
+                          title,
+                          style:  TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                
+              
               
               Positioned(
                 right: -10,
-                top: -30,
+                top: -15,
                 bottom: 0,
                 child: Align(
                   alignment: Alignment.centerRight,
@@ -209,31 +211,7 @@ Widget buildSection({
                         bottomRight: Radius.circular(45.0),
                         bottomLeft: Radius.circular(45.0),
                       ),
-                    ),
-                     child: Stack(
-                children: [
-                  Positioned(
-                    right: 18,
-                    top: 23,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.1),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0),
-                          bottomLeft: Radius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                     Center(
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            boxShadow: [
+                       boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
                     offset: const Offset(4, 4),
@@ -245,12 +223,56 @@ Widget buildSection({
                     blurRadius: 6,
                   ),
                 ],
+                    ),
+                     child: Stack(
+                children: [
+                  Positioned(
+                    right: 19,
+                    top: 22,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.1),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        ),
+                         boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.8),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 6,
+                  ),
+                ],
+                      ),
+                    ),
+                  ),
+                     Center(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                       boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            offset: const Offset(4, 4),
+                            blurRadius: 6,
+                          ),
+                        ],
                           color: Theme.of(context).cardColor,
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20.0),
                             bottomRight: Radius.circular(20.0),
                             bottomLeft: Radius.circular(20.0),
                           ),
+                          
                         ),
                         child: Center(
                           child: Image.asset(iconPath, width: 30, height: 30),
@@ -261,6 +283,9 @@ Widget buildSection({
                      ),
                   ),
                 ),
+              ),
+            ],
+        ),
               ),
                 Container(
           width: 200,
