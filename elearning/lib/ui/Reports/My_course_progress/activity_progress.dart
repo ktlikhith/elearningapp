@@ -444,7 +444,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                           section['name'] ?? 'Section Name',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(220, 6, 6, 6),
+                            color: Theme.of(context).primaryColor,
                             fontSize: 18,
                           ),
                         ),

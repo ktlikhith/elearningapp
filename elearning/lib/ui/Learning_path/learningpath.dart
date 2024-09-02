@@ -153,17 +153,20 @@ class _LearningPathPageState extends State<LearningPathPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Image.network(
-                      '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
-                      height: 200,
-                      fit: BoxFit.fill,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/coursedefaultimg.jpg',
-                          height: 200,
-                          fit: BoxFit.fill,
-                        );
-                      },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
+                        height: 200,
+                        fit: BoxFit.fill,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/coursedefaultimg.jpg',
+                            height: 200,
+                            fit: BoxFit.fill,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(height: 16.0),
@@ -173,7 +176,9 @@ class _LearningPathPageState extends State<LearningPathPage> {
                   ),
                   SizedBox(height: 4.0),
                   Text(
-                    removeHtmlTags(learningPathDetail['discriotion']),
+                    removeHtmlTags(
+                     learningPathDetail['discriotion']
+                    ),
                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.grey[600]),
                   ),
                   SizedBox(height: 8.0),
@@ -335,10 +340,17 @@ class _LearningPathPageState extends State<LearningPathPage> {
                                       style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).highlightColor),
                                     ),
                                     SizedBox(height: 8.0),
+                                   
                                     Text(
-                                      removeHtmlTags(course['coursedec']),
+                                    
+                                  removeHtmlTags(course['coursedec']),
+                                    
+                                     
                                       style: TextStyle(fontSize: 16.0, color: Theme.of(context).hintColor),
                                     ),
+                                   
+                                    
+
                                     SizedBox(height: 12.0),
                                     LinearPercentIndicator(
                                       barRadius: Radius.circular(30),
@@ -412,7 +424,9 @@ class _LearningPathPageState extends State<LearningPathPage> {
   }
 
   String removeHtmlTags(String htmlString) {
+    if (htmlString!=''){
     final RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
     return htmlString.replaceAll(exp, '');
+    }else return 'No data available';
   }
 }

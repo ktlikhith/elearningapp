@@ -215,7 +215,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               return Text(
                                 description.isNotEmpty ? removeHtmlTags(description) : 'No description available',
                                 style:  TextStyle(
-                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.5,
                                   color: Theme.of(context).cardColor,
                                 ),
                               );

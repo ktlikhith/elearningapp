@@ -5,6 +5,7 @@ import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LearningPathScreen extends StatefulWidget {
   final String token;
@@ -67,6 +68,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           );
         },
         child: Container(
+      
           margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -84,15 +86,24 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                 Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                                   '${learningPath.name}',
-                                   style: TextStyle(
-                   fontWeight: FontWeight.bold,
-                   fontSize: 20,
-                   color: Theme.of(context).primaryColor
-                                   ),
-                                 ),
-                     SizedBox(width: 25),
+                  SizedBox(
+                       width: MediaQuery.of(context).size.width*0.8,
+
+                    child: Center(
+                      child: Text(
+                                       '${learningPath.name}',
+                                       maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            
+                                       style: TextStyle(
+                       fontWeight: FontWeight.bold,
+                       fontSize: 20,
+                       color: Theme.of(context).primaryColor
+                                       ),
+                                     ),
+                    ),
+                  ),
+                   
              
                  
                 ],
@@ -106,21 +117,36 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                     ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
             child: 
-                    Image.network(
+                 SizedBox(
+      height: 60,
+      width: 100,
+      child: Stack(
+        children: [
+         
+          // Image with error handling
+          Image.network(
                       
                           '${Constants.baseUrl}${learningPath.imageUrl}',
                           height: 60,
                           width: 100,
                           fit: BoxFit.fill,
+                        
+                          
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
                               'assets/images/coursedefaultimg.jpg',
-                                  height: 100,
-                          width: 200,
+                                  height: 60,
+                          width: 100,
                               fit: BoxFit.fill,
                             );
                           },
                         ),
+
+
+        ],
+      ),
+    ),
+
                     ),
                     Container(
                      child: Column(
@@ -227,5 +253,17 @@ String _getStatusText(int progress) {
     } else {
       return Colors.orange;
     }
+  }
+   Widget _buildLoadingSkeleton() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 60,
+        width: 100,
+        color: Colors.white,
+      //  margin: EdgeInsets.symmetric(horizontal: 16.0),
+      ),
+    );
   }
 }

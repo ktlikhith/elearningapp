@@ -37,7 +37,7 @@ Widget buildProgressBar(String title, value) {
           center: Padding(
             padding: const EdgeInsets.only(bottom: 2.0),
             child: Text(
-              "$value%",
+              '${value.toStringAsFixed(2)}%',
               style: TextStyle(fontSize: 12, color: Colors.black),
             ),
           ),
