@@ -431,7 +431,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).hintColor.withOpacity(0.4),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
@@ -444,7 +444,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                           section['name'] ?? 'Section Name',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).highlightColor,
                             fontSize: 18,
                           ),
                         ),
@@ -486,7 +486,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                  })(),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                     color: Colors.green,
+                     color: Theme.of(context).cardColor,
                     ),
                   ),]),
                     ),Column(
@@ -503,7 +503,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                     module['completiondata']['state'] !=0)
                                   Icon(
                                     Icons.circle,
-                                    color: Colors.green,
+                                    color:Theme.of(context).cardColor,
                                     size: 18,
                                   ),
                                 if (module['completiondata'] == null ||

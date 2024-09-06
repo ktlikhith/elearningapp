@@ -3,6 +3,7 @@ import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LearningPathDetailScreen extends StatefulWidget {
@@ -69,32 +70,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
       body: courses.isEmpty
           ? Center(child: Text('No courses available'))
           : Stack(
-            children:[  Padding(
-                        padding:  EdgeInsets.only(top:40,left:23 ),
-                        child: Stack(children:[Container(width: 5,height: courses.length!=0?((courses.length-1)*100):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
-                          Container(
-                      width: 5,
-                      height:   courses.length==1?0: (() {
-                        int completedcourse=courses.where((course)=>course.progress==100).length;
-                           
-                                  if(completedcourse!=0){
-                                  if(completedcourse==courses.length)
-                                return (completedcourse-1)*100.0;
-                                else if( courses.length!=1)
-                                return completedcourse*100.0;
-                                }else {
-                                  return 0.0;
-                                }
-                               
-                                   })(),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                       color: Colors.green,
-                      ),
-                    ),
-                      ]),
-                        
-                      ),ListView.builder(
+            children:[ ListView.builder(
                 itemCount: courses.length,
                 itemBuilder: (context, index) {
                   var course = courses[index];
@@ -148,12 +124,15 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 0.0),
                       child:Column(
                         children: [
-                       if(course.courseprerequisite=='NULL'&&course.progress!=100||_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)==true&&course.courseprerequisite!='NULL'&&course.progress!=100)
-                        Icon(Icons.circle, color: Colors.grey,size: 18,),
+                       if(course.courseprerequisite=='NULL'&&course.progress<1||_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)==true&&course.courseprerequisite!='NULL'&&course.progress<1)
+                        Icon(FontAwesomeIcons.unlockKeyhole, color: Theme.of(context).cardColor,size: 15,),
                            if(course.progress==100&&course.courseprerequisite=='NULL'||_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)==true&&course.progress==100)
-                        Icon(Icons.circle, color: Colors.green,size: 18,),
+                        Icon(Icons.circle, color:Theme.of(context).cardColor,size: 18,),
+                        if(course.progress<100&&course.progress>0)
+                         Icon(Icons.circle, color:Colors.orange,size: 18,),
                          if(_courses.where((c)=>c.id==course.courseprerequisite).any((c1)=>c1.courseProgress==100)!=true&&course.courseprerequisite!='NULL')
                          Icon(Icons.lock_rounded, color: Theme.of(context).cardColor,size: 18,),
+                         
                           
                      
                      

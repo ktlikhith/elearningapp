@@ -94,6 +94,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
      
   builder:(_) {
     return AlertDialog(
+      backgroundColor: Colors.transparent,
       
       // title: Text(ErrorTitle),
       content:   Container(
@@ -104,7 +105,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
             // Scratch Card
             Scratcher(
               brushSize: 30,
-              threshold: 65,
+              threshold: 50,
               image: Image.network(card.scratchImage), // Set the scratch image directly
               onChange: (value) {
                 // Handle scratch progress change
@@ -122,6 +123,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
       Navigator.pop(context);
       // Display the point and point image
       showDialog(
+        
         context: context,
         builder: (_) => Dialog(
       child: Container(
@@ -162,6 +164,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
   },),
       child: Container(
         width: 100,
+        
         height: 100,
         child: Stack(
           children: [
