@@ -141,8 +141,8 @@ class _ReportPageState extends State<ReportPage> {
                           "assets/Reportsicon/cert/colors-students-at-graduation-ceremony.png",
                             MediaQuery.of(context).size.width*0.9,
                            MediaQuery.of(context).size.width*0.5,
-                              MediaQuery.of(context).size.width*0.6,
-                              MediaQuery.of(context).size.height*0.16,
+                              MediaQuery.of(context).size.width*0.55,
+                              MediaQuery.of(context).size.height*0.22,
                             // 275,200,
                           () {
                             Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
@@ -162,6 +162,7 @@ class _ReportPageState extends State<ReportPage> {
 
 Widget _buildCard(String title, String subtitle, String info, String svgPath,double boxwidth,double boxheight, double widthsvg, double heightsvg, VoidCallback onTap) {
   double topadding=svgPath.contains('assets/Reportsicon/reports/flat-interface-with-charts-and-graphs.png') ? 20.0 : 0.0;
+  double leftcert=title.contains('Certification')?20.0:0.0;
   return GestureDetector(
       
     onTap: onTap,
@@ -184,37 +185,40 @@ Widget _buildCard(String title, String subtitle, String info, String svgPath,dou
           Stack(children: [
             
           
-           Container(
-            height: boxheight- MediaQuery.of(context).size.width*0.14,
-            width: boxwidth,
-       
-             child: Padding(
-               padding:  EdgeInsets.only(top:topadding ),
-               child: Center(
-                 child: 
-                  
-                 svgPath.contains('.png')?
+           Padding(
+             padding:  EdgeInsets.only(left:leftcert),
+             child: Container(
+              height: boxheight- MediaQuery.of(context).size.width*0.14,
+              width: boxwidth,
+                    
+               child: Padding(
+                 padding:  EdgeInsets.only(top:topadding ),
+                 child: Center(
+                   child: 
+                    
+                   svgPath.contains('.png')?
+                             
+                             
+                             Image.asset(
+                              svgPath,
+                              height: heightsvg,
+                              width: widthsvg,
+                              alignment:Alignment.topCenter,
+                              fit: BoxFit.fitWidth,
+                              
+                                               
+                                             ):
                            
-                           
-                           Image.asset(
-                            svgPath,
-                            height: heightsvg,
-                            width: widthsvg,
-                            alignment:Alignment.topCenter,
-                            fit: BoxFit.fitWidth,
-                            
-                                             
-                                           ):
-                         
-                  
-                            SvgPicture.asset(
-                            svgPath,
-                            height: heightsvg,
-                            width: widthsvg,
-                            
-                                             
-                                           ),
-                 
+                    
+                              SvgPicture.asset(
+                              svgPath,
+                              height: heightsvg,
+                              width: widthsvg,
+                              
+                                               
+                                             ),
+                   
+                 ),
                ),
              ),
            ),

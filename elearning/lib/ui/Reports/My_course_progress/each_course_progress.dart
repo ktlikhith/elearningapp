@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/Reports/My_course_progress/activity_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CourseProgressPage extends StatefulWidget {
   final String token;
@@ -124,64 +125,73 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           ),
         ],
       ),
-      body: FutureBuilder<HomePageData>(
-        future: _homePageData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
-          } else if (snapshot.hasData) {
-             if(timertoshowhint!=true)
-              
-               Future.delayed(Duration(seconds: 1),(){
-              
-             _showTooltip(context);
-             timertoshowhint=true;
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          setState(() {
+             _homePageData = HomePageService.fetchHomePageData(widget.token);
              
-
-        });
-            final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
-             if( filteredCourses.length!=0){
-            return ListView.builder(
-              itemCount: filteredCourses.length,
-              itemBuilder: (context, index) {
-                final course = filteredCourses[index];
-             
-                return GestureDetector(
-                  
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ActivityDetailsPage(widget.token, course.id, course.name),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CourseProgressBar(
-                      courseName: course.name,
-                      progress: course.courseProgress.toDouble(),
-                    ),
-                  ),
-                );
-              },
-              
-             
-            );
-             }else   return Center(child: Text('No data found',style: TextStyle(fontWeight: FontWeight.bold),));
-              
-  
-          }
-          
-           else {
-            return Center(child: Text('No data found'));
-          }
-    
+          });
         },
-        
-      ),
+        child:  FutureBuilder<HomePageData>(
+            future: _homePageData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
+              } else if (snapshot.hasData) {
+                 if(timertoshowhint!=true)
+                  
+                   Future.delayed(Duration(seconds: 1),(){
+                  
+                 _showTooltip(context);
+                 timertoshowhint=true;
+                 
+          
+            });
+                final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
+                 if( filteredCourses.length!=0){
+                return ListView.builder(
+                  physics:AlwaysScrollableScrollPhysics(),
+                        itemCount: filteredCourses.length,
+                        itemBuilder: (context, index) {
+                          final course = filteredCourses[index];
+                       
+                          return GestureDetector(
+                            
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ActivityDetailsPage(widget.token, course.id, course.name),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CourseProgressBar(
+                                courseName: course.name,
+                                progress: course.courseProgress.toDouble(),
+                              ),
+                            ),
+                          );
+                        },
+                        
+                );
+                 }else   return Center(child: Text('No data found',style: TextStyle(fontWeight: FontWeight.bold),));
+                  
+            
+              }
+              
+               else {
+                return Center(child: Text('No data found'));
+              }
+              
+            },
+            
+          ),
+        ),
+      
       
       
     );

@@ -220,65 +220,67 @@ class _MLPopupState extends State<MLPopup> {
           ),
           const SizedBox(height: 20.0),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-               
-                onPressed:  is_course_videourl?() {
-                   
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    Expanded(
+      child: ElevatedButton(
+        onPressed: is_course_videourl ? () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => YouTubePlayerScreen(videoUrl: widget.course_videourl),
+            ),
+          );
+        } : () {
+          Navigator.pop(context);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).hintColor,
+        ),
+        child: const FaIcon(
+          FontAwesomeIcons.youtube,
+          color: Color.fromARGB(255, 249, 2, 2),
+        ),
+      ),
+    ),
+    SizedBox(width: 10.0), // Space between buttons
+    Expanded(
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
+        ),
+        child: const Text(
+          'START',
+          style: TextStyle(color: Colors.white,fontSize: 13.4),
+        ),
+      ),
+    ),
+    SizedBox(width: 10.0), // Space between buttons
+    Expanded(
+      child: ElevatedButton(
+        child: const FaIcon(
+          FontAwesomeIcons.close,
+          color: Color.fromARGB(255, 249, 2, 2),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).hintColor,
+        ),
+      ),
+    ),
+  ],
+)
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => YouTubePlayerScreen(videoUrl: widget.course_videourl),
-                    ),
-                  );
-
-                 
-                }:  () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).hintColor,
-                ),
-                child: const FaIcon(
-                  FontAwesomeIcons.youtube,
-                  color: Color.fromARGB(255, 249, 2, 2),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: (){
-                 Navigator.push( context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
-                    ),
-                  );
-
-              },
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).secondaryHeaderColor,
-                ),
-                child: const Text(
-                  'Start Course',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              ElevatedButton(
-               child:   FaIcon(
-                  FontAwesomeIcons.close,
-                  color: Color.fromARGB(255, 249, 2, 2),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).hintColor,
-                ),
-              ),
-            ],
-          ),
         ],
       ),
       ),

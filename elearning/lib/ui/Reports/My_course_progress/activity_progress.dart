@@ -461,7 +461,8 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                 child: Stack(
-                    children:[ Padding(
+                    children:[
+                       Padding(
                       padding:  EdgeInsets.only(top:22,left:22.5 ),
                       child: Stack(children:[ Container(width: 5,height: section['modules'].length!=0?((section['modules'].length-1)*57.5):0.0,color: Theme.of(context).cardColor.withOpacity(0.35)),
                       Container(

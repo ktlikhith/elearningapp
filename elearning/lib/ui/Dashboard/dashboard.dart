@@ -56,6 +56,17 @@ class _DashboardPageState extends State<DashboardPage> {
       _refreshNotificationCount();
     });
   }
+Future<void>  _refreshdata()async{
+
+     
+    _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+    _fetchOtherSectionsFuture = _fetchOtherSections();
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      _refreshNotificationCount();
+    });
+    setState(() {});
+        
+      }
 
   Future<void> _fetchUserInfo(String token) async {
     try {
@@ -80,6 +91,7 @@ class _DashboardPageState extends State<DashboardPage> {
           tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
         }
       }
+      
 
       setState(() {
         _notificationCount = count;
@@ -227,10 +239,16 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-         body: SingleChildScrollView(
-      controller: _scrollController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+         body: RefreshIndicator(
+
+        triggerMode:RefreshIndicatorTriggerMode.anywhere,
+       onRefresh:_refreshdata,
+      child:
+        SingleChildScrollView(
+           physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FutureBuilder<void>(
             future: _fetchUserInfoFuture,
@@ -313,8 +331,9 @@ class _DashboardPageState extends State<DashboardPage> {
             },
           ),
         ],
-      ),
-    ),
+              ),
+            ),
+         ),
     bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
         ),
       ),

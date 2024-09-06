@@ -23,12 +23,20 @@ class GamificationPage extends StatefulWidget {
 
 class _GamificationPageState extends State<GamificationPage> {
   late Future<RewardData> _rewardDataFuture;
+  final GlobalKey<LeaderboardState> _spinWheelKey = GlobalKey<LeaderboardState>();
 
   @override
   void initState() {
     super.initState();
     _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
   
+  }
+  Future<void> _refresh()async{
+    // _spinWheelKey.currentState?.refresh();
+    setState(() {
+         _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
+    });
+
   }
 
   @override
@@ -72,47 +80,51 @@ class _GamificationPageState extends State<GamificationPage> {
           automaticallyImplyLeading: false,
         ),
         backgroundColor:Theme.of(context).scaffoldBackgroundColor,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-            child: Column(
-              children: [
-               
-                RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
-               
-                SizedBox(height: 20),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 400,
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12),
-                      ),
-                      SizedBox(height: 20),
-                //       ElevatedButton(
-                //         onPressed: () {
-                //           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
-                //         },
-                //         style: ElevatedButton.styleFrom(
-                //   backgroundColor: Theme.of(context).secondaryHeaderColor,
-                // ),
-                //         child: Text('QUIZ',style: TextStyle(color: Colors.white),),
-                //       ),
-                    ],
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+              child: Column(
+                children: [
+                 
+                  RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
+                 
+                  SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 400,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh,),
+                        ),
+                        SizedBox(height: 20),
+                  //       ElevatedButton(
+                  //         onPressed: () {
+                  //           Navigator.of(context).pushReplacementNamed(RouterManger.Quiz,arguments: widget.token);
+                  //         },
+                  //         style: ElevatedButton.styleFrom(
+                  //   backgroundColor: Theme.of(context).secondaryHeaderColor,
+                  // ),
+                  //         child: Text('QUIZ',style: TextStyle(color: Colors.white),),
+                  //       ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                ScratchCardScreen(token: widget.token),
-                SizedBox(height: 20),
-                
+                  SizedBox(height: 20),
+                  ScratchCardScreen(token: widget.token, onRefresh: _refresh),
+                  SizedBox(height: 20),
                   
-                   Leaderboard(token: widget.token),
-                
-                SizedBox(height: 20),
-              ],
+                    
+                     Leaderboard(token: widget.token),
+                  
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

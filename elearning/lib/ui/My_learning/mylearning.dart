@@ -245,6 +245,7 @@ import 'package:elearning/ui/My_learning/buildsection.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart'; 
@@ -254,6 +255,7 @@ class LearningScreen extends StatelessWidget {
   final String token;
 
   const LearningScreen({Key? key, required this.token}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -266,6 +268,7 @@ class LearningScreen extends StatelessWidget {
 
 class MyLearningPage extends StatefulWidget {
   final String token;
+  
 
   const MyLearningPage({Key? key, required this.token}) : super(key: key);
 
@@ -294,6 +297,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
 
   @override
   Widget build(BuildContext context) {
+      final reportProvider = Provider.of<ReportProvider>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -313,6 +317,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
                   onChanged: _updateSearchQuery,
                   decoration: InputDecoration(
                     hintText: 'Search...',
+                    
                     border: InputBorder.none,
                     hintStyle: TextStyle(color: Colors.white),
                   ),
@@ -328,17 +333,26 @@ class _MyLearningPageState extends State<MyLearningPage> {
           ],
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Consumer<ReportProvider>(
-          builder: (context, reportProvider, _) {
-            return SingleChildScrollView(
-              child: MyLearningAppBody(
-                token: widget.token,
-                reportData: reportProvider.reportData,
-                isLoading: reportProvider.isLoading,
-                searchQuery: _searchQuery,
-              ),
-            );
+        body: RefreshIndicator(
+          onRefresh: ()async{
+            setState(()async {
+                  await reportProvider.fetchData();
+            });
+
+         
           },
+          child: Consumer<ReportProvider>(
+            builder: (context, reportProvider, _) {
+              return SingleChildScrollView(
+                child: MyLearningAppBody(
+                  token: widget.token,
+                  reportData: reportProvider.reportData,
+                  isLoading: reportProvider.isLoading,
+                  searchQuery: _searchQuery,
+                ),
+              );
+            },
+          ),
         ),
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 1, token: widget.token),
       ),
@@ -473,6 +487,7 @@ class ReportProvider with ChangeNotifier {
   final ReportService reportService = ReportService();
   Report? reportData;
   bool isLoading = true;
+  
 
   ReportProvider(this.token) {
     fetchData();
@@ -480,8 +495,10 @@ class ReportProvider with ChangeNotifier {
 
   Future<void> fetchData() async {
     try {
+      if(token!=null){
       final data = await reportService.fetchReport(token);
       reportData = data;
+      }
      
     } catch (e) {
       print('Error fetching data: $e');

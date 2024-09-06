@@ -294,6 +294,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyMorePage extends StatefulWidget {
@@ -317,21 +318,33 @@ class _MyMorePageState extends State<MyMorePage> {
   showDialog(context: context, 
   builder:(context) {
     return AlertDialog(
-      title: Text('Logout!!'),
-      content:  Text('Are you sure....'),
+      title: Center(
+        child: Text('Are you sure you  want to logout?',textAlign:TextAlign.center, style: GoogleFonts.lato(
+                 fontSize: 20,fontWeight: FontWeight.bold
+                ),
+        ),
+      ),
+     
       actions: [
-         TextButton(
-          onPressed: (){
-            
-              Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
-                  _clearToken();
-        
-          }, child: Text('LOGOUT'),),
-           TextButton(
+         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+           children: [
+             TextButton(
+              
+              onPressed: (){
+                
+                  Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+                      _clearToken();
+                     
+              }, child: Text('Yes, Logout',style: TextStyle(fontSize: 18,color: Theme.of(context).cardColor,fontWeight: FontWeight.bold)),),
+              TextButton(
           onPressed: (){
             
             Navigator.of(context).pop();
-          }, child: Text('Close'),),
+          }, child: Text('No',style: TextStyle(fontSize: 18,color: Theme.of(context).cardColor,fontWeight: FontWeight.bold)),),
+           ],
+         ),
+           
       ],
     );
     

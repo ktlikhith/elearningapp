@@ -323,22 +323,22 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       ),
                       
                        SizedBox(
+                      
                         
                      
                 width: 32, // Set the width of the circular progress indicator
                 height: 32, // Set the height of the circular progress indicator
-                child: Stack(
+                child:   section['name']!='General'?Stack(
                   fit: StackFit.expand,
                   children: [
                     
                     CircularProgressIndicator(
+                           
                       
                       value:      (() {
-                         int completedModules = section['modules']
-                                .where((module) =>
+                         int completedModules = section['modules'].where((module) =>
                                     module['completiondata'] != null &&
-                                    module['completiondata']['state'] != 0)
-                                .length;
+                                    module['completiondata']['state'] != 0).length;
                             int totalModules = section['modules'].length;
                            int sectionprogress = 0;
                                   if (totalModules > 0) {
@@ -395,7 +395,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       ),
                     ),
                   ],
-                ),
+                ):Container(),
               ),
                     
                       Icon(
