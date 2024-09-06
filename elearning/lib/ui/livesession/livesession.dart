@@ -7,6 +7,7 @@ import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -158,21 +159,21 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                           TextSpan(
                             children: [
                                TextSpan(
-                                text: 'Speaker: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                                text: 'Speaker: ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
                                 text: '${sessions[index].username}\n',
                                 style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
                               ),
                                TextSpan(
-                                text: 'Start Time: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                                text: 'Start Time: ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
                                 text: '${sessions[index].startTime}\n',
                                 style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
                               ),
                                TextSpan(
-                                text: 'Mode: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                                text: 'Mode: ',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
                                 text: '${sessions[index].sessionMod}',
@@ -201,13 +202,13 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                                     
                                     mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
                                     children: [
-                                      Icon(
-                                        FontAwesomeIcons.play,
+                                     Icon(
+                                         sessions[index].sessionMod=='Online'?FontAwesomeIcons.play:FontAwesomeIcons.signIn,
                                         color: Theme.of(context).highlightColor,
                                       ), // Add the Font Awesome icon
                                       SizedBox(width: 8), // Add some space between the icon and text
                                       Text(
-                                        'Join Now',
+                                        sessions[index].sessionMod=='Online'?'Join Now':'Sign Up',
                                         style: TextStyle(color:  Theme.of(context).highlightColor,),
                                       ),
                                     ],

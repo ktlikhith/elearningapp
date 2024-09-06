@@ -302,7 +302,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                   decoration: BoxDecoration(
                    // color: Colors.grey[200],
                    
-                   color: Theme.of(context).hintColor.withOpacity(0.4),
+                   color: Theme.of(context).cardColor,
                     borderRadius: section['expanded'] ?? false ? BorderRadius.vertical(top: Radius.circular(10)) : BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
@@ -315,7 +315,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                             section['name'] ?? 'Section Name',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).highlightColor,
                               fontSize: 18,
                             ),
                           ),
@@ -445,7 +445,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                  })(),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                     color: Colors.green,
+                     color: Theme.of(context).cardColor,
                     ),
                   ),
                     ]),
@@ -465,7 +465,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     children: [
                                      
                                       if (module['completiondata'] != null && module['completiondata']['state'] != 0)
-                                        Icon(Icons.circle, color: Colors.green,size: 18,),
+                                        Icon(Icons.circle, color: Theme.of(context).cardColor,size: 18,),
                                       if (module['completiondata'] == null || module['completiondata']['state'] == 0)
                                         Icon(Icons.circle, color: Colors.grey,size: 18,),
                                     
@@ -513,6 +513,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   onTap: () {
                                      bool uservisible =
                                     module['uservisible'] ;
+                                    bool availabilityinfo=module['availabilityinfo']!=null;
+
                                     print(uservisible);
                                     if(uservisible){
                                     if (module['modname'] == 'videofile' && module['contents'] != null && module['contents'].isNotEmpty) {
@@ -616,6 +618,16 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         );
                                       }
                                     }
+                                  }
+                                  else if(availabilityinfo){
+                                     String requiredurl=module['availabilityinfo'].split('?id=')[1];
+                                     String requiredid=requiredurl.split('\">')[0];
+                                      final modu= section['modules'].firstWhere(
+    (module) => module['id'] == requiredid, 
+    orElse: () => null, // Returns null if no match found
+  );
+                                     String requirednmae=modu!=null?modu['name']:'';
+                                     Showerrordialog(context,'Not available unless:','The activity ${requirednmae} is marked complete');
                                   }
                                   else{
                                     Showerrordialog(context,'No Access to this activity','Your not allowed to access this activity without completing the previous one...!!\n If your already completed then make sure that you marked it as completed..!! ');

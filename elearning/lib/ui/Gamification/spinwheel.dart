@@ -476,7 +476,7 @@ class _SpinWheelState extends State<SpinWheel> {
         points: label,
       );
       
-      _showCongratsDialog(label,widget.onRefresh);
+      label=='00'?showMotivationalDialog(context):_showCongratsDialog(label,widget.onRefresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -733,6 +733,62 @@ void _showCongratsDialog(String label,Function onRefresh) {
     },
   );
 }
+
+
+void showMotivationalDialog(BuildContext context) {
+  showDialog(
+    context: context,
+     barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          backgroundColor: Color.fromARGB(127, 0, 0, 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              "Better Luck Next Time!",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              ),
+            ),
+            SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/gamificatinn/genaimg.webp', // Path to your GIF
+                height: 150.0,
+                width: 150.0,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Keep spinning daily for more chances!",
+              style: TextStyle(
+                 color: Colors.white,
+                fontSize: 20.0,
+                 fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
 
 

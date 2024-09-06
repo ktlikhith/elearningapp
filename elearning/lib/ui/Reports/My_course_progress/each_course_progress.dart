@@ -61,28 +61,41 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
     });
   }
 
-  OverlayEntry _createOverlayEntry(BuildContext context) {
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        top: kToolbarHeight + MediaQuery.of(context).padding.top + 8.0,
-        right: 16.0,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Text(
-              'Tap on the Course to view Activity Status.',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+ OverlayEntry _createOverlayEntry(BuildContext context) {
+  return OverlayEntry(
+    builder: (context) => Positioned(
+      top: kToolbarHeight + MediaQuery.of(context).padding.top + 8.0,
+      right: 16.0,
+      left: 16.0, // Make sure we add `left` to give width flexibility
+      child: Material(
+        color: Colors.transparent,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            double maxWidth = MediaQuery.of(context).size.width - 32.0; // Ensure padding from both sides
+
+            return Container(
+              constraints: BoxConstraints(
+                maxWidth: maxWidth, // Restrict the maximum width of the container based on screen size
+              ),
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Text(
+                'Tap on the Course to view Activity Status.',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.left, // Adjust alignment if necessary
+                softWrap: true, // Ensure text wraps to the next line if needed
+              ),
+            );
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
 
   List<CourseData> filterCourses(List<CourseData> courses, String filter) {

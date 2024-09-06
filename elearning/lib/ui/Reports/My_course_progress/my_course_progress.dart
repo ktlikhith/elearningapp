@@ -493,29 +493,41 @@ class _CoursePageState extends State<Coursereport> {
       _isTooltipVisible = false;
     });
   }
+OverlayEntry _createOverlayEntry(BuildContext context) {
+  return OverlayEntry(
+    builder: (context) => Positioned(
+      top: kToolbarHeight + MediaQuery.of(context).padding.top + 8.0,
+      right: 16.0,
+      left: 16.0,  // Add a left value to ensure flexibility
+      child: Material(
+        color: Colors.transparent,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            double maxWidth = MediaQuery.of(context).size.width - 32.0; // Total padding (16 on each side)
 
-  OverlayEntry _createOverlayEntry(BuildContext context) {
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        top: kToolbarHeight + MediaQuery.of(context).padding.top + 8.0,
-        right: 16.0,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Text(
-              'Tap on the pie chart sections to view filtered courses.',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+            return Container(
+              constraints: BoxConstraints(
+                maxWidth: maxWidth,  // Restrict container width based on screen width
+              ),
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Text(
+                'Tap on the pie chart sections to view filtered courses.',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.left,  // Adjust text alignment
+                softWrap: true,  // Ensure text wraps when needed
+              ),
+            );
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget buildCustomLegend() {
     final List<Color> colorList = [
