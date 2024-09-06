@@ -263,6 +263,7 @@ import 'package:confetti/confetti.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
+import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -278,12 +279,16 @@ class SpinWheel extends StatefulWidget {
   final String token;
   final Future<RewardData> rewardDataFuture;
   final double width;
+    final Function onRefresh; // Accept a callback from the parent
+  
+ 
 
   const SpinWheel({
     Key? key,
     required this.token,
     required this.rewardDataFuture,
     required this.width,
+    required this.onRefresh
   }) : super(key: key);
 
   @override
@@ -294,6 +299,7 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<int> _dividerController = StreamController<int>();
   final StreamController<double> _wheelNotifier = StreamController<double>();
   late bool spinButton = false;
+  
   String selectedLabel = '';
   bool isconfettiplaying=false;
   final confettiController=ConfettiController();
@@ -470,7 +476,7 @@ class _SpinWheelState extends State<SpinWheel> {
         points: label,
       );
       
-      _showCongratsDialog(label);
+      _showCongratsDialog(label,widget.onRefresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -515,7 +521,7 @@ class _SpinWheelState extends State<SpinWheel> {
   //     },
   //   );
   // }
-void _showCongratsDialog(String label) {
+void _showCongratsDialog(String label,Function onRefresh) {
   showDialog(
     context: context,
     barrierDismissible: true, // Allows tapping outside the dialog to dismiss it
@@ -524,11 +530,8 @@ void _showCongratsDialog(String label) {
         onWillPop: () async {
           if(isconfettiplaying){
             confettiController.stop();
-          }          // Perform the navigation action when the back button is pressed
-          Navigator.of(context).pushReplacementNamed(
-            RouterManger.Gamification,
-            arguments: widget.token,
-          );
+          }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+            onRefresh();
           return false;
         },
         child: GestureDetector(
@@ -538,10 +541,9 @@ void _showCongratsDialog(String label) {
             confettiController.stop();
           }  
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(
-              RouterManger.Gamification,
-              arguments: widget.token,
-            );
+            onRefresh();
+           
+        
           },
           child: Column(
               children: [

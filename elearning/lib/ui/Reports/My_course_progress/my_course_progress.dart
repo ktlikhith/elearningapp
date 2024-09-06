@@ -577,132 +577,148 @@ class _CoursePageState extends State<Coursereport> {
           ),
         ],
       ),
-      body: FutureBuilder<HomePageData>(
-        future: _homePageData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child:Text('Something went wrong')); 
-             //child: Text('Error: ${snapshot.error}')
-          }  if (snapshot.hasData) {
-           
-              
-            final data = snapshot.data!;
-            final completedCount = getCompletedCoursesCount(data.allCourses);
-            final inProgressCount = getInProgressCoursesCount(data.allCourses);
-            final notStartedCount = getNotStartedCoursesCount(data.allCourses);
-            final total=completedCount+inProgressCount+notStartedCount;
-            final complete__=(completedCount*100)/total;
-             final progress__=(inProgressCount*100)/total;
-              final notstarted__=(notStartedCount*100)/total;
-             
-            if(timertoshowhint!=true)
-               Future.delayed(Duration(seconds: 1),(){
-             _showTooltip(context);
-             timertoshowhint=true;
-             
-
-        });
-          
-          
-
-            final Map<String, double> dataMap = {
-              "Completed": complete__,
-              "In Progress": progress__,
-              "Not Started": notstarted__,
-            };
-
-            final List<Color> colorList = [
-              Color.fromARGB(255, 7, 154, 14), // Completed
-              Color.fromARGB(255, 248, 147, 5), // In Progress
-              Color.fromARGB(255, 241, 25, 25), // Not Started
-            ];
-
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Course Progress', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-                  GestureDetector(
-                    onTapUp: (details) {
-                      final localPosition = details.localPosition;
-                      final centerX = MediaQuery.of(context).size.width / 2;
-                      final centerY = MediaQuery.of(context).size.width / 3.2;
-                      final angle = calculateAngle(localPosition.dx, localPosition.dy, centerX, centerY);
-                      final section = getSectionByAngle(angle, dataMap.entries.toList());
-                      if (section.isNotEmpty) {
-                        _handlePieChartTap(section);
-                          
-                      }
-                    },
-                    child: PieChart(
-                      dataMap: dataMap,
-                      animationDuration: Duration(milliseconds: 1500),
-                      chartLegendSpacing: 70,
-                      chartRadius: MediaQuery.of(context).size.width / 1.6,
-                      colorList: colorList,
-                      initialAngleInDegree: 0,
-                      chartType: ChartType.ring,
-                      ringStrokeWidth: 60,
-                      legendOptions: LegendOptions(
-                        showLegends: false, // Disable the default legend
-                      ),
-                      chartValuesOptions: ChartValuesOptions(
-                        showChartValueBackground: true,
-                        showChartValues: true,
-                        showChartValuesInPercentage: true,
-                        showChartValuesOutside: false,
-                        decimalPlaces: 0,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .1),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
-                    child: buildCustomLegend(),
-                  ), // Add the custom legend here
-                  SizedBox(height: MediaQuery.of(context).size.height * .01),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
-                          'token': widget.token,
-                          'filter': 'all',
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Theme.of(context).secondaryHeaderColor,
-                      ).copyWith(
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
-                      ),
-                      child: Text(
-                        'View More',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          
-          } 
-          
-          else {
-            return Center(child: Text('No data available'));
-          }
-          
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          setState(() {
+              _homePageData = HomePageService.fetchHomePageData(widget.token);
+          });
         },
+        child:FutureBuilder<HomePageData>(
+            future: _homePageData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child:Text('Something went wrong')); 
+                 //child: Text('Error: ${snapshot.error}')
+              }  if (snapshot.hasData) {
+                 
+                  
+                final data = snapshot.data!;
+                final completedCount = getCompletedCoursesCount(data.allCourses);
+                final inProgressCount = getInProgressCoursesCount(data.allCourses);
+                final notStartedCount = getNotStartedCoursesCount(data.allCourses);
+                final total=completedCount+inProgressCount+notStartedCount;
+                final complete__=(completedCount*100)/total.toDouble();
+                 final progress__=(inProgressCount*100)/total.toDouble();
+                  final notstarted__=(notStartedCount*100)/total.toDouble();
+                 
+                if(timertoshowhint!=true)
+                   Future.delayed(Duration(seconds: 1),(){
+                 _showTooltip(context);
+                 timertoshowhint=true;
+                 
+          
+            });
+              
+              
+          
+                final Map<String, double> dataMap = {
+                  "Completed": complete__,
+                  "In Progress": progress__,
+                  "Not Started": notstarted__,
+                };
+          
+                final List<Color> colorList = [
+                  Color.fromARGB(255, 7, 154, 14), // Completed
+                  Color.fromARGB(255, 248, 147, 5), // In Progress
+                  Color.fromARGB(255, 241, 25, 25), // Not Started
+                ];
+          
+                return ListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          children: [
+               Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text('Course Progress', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+                      GestureDetector(
+                        onTapUp: (details) {
+                          final localPosition = details.localPosition;
+                          final centerX = MediaQuery.of(context).size.width / 2;
+                          final centerY = MediaQuery.of(context).size.width / 3.2;
+                          final angle = calculateAngle(localPosition.dx, localPosition.dy, centerX, centerY);
+                          final section = getSectionByAngle(angle, dataMap.entries.toList());
+                          if (section.isNotEmpty) {
+                            _handlePieChartTap(section);
+                              
+                          }
+                        },
+                        child: PieChart(
+                          dataMap: dataMap,
+                          animationDuration: Duration(milliseconds: 1500),
+                          chartLegendSpacing: 70,
+                          chartRadius: MediaQuery.of(context).size.width / 1.6,
+                          colorList: colorList,
+                          initialAngleInDegree: 0,
+                          chartType: ChartType.ring,
+                          ringStrokeWidth: 60,
+                          legendOptions: LegendOptions(
+                            showLegends: false, // Disable the default legend
+                          ),
+                          chartValuesOptions: ChartValuesOptions(
+                            showChartValueBackground: true,
+                            showChartValues: true,
+                            showChartValuesInPercentage: true,
+                            showChartValuesOutside: false,
+                            decimalPlaces: 1,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
+                        child: buildCustomLegend(),
+                      ), // Add the custom legend here
+                      SizedBox(height: MediaQuery.of(context).size.height * .01),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
+                              'token': widget.token,
+                              'filter': 'all',
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: Theme.of(context).secondaryHeaderColor,
+                          ).copyWith(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          ),
+                          child: Text(
+                            'View More',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+          ]
+                 );
+              
+              } 
+              
+              else {
+                return Center(child: Text('No data available'));
+              }
+              
+        
+              
+            },
+            
+          ),
+          
         
       ),
       

@@ -7,8 +7,9 @@ import 'package:shimmer/shimmer.dart';
 
 class ScratchCardScreen extends StatefulWidget {
   final String token;
+  final Function onRefresh;
 
-  ScratchCardScreen({Key? key, required this.token}) : super(key: key);
+  ScratchCardScreen({Key? key, required this.token,required this.onRefresh}) : super(key: key);
 
   @override
   _ScratchCardScreenState createState() => _ScratchCardScreenState();
@@ -56,7 +57,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
-          isLoading ? _buildShimmerSkeleton() : _buildScratchCards(context),
+          isLoading ? _buildShimmerSkeleton() : _buildScratchCards(context,widget.onRefresh),
         ],
       ),
     );
@@ -80,14 +81,14 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
     );
   }
 
-  Widget _buildScratchCards(context) {
+  Widget _buildScratchCards(context,onRefresh) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: scratchCards.map((card) => _buildScratchCard(card,context)).toList(),
+      children: scratchCards.map((card) => _buildScratchCard(card,context,onRefresh)).toList(),
     );
   }
 
-  Widget _buildScratchCard(ScratchCard card,context) {
+  Widget _buildScratchCard(ScratchCard card,context,onRefresh) {
     return GestureDetector(
       onTap: ()=>showDialog(context: context,
      
@@ -103,7 +104,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
             // Scratch Card
             Scratcher(
               brushSize: 30,
-              threshold: 75,
+              threshold: 65,
               image: Image.network(card.scratchImage), // Set the scratch image directly
               onChange: (value) {
                 // Handle scratch progress change
@@ -117,6 +118,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
         type: 'scratchcard', // Set the type to 'scratch'
         points: card.point, // Pass the points from the scratch card
       );
+      onRefresh();
       Navigator.pop(context);
       // Display the point and point image
       showDialog(

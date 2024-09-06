@@ -136,7 +136,7 @@ class _LearningPathDetailScreenState extends State<LearningPathDetailScreen> {
                                      }
                                   
                                       else {
-                                    Showerrordialog(context,'This Course is Locked!!','Previous course in the Learning Path should be completed to access this course..!!');
+                                    Showerrordialog(context,'This Course is Locked!!','Previous course(s) in this Learning Path should be completed!!!...');
                                   }
                                   }
                    },

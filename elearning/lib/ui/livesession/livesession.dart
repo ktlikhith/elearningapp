@@ -106,115 +106,126 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _buildShimmerEffect(); // Show shimmer effect while loading
             } else if (snapshot.hasError) {
-              return Center(child: Text(''));//Error: ${snapshot.error}
+              return Center(child: Text('something went wrong'));//Error: ${snapshot.error}
             } else if (snapshot.hasData) {
               final List<LiveSession> sessions = snapshot.data!;
               if (sessions.isEmpty) {
                 return Center(child: Text('No data available'));
               } else {
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: sessions.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      //padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12.0), // Set border radius
-                        border: Border.all(color: Color.fromARGB(255, 173, 172, 172)!), // Set border color
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                     
-                          Container(
-                             
-                            width: double.infinity,
-                                child:ClipRRect(
-                                  borderRadius: BorderRadius.circular(9),
-                            child: Image.network(
-                              sessions[index].imgUrl,
-                              fit: BoxFit.cover,
-                              height: 200,
-                            ),
-                          ),
-                          ),
-                          SizedBox(height: 4),
-                          ListTile(
-                            title: Text(
-                              sessions[index].activityName,
-                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).highlightColor),
-                            ),
-                           subtitle: Text.rich(
-  TextSpan(
-    children: [
-       TextSpan(
-        text: 'Speaker: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
-      ),
-      TextSpan(
-        text: '${sessions[index].username}\n',
-        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
-      ),
-       TextSpan(
-        text: 'Start Time: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
-      ),
-      TextSpan(
-        text: '${sessions[index].startTime}\n',
-        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
-      ),
-       TextSpan(
-        text: 'Mode: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
-      ),
-      TextSpan(
-        text: '${sessions[index].sessionMod}',
-        style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
-      ),
-    ],
-  ),
-),
+                return RefreshIndicator(
+                  onRefresh: ()async{
+                    setState(() {
+                      _fetchLiveEventData();
+                    });
 
-                          ),
-                          SizedBox(height: 2),
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
-                                  String moduleUrl = sessions[index].url;
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WebViewPage('Live Event', moduleUrl,widget.token),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Row(
-                                
-                                mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.play,
-                                    color: Theme.of(context).highlightColor,
-                                  ), // Add the Font Awesome icon
-                                  SizedBox(width: 8), // Add some space between the icon and text
-                                  Text(
-                                    'Join Now',
-                                    style: TextStyle(color:  Theme.of(context).highlightColor,),
-                                  ),
-                                ],
-                              ),
-                              style: TextButton.styleFrom(
-                                backgroundColor: Theme.of(context).primaryColor, 
-                                // Set button background color
-                              ),
-                            ),
-                            
-                          ),
-                          SizedBox(height: 8),
-                        ],
-                      ),
-                    );
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: sessions.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical:8.0),
+                        child: Container(
+                         // padding: const EdgeInsets.symmetric(vertical:20),
+                          decoration: BoxDecoration(
+                             color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(12.0), // Set border radius
+                            border: Border.all(color: Color.fromARGB(255, 173, 172, 172)!), // Set border color
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                         
+                              Container(
+                                 
+                                width: double.infinity,
+                                    child:ClipRRect(
+                                      borderRadius: BorderRadius.circular(9),
+                                child: Image.network(
+                                  sessions[index].imgUrl,
+                                  fit: BoxFit.cover,
+                                  height: 200,
+                                ),
+                              ),
+                              ),
+                              SizedBox(height: 4),
+                              ListTile(
+                                title: Text(
+                                  sessions[index].activityName,
+                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).highlightColor),
+                                ),
+                               subtitle: Text.rich(
+                          TextSpan(
+                            children: [
+                               TextSpan(
+                                text: 'Speaker: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                text: '${sessions[index].username}\n',
+                                style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
+                              ),
+                               TextSpan(
+                                text: 'Start Time: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                text: '${sessions[index].startTime}\n',
+                                style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
+                              ),
+                               TextSpan(
+                                text: 'Mode: ',style: TextStyle(color: Theme.of(context).hintColor,fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                text: '${sessions[index].sessionMod}',
+                                style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                              ),
+                              SizedBox(height: 2),
+                              Center(
+                                child: TextButton(
+                                  onPressed: () {
+                                    if (sessions[index].url != null && sessions[index].url.isNotEmpty) {
+                                      String moduleUrl = sessions[index].url;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage('Live Event', moduleUrl,widget.token),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    
+                                    mainAxisSize: MainAxisSize.min, // Ensure the row takes only the minimum required space
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.play,
+                                        color: Theme.of(context).highlightColor,
+                                      ), // Add the Font Awesome icon
+                                      SizedBox(width: 8), // Add some space between the icon and text
+                                      Text(
+                                        'Join Now',
+                                        style: TextStyle(color:  Theme.of(context).highlightColor,),
+                                      ),
+                                    ],
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Theme.of(context).primaryColor, 
+                                    // Set button background color
+                                  ),
+                                ),
+                                
+                              ),
+                              SizedBox(height: 14),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 );
               }
             } else {
@@ -222,8 +233,10 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
             }
           },
         ),
+        
         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 2, token: widget.token),
       ),
+      
     );
   }
 

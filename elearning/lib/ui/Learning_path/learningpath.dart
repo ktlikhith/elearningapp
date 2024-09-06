@@ -307,7 +307,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                             );
                             
                                }else
-                              Showerrordialog(context,'This Course is Locked!!','Previous course in this Learning Path should be completed...!!');
+                              Showerrordialog(context,'This Course is Locked!!',"Previous course(s) in this Learning Path should be completed!!!...");
                             };
                             },
                             child: Padding(

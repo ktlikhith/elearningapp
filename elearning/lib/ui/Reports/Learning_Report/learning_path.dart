@@ -4,6 +4,7 @@ import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:flutter/widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -118,8 +119,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
               borderRadius: BorderRadius.circular(8.0),
             child: 
                  SizedBox(
-      height: 60,
-      width: 100,
+      height: 55,
+      width: 90,
       child: Stack(
         children: [
          
@@ -127,16 +128,16 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           Image.network(
                       
                           '${Constants.baseUrl}${learningPath.imageUrl}',
-                          height: 60,
-                          width: 100,
+                          height: 55,
+                          width: 90,
                           fit: BoxFit.fill,
                         
                           
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
                               'assets/images/coursedefaultimg.jpg',
-                                  height: 60,
-                          width: 100,
+                                  height: 55,
+                          width: 90,
                               fit: BoxFit.fill,
                             );
                           },
@@ -148,14 +149,29 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
     ),
 
                     ),
-                    Container(
-                     child: Column(
-                       children: [
-                         Text('Duration:${learningPath.duration}',style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),),
-                         Text('Courses:${learningPath.nocourses}',style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),)
-                       ],
-                     ),
-                     
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:16.0),
+                      child: Container(
+                       child: Column(
+                        
+                        crossAxisAlignment:CrossAxisAlignment.start,
+                         children: [
+                           Row(
+                             children: [
+                               Text('Duration:',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w900),),
+                               Text('${learningPath.duration}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w500),),
+                             ],
+                           ),
+                           Row(
+                             children: [
+                              Text('Courses :',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w900),),
+                               Text('${learningPath.nocourses}',style: TextStyle(fontSize: 13,fontWeight:  FontWeight.w500),),
+                             ],
+                           )
+                         ],
+                       ),
+                       
+                      ),
                     ),
 
                          Column(
@@ -189,18 +205,110 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                       SizedBox(height: 10),
                       Row(
                             children: [
-                              LinearPercentIndicator(
-                                barRadius:Radius.circular(10),
-                                percent: learningPath.progress / 100,
-                              width:100,
-                              lineHeight: 8,
+                              Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              height: 8,
+                                              width: MediaQuery.of(context).size.width * 0.2,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF3ACBE8).withOpacity(0.3),
+                                                    Color(0xFF0D85D8).withOpacity(0.3),
+                                                    Color(0xFF0041C7).withOpacity(0.3),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            if(learningPath.progress>7)
+                                            Container(
+                                              height: 15,
+                                              width: MediaQuery.of(context).size.width * 0.2 * (learningPath.progress / 100),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF3ACBE8),
+                                                    Color(0xFF0D85D8),
+                                                    Color(0xFF0041C7),
+                                                  ],
+                                                  stops: [0.0, 0.5, 1.0],
+                                                ),
+                                              ),
+                                            ),
+                                            if(learningPath.progress < 7 && learningPath.progress>0)
+                                              Positioned(
+                                                left: MediaQuery.of(context).size.width * 0.22 *0.028-8,
+                                                child: Container(
+                                                  width: 15,
+                                                  height: 15,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        Color(0xFF3ACBE8),
+                                                        Color(0xFF0D85D8),
+                                                        Color(0xFF0041C7),
+                                                      ],
+                                                      stops: [0.0, 0.5, 1.0],
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black.withOpacity(0.1),
+                                                        blurRadius: 5,
+                                                        offset: Offset(0, 2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            if (learningPath.progress >= 7)
+                                              Positioned(
+                                                left: MediaQuery.of(context).size.width * 0.2* (learningPath.progress / 100) - 8,
+                                                child: Container(
+                                                  width: 16,
+                                                  height: 16,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        Color(0xFF3ACBE8),
+                                                        Color(0xFF0D85D8),
+                                                        Color(0xFF0041C7),
+                                                      ],
+                                                      stops: [0.0, 0.5, 1.0],
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black.withOpacity(0.1),
+                                                        blurRadius: 5,
+                                                        offset: Offset(0, 2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                              
+                                      
+                                      ],
+                                    ),
+                              // LinearPercentIndicator(
+                              //   barRadius:Radius.circular(10),
+                              //   percent: learningPath.progress / 100,
+                              // width:100,
+                              // lineHeight: 8,
                                                        
-                                // strokeWidth: 13,
-                                backgroundColor: Color.fromARGB(255, 170, 167, 167),
-                                progressColor: 
-                                  _getStatusColor(learningPath.progress),
+                              //   // strokeWidth: 13,
+                              //   backgroundColor: Color.fromARGB(255, 170, 167, 167),
+                              //   progressColor: 
+                              //     _getStatusColor(learningPath.progress),
                                 
-                              ),
+                              // ),
                               
                           Center(
                             child: Text(
