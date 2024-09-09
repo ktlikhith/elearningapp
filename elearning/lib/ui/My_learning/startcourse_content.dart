@@ -10,6 +10,7 @@ import 'package:elearning/ui/My_learning/video_player_screen.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
+import 'package:elearning/ui/download/test-courseimg-download.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -42,11 +43,12 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   List<Map<String, dynamic>>? _courseContentData;
   late Future<String> _courseImageUrlFuture;
   late Future<String> _courseDescriptionFuture;
+  String imgurl='';
 
   @override
   void initState() {
     super.initState();
-     
+     DownloadManager dm =DownloadManager();
     _fetchCourseContent();
     _courseImageUrlFuture = _fetchCourseImage();
     _courseDescriptionFuture = _fetchCourseDescription();
@@ -86,10 +88,10 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     }
   }
 
-  Future<String> _fetchCourseImage() async {
+   Future<String> _fetchCourseImage() async {
     try {
       CourseReportApiService courseReportApiService = CourseReportApiService();
-      return await courseReportApiService.getCourseImageWith_token_id(widget.token, widget.courseId);
+      return courseReportApiService.getCourseImageWith_token_id(widget.token, widget.courseId);
     } catch (e) {
       throw Exception('Error fetching course image: $e');
     }
@@ -167,6 +169,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
             return Center(child: Text('Smething went wrong try Again!!'));//Error: ${snapshot.error}
           } else {
             final imageUrl = snapshot.data!;
+            
+              imgurl=imageUrl;
+            
             return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
@@ -495,13 +500,20 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                                   return '$filePath1&token=$Token';
                                                 }
                                                 String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
-                                                DownloadManager.downloadFile(
+                                                DownloadManager dm =DownloadManager();
+                                                dm.downloadFile(
                                                   context,
                                                   fileurl,
                                                   content['filename'],
                                                   widget.token,
-                                                  widget.courseName
+                                                  widget.courseName,
+                                                  imgurl
                                                 );
+                                  //                 Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context)=>ImageDisplayExample())
+                                  // );
+                                             
                                               }
                                          
                                             }

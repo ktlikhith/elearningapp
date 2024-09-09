@@ -295,11 +295,15 @@
 
 
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/My_learning/startcourse_content.dart';
 import 'package:elearning/ui/download/download_view.dart';
+import 'package:elearning/ui/download/downloadedcontents.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -319,76 +323,93 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   List<Map<String, dynamic>> _files = [];
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
+  _loadDownloadedFiles();
+  Timer.periodic(Duration(seconds: 1), (Timer timer) {
     _loadDownloadedFiles();
-  }
-
-Future<void> _loadDownloadedFiles() async {
-  final files = await DownloadManager.getDownloadedFiles();
-  final directory = await getApplicationDocumentsDirectory();
-    final downloadDirectory = Directory('${directory.path}/Download/');
-  
-  final Map<String, List<Map<String, dynamic>>> groupedFiles = {};
-
-  for (var file in files) {
-    final courseName = file['CourseName']; // Assume courseName is in the file data
-    final filePath = join(downloadDirectory.path, file['fileName']);
-    final fileData = {
-      'fileName': file['fileName'],
-      'url': file['url'],
-      'filePath': filePath,
-      'downloadDate': file['downloadDate'],
-    };
-
-    if (!groupedFiles.containsKey(courseName)) {
-      groupedFiles[courseName] = [];
-    }
-    groupedFiles[courseName]?.add(fileData);
-  }
-
-  setState(() {
-    _files = groupedFiles.entries.map((e) => {'courseName': e.key, 'files': e.value}).toList();
   });
 }
-
-
-  void _reDownloadFile(BuildContext context, String url, String fileName,String courseName) async {
-    await DownloadManager.downloadFile(context, url, fileName, widget.token,courseName);
-    _loadDownloadedFiles(); // Refresh the file list after re-download
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
-Future<void> _deleteFile(String filePath, String fileName) async {
-  try {
-    // Delete the actual file from the system
-    final file = File(filePath);
-    if (file.existsSync()) {
-      await file.delete();
-    }
+void _navigateToDownloadcontentScreen(Context,coursename,filelist) async {
+  final result = await  Navigator.of(Context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => CourseDownloaded(
+                            courseName: coursename,
+                            files: filelist,
+                            token: widget.token,
+                          ),
+                        )
+                        
+                      );
 
-    // Update the metadata file
-    final metadataFile = await _getMetadataFile();
-    final List<dynamic> metadata = jsonDecode(await metadataFile.readAsString());
-    metadata.removeWhere((entry) => entry['fileName'] == fileName);
-    await metadataFile.writeAsString(jsonEncode(metadata));
-
-    // Update the _files list and remove the deleted file
+  if (result == true) {
     setState(() {
-      for (var courseData in _files) {
-        List<Map<String, dynamic>> files = courseData['files'];
-        files.removeWhere((file) => file['fileName'] == fileName);
-
-        // If no files remain for this course, remove the course entry
-        if (files.isEmpty) {
-          _files.remove(courseData);
-          break;
-        }
-      }
+      // Refresh the data if result is true
+      _loadDownloadedFiles();
     });
-  } catch (e) {
-    print("Error deleting file: $e");
   }
 }
+ 
+
+// Future<void> _loadDownloadedFiles() async {
+//   final files = await DownloadManager.getDownloadedFiles();
+//   final directory = await getApplicationDocumentsDirectory();
+//     final downloadDirectory = Directory('${directory.path}/Download/');
+  
+//   final Map<String, List<Map<String, dynamic>>> groupedFiles = {};
+
+//   for (var file in files) {
+//     final courseName = file['CourseName']; // Assume courseName is in the file data
+//   //  final cimgpath=file['imgurl'];
+//    // print(cimgpath);
+
+//     final filePath = join(downloadDirectory.path, file['fileName']);
+//     final fileData = {
+//       'fileName': file['fileName'],
+//       'url': file['url'],
+//       'filePath': filePath,
+//       'downloadDate': file['downloadDate'],
+//       'imgurl':file['imgurl'],
+//     };
+//     print(fileData);
+
+//     if (!groupedFiles.containsKey(courseName)) {
+//       groupedFiles[courseName] = [];
+//     }
+//     groupedFiles[courseName]?.add(fileData);
+//   }
+
+//   setState(() {
+//   _files = groupedFiles.entries.map((e) {
+//     // Assuming each file contains 'imgurl', you can extract it from the first file in the list.
+//     String? imgurl;
+//     if (e.value.isNotEmpty && e.value[0].containsKey('imgurl')) {
+//       imgurl = e.value[0]['imgurl'];
+//     }
+
+//     return {
+//       'courseName': e.key,
+//       'files': e.value,
+//       'imgurl': imgurl, // Add imgurl to the map
+//     };
+//   }).toList();
+// });
+
+// }
+
+
+  // void _reDownloadFile(BuildContext context, String url, String fileName,String courseName) async {
+  //   await DownloadManager.downloadFile(context, url, fileName, widget.token,courseName);
+  //   _loadDownloadedFiles(); // Refresh the file list after re-download
+  // }
+
+
 
 
   Future<File> _getMetadataFile() async {
@@ -401,78 +422,42 @@ Future<void> _deleteFile(String filePath, String fileName) async {
     return file;
   }
 
+Future<List<Map<String, dynamic>>> _loadDownloadedFiles() async {
+  final files = await DownloadManager.getDownloadedFiles();
+  final directory = await getApplicationDocumentsDirectory();
+  final downloadDirectory = Directory('${directory.path}/Download/');
 
-void _showFileInfo(BuildContext context, String filePath, String date) {
-  final fileSize = _getFileSize(filePath);
-  final fileExtension = _getFileExtension(filePath);
+  final Map<String, List<Map<String, dynamic>>> groupedFiles = {};
 
-  // Parse the date string
-  DateTime parsedDate = DateTime.parse(date);
-  String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
-  String formattedTime = DateFormat('hh:mm a').format(parsedDate); // 12-hour format with AM/PM
+  for (var file in files) {
+    final courseName = file['CourseName'];
+    final filePath = join(downloadDirectory.path, file['fileName']);
+    final fileData = {
+      'fileName': file['fileName'],
+      'url': file['url'],
+      'filePath': filePath,
+      'downloadDate': file['downloadDate'],
+      'imgurl': file['imgurl'],
+    };
 
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true, // Allow the bottom sheet to take full height
-    builder: (context) {
-      return Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'File Information',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12.0),
-                Text('Size: $fileSize'),
-                const SizedBox(height: 8.0),
-                Text('Format: $fileExtension'),
-                const SizedBox(height: 8.0),
-                Text('Downloaded Date: $formattedDate'),
-                const SizedBox(height: 8.0),
-                Text('Downloaded Time: $formattedTime'),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-  void _showMoreOptions(BuildContext context, String fileName, String filePath, String downloadDate) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () {
-                _deleteFile(filePath, fileName);
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text('Details'),
-              onTap: () {
-                _showFileInfo(context, filePath, downloadDate);
-                
-              },
-            ),
-          ],
-        );
-      },
-    );
+    if (!groupedFiles.containsKey(courseName)) {
+      groupedFiles[courseName] = [];
+    }
+    groupedFiles[courseName]?.add(fileData);
   }
+
+  return groupedFiles.entries.map((e) {
+    String? imgurl;
+    if (e.value.isNotEmpty && e.value[0].containsKey('imgurl')) {
+      imgurl = e.value[0]['imgurl'];
+    }
+    return {
+      'courseName': e.key,
+      'files': e.value,
+      'imgurl': imgurl,
+    };
+  }).toList();
+}
 
 @override
 Widget build(BuildContext context) {
@@ -489,122 +474,91 @@ Widget build(BuildContext context) {
       ),
     ),
     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-    body: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _files.isEmpty
-              ? [const Center(child: Text('No downloaded files.'))]
-              : _files.map((courseData) {
+    body: FutureBuilder<List<Map<String, dynamic>>>(
+      future: _loadDownloadedFiles(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No downloaded files.'));
+        } else {
+          final files = snapshot.data!;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: files.map((courseData) {
                   final courseName = courseData['courseName'] as String;
-                  final files = courseData['files'] as List<Map<String, dynamic>>;
+                  final cimg = courseData['imgurl'];
+                  final fileList = courseData['files'] as List<Map<String, dynamic>>;
 
-                  return ExpansionTile(
-                    title: Text(courseName, style:  TextStyle(fontWeight: FontWeight.bold,color:Theme.of(context).cardColor,),),
-                  collapsedBackgroundColor:Theme.of(context).hintColor.withOpacity(0.8),
-                  collapsedShape: Border.all(width: 0.5, ),
-                  
-                    children: files.map<Widget>((file) {
-                      final fileName = file['fileName'];
-                      final url = file['url'];
-                      final filePath = file['filePath'];
-                      final downloadDate = file['downloadDate'] ?? 'Unknown Date';
-
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewerScreen(filePath: filePath),
-                            ),
-                          );
-                        },
-                        child: Dismissible(
-                          key: Key(fileName), 
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            _deleteFile(filePath, fileName);
-                          },
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            color: Colors.red,
-                            child: const Icon(Icons.delete, color: Colors.white),
+                  return GestureDetector(
+                    onTap: () {
+                     _navigateToDownloadcontentScreen(context,courseName,fileList);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(width: 0.5),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child:
+                              cimg != null
+                              ? Image.file(
+                                  File(cimg),
+                                  width: 130,
+                                  height: 70,
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                ),),
+                                
+                                 Padding(
+                                   padding: const EdgeInsets.only(left: 10.0),
+                                   child: Text(
+                                                                   courseName,
+                                                                   style: TextStyle(
+                                                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).highlightColor,
+                                                                   ),
+                                                                 ),
+                                 ),
+                            ],
                           ),
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 16.0),
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: Colors.grey),
-                              color: Theme.of(context).hintColor.withOpacity(0.6),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 3, 
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        _getIconForFile(filePath),
-                                        size: 48.0,
-                                        color: const Color.fromARGB(255, 237, 23, 23),
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      Expanded(
-                                        child: Text(
-                                          '$fileName\n',
-                                          style: const TextStyle(fontSize: 16.0),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1, 
-                                  child: IconButton(
-                                    icon: const Icon(Icons.more_vert, color: Colors.black),
-                                    onPressed: () => _showMoreOptions(context, fileName, filePath, downloadDate),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                         
+                       
+                        ],
+                      ),
+                    ),
                   );
                 }).toList(),
-        ),
-      ),
+              ),
+            ),
+          );
+        }
+      },
     ),
   );
 }
 
-  IconData _getIconForFile(String filePath) {
-    final fileExtension = extension(filePath).toLowerCase();
-    switch (fileExtension) {
-      case '.mp4':
-      case '.avi':
-      case '.mov':
-        return Icons.play_circle_fill;
-      case '.pdf':
-        return Icons.picture_as_pdf;
-      default:
-        return Icons.insert_drive_file;
-    }
-  }
 
-  String _getFileSize(String filePath) {
-    final file = File(filePath);
-    if (file.existsSync()) {
-      final bytes = file.lengthSync();
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB';
-    }
-    return 'Unknown size';
-  }
+ 
 
   String _getFileExtension(String filePath) {
     return extension(filePath).replaceAll('.', '').toUpperCase();
