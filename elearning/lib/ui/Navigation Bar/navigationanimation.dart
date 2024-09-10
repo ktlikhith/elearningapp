@@ -169,11 +169,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           color: Colors.white,
           circleColor: Theme.of(context).primaryColor,
           height: 60,
-          circleWidth: 55,
+          circleWidth: 50,
           onTap: _handleTabPressed,
           activeIndex: _selectedIndex,
           tabCurve: Curves.easeOutExpo,
           padding: const EdgeInsets.all(8),
+        
           cornerRadius: const BorderRadius.vertical(top: Radius.circular(15)),
           shadowColor: Colors.black45,
           elevation: 10,

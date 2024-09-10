@@ -1,13 +1,14 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/live_event_service.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
-import 'package:elearning/ui/Webview/webview.dart';
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -22,11 +23,93 @@ class LiveSessionPage extends StatefulWidget {
 
 class _LiveSessionPageState extends State<LiveSessionPage> {
   late Future<List<LiveSession>> _futureData;
-
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  bool isDialogOpen = false;
   @override
   void initState() {
     super.initState();
     _fetchLiveEventData();
+       initConnectivity();
+
+      // Correct type for StreamSubscription<ConnectivityResult>
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+  @override
+  void dispose(){
+      _connectivitySubscription.cancel();
+      super.dispose();
+  }
+  
+  // Initialize connectivity
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  // Update connectivity status
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+
+    if (_connectionStatus == ConnectivityResult.none) {
+      _showNoInternetDialog();
+    } else {
+      _dismissNoInternetDialog();
+    }
+  }
+
+  // Show No Internet Dialog
+  void _showNoInternetDialog() {
+    if (!isDialogOpen) {
+      isDialogOpen = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Opss No Internet Connection..'),
+            content: const Text('Please check your connection. You can try reloading the page or explore the available offline content.'),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Reload'),
+                onPressed:_fetchLiveEventData ,
+                // onPressed: () async {
+                //   final result = await _connectivity.checkConnectivity();
+                //   _updateConnectionStatus(result);
+                // },
+              ),
+              ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),)
+              
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // Dismiss No Internet Dialog
+  void _dismissNoInternetDialog() {
+    if (isDialogOpen) {
+      _fetchLiveEventData();
+      Navigator.of(context, rootNavigator: true).pop();
+      isDialogOpen = false;
+
+    }
   }
 
   Future<void> _fetchLiveEventData() async {

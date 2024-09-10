@@ -1,8 +1,11 @@
 
 
 
+import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/course_content.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
@@ -25,7 +28,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
-
+import 'dart:developer' as developer;
 import 'package:elearning/services/auth.dart';
 
 class CourseDetailsPage extends StatefulWidget {
@@ -44,10 +47,19 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   late Future<String> _courseImageUrlFuture;
   late Future<String> _courseDescriptionFuture;
   String imgurl='';
+     ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  bool isDialogOpen = false;
 
   @override
   void initState() {
     super.initState();
+      initConnectivity();
+
+      // Correct type for StreamSubscription<ConnectivityResult>
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
      DownloadManager dm =DownloadManager();
     _fetchCourseContent();
     _courseImageUrlFuture = _fetchCourseImage();
@@ -55,13 +67,82 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   }
     @override
   void dispose() {
-   
+      _connectivitySubscription.cancel(); 
 // to stop audio and video
-
-
  setState(() {});
     super.dispose();
   }
+   
+  // Initialize connectivity
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  // Update connectivity status
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+
+    if (_connectionStatus == ConnectivityResult.none) {
+      _showNoInternetDialog();
+    } else {
+      _dismissNoInternetDialog();
+    }
+  }
+
+  // Show No Internet Dialog
+  void _showNoInternetDialog() {
+    if (!isDialogOpen) {
+      isDialogOpen = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Opss No Internet Connection..'),
+            content: const Text('Please check your connection. You can try reloading the page or explore the available offline content.'),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Reload'),
+                onPressed: () 
+                {  _refreshContent();},
+                // onPressed: () async {
+                //   final result = await _connectivity.checkConnectivity();
+                //   _updateConnectionStatus(result);
+                // },
+              ),
+              ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),)
+              
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // Dismiss No Internet Dialog
+  void _dismissNoInternetDialog() {
+    if (isDialogOpen) {
+    _refreshContent();
+      Navigator.of(context, rootNavigator: true).pop();
+      isDialogOpen = false;
+
+    }
+  }
+
 
  Future<void> _refreshContent() async {
     await _fetchCourseContent();

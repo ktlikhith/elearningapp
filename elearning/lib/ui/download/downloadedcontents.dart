@@ -99,10 +99,13 @@ class _CourseDownloadedState extends State<CourseDownloaded> {
                                 flex: 3,
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      _getIconForFile(filePath),
-                                      size: 44.0,
-                                      color: Theme.of(context).cardColor,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        _getIconForFile(filePath),
+                                        size: 44.0,
+                                        color: Theme.of(context).cardColor,
+                                      ),
                                     ),
                                     const SizedBox(width: 8.0),
                                     Expanded(

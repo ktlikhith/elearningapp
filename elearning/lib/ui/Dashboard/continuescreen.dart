@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -193,7 +194,7 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
     );
   },
 ),
-
+ bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
             );
         
       

@@ -289,6 +289,7 @@ import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -465,6 +466,7 @@ class _MyMorePageState extends State<MyMorePage> {
             ),
           ],
         ),
+         bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 5, token: widget.token),
       ),
     );
   }
