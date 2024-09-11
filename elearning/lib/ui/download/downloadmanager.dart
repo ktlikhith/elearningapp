@@ -220,16 +220,21 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http; 
 
 class DownloadManager {
   static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  static Future<Directory> getDownloadDirectory(String courseName) async {
+  static Future<Directory> getDownloadDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
     final downloadDirectory = Directory('${directory.path}/Download/');
+    final imgdownloadDirectory=Directory('${directory.path}/Download/cimges/');
 
     if (!await downloadDirectory.exists()) {
       await downloadDirectory.create(recursive: true);
+      if(!await imgdownloadDirectory.exists()){
+       await imgdownloadDirectory.create(recursive: true);
+      }
     }
 
     return downloadDirectory;
@@ -245,13 +250,14 @@ class DownloadManager {
     return file;
   }
 
-  static Future<void> _saveMetadata(String fileName, String url, String checksum, DateTime downloadDate,String courseName) async {
+  static Future<void> _saveMetadata(String fileName, String url, String checksum, DateTime downloadDate,String courseName,String Cimg) async {
     final file = await _getMetadataFile();
     final content = await file.readAsString();
     final List<dynamic> metadata = jsonDecode(content);
 
-    metadata.add({'fileName': fileName, 'url': url, 'checksum': checksum, 'downloadDate': downloadDate.toIso8601String(),'CourseName':courseName});
+    metadata.add({'fileName': fileName, 'url': url, 'checksum': checksum, 'downloadDate': downloadDate.toIso8601String(),'CourseName':courseName,'imgurl':Cimg});
 
+print(metadata);
     await file.writeAsString(jsonEncode(metadata));
   }
 
@@ -303,17 +309,19 @@ class DownloadManager {
     return digest.toString();
   }
 
-  static Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,{String? expectedChecksum}) async {
+   Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,String imgurl,{String? expectedChecksum}) async {
     try {
       final hasPermission = await requestStoragePermission(context);
       if (!hasPermission) {
         print('Storage permission not granted for file download');
         return;
       }
+         
+
 
       final dio = Dio();
-      final downloadDirectory = await getDownloadDirectory(courseNmae);
-      final filePath = '${downloadDirectory.path}/$fileName';
+      final downloadDirectory = await getDownloadDirectory();
+      final filePath = '${downloadDirectory.path}$fileName';
 
       final file = File(filePath);
       if (await file.exists()) {
@@ -333,6 +341,7 @@ class DownloadManager {
         );
         return;
       }
+      
 
       int notificationId = 0;
       await _flutterLocalNotificationsPlugin.show(
@@ -349,9 +358,13 @@ class DownloadManager {
           ),
         ),
       );
+    
+ 
+
+   
 
       await dio.download(
-        url,
+      url,
         filePath,
         onReceiveProgress: (receivedBytes, totalBytes) async {
           if (totalBytes != -1) {
@@ -379,7 +392,8 @@ class DownloadManager {
           }
         },
       );
-
+    String Cimg = await downloadImage(imgurl,courseNmae,token);  
+    print('imgdownloded path $Cimg');
       print('File downloaded to $filePath');
 
       // Verify file checksum
@@ -406,11 +420,11 @@ class DownloadManager {
 
       // Save metadata after download
       DateTime downloadDate = DateTime.now();
-      await _saveMetadata(fileName, url, actualChecksum, downloadDate,courseNmae);
+      await _saveMetadata(fileName, url, actualChecksum, downloadDate,courseNmae,Cimg);
+    
 
       // Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: token);
   Navigator.of(context).pushNamed(RouterManger.downloads, arguments: token);
-
 
       // Example of post-download operation
       print('Download complete. Showing message to user.');
@@ -474,5 +488,60 @@ class DownloadManager {
     } else {
       return [];
     }
+    
+  }Future<String> downloadImage(String url, String coursename, String token) async {
+  try {
+    String imgwithurl = '${url}';
+    print(imgwithurl);
+
+    // Send a GET request to the URL
+    final response = await http.get(Uri.parse(imgwithurl));
+
+    // Check if the request was successful
+    if (response.statusCode == 200) {
+      // Get the directory to store the downloaded file
+      Directory appDocDir = await getDownloadDirectory();
+      final filePath = '${appDocDir.path}cimges/';
+      final directory = Directory(filePath);
+
+      // Write the file to the specified path
+      if (await directory.exists()) {
+        final imgpath = '${filePath}$coursename';
+        final directory1 = Directory(imgpath);
+
+        if (await directory1.exists()) {
+          return imgpath;
+        } else {
+          File file = File(imgpath);
+          await file.create(recursive: true);
+
+          await file.writeAsBytes(response.bodyBytes);
+          print(imgpath);
+          print('img download path');
+          return imgpath;
+        }
+      } else {
+        throw Exception("Directory does not exist.");
+      }
+    } else {
+      throw Exception("Failed to download image. Status code: ${response.statusCode}");
+    }
+  } catch (e) {
+    throw Exception("Error downloading image: $e");
+  }
+
+  // Add a throw or return statement at the end to handle all paths
+  throw Exception("An unknown error occurred during image download.");
+}
+
+ static Future<Directory> getDownloadDirectoryforimg(String courseName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final downloadDirectory = Directory('${directory.path}/Download/');
+
+    if (!await downloadDirectory.exists()) {
+      await downloadDirectory.create(recursive: true);
+    }
+
+    return downloadDirectory;
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -10,6 +12,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:elearning/services/report_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:developer' as developer;
 
 class ReportPage extends StatefulWidget {
   final String token;
@@ -22,6 +25,11 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   final ReportService reportService = ReportService();
+   ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  bool isDialogOpen = false;
+ 
 
   Report? reportData; // Store fetched report data
 
@@ -30,7 +38,98 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
+     initConnectivity();
+
+      // Correct type for StreamSubscription<ConnectivityResult>
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+      // Lock the screen orientation to portrait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     fetchData(widget.token);
+  }
+   @override
+  void dispose() {
+      _connectivitySubscription.cancel();
+    // Revert back to the default orientation when leaving this screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    super.dispose();
+  }
+
+  // Initialize connectivity
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  // Update connectivity status
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+
+    if (_connectionStatus == ConnectivityResult.none) {
+      _showNoInternetDialog();
+    } else {
+      _dismissNoInternetDialog();
+    }
+  }
+
+  // Show No Internet Dialog
+  void _showNoInternetDialog() {
+    if (!isDialogOpen) {
+      isDialogOpen = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Opss No Internet Connection..'),
+            content: const Text('Please check your connection. You can try reloading the page or explore the available offline content.'),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Reload'),
+                onPressed: () 
+                { fetchData(widget.token);},
+                // onPressed: () async {
+                //   final result = await _connectivity.checkConnectivity();
+                //   _updateConnectionStatus(result);
+                // },
+              ),
+              ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),)
+              
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // Dismiss No Internet Dialog
+  void _dismissNoInternetDialog() {
+    if (isDialogOpen) {
+      fetchData(widget.token);
+      Navigator.of(context, rootNavigator: true).pop();
+      isDialogOpen = false;
+
+    }
   }
 
  

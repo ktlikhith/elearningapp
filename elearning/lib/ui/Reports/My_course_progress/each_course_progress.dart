@@ -75,7 +75,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
 
             return Container(
               constraints: BoxConstraints(
-                maxWidth: maxWidth, // Restrict the maximum width of the container based on screen size
+                maxWidth: maxWidth,// Restrict the maximum width of the container based on screen size
               ),
               padding: EdgeInsets.all(8.0),
               decoration: BoxDecoration(

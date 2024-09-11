@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/tanentlogo_service.dart';
@@ -13,6 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/services.dart';
 
@@ -39,6 +41,11 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+   ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  bool isDialogOpen = false;
+  
   late Future<void> _fetchUserInfoFuture;
   late Future<void> _fetchOtherSectionsFuture;
   String _userName = '';
@@ -51,16 +58,22 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-    _fetchOtherSectionsFuture = _fetchOtherSections();
+   _fetchOtherSectionsFuture = _fetchOtherSections();
+  initConnectivity();
+
+      // Correct type for StreamSubscription<ConnectivityResult>
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       _refreshNotificationCount();
     });
   }
+
 Future<void>  _refreshdata()async{
 
      
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-    _fetchOtherSectionsFuture = _fetchOtherSections();
+   _fetchOtherSectionsFuture = _fetchOtherSections();
     _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       _refreshNotificationCount();
     });
@@ -123,9 +136,77 @@ Future<void>  _refreshdata()async{
   @override
   void dispose() {
     _timer.cancel();
+        _connectivitySubscription.cancel();
     super.dispose();
+  }  
+  // Initialize connectivity
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    return _updateConnectionStatus(result);
   }
 
+  // Update connectivity status
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+
+    if (_connectionStatus == ConnectivityResult.none) {
+      _showNoInternetDialog();
+    } else {
+      _dismissNoInternetDialog();
+    }
+  }
+
+  // Show No Internet Dialog
+  void _showNoInternetDialog() {
+    if (!isDialogOpen) {
+      isDialogOpen = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Opss No Internet Connection..'),
+            content: const Text('Please check your connection. You can try reloading the page or explore the available offline content.'),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Reload'),
+                onPressed:_refreshdata ,
+                // onPressed: () async {
+                //   final result = await _connectivity.checkConnectivity();
+                //   _updateConnectionStatus(result);
+                // },
+              ),
+              ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),)
+              
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  // Dismiss No Internet Dialog
+  void _dismissNoInternetDialog() {
+    if (isDialogOpen) {
+      _refreshdata();
+      Navigator.of(context, rootNavigator: true).pop();
+      isDialogOpen = false;
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -259,6 +340,7 @@ Future<void>  _refreshdata()async{
                 return Center(child: Text('Error loading user info'));
               } else {
                 return Container(
+                  width:MediaQuery.of(context).size.width,
                   color: Colors.grey[100],
                   padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                   child: Column(
@@ -334,7 +416,7 @@ Future<void>  _refreshdata()async{
               ),
             ),
          ),
-    bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
+  bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
         ),
       ),
     );

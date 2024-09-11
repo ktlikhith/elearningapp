@@ -68,13 +68,64 @@ class _ViewerScreenState extends State<ViewerScreen> {
                 },
               )
             : fileExtension == 'mp4' || fileExtension == 'avi' || fileExtension == 'mov'
-                ? Chewie(
+                ?
+                 
+                 Chewie(
                     controller: _chewieController,
                   )
-                : Center(
+                : 
+                  fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png'
+                  ?
+                  ImageDisplay(filePath: widget.filePath,): Center(
                     child: Text('Unsupported file type'),
                   ),
+
+
       ),
     );
   }
 }
+
+   // For getting the local storage path
+
+class ImageDisplay extends StatefulWidget {
+  final String filePath;
+
+  ImageDisplay({required this.filePath});
+
+  @override
+  _ImageDisplayState createState() => _ImageDisplayState();
+}
+
+class _ImageDisplayState extends State<ImageDisplay> {
+  File? _imageFile;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  void _loadImage() async {
+    String fileExtension = widget.filePath.split('.').last.toLowerCase();
+    if (fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png') {
+      setState(() {
+        _imageFile = File(widget.filePath);  // Load the image from the file path
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Image Display")),
+      body: Center(
+        child: _imageFile != null
+            ? Image.file(_imageFile!)  // Display the image
+            : Text("No image found."),
+      ),
+    );
+  }
+}
+
+
