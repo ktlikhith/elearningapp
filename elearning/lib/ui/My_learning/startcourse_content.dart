@@ -51,6 +51,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isDialogOpen = false;
+   int? _expandedIndex;
 
   @override
   void initState() {
@@ -187,48 +188,14 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     }
   }
 
-  Future<Directory> getDownloadDirectory() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final downloadDirectory = Directory('${directory.path}/Download');
-    if (!await downloadDirectory.exists()) {
-      await downloadDirectory.create(recursive: true);
-    }
-    return downloadDirectory;
-  }
 
   String removeHtmlTags(String htmlString) {
     RegExp htmlTagRegExp = RegExp(r'<[^>]*>'); // Regular expression to match HTML tags
     return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
   }
 
-  Future<bool> requestStoragePermission() async {
-    if (!(await Permission.storage.status.isGranted)) {
-      var status = await Permission.storage.request();
-      return status.isGranted;
-    } else {
-      return true; // Permission already granted
-    }
-  }
 
-  Future<void> downloadFile(String url, String fileName) async {
-    try {
-      final hasPermission = await requestStoragePermission();
-      if (!hasPermission) {
-        print('Storage permission not granted inside the downloadFile');
-        return;
-      }
 
-      final dio = Dio();
-      final downloadDirectory = await getDownloadDirectory();
-      final filePath = '${downloadDirectory.path}/$fileName';
-
-      await dio.download(url, filePath);
-
-      print('File downloaded to $filePath');
-    } catch (e) {
-      print('Error downloading file: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -374,15 +341,30 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var section in _courseContentData!)
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
                 onTap: () {
-                   if(section['modules'].length!=0)
-                  setState(() {
-                    section['expanded'] = !(section['expanded'] ?? false);
-                  });
+                  //  if(section['modules'].length!=0)
+                  //   setState(() {
+                  //   section['expanded'] = !(section['expanded'] ?? null);
+                  // });
+                 
+                    if (section['modules'].length != 0) {
+      setState(() {
+        // Collapse all other sections
+        for (var sec in _courseContentData!) {
+          if( sec['expanded']!=section['expanded'] )
+          sec['expanded'] = false;
+        }
+        // Expand the current section
+        section['expanded'] = !(section['expanded'] ?? false);
+      });
+    }
+                
+                  
                 },
                 child: Container(
                   decoration: BoxDecoration(
