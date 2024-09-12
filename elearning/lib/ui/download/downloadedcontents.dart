@@ -69,7 +69,7 @@ class _CourseDownloadedState extends State<CourseDownloaded> {
                   final downloadDate = file['downloadDate'] ?? 'Unknown Date';
 
                   return Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0,horizontal: 10),
                     child: Dismissible(
                       key: Key(fileName),
                       direction: DismissDirection.endToStart,
@@ -83,35 +83,46 @@ class _CourseDownloadedState extends State<CourseDownloaded> {
                       ),
                       child: GestureDetector(
                         onTap: (){
-                      ViewerScreen(filePath: filePath,);
+                   Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ViewerScreen(filePath: filePath),
+    ),
+  );
                         },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 0.0),
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(0.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             border: Border.all(color: Colors.grey),
-                            color: Theme.of(context).hintColor.withOpacity(0.8),
+                            color: Theme.of(context).cardColor,
                           ),
                           child: Row(
                             children: [
                               Expanded(
-                                flex: 3,
+                                flex: 6,
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        _getIconForFile(filePath),
-                                        size: 44.0,
-                                        color: Theme.of(context).cardColor,
-                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                       child:Image.asset(
+                                             _getIconForFile(filePath),
+                                           width: 32,
+                                           height: 32,
+                                           fit: BoxFit.cover,
+                                         ),
+                                      // Icon(
+                                      //   _getIconForFile(filePath),
+                                      //   size: 44.0,
+                                      //   color: Theme.of(context).cardColor,
+                                      // ),
                                     ),
                                     const SizedBox(width: 8.0),
                                     Expanded(
                                       child: Text(
                                         '$fileName\n',
-                                        style:  TextStyle(fontSize: 16.0,color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold),
+                                        style:  TextStyle(fontSize: 16.0,color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         
@@ -129,11 +140,11 @@ class _CourseDownloadedState extends State<CourseDownloaded> {
                                     Column(
                                       children: [
                                         IconButton(
-                                          icon:  Icon(Icons.info_outline, color: Theme.of(context).cardColor),
+                                          icon:  Icon(Icons.info_outline, color: Theme.of(context).shadowColor),
                                           onPressed: () => _showFileInfo(context, filePath, downloadDate),
                                         ),
                                           IconButton(
-                                      icon: const Icon(Icons.delete_forever, color: Color.fromARGB(255, 243, 33, 33)),
+                                      icon:  Icon(Icons.delete_forever, color:Theme.of(context).shadowColor ),
                                       onPressed: () => _deleteFile(context,filePath, fileName),
                                     ),
                                       ],
@@ -256,17 +267,17 @@ await _updateMetadata(fileName);
     return extension(filePath).replaceAll('.', '').toUpperCase();
   }
 
-  IconData _getIconForFile(String filePath) {
+  String _getIconForFile(String filePath) {
     final fileExtension = extension(filePath).toLowerCase();
     switch (fileExtension) {
       case '.mp4':
       case '.avi':
       case '.mov':
-        return Icons.play_circle_fill;
+        return 'assets/Activity icons/Video.png';
       case '.pdf':
-        return Icons.picture_as_pdf;
+        return 'assets/Activity icons/pdf-96 (1).png';
       default:
-        return Icons.insert_drive_file;
+        return 'assets/Activity icons/file.png';
     }
   }
 }

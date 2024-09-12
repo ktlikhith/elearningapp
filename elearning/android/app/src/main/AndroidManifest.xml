@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true"
-        android:icon="@drawable/eapplogo">
+        android:icon="@mipmap/ic_launcher">
 
       
 

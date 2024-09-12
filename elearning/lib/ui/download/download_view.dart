@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'dart:io';
@@ -17,6 +18,7 @@ class _ViewerScreenState extends State<ViewerScreen> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
 
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +33,7 @@ class _ViewerScreenState extends State<ViewerScreen> {
         looping: true,
       );
     }
+  
   }
 
   @override
@@ -76,7 +79,10 @@ class _ViewerScreenState extends State<ViewerScreen> {
                 : 
                   fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'png'
                   ?
-                  ImageDisplay(filePath: widget.filePath,): Center(
+                  ImageDisplay(filePath: widget.filePath,)
+                  : fileExtension=='pptx'? 
+  slides(filePath: widget.filePath,)
+  : Center(
                     child: Text('Unsupported file type'),
                   ),
 
@@ -123,6 +129,51 @@ class _ImageDisplayState extends State<ImageDisplay> {
         child: _imageFile != null
             ? Image.file(_imageFile!)  // Display the image
             : Text("No image found."),
+      ),
+    );
+  }
+}
+
+
+class slides extends StatelessWidget {
+  final String filePath;
+
+  slides({required this.filePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("View Presentation"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            await _openFile(context, filePath);
+          },
+          child: const Text('Open PowerPoint'),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openFile(BuildContext context, String filePath) async {
+    final result = await OpenFilex.open(filePath);
+
+    String message;
+
+    // Checking the result type to determine if the file was opened or not
+    if (result.type == ResultType.done) {
+      message = 'File opened successfully!';
+    } else {
+      message = 'Error: ${result.message}';
+    }
+
+    // Display the result in a SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
       ),
     );
   }

@@ -141,7 +141,7 @@ class SplashScreen extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Center(
-        child: Image.asset('assets/images/eapplogo.png', width: MediaQuery.of(context).size.height * 0.1),
+        child: Image.asset('assets/logo/eapplogo.jpg', width: MediaQuery.of(context).size.height * 0.15),
       ),
     );
   }
