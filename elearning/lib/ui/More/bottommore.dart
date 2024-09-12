@@ -315,43 +315,89 @@ class _MyMorePageState extends State<MyMorePage> {
     super.initState();
     _fetchProfileData(widget.token);
   }
- void ShowLogoutdialog(BuildContext context){
-  showDialog(context: context, 
-  builder:(context) {
-    return AlertDialog(
-      title: Center(
-        child: Text('Are you sure you  want to logout?',textAlign:TextAlign.center, style: GoogleFonts.lato(
-                 fontSize: 20,fontWeight: FontWeight.bold
-                ),
+  void ShowLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
-      ),
-     
-      actions: [
-         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-           children: [
-             TextButton(
-              
-              onPressed: (){
-                
-                  Navigator.of(context).pushReplacementNamed(RouterManger.landingpage);
+        titlePadding: EdgeInsets.all(30),
+        title: Center(
+          child: Text(
+            'Are you sure you want to logout?',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.lato(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        contentPadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Colors.grey), // Top border line
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed('landingPage');
                       _clearToken();
-                     
-              }, child: Text('Yes, Logout',style: TextStyle(fontSize: 18,color: Theme.of(context).cardColor,fontWeight: FontWeight.bold)),),
-              TextButton(
-          onPressed: (){
-            
-            Navigator.of(context).pop();
-          }, child: Text('No',style: TextStyle(fontSize: 18,color: Theme.of(context).cardColor,fontWeight: FontWeight.bold)),),
-           ],
-         ),
-           
-      ],
-    );
-    
-  },);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(color: Colors.grey), // Vertical divider
+                        ),
+                      ),
+                      child: Text(
+                        'Yes, Logout',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        'No',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
-
   Future<void> _clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
@@ -460,7 +506,7 @@ class _MyMorePageState extends State<MyMorePage> {
               text: 'Logout',
               onTap: () {
             
-                ShowLogoutdialog(context);
+                ShowLogoutDialog(context);
               
               }
             ),

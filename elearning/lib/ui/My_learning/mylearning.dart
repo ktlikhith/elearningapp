@@ -335,8 +335,8 @@ class _MyLearningPageState extends State<MyLearningPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: RefreshIndicator(
           onRefresh: ()async{
-            setState(()async {
-                  await reportProvider.fetchData();
+            setState(() {
+                   reportProvider.fetchData();
             });
 
          

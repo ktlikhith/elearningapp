@@ -86,12 +86,23 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Upcoming Events',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    children: [ SizedBox(
+                                width: 35,
+                                height: 30,
+                                child: Image.asset(
+                                  'assets/upcoming and continue learning (1)/darkblue.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),SizedBox(width: 10,),
+                      Text(
+                        'Upcoming Events',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 15.0),
