@@ -181,15 +181,21 @@ Future<void>  _refreshdata()async{
             title: const Text('Opss No Internet Connection..'),
             content: const Text('Please check your connection. You can try reloading the page or explore the available offline content.'),
             actions: <Widget>[
-              ElevatedButton(
-                child: const Text('Reload'),
-                onPressed:_refreshdata ,
-                // onPressed: () async {
-                //   final result = await _connectivity.checkConnectivity();
-                //   _updateConnectionStatus(result);
-                // },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    child: const Text('Reload'),
+                    onPressed:_refreshdata ,
+                    // onPressed: () async {
+                    //   final result = await _connectivity.checkConnectivity();
+                    //   _updateConnectionStatus(result);
+                    // },
+                  ),
+                                ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),),
+                ],
               ),
-              ElevatedButton(onPressed:(){  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);}, child:  const Text('Offline Content'),)
+
               
             ],
           );

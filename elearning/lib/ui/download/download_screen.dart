@@ -487,7 +487,7 @@ Widget build(BuildContext context) {
           final files = snapshot.data!;
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(vertical: 0.0,horizontal: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: files.map((courseData) {
@@ -500,7 +500,7 @@ Widget build(BuildContext context) {
                      _navigateToDownloadcontentScreen(context,courseName,fileList);
                     },
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      margin: const EdgeInsets.symmetric(vertical: 5.0),
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,

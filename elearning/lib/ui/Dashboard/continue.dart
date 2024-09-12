@@ -262,12 +262,23 @@ Widget _buildSection(BuildContext context, CourseData course) {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Continue Learning',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [ SizedBox(width: 10,),SizedBox(
+                                width: 30,
+                                height:30,
+                                child: Image.asset(
+                                'assets/upcoming and continue learning (1)/continue learning/video-lesson (1).png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),SizedBox(width: 10,),
+                  Text(
+                    'Continue Learning',
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             GestureDetector(
@@ -277,7 +288,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                   MaterialPageRoute(
                     builder: (context) => ContinueWatchingScreen(
                       token: widget.token,
-                      initialCourses: _courses,
+                      
                     ),
                   ),
                 );

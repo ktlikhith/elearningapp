@@ -1,16 +1,20 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ContinueWatchingScreen extends StatefulWidget {
   final String token;
-  final List<CourseData> initialCourses;
 
-  const ContinueWatchingScreen({Key? key, required this.token, required this.initialCourses})
+
+
+   ContinueWatchingScreen({Key? key, required this.token, })
       : super(key: key);
 
   @override
@@ -18,34 +22,31 @@ class ContinueWatchingScreen extends StatefulWidget {
 }
 
 class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
-  late List<CourseData> courses;
+     List<CourseData> courses=[];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    courses = widget.initialCourses;
-    if (courses.isEmpty) {
-      _fetchCourses();
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
+_fetchCourses();
+   
+  
   }
 
   Future<void> _fetchCourses() async {
     try {
-      // Simulating network request
-      await Future.delayed(Duration(seconds: 2));
-      // Fetch courses here
-      // courses = await fetchCourses(widget.token);
-
-      setState(() {
-        courses = []; // Assign the fetched courses here
-        isLoading = false;
-      });
-    } catch (e) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('homepageData')) {
+      final homepageData = prefs.getString('homepageData');
+      final decodedData = jsonDecode(homepageData!);
+      final List<dynamic> courseList = decodedData['courses'];
+      final List<CourseData> courses1 = courseList.map((course) => CourseData.fromJson(course)).toList();
+     setState(() {
+       courses=courses1;
+     });
+    }else{
+      _fetchHomePageData();
+    }} catch (e) {
       setState(() {
         isLoading = false;
       });
@@ -53,6 +54,27 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
       print('Failed to load courses: $e');
     }
   }
+   Future<void> _fetchHomePageData() async {
+    try {
+      final HomePageData response = await HomePageService.fetchHomePageData(widget.token);
+      final List<CourseData> courses1 = response.allCourses;
+      setState(() {
+        courses = courses1;
+        isLoading = false;
+      });
+
+      final encodedData = jsonEncode({'courses': courses});
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('homepageData', encodedData);
+    } catch (e) {
+      print('Error fetching homepage data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +92,13 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView.builder(
-  itemCount: courses.isEmpty ? 5 : courses.length, // Use 5 shimmer items if courses list is empty
+  itemCount: courses.isEmpty ? 10 : courses.length, // Use 5 shimmer items if courses list is empty
   itemBuilder: (context, index) {
-    if (courses.isEmpty) {
+    if (courses.isEmpty||isLoading) {
+     
       return _buildShimmerItem();
     }
+    
     final CourseData course = courses[index];
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

@@ -213,6 +213,8 @@ import 'dart:io';
 
 
 import 'package:elearning/routes/routes.dart';
+import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -312,7 +314,8 @@ print(metadata);
    Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,String imgurl,{String? expectedChecksum}) async {
     try {
       final hasPermission = await requestStoragePermission(context);
-      if (!hasPermission) {
+      final hasnotificationpermistion=await requestNotificationPermission(context);
+      if (!hasPermission&&!hasnotificationpermistion) {
         print('Storage permission not granted for file download');
         return;
       }
@@ -544,4 +547,65 @@ print(metadata);
 
     return downloadDirectory;
   }
+
+//   Future<void> openNotificationSettings(context) async {
+//   if (Theme.of(context).platform == TargetPlatform.android) {
+//     // Get the package name
+//     PackageInfo packageInfo = await PackageInfo.fromPlatform();
+//     String packageName = packageInfo.packageName;
+
+//     // Use platform channel to open the settings
+//     const platform = MethodChannel('com.example.elearning.app/settings');
+//     try {
+//       await platform.invokeMethod('openNotificationSettings', packageName);
+//     } on PlatformException catch (e) {
+//       print("Failed to open settings: '${e.message}'.");
+//     }
+//   } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+//     // For iOS, this will open the app's settings page
+//     const platform = MethodChannel('com.example.elearning.app/settings');
+//     await platform.invokeMethod('openAppSettings');
+//   }
+// }
+
+
+Future<bool> requestNotificationPermission(context) async {
+  // Step 1: Pre-check if notifications are already enabled
+  var status = await Permission.notification.status;
+  if (status.isGranted) {
+    // Notifications are already enabled
+    return true;
+  }
+
+  // Step 2: Open app settings to allow notifications if not granted
+  if (await openNotificationSettings(context)) {
+    // Step 3: Post-check the notification permission after returning from settings
+    var postStatus = await Permission.notification.status;
+    return postStatus.isGranted;
+  } else {
+    // Failed to open settings or user did not grant permission
+    return false;
+  }
+}
+
+Future<bool> openNotificationSettings(context) async {
+  // Check platform
+  if (Theme.of(context).platform == TargetPlatform.android) {
+    // Android: Open notification settings for the app
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    const platform = MethodChannel('com.example.elearning/settings');
+    try {
+      await platform.invokeMethod('openNotificationSettings', packageInfo.packageName);
+      return true;  // Assuming the user opened the settings
+    } on PlatformException {
+      return false; // Failed to open settings
+    }
+  } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+    // iOS: Open the app settings directly
+    bool opened = await openAppSettings(); // from permission_handler
+    return opened;
+  }
+
+  return false;
+}
 }
