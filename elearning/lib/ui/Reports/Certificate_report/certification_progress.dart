@@ -293,13 +293,14 @@ class CourseCard extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
+           // mainAxisAlignment: MainAxisAlignment.center,            
             crossAxisAlignment: CrossAxisAlignment.center,
+
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.15),
-                    child: Container(
+              Center(
+                child: Row(
+                  children: [
+                    Container(
                       
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
@@ -309,11 +310,34 @@ class CourseCard extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
+                             Padding(
+                               padding: const EdgeInsets.only(right: 5.0),
+                               child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                 child: Image.network(
+                                                       
+                                                           '${course.courseImg}?token=${token}',
+                                                           height: 45,
+                                                           width: 70,
+                                                           fit: BoxFit.fill,
+                                                         
+                                                           
+                                                           errorBuilder: (context, error, stackTrace) {
+                                                             return Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                      height: 45,
+                                                           width: 70,
+                                  fit: BoxFit.fill,
+                                                             );
+                                                           },
+                                                         ),
+                               ),
+                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.44,
+                              width: MediaQuery.of(context).size.width*0.55,
                               child: Text(
                                 course.name,
-                              maxLines: 1,
+                              maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 18.0,
@@ -322,7 +346,7 @@ class CourseCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                              SizedBox(width: 3),
+                              SizedBox(width: 0),
                                 Stack(children: [ Padding(
                                   padding: const EdgeInsets.only(top: 10,left: 10),
                                   child: Image.asset("assets/Reportsicon/cert/3d-fluency-contract.png",width: 20,),
@@ -337,15 +361,14 @@ class CourseCard extends StatelessWidget {
                         
                       ),
                     ),
-                  ),
-                  
-              
+                    
                 
-                ],
+                  
+                  ],
+                ),
               ),
               SizedBox(height: 8.0),
-              Padding(
-                padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.105),
+              Center(
                 child: Text(
                   'Issued : ${course.awarddate}',
                   style: TextStyle(

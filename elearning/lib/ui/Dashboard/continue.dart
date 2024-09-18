@@ -267,7 +267,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                                 width: 30,
                                 height:30,
                                 child: Image.asset(
-                                'assets/upcoming and continue learning (1)/continue learning/video-lesson (1).png',
+                                'assets/upcoming and continue learning (1)/continue learning/video-lesson.png',
                                   fit: BoxFit.fill,
                                 ),
                               ),SizedBox(width: 10,),

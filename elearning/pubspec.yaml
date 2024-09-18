@@ -131,7 +131,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo/eapplogo.jpg"
+  image_path: "assets/logo/eapplogo.png"
   min_sdk_android: 21
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -164,9 +164,9 @@ flutter:
     - assets/Reportsicon/cert/
     - assets/Reportsicon/Downloads/
     - assets/Reportsicon/reports/
-    - assets/logo/eapplogo.jpg
-    - assets/upcoming and continue learning (1)/darkblue.png
-    - assets/upcoming and continue learning (1)/continue learning/video-lesson (1).png
+    - assets/logo/eapplogo.png
+    - assets/upcoming and continue learning (1)/upc (2).png
+    - assets/upcoming and continue learning (1)/continue learning/video-lesson.png
    
     - assets/images/roulette-center-300.png
    

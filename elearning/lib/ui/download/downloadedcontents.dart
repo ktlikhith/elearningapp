@@ -140,11 +140,11 @@ class _CourseDownloadedState extends State<CourseDownloaded> {
                                     Column(
                                       children: [
                                         IconButton(
-                                          icon:  Icon(Icons.info_outline, color: Theme.of(context).shadowColor),
+                                          icon:  Icon(Icons.info_outline, color: Theme.of(context).highlightColor),
                                           onPressed: () => _showFileInfo(context, filePath, downloadDate),
                                         ),
                                           IconButton(
-                                      icon:  Icon(Icons.delete_forever, color:Theme.of(context).shadowColor ),
+                                      icon:  Icon(Icons.delete_forever, color:Theme.of(context).highlightColor ),
                                       onPressed: () => _deleteFile(context,filePath, fileName),
                                     ),
                                       ],
