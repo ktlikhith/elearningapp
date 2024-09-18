@@ -91,7 +91,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                                 width: 35,
                                 height: 30,
                                 child: Image.asset(
-                                  'assets/upcoming and continue learning (1)/darkblue.png',
+                                  'assets/upcoming and continue learning (1)/upc (2).png',
                                   fit: BoxFit.fill,
                                 ),
                               ),SizedBox(width: 10,),
