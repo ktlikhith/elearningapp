@@ -120,7 +120,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
             child: 
                  SizedBox(
       height: 55,
-      width: 90,
+          width: MediaQuery.of(context).size.width*0.22,
       child: Stack(
         children: [
          
@@ -129,7 +129,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                       
                           '${Constants.baseUrl}${learningPath.imageUrl}',
                           height: 55,
-                          width: 90,
+                          width: MediaQuery.of(context).size.width*0.25,
                           fit: BoxFit.fill,
                         
                           

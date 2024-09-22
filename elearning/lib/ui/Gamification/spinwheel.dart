@@ -327,6 +327,7 @@ class _SpinWheelState extends State<SpinWheel> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -476,7 +477,7 @@ class _SpinWheelState extends State<SpinWheel> {
         points: label,
       );
       
-      label=='00'?showMotivationalDialog(context):_showCongratsDialog(label,widget.onRefresh);
+      label=='00'?showMotivationalDialog(context,widget.onRefresh):_showCongratsDialog(label,widget.onRefresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -735,12 +736,20 @@ void _showCongratsDialog(String label,Function onRefresh) {
 }
 
 
-void showMotivationalDialog(BuildContext context) {
+void showMotivationalDialog(BuildContext context,Function onRefresh) {
   showDialog(
     context: context,
      barrierDismissible: true,
     builder: (BuildContext context) {
-      return AlertDialog(
+      return WillPopScope(
+        onWillPop: () async {
+          if(isconfettiplaying){
+            confettiController.stop();
+          }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+            onRefresh();
+          return false;
+        },
+        child:AlertDialog(
           backgroundColor: Color.fromARGB(127, 0, 0, 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -780,10 +789,12 @@ void showMotivationalDialog(BuildContext context) {
           TextButton(
             child: Text("OK"),
             onPressed: () {
+              onRefresh();
               Navigator.of(context).pop();
             },
           ),
         ],
+        ),
       );
     },
   );

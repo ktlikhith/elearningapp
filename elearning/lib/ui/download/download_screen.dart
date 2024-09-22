@@ -500,6 +500,7 @@ Widget build(BuildContext context) {
                      _navigateToDownloadcontentScreen(context,courseName,fileList);
                     },
                     child: Container(
+                      width: MediaQuery.of(context).size.width*0.95,
                       margin: const EdgeInsets.symmetric(vertical: 5.0),
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
@@ -518,7 +519,7 @@ Widget build(BuildContext context) {
                               cimg != null
                               ? Image.file(
                                   File(cimg),
-                                  width: 130,
+                                  width: MediaQuery.of(context).size.width*0.325,
                                   height: 70,
                                   fit: BoxFit.fill,
                                 )
@@ -530,14 +531,19 @@ Widget build(BuildContext context) {
                                 
                                  Padding(
                                    padding: const EdgeInsets.only(left: 10.0),
-                                   child: Text(
-                                                                   courseName,
-                                                                   style: TextStyle(
-                                                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).highlightColor,
+                                   child: Container(
+                                    width: MediaQuery.of(context).size.width*0.5,
+                                     child: Text(
+                                                                     courseName,
+                                                                     overflow: TextOverflow.clip,
+                                                                     maxLines: 2,
+                                                                     style: TextStyle(
+                                                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).highlightColor,
+                                                                     ),
                                                                    ),
-                                                                 ),
+                                   ),
                                  ),
                             ],
                           ),
