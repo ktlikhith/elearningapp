@@ -306,12 +306,14 @@ class _SpinWheelState extends State<SpinWheel> {
 
   @override
   void initState() {
+  
     super.initState();
     widget.rewardDataFuture.then((rewardData) {
       setState(() {
         spinButton = rewardData.spinButton;
       });
     });
+   
     ///listen to states: play the confitt animation
     confettiController.addListener((){
       setState(() {
@@ -319,6 +321,14 @@ class _SpinWheelState extends State<SpinWheel> {
       });
     });
   }
+   void refresh() async{
+       await  widget.onRefresh();
+       widget.rewardDataFuture.then((rewardData) {
+      setState(() {
+        spinButton = rewardData.spinButton;
+      });
+    });
+    }
 
   @override
   void dispose() {
@@ -477,7 +487,7 @@ class _SpinWheelState extends State<SpinWheel> {
         points: label,
       );
       
-      label=='00'?showMotivationalDialog(context,widget.onRefresh):_showCongratsDialog(label,widget.onRefresh);
+      label=='00'?showMotivationalDialog(context,refresh):_showCongratsDialog(label,refresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -522,7 +532,7 @@ class _SpinWheelState extends State<SpinWheel> {
   //     },
   //   );
   // }
-void _showCongratsDialog(String label,Function onRefresh) {
+void _showCongratsDialog(String label,Function refresh) {
   showDialog(
     context: context,
     barrierDismissible: true, // Allows tapping outside the dialog to dismiss it
@@ -532,7 +542,7 @@ void _showCongratsDialog(String label,Function onRefresh) {
           if(isconfettiplaying){
             confettiController.stop();
           }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
-            onRefresh();
+            refresh();
           return false;
         },
         child: GestureDetector(
@@ -542,7 +552,7 @@ void _showCongratsDialog(String label,Function onRefresh) {
             confettiController.stop();
           }  
             Navigator.of(context).pop();
-            onRefresh();
+            refresh();
            
         
           },
@@ -736,7 +746,7 @@ void _showCongratsDialog(String label,Function onRefresh) {
 }
 
 
-void showMotivationalDialog(BuildContext context,Function onRefresh) {
+void showMotivationalDialog(BuildContext context,Function refresh) {
   showDialog(
     context: context,
      barrierDismissible: true,
@@ -746,7 +756,7 @@ void showMotivationalDialog(BuildContext context,Function onRefresh) {
           if(isconfettiplaying){
             confettiController.stop();
           }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
-            onRefresh();
+            refresh();
           return false;
         },
         child:AlertDialog(
@@ -789,7 +799,7 @@ void showMotivationalDialog(BuildContext context,Function onRefresh) {
           TextButton(
             child: Text("OK"),
             onPressed: () {
-              onRefresh();
+              refresh();
               Navigator.of(context).pop();
             },
           ),
