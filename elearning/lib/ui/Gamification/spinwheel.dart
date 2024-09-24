@@ -541,18 +541,21 @@ void _showCongratsDialog(String label,Function refresh) {
         onWillPop: () async {
           if(isconfettiplaying){
             confettiController.stop();
-          }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
-            refresh();
+          } 
+            await refresh();
+              Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+         
           return false;
         },
         child: GestureDetector(
           
-          onTap: () {
+          onTap: ()async {
              if(isconfettiplaying){
             confettiController.stop();
           }  
+            await refresh();
             Navigator.of(context).pop();
-            refresh();
+          
            
         
           },
@@ -755,8 +758,10 @@ void showMotivationalDialog(BuildContext context,Function refresh) {
         onWillPop: () async {
           if(isconfettiplaying){
             confettiController.stop();
-          }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
-            refresh();
+          }   
+           await refresh();
+              Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+          
           return false;
         },
         child:AlertDialog(
@@ -798,8 +803,8 @@ void showMotivationalDialog(BuildContext context,Function refresh) {
         actions: <Widget>[
           TextButton(
             child: Text("OK"),
-            onPressed: () {
-              refresh();
+            onPressed: () async{
+              await refresh();
               Navigator.of(context).pop();
             },
           ),

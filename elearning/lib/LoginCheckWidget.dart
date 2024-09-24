@@ -139,10 +139,22 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Center(
-        child: Image.asset('assets/logo/eapplogo.png', width: MediaQuery.of(context).size.height * 0.15),
-      ),
-    );
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [  Color(0xFF0041C7), // Start color with opacity
+                            Color(0xFF0D85D8), // Mid color with opacity
+                            Color(0xFF3ACBE8),],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
+                            
+          ),
+          child: Column(
+            mainAxisAlignment:MainAxisAlignment.center,
+            children: [
+            Image.asset('assets/logo/eapplogo.png', width: MediaQuery.of(context).size.height * 0.18),
+            
+            
+          ],),
+        );
   }
 }
