@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:elearning/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class RewardService {
+   final _rewardStreamController = StreamController<RewardData>.broadcast();
+
+  Stream<RewardData> get rewardStream => _rewardStreamController.stream;
   Future<RewardData> getUserRewardPoints(String token) async {
     try {
       final userInfo = await SiteConfigApiService.getUserId(token);
@@ -18,7 +22,7 @@ class RewardService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final rewardData = RewardData.fromJson(jsonResponse['reward_data']);
-       
+        _rewardStreamController.sink.add(rewardData);
         return rewardData;
       } else {
         throw Exception('Failed to load user reward points');
@@ -27,6 +31,14 @@ class RewardService {
       print('Error: $e');
       throw Exception('Failed to load user reward points');
     }
+  }
+    // Function to update points when user earns more points in GameScreen
+  void updateUserPoints(RewardData updatedRewardData) {
+    _rewardStreamController.sink.add(updatedRewardData);
+  }
+
+  void dispose() {
+    _rewardStreamController.close();
   }
 }
 

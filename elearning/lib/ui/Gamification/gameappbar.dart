@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/services/reward_service.dart';
+import 'package:elearning/services/rewarddata_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
@@ -13,6 +14,7 @@ import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/services.dart';
 import 'dart:developer' as developer;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class GamificationPage extends StatefulWidget {
   final String token;
@@ -39,6 +41,7 @@ class _GamificationPageState extends State<GamificationPage> {
     super.initState();
     _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
       initConnectivity();
+            
 
       // Correct type for StreamSubscription<ConnectivityResult>
     _connectivitySubscription =
@@ -47,6 +50,7 @@ class _GamificationPageState extends State<GamificationPage> {
    SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+     
   }
   @override
   void dispose() {
@@ -63,6 +67,7 @@ class _GamificationPageState extends State<GamificationPage> {
    
   // Initialize connectivity
   Future<void> initConnectivity() async {
+
     late ConnectivityResult result;
     try {
       result = await _connectivity.checkConnectivity();
@@ -130,11 +135,15 @@ class _GamificationPageState extends State<GamificationPage> {
     }
   }
   Future<void> _refresh()async{
+    
+
+   
     // _spinWheelKey.currentState?.refresh();
     setState(() {
+      
          _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
     });
-
+     
   }
 
   @override
@@ -198,7 +207,7 @@ class _GamificationPageState extends State<GamificationPage> {
                         SizedBox(
                           height: 400,
                           width: MediaQuery.of(context).size.width * 0.7,
-                          child: SpinWheel(token: widget.token, rewardDataFuture: _rewardDataFuture, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh,),
+                          child: SpinWheel(token: widget.token, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh,),
                         ),
                         SizedBox(height: 20),
                   //       ElevatedButton(
