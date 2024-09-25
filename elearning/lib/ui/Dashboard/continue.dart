@@ -124,7 +124,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
           child: Material(
             borderRadius: BorderRadius.circular(8.0),
           
-          //  BoxDecoration(border: Border.all(color: Colors.black))
+           // BoxDecoration(border: Border.all(color: Colors.black))
             color: Theme.of(context).cardColor,
             child: InkWell(
               onTap: () => showMLPopup(
@@ -145,6 +145,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                     height: cardHeight * 0.6, // Adjust image height
                     width: double.infinity,
                     decoration: BoxDecoration(
+                      border:Border.all(color: Theme.of(context).cardColor),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0),
@@ -158,19 +159,23 @@ Widget _buildSection(BuildContext context, CourseData course) {
                         topLeft: Radius.circular(6.0),
                         topRight: Radius.circular(6.0),
                         
+                        
                       ),
-                      child: Image.network(
-                        course.getImageUrlWithToken(widget.token),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Return a default image when loading fails
-                          return Image.asset(
-                            'assets/images/coursedefaultimg.jpg',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          );
-                        },
+                      child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: Image.network(
+                          course.getImageUrlWithToken(widget.token),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                            // Return a default image when loading fails
+                            return Image.asset(
+                              'assets/images/coursedefaultimg.jpg',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),

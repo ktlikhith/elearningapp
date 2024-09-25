@@ -312,7 +312,7 @@ class _SpinWheelState extends State<SpinWheel> {
   
     super.initState();
       rewardService = RewardService();
-    rewardService.getUserRewardPoints(widget.token);
+  
     //  load();
   
     ///listen to states: play the confitt animation
@@ -393,7 +393,9 @@ class _SpinWheelState extends State<SpinWheel> {
     
       // final rewardProvider = Provider.of<RewardProvider>(context,listen: false);
       
-        
+           
+  
+  
    
         
     return

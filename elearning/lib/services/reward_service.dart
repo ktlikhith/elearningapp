@@ -32,10 +32,7 @@ class RewardService {
       throw Exception('Failed to load user reward points');
     }
   }
-    // Function to update points when user earns more points in GameScreen
-  void updateUserPoints(RewardData updatedRewardData) {
-    _rewardStreamController.sink.add(updatedRewardData);
-  }
+  
 
   void dispose() {
     _rewardStreamController.close();

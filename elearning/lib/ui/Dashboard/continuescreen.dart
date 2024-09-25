@@ -103,6 +103,7 @@ _fetchCourses();
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(
+        
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(color: Theme.of(context).primaryColor),
       ),
