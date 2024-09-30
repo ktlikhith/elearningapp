@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,6 +197,12 @@ class _SplashScreenState extends State<SplashScreen>
           alignment: Alignment.center,
           children: [
             // Circular wave effect
+            Image.asset(
+                  'assets/logo/splashbg.webp',
+                  fit:BoxFit.cover,
+                //  width: double.infinity,
+                  height: double.infinity,
+                ),
             Container(
               width: _animation.value, // Expands over time
               height: _animation.value,

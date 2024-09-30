@@ -45,6 +45,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isDialogOpen = false;
+ 
   
   late Future<void> _fetchUserInfoFuture;
   late Future<void> _fetchOtherSectionsFuture;
@@ -52,21 +53,22 @@ class _DashboardPageState extends State<DashboardPage> {
   String _userprofile = '';
   Uint8List? _tenantLogoBytes;
   int _notificationCount = 0;
-  late Timer _timer;
+  // late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
    _fetchOtherSectionsFuture = _fetchOtherSections();
+   
   initConnectivity();
 
       // Correct type for StreamSubscription<ConnectivityResult>
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      _refreshNotificationCount();
-    });
+    // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    //   _refreshNotificationCount();
+    // });
   }
 
 Future<void>  _refreshdata()async{
@@ -74,14 +76,15 @@ Future<void>  _refreshdata()async{
      
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
    _fetchOtherSectionsFuture = _fetchOtherSections();
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      _refreshNotificationCount();
-    });
+    // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    //   _refreshNotificationCount();
+    // });
     setState(() {});
         
       }
 
   Future<void> _fetchUserInfo(String token) async {
+  
     try {
       // Fetch data in parallel
       final results = await Future.wait([
@@ -121,6 +124,15 @@ Future<void>  _refreshdata()async{
     // This method can be used to load data for other sections if necessary
     await Future.delayed(Duration(seconds: 1)); // Simulating network delay
   }
+  Stream<int> noticount() async*{
+     try {
+      final count = await NotificationCount.getUnreadNotificationCount(widget.token);
+      yield count;
+    } catch (e) {
+      print('Error refreshing notification count: $e');
+    }
+
+  }
 
   Future<void> _refreshNotificationCount() async {
     try {
@@ -135,7 +147,7 @@ Future<void>  _refreshdata()async{
 
   @override
   void dispose() {
-    _timer.cancel();
+    // _timer.cancel();
         _connectivitySubscription.cancel();
     super.dispose();
   }  
@@ -291,23 +303,31 @@ Future<void>  _refreshdata()async{
                       );
                     },
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: Text(
-                        '$_notificationCount',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                  StreamBuilder<int>(
+                    stream: noticount(),
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData){
+                      return Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red,
+                          ),
+                          child: Text(
+                            '$_notificationCount',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                      }
+                      else return Container();
+                    }
                   ),
                 ],
               ),
