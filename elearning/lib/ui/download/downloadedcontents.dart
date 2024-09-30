@@ -218,34 +218,38 @@ await _updateMetadata(fileName);
     String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
     String formattedTime = DateFormat('hh:mm a').format(parsedDate);
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
+     useSafeArea:true,
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'File Information',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12.0),
-                  Text('Size: $fileSize'),
-                  const SizedBox(height: 8.0),
-                  Text('Format: $fileExtension'),
-                  const SizedBox(height: 8.0),
-                  Text('Downloaded Date: $formattedDate'),
-                  const SizedBox(height: 8.0),
-                  Text('Downloaded Time: $formattedTime'),
-                ],
+        return Center(
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),  color: Colors.white,),
+          
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'File Information',
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12.0),
+                    Text('Size: $fileSize'),
+                    const SizedBox(height: 8.0),
+                    Text('Format: $fileExtension'),
+                    const SizedBox(height: 8.0),
+                    Text('Downloaded Date: $formattedDate'),
+                    const SizedBox(height: 8.0),
+                    Text('Downloaded Time: $formattedTime'),
+                  ],
+                ),
               ),
             ),
           ),
