@@ -484,7 +484,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
           children: [
             Container(
                width: MediaQuery.of(context).size.width * 1.0,
-               height: MediaQuery.of(context).size.height * 0.22,
+               height: MediaQuery.of(context).size.height * 0.165,
               decoration: BoxDecoration(
                 border: Border.all(color: Theme.of(context).cardColor),
                 borderRadius: BorderRadius.circular(8.0),

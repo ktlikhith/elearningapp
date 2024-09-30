@@ -108,11 +108,11 @@ _fetchCourses();
         side: BorderSide(color: Theme.of(context).primaryColor),
       ),
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).hintColor.withOpacity(0.2),
         child: ListTile(
           contentPadding: EdgeInsets.all(8.0),
           leading: Container(
-            width: 100.0,
+            width: MediaQuery.of(context).size.width*0.27,
             height: 120.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -129,7 +129,7 @@ _fetchCourses();
                 return Image.asset(
                   'assets/images/coursedefaultimg.jpg',
                   fit: BoxFit.cover,
-                  width: double.infinity,
+                  width: MediaQuery.of(context).size.width*0.27,
                 //  height: double.infinity,
                 );
               },
@@ -150,7 +150,7 @@ _fetchCourses();
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[500],
+                  color: Colors.grey[600],
                 ),
               ),
               Text(
@@ -158,7 +158,7 @@ _fetchCourses();
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[500],
+                  color: Colors.grey[600],
                 ),
               ),
             ],

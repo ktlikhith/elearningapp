@@ -256,13 +256,11 @@ class _MLPopupState extends State<MLPopup> {
           backgroundColor: Theme.of(context).secondaryHeaderColor,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          
+         // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: Icon(FontAwesomeIcons.play,size: 15,color:Theme.of(context).highlightColor ,),
-            ),
+            Icon(FontAwesomeIcons.play,size: 15,color:Theme.of(context).highlightColor ,),
              Text(
               'Start',
               style: TextStyle(color: Theme.of(context).highlightColor,fontSize: 13.4),

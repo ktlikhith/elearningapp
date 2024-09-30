@@ -85,7 +85,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                   // color: Theme.of(context).secondaryHeaderColor.withOpacity(0.4),
                   color:Theme.of(context).cardColor,
                 ),
-             // color: Theme.of(context).hintColor.withOpacity(0.2),
+             color: Theme.of(context).hintColor.withOpacity(0.2),
               
             ),
             child: Column(
@@ -144,7 +144,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                               return Image.asset(
                                 'assets/images/coursedefaultimg.jpg',
                                     height: 55,
-                            width: 90,
+                           width: MediaQuery.of(context).size.width*0.25,
                                 fit: BoxFit.fill,
                               );
                             },
