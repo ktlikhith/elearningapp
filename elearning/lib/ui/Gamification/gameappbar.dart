@@ -1,5 +1,6 @@
 import 'dart:async';
 
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/services/reward_service.dart';
 import 'package:elearning/services/rewarddata_provider.dart';
@@ -28,18 +29,28 @@ class GamificationPage extends StatefulWidget {
 
 
 class _GamificationPageState extends State<GamificationPage> {
-  late Future<RewardData> _rewardDataFuture;
+  late Stream<RewardData> _rewardDataFuture;
  // final GlobalKey<LeaderboardState> _spinWheelKey = GlobalKey<LeaderboardState>();
    ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isDialogOpen = false;
+ // late Stream<RewardData> datas;
+  late Stream<RewardData> datas;
+  final rd=RewardService();
+  final _rewardStreamController = StreamController<Stream<RewardData>>.broadcast();
+  
+  //final stream_data =_rewardStreamController.stream.asBroadcastStream();
   
 
   @override
   void initState() {
     super.initState();
-    _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
+    
+    _rewardDataFuture = rd.getUserRewardPoints(widget.token);
+    // _rewardStreamController.sink.add(_rewardDataFuture);
+    // datas= _rewardDataFuture.asBroadcast();
+     datas=_rewardDataFuture.asBroadcastStream();
       initConnectivity();
             
 
@@ -136,13 +147,19 @@ class _GamificationPageState extends State<GamificationPage> {
   }
   Future<void> _refresh()async{
     
-
-   
+ setState(() {
+   _rewardDataFuture = rd.getUserRewardPoints(widget.token);
+       datas=_rewardDataFuture.asBroadcastStream();
+    
+ });
+    // datas=_rewardDataFuture.asBroadcastStream();
+  
     // _spinWheelKey.currentState?.refresh();
-    setState(() {
+    // setState(() {
       
-         _rewardDataFuture = RewardService().getUserRewardPoints(widget.token);
-    });
+    //      _rewardDataFuture = rd.streamreward(widget.token);
+    //        datas=_rewardDataFuture.asBroadcastStream();
+    // });
      
   }
 
@@ -162,8 +179,8 @@ class _GamificationPageState extends State<GamificationPage> {
             child: Image.asset('assets/gamificatinn/crown.png',),
           ),
           leadingWidth: 40,
-          title: FutureBuilder<RewardData>(
-            future: _rewardDataFuture,
+          title: StreamBuilder<RewardData>(
+            stream: datas,
  builder: (context, snapshot) {
             String pointsText = 'My Points : -';
             if (snapshot.connectionState == ConnectionState.done) {
@@ -196,7 +213,7 @@ class _GamificationPageState extends State<GamificationPage> {
               child: Column(
                 children: [
                  
-                  RewardSection(token: widget.token, rewardDataFuture: _rewardDataFuture),
+                  RewardSection(token: widget.token, rewardDataFuture: datas),
                  
                   SizedBox(height: 20),
                   Container(
@@ -207,7 +224,7 @@ class _GamificationPageState extends State<GamificationPage> {
                         SizedBox(
                           height: 400,
                           width: MediaQuery.of(context).size.width * 0.7,
-                          child: SpinWheel(token: widget.token, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh,),
+                          child: SpinWheel(token: widget.token, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh, rewardStreame: datas,),
                         ),
                         SizedBox(height: 20),
                   //       ElevatedButton(

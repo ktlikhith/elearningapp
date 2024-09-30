@@ -279,18 +279,18 @@ import 'package:shimmer/shimmer.dart';
 
 class SpinWheel extends StatefulWidget {
   final String token;
- 
+ late Stream<RewardData> rewardStreame;
   final double width;
     final Function onRefresh; // Accept a callback from the parent
   
  
 
-  const SpinWheel({
+   SpinWheel({
     Key? key,
     required this.token,
-   
+   required this.rewardStreame,
     required this.width,
-    required this.onRefresh
+    required this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -302,17 +302,19 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<double> _wheelNotifier = StreamController<double>();
  bool spinButton = false;
   bool isLoading=true;
-     
+    late Stream<RewardData> _rewardDataFuture;
   String selectedLabel = '';
   bool isconfettiplaying=false;
   final confettiController=ConfettiController();
-  late RewardService rewardService;
+  late Stream<RewardData> datas;
+   final rd =RewardService();
+  // late RewardService rewardService;
   @override
   void initState() {
   
     super.initState();
-      rewardService = RewardService();
-  
+    _rewardDataFuture=rd.getspinwheel(widget.token);
+     datas=_rewardDataFuture.asBroadcastStream();
     //  load();
   
     ///listen to states: play the confitt animation
@@ -350,6 +352,10 @@ class _SpinWheelState extends State<SpinWheel> {
 //     }
 //   }
    void refresh() async{
+    // setState(() {
+    //     final _rewardDataFuture=rd.getUserRewardPoints(widget.token);
+    //  datas=_rewardDataFuture.asBroadcastStream();
+    // });
       
        await  widget.onRefresh();
       
@@ -360,7 +366,7 @@ class _SpinWheelState extends State<SpinWheel> {
     _dividerController.close();
     _wheelNotifier.close();
     
- rewardService.dispose();
+
     super.dispose();
   }
    Widget _buildShimmerItem(BuildContext context) {
@@ -394,20 +400,20 @@ class _SpinWheelState extends State<SpinWheel> {
       // final rewardProvider = Provider.of<RewardProvider>(context,listen: false);
       
            
-  
-  
+ 
+
    
         
     return
      StreamBuilder<RewardData>(
-        stream: rewardService.rewardStream,
+
+        stream:_rewardDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildShimmerItem(context);
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData) {
-            return Center(child: Text("No Data Available"));
+            return  _buildShimmerItem(context);
+          
           } else {
             final rewardData = snapshot.data!;
     

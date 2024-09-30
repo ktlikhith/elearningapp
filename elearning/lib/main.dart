@@ -28,14 +28,15 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
    runApp(
-    MultiProvider(
-      providers: [
-        // ChangeNotifierProvider(create: (_) => RewardNotifier()),
-          ChangeNotifierProvider(create: (_) => RewardProvider()),
+    // MultiProvider(
+    //   providers: [
+    //     // ChangeNotifierProvider(create: (_) => RewardNotifier()),
+    //       ChangeNotifierProvider(create: (_) => RewardProvider()),
         
-      ],
-      child: MyApp(),
-    ),
+    //   ],
+    //   child: MyApp(),
+    // ),
+    MyApp(),
   );
 
  

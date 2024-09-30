@@ -5,16 +5,17 @@ import 'package:elearning/services/reward_service.dart';
 
 class RankLevel extends StatelessWidget {
   final String token;
+  final rd=RewardService();
 
-  const RankLevel({
+   RankLevel({
     Key? key,
     required this.token,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<RewardData>(
-      future: RewardService().getUserRewardPoints(token),
+    return StreamBuilder<RewardData>(
+      stream: rd.getUserRewardPoints(token),
       builder: (context, AsyncSnapshot<RewardData> snapshot) {
         final isLoading = snapshot.connectionState == ConnectionState.waiting;
 

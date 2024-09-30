@@ -407,7 +407,7 @@ class _MyMorePageState extends State<MyMorePage> {
 }
   Future<void> _clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await prefs.clear();
     // Navigate back to the landing page or login screen if needed
   }
 

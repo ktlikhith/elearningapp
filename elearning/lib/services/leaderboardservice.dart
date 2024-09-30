@@ -66,7 +66,7 @@ import 'package:http/http.dart' as http;
 
 class LeaderboardService {
   static Stream<List<User>> streamLeaderboard(String token) {
-    return Stream.periodic(Duration(seconds: 3), (_) async {
+    return Stream.periodic(Duration(seconds: 1), (_) async {
       // Fetch leaderboard data
       final userInfo = await SiteConfigApiService.getUserId(token);
       final userId = userInfo['id'];

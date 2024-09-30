@@ -198,9 +198,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   void _handleTabPressed(int index) {
     if (!mounted) return; // Check if the state is still mounted
 
-    setState(() {
-      _selectedIndex = index;
-    });
+    // setState(() {
+    //   _selectedIndex = index;
+    // });
+    if(index!=_selectedIndex)
 
     switch (index) {
       case 0:
