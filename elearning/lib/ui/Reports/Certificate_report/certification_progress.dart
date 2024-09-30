@@ -301,7 +301,7 @@ class CourseCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      
+                      width: MediaQuery.of(context).size.width*0.87,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: Theme.of(context).highlightColor,
@@ -334,13 +334,13 @@ class CourseCard extends StatelessWidget {
                                ),
                              ),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.55,
+                              width: MediaQuery.of(context).size.width*0.5,
                               child: Text(
                                 course.name,
                               maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),

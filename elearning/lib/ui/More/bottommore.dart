@@ -289,6 +289,7 @@ import 'dart:convert';
 
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/ui/Landingscreen/landingscreen.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -347,10 +348,16 @@ class _MyMorePageState extends State<MyMorePage> {
             child: Row(
               children: [
                 Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed('landingPage');
-                      _clearToken();
+                  child: GestureDetector(
+                    onTap: () async{
+                          await _clearToken();
+                          Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(builder: (context) => LandingPage()), // Navigate to the new screen
+  (Route<dynamic> route) => false, // This will remove all previous screens
+);
+                    
+                 
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -372,7 +379,7 @@ class _MyMorePageState extends State<MyMorePage> {
                   ),
                 ),
                 Expanded(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
@@ -400,7 +407,7 @@ class _MyMorePageState extends State<MyMorePage> {
 }
   Future<void> _clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await prefs.clear();
     // Navigate back to the landing page or login screen if needed
   }
 

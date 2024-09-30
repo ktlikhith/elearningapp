@@ -7,7 +7,7 @@ import 'dart:async';
 
 class RewardSection extends StatefulWidget {
   final String token;
-  final Future<RewardData> rewardDataFuture;
+  final Stream<RewardData> rewardDataFuture;
 
   RewardSection({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
 
@@ -55,8 +55,8 @@ class _RewardSectionState extends State<RewardSection> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<RewardData>(
-      future: widget.rewardDataFuture,
+    return StreamBuilder<RewardData>(
+      stream: widget.rewardDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildShimmerSkeleton();

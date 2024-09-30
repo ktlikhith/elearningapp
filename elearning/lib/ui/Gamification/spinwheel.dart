@@ -255,14 +255,13 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:confetti/confetti.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
+import 'package:elearning/services/rewarddata_provider.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
@@ -270,25 +269,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kbspinningwheel/kbspinningwheel.dart';
 import 'package:neopop/neopop.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SpinWheel extends StatefulWidget {
   final String token;
-  final Future<RewardData> rewardDataFuture;
+ late Stream<RewardData> rewardStreame;
   final double width;
     final Function onRefresh; // Accept a callback from the parent
   
  
 
-  const SpinWheel({
+   SpinWheel({
     Key? key,
     required this.token,
-    required this.rewardDataFuture,
+   required this.rewardStreame,
     required this.width,
-    required this.onRefresh
+    required this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -298,38 +300,127 @@ class SpinWheel extends StatefulWidget {
 class _SpinWheelState extends State<SpinWheel> {
   final StreamController<int> _dividerController = StreamController<int>();
   final StreamController<double> _wheelNotifier = StreamController<double>();
-  late bool spinButton = false;
-  
+ bool spinButton = false;
+  bool isLoading=true;
+    late Stream<RewardData> _rewardDataFuture;
   String selectedLabel = '';
   bool isconfettiplaying=false;
   final confettiController=ConfettiController();
-
+  late Stream<RewardData> datas;
+   final rd =RewardService();
+  // late RewardService rewardService;
   @override
   void initState() {
+  
     super.initState();
-    widget.rewardDataFuture.then((rewardData) {
-      setState(() {
-        spinButton = rewardData.spinButton;
-      });
-    });
+    _rewardDataFuture=rd.getspinwheel(widget.token);
+     datas=_rewardDataFuture.asBroadcastStream();
+    //  load();
+  
     ///listen to states: play the confitt animation
+   
     confettiController.addListener((){
-      setState(() {
-        isconfettiplaying=confettiController.state==ConfettiControllerState.playing;
-      });
+     setState(() {
+         isconfettiplaying=confettiController.state==ConfettiControllerState.playing;  
+      
+    });
+   
+   
     });
   }
+//  Future<void> load() async {
+//     // Fetch the reward data from the provider
+//     // final rewardProvider = Provider.of<RewardProvider>(context, listen: false);
+
+//     try {
+//       await rewardProvider.fetchRewardData(widget.token); // Token from the parent widget
+
+//       // Check if data is successfully fetched
+//       if (rewardProvider.rewardData != null) {
+//         setState(() {
+//           spinButton = rewardProvider.rewardData!.spinButton; // Update the state
+//         });
+//       }
+//     } catch (e) {
+//       // Handle error if needed
+//       print('Error loading data: $e');
+//     } finally {
+//       // After the data is fetched, stop showing the loading indicator
+//       setState(() {
+//         isLoading = false;
+//       });
+//     }
+//   }
+   void refresh() async{
+    // setState(() {
+    //     final _rewardDataFuture=rd.getUserRewardPoints(widget.token);
+    //  datas=_rewardDataFuture.asBroadcastStream();
+    // });
+      
+       await  widget.onRefresh();
+      
+    }
 
   @override
   void dispose() {
     _dividerController.close();
     _wheelNotifier.close();
+    
+
     super.dispose();
   }
+   Widget _buildShimmerItem(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          width: widget.width,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).secondaryHeaderColor,
+              width: 2.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+ 
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+ 
+    
+      // final rewardProvider = Provider.of<RewardProvider>(context,listen: false);
+      
+           
+ 
+
+   
+        
+    return
+     StreamBuilder<RewardData>(
+
+        stream:_rewardDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildShimmerItem(context);
+          } else if (snapshot.hasError) {
+            return  _buildShimmerItem(context);
+          
+          } else {
+            final rewardData = snapshot.data!;
+    
+    
+    
+     
+   return Container(
       width: widget.width,
       decoration: BoxDecoration(
      color: Theme.of(context).cardColor,
@@ -393,7 +484,8 @@ class _SpinWheelState extends State<SpinWheel> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                spinButton
+                
+                rewardData.spinButton
                     ? 'Spin the wheel and try your luck to get points benefit and redeem.'
                     : 'You have won todays luck on wheel, try next day',
                 textAlign: TextAlign.center,
@@ -410,10 +502,11 @@ class _SpinWheelState extends State<SpinWheel> {
             builder: (context, snapshot) =>
                 snapshot.hasData ? rouletteScore(snapshot.data!) : Container(),
           ),
-          spinButton ?
+
+     rewardData.spinButton?
             NeoPopTiltedButton(
               isFloating: true,
-              onTapUp: spinButton
+              onTapUp:  rewardData.spinButton
                   ? () {
                       _wheelNotifier.sink.add(_generateRandomVelocity());
                     }
@@ -435,6 +528,9 @@ class _SpinWheelState extends State<SpinWheel> {
           //   CircularProgressIndicator(),
         ],
       ),
+    );
+          }
+        }
     );
   }
 
@@ -476,7 +572,7 @@ class _SpinWheelState extends State<SpinWheel> {
         points: label,
       );
       
-      label=='00'?showMotivationalDialog(context):_showCongratsDialog(label,widget.onRefresh);
+      label=='00'?showMotivationalDialog(context,refresh):_showCongratsDialog(label,refresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -521,27 +617,34 @@ class _SpinWheelState extends State<SpinWheel> {
   //     },
   //   );
   // }
-void _showCongratsDialog(String label,Function onRefresh) {
+void _showCongratsDialog(String label,Function refresh) {
   showDialog(
     context: context,
     barrierDismissible: true, // Allows tapping outside the dialog to dismiss it
     builder: (BuildContext context) {
       return WillPopScope(
         onWillPop: () async {
+              await refresh();
+              //load();
           if(isconfettiplaying){
             confettiController.stop();
-          }     Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
-            onRefresh();
-          return false;
+          }
+         
+              Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+         
+          return true;
         },
         child: GestureDetector(
           
-          onTap: () {
+          onTap: ()async {
+             await refresh();
+            // load();
              if(isconfettiplaying){
             confettiController.stop();
           }  
+           
             Navigator.of(context).pop();
-            onRefresh();
+          
            
         
           },
@@ -735,12 +838,24 @@ void _showCongratsDialog(String label,Function onRefresh) {
 }
 
 
-void showMotivationalDialog(BuildContext context) {
+void showMotivationalDialog(BuildContext context,Function refresh) {
   showDialog(
     context: context,
      barrierDismissible: true,
     builder: (BuildContext context) {
-      return AlertDialog(
+      return WillPopScope(
+        onWillPop: () async {
+              await refresh();
+             // load();
+          if(isconfettiplaying){
+            confettiController.stop();
+          }   
+         
+              Navigator.of(context).pop();      // Perform the navigation action when the back button is pressed
+          
+          return true;
+        },
+        child:AlertDialog(
           backgroundColor: Color.fromARGB(127, 0, 0, 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -778,12 +893,14 @@ void showMotivationalDialog(BuildContext context) {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text("OK"),
-            onPressed: () {
+            child: Text("OK",style: TextStyle(color: Colors.white),),
+            onPressed: () async{
+              await refresh();
               Navigator.of(context).pop();
             },
           ),
         ],
+        ),
       );
     },
   );

@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:elearning/services/auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class RewardService {
-  Future<RewardData> getUserRewardPoints(String token) async {
+  
+  Stream<RewardData> getUserRewardPoints(String token) async* {
     try {
       final userInfo = await SiteConfigApiService.getUserId(token);
       final username = userInfo['username'];
@@ -17,8 +20,8 @@ class RewardService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final rewardData = RewardData.fromJson(jsonResponse['reward_data']);
-       
-        return rewardData;
+     
+        yield rewardData;
       } else {
         throw Exception('Failed to load user reward points');
       }
@@ -26,7 +29,59 @@ class RewardService {
       print('Error: $e');
       throw Exception('Failed to load user reward points');
     }
+
   }
+  
+    Stream<RewardData> getspinwheel(String token) {
+    return Stream.periodic(Duration(seconds: 1), (_) async {
+      // Fetch leaderboard data
+   final userInfo = await SiteConfigApiService.getUserId(token);
+      final username = userInfo['username'];
+
+      final apiUrl = Uri.parse(
+        '${Constants.baseUrl}/webservice/rest/server.php?wstoken=$token&wsfunction=local_reward_points_user&moodlewsrestformat=json&username=$username',
+      );
+
+      final response = await http.get(apiUrl);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final rewardData = RewardData.fromJson(jsonResponse['reward_data']);
+     
+        return rewardData;
+      } else {
+        throw Exception('Failed to fetch leaderboard');
+      }
+    }).asyncMap((future) => future); // Convert Future to Stream
+  }
+
+  //   final _rewardStreamController = StreamController<RewardData>.broadcast();
+
+  //    Stream<RewardData> streamreward(String token) {
+     
+  //       // final stream_data =_rewardStreamController.stream.asBroadcastStream();
+  //   return Stream.periodic(Duration(seconds: 1), (_) async {
+  //     // Fetch reward data
+  //    final userInfo = await SiteConfigApiService.getUserId(token);
+  //     final username = userInfo['username'];
+
+  //     final apiUrl = Uri.parse(
+  //       '${Constants.baseUrl}/webservice/rest/server.php?wstoken=$token&wsfunction=local_reward_points_user&moodlewsrestformat=json&username=$username',
+  //     );
+
+  //     final response = await http.get(apiUrl);
+
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = json.decode(response.body);
+  //       final rewardData = RewardData.fromJson(jsonResponse['reward_data']);
+  //   _rewardStreamController.sink.add(rewardData);
+    
+  //       return rewardData;
+  //     } else {
+  //       throw Exception('Failed to fetch leaderboard');
+  //     }
+  //   }).asyncMap((future) => future); // Convert Future to Stream
+  // }
 }
 
 class RewardData {
@@ -98,6 +153,11 @@ class RewardData {
       rewardsReceivedPoints: int.parse(json['rewards_received_points'].toString()),
     );
   }
+
+
 }
+
+
+
 
 

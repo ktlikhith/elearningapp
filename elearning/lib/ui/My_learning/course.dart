@@ -486,6 +486,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
                width: MediaQuery.of(context).size.width * 1.0,
                height: MediaQuery.of(context).size.height * 0.22,
               decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).cardColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ClipRRect(
@@ -493,19 +494,22 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image.network(
-                      course.getImageUrlWithToken(widget.token),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/coursedefaultimg.jpg',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        );
-                      },
+                    Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: Image.network(
+                        course.getImageUrlWithToken(widget.token),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/coursedefaultimg.jpg',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

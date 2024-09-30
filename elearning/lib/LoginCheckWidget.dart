@@ -9,6 +9,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:liquid_swipe/liquid_swipe.dart';
 
 class LoginCheckWidget extends StatefulWidget {
   @override
@@ -135,14 +137,112 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
   }
 }
 
-class SplashScreen extends StatelessWidget {
+
+
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Animation controller for the waves animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: false);
+
+    // Animation for the circular waves
+    _animation = Tween<double>(begin: 0, end: 600).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: Image.asset('assets/logo/eapplogo.png', width: MediaQuery.of(context).size.height * 0.15),
+    final logoSize = MediaQuery.of(context).size.height * 0.18;
+
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [
+        //       Color(0xFF0041C7),
+        //       Color(0xFF0D85D8),
+        //       Color(0xFF3ACBE8),
+        //     ],
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //   ),
+        // ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Circular wave effect
+            Container(
+              width: _animation.value, // Expands over time
+              height: _animation.value,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.yellow.withOpacity(0.3), // Semi-transparent waves
+              ),
+            ),
+            Container(
+              width: _animation.value * 0.7, // Second wave
+              height: _animation.value * 0.7,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.yellow.withOpacity(0.4),
+              ),
+            ),
+            Container(
+              width: _animation.value * 0.4, // Third wave
+              height: _animation.value * 0.4,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.yellow.withOpacity(0.6),
+              ),
+            ),
+            // 3D elevated logo
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1), // Shadow for 3D effect
+                    blurRadius: 20,
+                    offset: Offset(0, 6), // Shadow below the logo
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 0.0),
+                child: Image.asset(
+                  'assets/logo/eapplogo.png',
+                  width: logoSize,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+

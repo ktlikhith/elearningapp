@@ -2,13 +2,14 @@ import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/ui/Landingscreen/landingscreen.dart';
+import 'package:elearning/services/rewarddata_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -26,8 +27,19 @@ void main() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+   runApp(
+    // MultiProvider(
+    //   providers: [
+    //     // ChangeNotifierProvider(create: (_) => RewardNotifier()),
+    //       ChangeNotifierProvider(create: (_) => RewardProvider()),
+        
+    //   ],
+    //   child: MyApp(),
+    // ),
+    MyApp(),
+  );
 
-  runApp(MyApp());
+ 
 }
 
 class MyApp extends StatelessWidget {

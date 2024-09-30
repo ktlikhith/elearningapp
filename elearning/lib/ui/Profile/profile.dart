@@ -333,6 +333,7 @@ import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
+import 'package:elearning/services/reward_service.dart';
 import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:elearning/ui/Profile/rank_level.dart';
@@ -358,6 +359,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isDialogOpen = false;
+  final rd=RewardService();
 
   @override
   void initState() {
@@ -725,7 +727,7 @@ Widget _buildAchievementUI(Map<String, dynamic> data) {
               ),
             ),
             const SizedBox(height: 10),
-            const RankLevel(token: ''), // Placeholder widget for loading
+             RankLevel(token: ''), // Placeholder widget for loading
             const SizedBox(height: 5),
             Container(
               width: 370,

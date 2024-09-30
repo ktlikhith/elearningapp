@@ -108,6 +108,7 @@
 import 'dart:async';
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:elearning/routes/routes.dart';
@@ -138,7 +139,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancel the timer
+    _timer?.cancel(); 
+   // Cancel the timer
     super.dispose();
   }
 
@@ -196,9 +198,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   void _handleTabPressed(int index) {
     if (!mounted) return; // Check if the state is still mounted
 
-    setState(() {
-      _selectedIndex = index;
-    });
+    // setState(() {
+    //   _selectedIndex = index;
+    // });
+    if(index!=_selectedIndex)
 
     switch (index) {
       case 0:
@@ -217,7 +220,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       Navigator.of(context).pushReplacementNamed(RouterManger.Report, arguments: widget.token);
         
         break;
-      case 5: // Added case for the new icon
+      case 5:
        Navigator.of(context).pushReplacementNamed(RouterManger.morescreen, arguments: widget.token);
         break;
     }
