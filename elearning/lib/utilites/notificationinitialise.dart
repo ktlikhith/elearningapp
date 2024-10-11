@@ -2,6 +2,7 @@
 import 'package:elearning/services/notification_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+class notification{
 Future<void> _initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon'); // Ensure you have an app_icon in your drawable resources
@@ -39,7 +40,7 @@ Future<void> _initializeNotifications() async {
     RegExp htmlTagRegExp = RegExp(r'<[^>]*>');
     return htmlString.replaceAll(htmlTagRegExp, '');
   }
-    Future<void> _fetchNotifications(String token) async {
+    Future<void> fetchNotifications(String token) async {
         final NotificationService _notificationService = NotificationService();
     try {
       final List<Notifications> response = await _notificationService.getNotifications(token);
@@ -54,3 +55,4 @@ Future<void> _initializeNotifications() async {
       print('Error fetching notifications: $e');
     }
   }
+}

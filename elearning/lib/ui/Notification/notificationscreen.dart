@@ -482,9 +482,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
           if(snapshot.connectionState==ConnectionState.waiting){
             return  _buildShimmerList();
 
-          }else if(snapshot.isNull||snapshot.data!.isEmpty){
+          }
+        
+              if (snapshot.hasError) {
+                return Center(child: Text('Error loading user info'));
+              }
+            
+             if(snapshot==null){
             return Center(child: Text('No notifications to read'));
-            }else if(snapshot.hasData){
+            }
+            else if(snapshot.hasData){
               _notifications=snapshot.data!;
           return Container(
             padding: EdgeInsets.all(8.0),
@@ -547,12 +554,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       )
               
           );
+          
           }
-          else return Container(child: Center(child: Text('somethinng went wrong'),),);
+           else return Container(child: Center(child: Text('somethinng went wrong'),),);
+         
         }
+        
       ),
     );
   }
+
 }
 
 class NotificationDetailsScreen extends StatelessWidget {

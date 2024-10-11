@@ -124,15 +124,15 @@ Future<void>  _refreshdata()async{
     // This method can be used to load data for other sections if necessary
     await Future.delayed(Duration(seconds: 1)); // Simulating network delay
   }
-  Stream<int> noticount() async*{
-     try {
-      final count = await NotificationCount.getUnreadNotificationCount(widget.token);
-      yield count;
-    } catch (e) {
-      print('Error refreshing notification count: $e');
-    }
+  // Stream<int> noticount() async*{
+  //    try {
+  //     Stream count = await NotificationCount().getUnreadNotificationCountStream(widget.token);
+  //     yield count;
+  //   } catch (e) {
+  //     print('Error refreshing notification count: $e');
+  //   }
 
-  }
+  // }
 
   Future<void> _refreshNotificationCount() async {
     try {
@@ -244,13 +244,16 @@ Future<void>  _refreshdata()async{
                   padding: EdgeInsets.only(right: 10.0,left: 0),
                   child: _tenantLogoBytes != null
                       ? Container(
-                       
+                     
                           width: 90,
                           height: 40,
                           color:Colors.white,
-                          child: Image.memory(
-                            _tenantLogoBytes!,
-                            fit: BoxFit.contain,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.memory(
+                              _tenantLogoBytes!,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         )
                       : FutureBuilder(
@@ -267,12 +270,16 @@ Future<void>  _refreshdata()async{
                                 ),
                               );
                             } else {
-                              return SizedBox(
+                              return Container(
+                                
                                 width: 90,
                                 height: 40,
-                                child: Image.asset(
-                                  'assets/logo/RAP_logo.jpeg',
-                                  fit: BoxFit.fill,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    'assets/logo/RAP_logo.jpeg',
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               );
                             }
@@ -304,7 +311,7 @@ Future<void>  _refreshdata()async{
                     },
                   ),
                   StreamBuilder<int>(
-                    stream: noticount(),
+                    stream: NotificationCount().getUnreadNotificationCountStream(widget.token),
                     builder: (context, snapshot) {
                       if(snapshot.hasData){
                       return Positioned(
@@ -317,7 +324,7 @@ Future<void>  _refreshdata()async{
                             color: Colors.red,
                           ),
                           child: Text(
-                            '$_notificationCount',
+                            snapshot.data.toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,

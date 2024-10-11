@@ -298,6 +298,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
   @override
   Widget build(BuildContext context) {
       final reportProvider = Provider.of<ReportProvider>(context, listen: false);
+        final courseeprovider = Provider.of<CourseProvider>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -337,6 +338,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
           onRefresh: ()async{
             setState(() {
                    reportProvider.fetchData();
+                   courseeprovider.fetchData(widget.token);
             });
 
          
@@ -376,7 +378,10 @@ class MyLearningAppBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return 
+    Consumer<ReportProvider>(
+            builder: (context, reportProvider, _) {
+              return Container(
       padding: const EdgeInsets.only(left: 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,6 +419,8 @@ class MyLearningAppBody extends StatelessWidget {
           isLoading ? _buildLoadingShimmer() : BuildCourseSections(token: token, searchQuery: searchQuery),
         ],
       ),
+    );
+            }
     );
   }
 

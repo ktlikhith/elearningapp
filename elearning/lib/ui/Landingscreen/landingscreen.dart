@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/login_page/login_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -34,6 +35,9 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     _checkInternetConnection();
   }
 
@@ -42,6 +46,17 @@ class _LandingPageState extends State<LandingPage> {
     setState(() {
       _isConnected = connectivityResult != ConnectivityResult.none;
     });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+     SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    super.dispose();
   }
 
   @override
@@ -196,7 +211,7 @@ class _LandingPageState extends State<LandingPage> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: _currentPage == index ? Colors.blue : Colors.grey,
+        color: _currentPage == index ? Theme.of(context).primaryColor : Colors.grey,
       ),
     );
   }

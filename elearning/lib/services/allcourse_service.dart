@@ -24,6 +24,22 @@ class CourseReportApiService {
       throw Exception('Error fetching courses: $e');
     }
   }
+  Stream<int> getCprogress(String id,String token) {
+    return Stream.periodic(Duration(seconds: 1),(_) async {
+      try{
+           List<Course> courses = await fetchCourses(token);
+           for(Course course in  courses){
+            if(id==course.id){
+              return course.courseProgress;
+            }
+           }   throw Exception('Course not found');
+    } catch (e) {
+      throw Exception('Error retrieving course image: $e');
+    
+      }
+
+    }).asyncMap((future) => future); 
+  }
 
   Future<String> getCourseImageWith_token_id(String token, String courseId) async {
     try {

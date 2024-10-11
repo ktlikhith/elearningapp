@@ -71,7 +71,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LearningPathDetailScreen(learningPath: learningPath,token: widget.token,),
+                builder: (context) => LearningPathDetailScreen(learningPath: learningPath,index:index,token: widget.token,),
               ),
             );
           },

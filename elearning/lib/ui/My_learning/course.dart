@@ -1,6 +1,8 @@
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 // class BuildCourseSections extends StatefulWidget {
@@ -346,24 +348,53 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       print('Error fetching courses: $e');
     }
   }
-
-  @override
+    @override
   Widget build(BuildContext context) {
-    List<Course> filteredCourses = _courses.where((course) {
-      return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
-    }).toList();
+    return Consumer<CourseProvider>(
+      builder: (context, provider, _) {
+        List<Course> filteredCourses = provider.course?.where((course) {
+          return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
+        }).toList() ?? [];
 
-    return _isLoading
-        ? _buildShimmerEffect()
-        : SingleChildScrollView(
-            child: Column(
-              children: filteredCourses.map((course) => buildCourseContainer(context, course)).toList(),
-            ),
-          );
+        return provider.isLoading
+            ? _buildShimmerEffect()
+            : SingleChildScrollView(
+                child: Column(
+                  children: filteredCourses
+                      .map((course) => buildCourseContainer(context, course))
+                      .toList(),
+                ),
+              );
+      },
+    );
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //    final courseeprovider = Provider.of<CourseProvider>(context, listen: false);
+  //   List<Course> filteredCourses = _courses.where((course) {
+  //     return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
+  //   }).toList();
+
+  //   return  _isLoading
+  //       ? _buildShimmerEffect()
+  //       :  ChangeNotifierProvider(
+  //     create: (_) => CourseProvider(),
+  //     child: 
+    
+  //       SingleChildScrollView(
+  //           child: Column(
+  //             children: filteredCourses.map((course) => buildCourseContainer(context, course)).toList(),
+  //           ),
+  //         ),
+  //       );
+  // }
+
   Widget _buildShimmerEffect() {
-    return ListView.builder(
+    return 
+    Consumer<CourseProvider>(
+            builder: (context, provider, _) {
+              return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: 3,
@@ -424,10 +455,15 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
         );
       },
     );
+            }
+    );
   }
 
   Widget buildCourseContainer(BuildContext context, Course course) {
-    return Container(
+    return
+    Consumer<CourseProvider>(
+            builder: (context, CourseProvider, _) { 
+              return Container(
       margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
       //padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -445,6 +481,9 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       ),
       child: buildSingleCourseSection(context, course),
     );
+    
+  }
+    );
   }
 
   Widget buildSingleCourseSection(BuildContext context, Course course) {
@@ -457,7 +496,9 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     String videoUrl = course.courseVideoUrl;
     String duration = course.courseDuration;
 
-    return GestureDetector(
+    return  Consumer<CourseProvider>(
+            builder: (context, CourseProvider, _) { 
+              return GestureDetector(
       onTap: () => showMLPopup(
         context,
         courseId,
@@ -560,25 +601,39 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                               ),
-                              Container(
-                                height: 8.0,
-                                width: 100.0 * course.courseProgress / 100,
-                                decoration: BoxDecoration(
-                                  color: getProgressBarColor(course.courseProgress),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
+                              StreamBuilder<int>(
+                                stream: CourseReportApiService().getCprogress(course.id,widget.token),
+                                builder: (context, snapshot) {
+
+                                  return Container(
+                                    height: 8.0,
+                                    width: snapshot.hasData?100.0*snapshot.data!/100:
+                                     100.0 * course.courseProgress / 100,
+                                    decoration: BoxDecoration(
+                                      color: getProgressBarColor(course.courseProgress),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  );
+                                }
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(width: 8.0),
-                        Text(
-                          '${course.courseProgress}%',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).hintColor,
-                          ),
+                        
+                        StreamBuilder<int>(
+                          
+                           stream: CourseReportApiService().getCprogress(course.id,widget.token), 
+                          builder: (context, snapshot) {
+                            return Text(snapshot.hasData?'${snapshot.data!}%':
+                              '${course.courseProgress}%',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            );
+                          }
                         ),
                       ],
                     ),
@@ -614,6 +669,9 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
           ],
         ),
       ),
+    );
+    
+  }
     );
   }
 
@@ -656,3 +714,36 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 }
+
+class CourseProvider with ChangeNotifier {
+ 
+   final CourseReportApiService _apiService = CourseReportApiService();
+  
+  
+  List<Course>? course;
+  bool isLoading = true;
+  
+
+  CourseProvider() {
+  String? token;
+    fetchData(token);
+  }
+
+  Future<void> fetchData(token) async {
+    try {
+      if(token!=null){
+          final List<Course> response = await _apiService.fetchCourses(token);
+     
+      course = response;
+      }
+     
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
+      isLoading = false;
+       print(course);
+      notifyListeners();
+    }
+  }
+}
+

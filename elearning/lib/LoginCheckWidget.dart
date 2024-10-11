@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -25,6 +26,9 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
   void initState() {
     super.initState();
     _checkLoginStatus();
+     SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
   }
 
   Future<void> _checkLoginStatus() async {
@@ -154,7 +158,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-
+ SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     // Animation controller for the waves animation
     _controller = AnimationController(
       vsync: this,
@@ -171,6 +177,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     _controller.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     super.dispose();
   }
 
@@ -198,10 +210,10 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             // Circular wave effect
             Image.asset(
-                  'assets/logo/splashbg.webp',
-                  fit:BoxFit.cover,
+                  'assets/logo/spalsh bg01.jpg',
+                  fit:BoxFit.fitHeight,
                 //  width: double.infinity,
-                  height: double.infinity,
+                  height: MediaQuery.of(context).size.height,
                 ),
             Container(
               width: _animation.value, // Expands over time
@@ -239,13 +251,20 @@ class _SplashScreenState extends State<SplashScreen>
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 0.0),
+                padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*0.022),
                 child: Image.asset(
-                  'assets/logo/eapplogo.png',
+                  'assets/logo/eapplogo (1) (1).png',
                   width: logoSize,
                 ),
               ),
             ),
+             Padding(
+               padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height*0.13,left: MediaQuery.of(context).size.width*0.02),
+               child: Text("RAPID ACCESS PLATFORM",
+               style: GoogleFonts.acme(color: const Color.fromARGB(255, 1, 29, 78),fontWeight: FontWeight.w900 ,fontSize: 13,),
+              // style: TextStyle(color: const Color.fromARGB(255, 1, 29, 78),fontWeight: FontWeight.w900 ,fontSize: 13,),
+               ),
+             ),
           ],
         ),
       ),
