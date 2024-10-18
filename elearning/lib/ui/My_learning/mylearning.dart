@@ -238,6 +238,8 @@
 //     }
 //   }
 // }
+
+
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/report_service.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
@@ -279,6 +281,13 @@ class MyLearningPage extends StatefulWidget {
 class _MyLearningPageState extends State<MyLearningPage> {
   bool _isSearching = false;
   String _searchQuery = '';
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+  }
 
   void _handleSearchPressed() {
     setState(() {
@@ -298,7 +307,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
   @override
   Widget build(BuildContext context) {
       final reportProvider = Provider.of<ReportProvider>(context, listen: false);
-        final courseeprovider = Provider.of<CourseProvider>(context, listen: false);
+     
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -338,7 +347,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
           onRefresh: ()async{
             setState(() {
                    reportProvider.fetchData();
-                   courseeprovider.fetchData(widget.token);
+                 
             });
 
          
@@ -496,23 +505,26 @@ class ReportProvider with ChangeNotifier {
   bool isLoading = true;
   
 
+ 
+
+
   ReportProvider(this.token) {
     fetchData();
   }
 
-  Future<void> fetchData() async {
-    try {
-      if(token!=null){
-      final data = await reportService.fetchReport(token);
-      reportData = data;
-      }
-     
-    } catch (e) {
-      print('Error fetching data: $e');
-    } finally {
-      isLoading = false;
-       print(reportData);
-      notifyListeners();
-    }
+Future<void> fetchData() async {
+  isLoading = true; // Set loading state
+  notifyListeners(); // Notify listeners before fetching data
+  try {
+    final data = await reportService.fetchReport(token);
+    reportData = data;
+  } catch (e) {
+    print('Error fetching data: $e');
+    // Optionally, set an error state or show a message to the user
+  } finally {
+    isLoading = false; // Set loading state to false regardless of success/failure
+    notifyListeners(); // Notify listeners after fetching data
   }
+}
+
 }

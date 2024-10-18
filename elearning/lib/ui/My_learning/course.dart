@@ -313,6 +313,9 @@ import 'package:shimmer/shimmer.dart';
 //     );
 //   }
 // }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BuildCourseSections extends StatefulWidget {
   final String token;
@@ -325,76 +328,40 @@ class BuildCourseSections extends StatefulWidget {
 }
 
 class _BuildCourseSectionsState extends State<BuildCourseSections> {
-  final CourseReportApiService _apiService = CourseReportApiService();
-  List<Course> _courses = [];
-  bool _isLoading = true;
-
   @override
   void initState() {
     super.initState();
-    _fetchCourses(widget.token);
+    // Set the token when the widget initializes
+    final provider = Provider.of<CourseProvider>(context, listen: false);
+    provider.setTokenAndFetch(widget.token);
   }
 
-  Future<void> _fetchCourses(String token) async {
-    try {
-      final List<Course> response = await _apiService.fetchCourses(token);
-      if (mounted) {
-        setState(() {
-          _courses = response;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      print('Error fetching courses: $e');
-    }
-  }
-    @override
+  @override
   Widget build(BuildContext context) {
     return Consumer<CourseProvider>(
       builder: (context, provider, _) {
+        // Fetch the filtered courses based on the search query
         List<Course> filteredCourses = provider.course?.where((course) {
           return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
         }).toList() ?? [];
 
         return provider.isLoading
             ? _buildShimmerEffect()
-            : SingleChildScrollView(
-                child: Column(
-                  children: filteredCourses
-                      .map((course) => buildCourseContainer(context, course))
-                      .toList(),
-                ),
-              );
+            : filteredCourses.isNotEmpty
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: filteredCourses
+                          .map((course) => buildCourseContainer(context, course, provider))
+                          .toList(),
+                    ),
+                  )
+                : Center(child: Text('No courses found.'));
       },
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //    final courseeprovider = Provider.of<CourseProvider>(context, listen: false);
-  //   List<Course> filteredCourses = _courses.where((course) {
-  //     return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
-  //   }).toList();
-
-  //   return  _isLoading
-  //       ? _buildShimmerEffect()
-  //       :  ChangeNotifierProvider(
-  //     create: (_) => CourseProvider(),
-  //     child: 
-    
-  //       SingleChildScrollView(
-  //           child: Column(
-  //             children: filteredCourses.map((course) => buildCourseContainer(context, course)).toList(),
-  //           ),
-  //         ),
-  //       );
-  // }
-
   Widget _buildShimmerEffect() {
-    return 
-    Consumer<CourseProvider>(
-            builder: (context, provider, _) {
-              return ListView.builder(
+    return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: 3,
@@ -455,21 +422,13 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
         );
       },
     );
-            }
-    );
   }
 
-  Widget buildCourseContainer(BuildContext context, Course course) {
-    return
-    Consumer<CourseProvider>(
-            builder: (context, CourseProvider, _) { 
-              return Container(
+  Widget buildCourseContainer(BuildContext context, Course course, CourseProvider provider) {
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
-      //padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),
-        // border: Border.all(color: Theme.of(context).primaryColor,width: 1.5),
-       // color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -479,199 +438,177 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
           ),
         ],
       ),
-      child: buildSingleCourseSection(context, course),
-    );
-    
-  }
+      child: buildSingleCourseSection(context, course, provider),
     );
   }
 
-  Widget buildSingleCourseSection(BuildContext context, Course course) {
-    String courseId = course.id;
-    String courseName = course.name;
-    String progress = course.courseProgress.toString();
-    String description = course.courseDescription;
-    String startDate = course.courseStartDate;
-    String endDate = course.courseEndDate;
-    String videoUrl = course.courseVideoUrl;
-    String duration = course.courseDuration;
-
-    return  Consumer<CourseProvider>(
-            builder: (context, CourseProvider, _) { 
-              return GestureDetector(
+  Widget buildSingleCourseSection(BuildContext context, Course course, CourseProvider provider) {
+    return GestureDetector(
       onTap: () => showMLPopup(
         context,
-        courseId,
-        courseName,
-        progress,
-        description,
-        startDate,
-        endDate,
-        videoUrl,
-        duration,
+        course.id,
+        course.name,
+        course.courseProgress.toString(),
+        course.courseDescription,
+        course.courseStartDate,
+        course.courseEndDate,
+        course.courseVideoUrl,
+        course.courseDuration,
       ),
       child: Container(
         decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Theme.of(context).cardColor,
-              ),
-
-       
-        
+          borderRadius: BorderRadius.circular(8.0),
+          color: Theme.of(context).cardColor,
+        ),
         child: Column(
-          
-          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-               width: MediaQuery.of(context).size.width * 1.0,
-               height: MediaQuery.of(context).size.height * 0.165,
-              decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).cardColor),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8),topRight: Radius.circular(8)),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      child: Image.network(
-                        course.getImageUrlWithToken(widget.token),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            'assets/images/coursedefaultimg.jpg',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            buildCourseImage(context, course),
             const SizedBox(height: 6.0),
-             Padding(
-                    padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-            Text(
-              course.name,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).highlightColor
-              ),
-            ),
-            const SizedBox(height: 6.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Status',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Theme.of(context).hintColor,
-                        
-                      ),
-                    ),
-                    const SizedBox(height: 6.0),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 8.0,
-                          width: 100.0,
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 8.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              ),
-                              StreamBuilder<int>(
-                                stream: CourseReportApiService().getCprogress(course.id,widget.token),
-                                builder: (context, snapshot) {
-
-                                  return Container(
-                                    height: 8.0,
-                                    width: snapshot.hasData?100.0*snapshot.data!/100:
-                                     100.0 * course.courseProgress / 100,
-                                    decoration: BoxDecoration(
-                                      color: getProgressBarColor(course.courseProgress),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  );
-                                }
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8.0),
-                        
-                        StreamBuilder<int>(
-                          
-                           stream: CourseReportApiService().getCprogress(course.id,widget.token), 
-                          builder: (context, snapshot) {
-                            return Text(snapshot.hasData?'${snapshot.data!}%':
-                              '${course.courseProgress}%',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).hintColor,
-                              ),
-                            );
-                          }
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Due Date',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                       color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    Text(
-                      course.courseEndDate,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                         color: Theme.of(context).highlightColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 6.0),
-                      ],
-                      ),
-                      ),
+            buildCourseDetails(context, course, provider),
           ],
         ),
       ),
     );
-    
   }
+
+  Widget buildCourseImage(BuildContext context, Course course) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 1.0,
+      height: MediaQuery.of(context).size.height * 0.165,
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).cardColor),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Image.network(
+                course.getImageUrlWithToken(widget.token),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/coursedefaultimg.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildCourseDetails(BuildContext context, Course course, CourseProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, top: 5, right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            course.name,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).highlightColor,
+            ),
+          ),
+          const SizedBox(height: 6.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildProgressSection(context, course),
+              buildDueDateSection(context, course),
+            ],
+          ),
+          const SizedBox(height: 6.0),
+        ],
+      ),
+    );
+  }
+
+  Widget buildProgressSection(BuildContext context, Course course) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Status',
+          style: TextStyle(
+            fontSize: 14.0,
+            color: Theme.of(context).hintColor,
+          ),
+        ),
+        const SizedBox(height: 6.0),
+        Row(
+          children: [
+            SizedBox(
+              height: 8.0,
+              width: 100.0,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 8.0,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  Container(
+                    height: 8.0,
+                    width: 100.0 * course.courseProgress / 100,
+                    decoration: BoxDecoration(
+                      color: getProgressBarColor(course.courseProgress),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              '${course.courseProgress}%',
+              style: TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildDueDateSection(BuildContext context, Course course) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Due Date',
+          style: TextStyle(
+            fontSize: 14.0,
+            color: Theme.of(context).hintColor,
+          ),
+        ),
+        Text(
+          course.courseEndDate,
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).highlightColor,
+          ),
+        ),
+      ],
     );
   }
 
@@ -714,36 +651,32 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 }
-
 class CourseProvider with ChangeNotifier {
- 
-   final CourseReportApiService _apiService = CourseReportApiService();
-  
-  
+  final CourseReportApiService _apiService = CourseReportApiService();
   List<Course>? course;
   bool isLoading = true;
-  
 
+  // Remove the token from the constructor
   CourseProvider() {
-  String? token;
-    fetchData(token);
+    // No need to fetch data here; we'll do it after setting the token.
   }
 
-  Future<void> fetchData(token) async {
+  // Method to set the token and fetch courses
+  Future<void> setTokenAndFetch(String token) async {
+    await fetchData(token);
+  }
+
+  Future<void> fetchData(String token) async {
     try {
-      if(token!=null){
-          final List<Course> response = await _apiService.fetchCourses(token);
-     
+      isLoading = true;  // Set loading to true while fetching data
+      notifyListeners(); // Notify listeners about loading state
+      final List<Course> response = await _apiService.fetchCourses(token);
       course = response;
-      }
-     
     } catch (e) {
       print('Error fetching data: $e');
     } finally {
-      isLoading = false;
-       print(course);
-      notifyListeners();
+      isLoading = false; // Set loading to false after fetching
+      notifyListeners(); // Notify listeners after fetching data
     }
   }
 }
-
