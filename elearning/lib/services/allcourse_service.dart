@@ -4,25 +4,49 @@ import 'package:elearning/services/auth.dart';
 import 'package:http/http.dart' as http;
 
 class CourseReportApiService {
-  Future<List<Course>> fetchCourses(String token) async {
-    final userInfo = await SiteConfigApiService.getUserId(token);
-    final userId = userInfo['id'];
-    final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
-        'moodlewsrestformat=json&wstoken=$token&'
-        'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
-    try {
-      final response = await http.get(apiUrl);
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        final List<dynamic> coursesData = responseData['allcourses'];
-        
-        return coursesData.map((courseData) => Course.fromJson(courseData)).toList();
-      } else {
-        throw Exception('Failed to load courses');
-      }
-    } catch (e) {
-      throw Exception('Error fetching courses: $e');
+Future<List<Course>> fetchCourses(String token) async {
+  final userInfo = await SiteConfigApiService.getUserId(token);
+  
+  if (userInfo == null || userInfo['id'] == null) {
+    throw Exception('User information is missing');
+  }
+
+  final userId = userInfo!['id'];
+  final apiUrl = Uri.parse('${Constants.baseUrl}/webservice/rest/server.php?'
+      'moodlewsrestformat=json&wstoken=$token&'
+      'wsfunction=local_corporate_api_create_coursesapi&userid=$userId');
+
+  try {
+    final response = await http.get(apiUrl);
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      final List<dynamic> coursesData = responseData['allcourses'];
+      return coursesData.map((courseData) => Course.fromJson(courseData)).toList();
+    } else {
+      print('Failed to load courses: ${response.statusCode}');
+      throw Exception('Failed to load courses');
     }
+  } catch (e) {
+    print('Error fetching courses: $e');
+    throw Exception('Error fetching courses: $e');
+  }
+}
+
+  Stream<int> getCprogress(String id,String token) {
+    return Stream.periodic(Duration(seconds: 1),(_) async {
+      try{
+           List<Course> courses = await fetchCourses(token);
+           for(Course course in  courses){
+            if(id==course.id){
+              return course.courseProgress;
+            }
+           }   throw Exception('Course not found');
+    } catch (e) {
+      throw Exception('Error retrieving course image: $e');
+    
+      }
+
+    }).asyncMap((future) => future); 
   }
 
   Future<String> getCourseImageWith_token_id(String token, String courseId) async {

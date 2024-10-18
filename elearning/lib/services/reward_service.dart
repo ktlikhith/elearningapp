@@ -32,7 +32,7 @@ class RewardService {
 
   }
   
-    Stream<RewardData> getspinwheel(String token) {
+    Stream<spinwheel> getspinwheel(String token) {
     return Stream.periodic(Duration(seconds: 1), (_) async {
       // Fetch leaderboard data
    final userInfo = await SiteConfigApiService.getUserId(token);
@@ -46,7 +46,7 @@ class RewardService {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        final rewardData = RewardData.fromJson(jsonResponse['reward_data']);
+        final rewardData = spinwheel.fromJson(jsonResponse['reward_data']);
      
         return rewardData;
       } else {
@@ -82,6 +82,17 @@ class RewardService {
   //     }
   //   }).asyncMap((future) => future); // Convert Future to Stream
   // }
+}
+class spinwheel{
+  final bool spinButton;
+  spinwheel({
+required this.spinButton,
+  });
+   factory spinwheel.fromJson(Map<String, dynamic> json) {
+    return spinwheel(
+      spinButton: json['spinbutton'] == true || json['spinbutton'] == 'true',
+    );
+   }
 }
 
 class RewardData {

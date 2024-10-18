@@ -302,11 +302,11 @@ class _SpinWheelState extends State<SpinWheel> {
   final StreamController<double> _wheelNotifier = StreamController<double>();
  bool spinButton = false;
   bool isLoading=true;
-    late Stream<RewardData> _rewardDataFuture;
+    late Stream<spinwheel> _rewardDataFuture;
   String selectedLabel = '';
   bool isconfettiplaying=false;
   final confettiController=ConfettiController();
-  late Stream<RewardData> datas;
+  late Stream<spinwheel> datas;
    final rd =RewardService();
   // late RewardService rewardService;
   @override
@@ -405,7 +405,7 @@ class _SpinWheelState extends State<SpinWheel> {
    
         
     return
-     StreamBuilder<RewardData>(
+     StreamBuilder<spinwheel>(
 
         stream:_rewardDataFuture,
         builder: (context, snapshot) {

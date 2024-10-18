@@ -108,6 +108,36 @@ class NotificationCount {
       throw Exception('Failed to load unread notification count');
     }
   }
+  Stream<int> getUnreadNotificationCountStream(String token) async* {
+  while (true) {
+    try {
+      final userInfo = await SiteConfigApiService.getUserId(token);
+      final userId = userInfo['id'];
+      final url = '${Constants.baseUrl}/webservice/rest/server.php?'
+          'moodlewsrestformat=json'
+          '&wstoken=$token'
+          '&wsfunction=message_popup_get_unread_popup_notification_count'
+          '&useridto=$userId';
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        int count = int.parse(jsonResponse.toString());
+        yield count; // Emit the unread notification count
+      } else {
+        throw Exception('Failed to load unread notification count');
+      }
+    } catch (e) {
+      print('Error fetching notification count: $e');
+      yield 0; // Emit 0 in case of an error
+    }
+
+    // Optionally, wait before fetching the count again
+    await Future.delayed(Duration(seconds: 1)); // Fetch new count every 30 seconds
+  }
+}
+
 }
 
 

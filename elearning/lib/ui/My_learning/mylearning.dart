@@ -238,6 +238,8 @@
 //     }
 //   }
 // }
+
+
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/report_service.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
@@ -279,6 +281,13 @@ class MyLearningPage extends StatefulWidget {
 class _MyLearningPageState extends State<MyLearningPage> {
   bool _isSearching = false;
   String _searchQuery = '';
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+  }
 
   void _handleSearchPressed() {
     setState(() {
@@ -298,6 +307,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
   @override
   Widget build(BuildContext context) {
       final reportProvider = Provider.of<ReportProvider>(context, listen: false);
+     
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -334,10 +344,16 @@ class _MyLearningPageState extends State<MyLearningPage> {
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: RefreshIndicator(
-          onRefresh: ()async{
-            setState(() {
-                   reportProvider.fetchData();
-            });
+          onRefresh:
+           () async {
+          // Using pushReplacement to force a full screen rebuild
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LearningScreen(token: widget.token),
+            ),
+          );
+           
 
          
           },
@@ -374,48 +390,58 @@ class MyLearningAppBody extends StatelessWidget {
     required this.searchQuery,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(height: 18.0),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: <Widget>[
-                buildSection(
-                  iconPath: 'assets/learning icons/total activity.png',
-                  number: reportData?.totalNoActivity ?? 0,
-                  title: 'Totalactivity',
-                  context: context,
-                  Color1: Color.fromARGB(255, 221, 218, 23),
-                ),
-                buildSection(
-                  iconPath: 'assets/learning icons/Completed Activity.png',
-                  number: reportData?.completedActivity ?? 0,
-                  title: 'Completed',
-                  context: context,
-                  Color1: Color.fromARGB(255, 61, 243, 37),
-                ),
-                buildSection(
-                  iconPath: 'assets/learning icons/Average.png',
-                  number: reportData?.averageGrade ?? 0,
-                  title: 'Avg_Grade',
-                  context: context,
-                  Color1: Color.fromARGB(255, 32, 247, 233),
-                ),
-              ],
+ @override
+Widget build(BuildContext context) {
+  return Consumer<ReportProvider>(
+    builder: (context, reportProvider, _) {
+      return Container(
+        padding: const EdgeInsets.only(left: 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 18.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: <Widget>[
+                  buildSection(
+                    iconPath: 'assets/learning icons/total activity.png',
+                    number: reportProvider.reportData?.totalNoActivity ?? 0,
+                    title: 'Totalactivity',
+                    context: context,
+                    Color1: Color.fromARGB(255, 221, 218, 23),
+                  ),
+                  buildSection(
+                    iconPath: 'assets/learning icons/Completed Activity.png',
+                    number: reportProvider.reportData?.completedActivity ?? 0,
+                    title: 'Completed',
+                    context: context,
+                    Color1: Color.fromARGB(255, 61, 243, 37),
+                  ),
+                  buildSection(
+                    iconPath: 'assets/learning icons/Average.png',
+                    number: reportProvider.reportData?.averageGrade ?? 0,
+                    title: 'Avg_Grade',
+                    context: context,
+                    Color1: Color.fromARGB(255, 32, 247, 233),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 6.0),
-          isLoading ? _buildLoadingShimmer() : BuildCourseSections(token: token, searchQuery: searchQuery),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 6.0),
+           BuildCourseSections(
+                    token: token,
+                    searchQuery: searchQuery,
+                      reportprovider: reportProvider.isLoading,
+                    
+                  )// Show actual course content when isLoading is false
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildLoadingShimmer() {
     return ListView.builder(
@@ -489,23 +515,26 @@ class ReportProvider with ChangeNotifier {
   bool isLoading = true;
   
 
+ 
+
+
   ReportProvider(this.token) {
     fetchData();
   }
 
-  Future<void> fetchData() async {
-    try {
-      if(token!=null){
-      final data = await reportService.fetchReport(token);
-      reportData = data;
-      }
-     
-    } catch (e) {
-      print('Error fetching data: $e');
-    } finally {
-      isLoading = false;
-       print(reportData);
-      notifyListeners();
-    }
+Future<void> fetchData() async {
+  isLoading = true; // Set loading state
+  notifyListeners(); // Notify listeners before fetching data
+  try {
+    final data = await reportService.fetchReport(token);
+    reportData = data;
+  } catch (e) {
+    print('Error fetching data: $e');
+    // Optionally, set an error state or show a message to the user
+  } finally {
+    isLoading = false; // Set loading state to false regardless of success/failure
+    notifyListeners(); // Notify listeners after fetching data
   }
+}
+
 }

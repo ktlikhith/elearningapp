@@ -89,15 +89,15 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
   }
 
 Widget _buildSection(BuildContext context, CourseData course) {
-  const double cardHeight = 240; // Define a constant height for the card
-  const double cardWidth = 300; // Define a constant width for the card
+   double cardHeight = MediaQuery.of(context).size.height*0.25; // Define a constant height for the card
+   double cardWidth = MediaQuery.of(context).size.width*0.8; // Define a constant width for the card
   const double titleMaxHeight = 36; // Maximum height for the title text (2 lines)
 
   return Padding(
     padding: const EdgeInsets.all(4.0),
     child: Container(
-      width: cardWidth,
-      height: cardHeight,
+       width: cardWidth,
+      // height: cardHeight,
       
        // Set the card height to a constant value
       child: Container(
@@ -121,122 +121,130 @@ Widget _buildSection(BuildContext context, CourseData course) {
               ),
             ],
           ),
-          child: Material(
-            borderRadius: BorderRadius.circular(8.0),
-          
-           // BoxDecoration(border: Border.all(color: Colors.black))
-            color: Theme.of(context).cardColor,
-            child: InkWell(
-              onTap: () => showMLPopup(
-                context,
-                course.id,
-                course.name,
-                course.courseProgress.toString(),
-                course.courseDescription,
-                course.courseStartDate,
-                course.courseEndDate,
-                course.courseVideoUrl,
-                course.courseDuration,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: cardHeight * 0.6, // Adjust image height
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border:Border.all(color: Theme.of(context).cardColor),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        topRight: Radius.circular(8.0),
-                      
-                      ),
-                     
-                    ),
-                    child: ClipRRect(
-                      
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(6.0),
-                        topRight: Radius.circular(6.0),
+          child: ConstrainedBox(
+            constraints:  BoxConstraints(minHeight: cardHeight, // Set the minimum height
+      maxHeight: double.infinity,
+            ),
+            child: Material(
+              borderRadius: BorderRadius.circular(8.0),
+            
+             // BoxDecoration(border: Border.all(color: Colors.black))
+              color: Theme.of(context).cardColor,
+              child: InkWell(
+                onTap: () => showMLPopup(
+                  context,
+                  course.id,
+                  course.name,
+                  course.courseProgress.toString(),
+                  course.courseDescription,
+                  course.courseStartDate,
+                  course.courseEndDate,
+                  course.courseVideoUrl,
+                  course.courseDuration,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: cardHeight * 0.6, // Adjust image height
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border:Border.all(color: Theme.of(context).cardColor),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          topRight: Radius.circular(8.0),
                         
-                        
-                      ),
-                      child: Container(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: Image.network(
-                          course.getImageUrlWithToken(widget.token),
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          errorBuilder: (context, error, stackTrace) {
-                            // Return a default image when loading fails
-                            return Image.asset(
-                              'assets/images/coursedefaultimg.jpg',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            );
-                          },
                         ),
+                       
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          course.name,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).highlightColor
+                      child: ClipRRect(
+                        
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(6.0),
+                          topRight: Radius.circular(6.0),
+                          
+                          
+                        ),
+                        child: Container(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: Image.network(
+                            course.getImageUrlWithToken(widget.token),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Return a default image when loading fails
+                              return Image.asset(
+                                'assets/images/coursedefaultimg.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              );
+                            },
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
-                          'End Date: ${course.courseEndDate}',
-                          style: TextStyle(
-                            color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0,top: 5,right: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            course.name,
+                           //'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
+                            maxLines: 2,
+                            
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                             // height:0.8,
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).highlightColor
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: FractionallySizedBox(
-                                  alignment: Alignment.centerLeft,
-                                  widthFactor: course.courseProgress / 100,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: getProgressBarColor(course.courseProgress),
-                                      borderRadius: BorderRadius.circular(5.0),
+                          SizedBox(height: 4),
+                          Text(
+                            'End Date: ${course.courseEndDate}',
+                            style: TextStyle(
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: FractionallySizedBox(
+                                    alignment: Alignment.centerLeft,
+                                    widthFactor: course.courseProgress / 100,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: getProgressBarColor(course.courseProgress),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              '${course.courseProgress}%',
-                              style: TextStyle(
-                                color: Theme.of(context).hintColor,
-                                fontWeight: FontWeight.bold,
+                              SizedBox(width: 4),
+                              Text(
+                                '${course.courseProgress}%',
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

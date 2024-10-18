@@ -88,7 +88,7 @@ class Notifications {
       fullMessageFormat: json['fullmessageformat'],
       fullMessageHtml: json['fullmessagehtml'],
       smallMessage: json['smallmessage'],
-      contextUrl: json['contexturl'],
+      contextUrl: json['contexturl']??"Null",
       contextUrlName: json['contexturlname'],
       timeCreated: json['timecreated'],
       timeCreatedPretty: json['timecreatedpretty'],

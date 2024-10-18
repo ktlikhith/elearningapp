@@ -292,6 +292,7 @@ import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -314,7 +315,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     _initializeNotifications();
-    _fetchNotifications(widget.token);
+
   }
 
   Future<void> _initializeNotifications() async {
@@ -345,6 +346,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
     } catch (e) {
       print('Error fetching notifications: $e');
     }
+  }
+  
+   Stream<List<Notifications>> getnoti(String token) async* {
+    try {
+    final List<Notifications> response = await _notificationService.getNotifications(token);
+
+      
+//  for (var notification in response) {
+//         if (!notification.read) {
+//           _showNotification(notification);
+//         }
+//       }
+      
+        yield response;
+    
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load user reward points');
+    }
+
   }
 
   Future<void> _showNotification(Notifications notification) async {
@@ -455,72 +476,94 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: _notifications != null
-            ? _notifications.isEmpty
-                ? Center(child: Text('No notifications to read'))
-                : ListView.builder(
-                    itemCount: _notifications.length,
-                    itemBuilder: (context, index) {
-                      final notification = _notifications[index];
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 8.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white,
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            notification.subject,
-                            style: TextStyle(
-                              fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
-                              color: notification.read ? Colors.black : Colors.blue,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(notification.timeCreatedPretty),
-                              TextButton(
-                                onPressed: () async {
-                                  await _markNotificationAsRead(notification.id);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NotificationDetailsScreen(
-                                        token: widget.token,
-                                        notification: notification,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+      body: StreamBuilder<List<Notifications>>(
+        stream: getnoti(widget.token),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState==ConnectionState.waiting){
+            return  _buildShimmerList();
+
+          }
+        
+              if (snapshot.hasError) {
+                return Center(child: Text('Error loading user info'));
+              }
+            
+             if(snapshot==null){
+            return Center(child: Text('No notifications to read'));
+            }
+            else if(snapshot.hasData){
+              _notifications=snapshot.data!;
+          return Container(
+            padding: EdgeInsets.all(8.0),
+            child: ListView.builder(
+                        itemCount: _notifications.length,
+                        itemBuilder: (context, index) {
+                          final notification = _notifications[index];
+                          return Container(
+                            margin: EdgeInsets.symmetric(vertical: 8.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
                                 ),
-                                child: Text(
-                                  'View Full Notification',
-                                  style: TextStyle(color: Colors.blue),
+                              ],
+                            ),
+                            child: ListTile(
+                              title: Text(
+                                notification.subject,
+                                style: TextStyle(
+                                  fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
+                                  color: notification.read ? Colors.black : Colors.blue,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  )
-            : _buildShimmerList(),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(notification.timeCreatedPretty),
+                                  TextButton(
+                                    onPressed: () async {
+                                      await _markNotificationAsRead(notification.id);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NotificationDetailsScreen(
+                                            token: widget.token,
+                                            notification: notification,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ButtonStyle(
+                                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                    ),
+                                    child: Text(
+                                      'View Full Notification',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      )
+              
+          );
+          
+          }
+           else return Container(child: Center(child: Text('somethinng went wrong'),),);
+         
+        }
+        
       ),
     );
   }
+
 }
 
 class NotificationDetailsScreen extends StatelessWidget {
