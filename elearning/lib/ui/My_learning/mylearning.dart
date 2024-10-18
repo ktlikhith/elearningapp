@@ -344,11 +344,16 @@ class _MyLearningPageState extends State<MyLearningPage> {
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: RefreshIndicator(
-          onRefresh: ()async{
-            setState(() {
-                   reportProvider.fetchData();
-                 
-            });
+          onRefresh:
+           () async {
+          // Using pushReplacement to force a full screen rebuild
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LearningScreen(token: widget.token),
+            ),
+          );
+           
 
          
           },
@@ -385,53 +390,58 @@ class MyLearningAppBody extends StatelessWidget {
     required this.searchQuery,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return 
-    Consumer<ReportProvider>(
-            builder: (context, reportProvider, _) {
-              return Container(
-      padding: const EdgeInsets.only(left: 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(height: 18.0),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: <Widget>[
-                buildSection(
-                  iconPath: 'assets/learning icons/total activity.png',
-                  number: reportData?.totalNoActivity ?? 0,
-                  title: 'Totalactivity',
-                  context: context,
-                  Color1: Color.fromARGB(255, 221, 218, 23),
-                ),
-                buildSection(
-                  iconPath: 'assets/learning icons/Completed Activity.png',
-                  number: reportData?.completedActivity ?? 0,
-                  title: 'Completed',
-                  context: context,
-                  Color1: Color.fromARGB(255, 61, 243, 37),
-                ),
-                buildSection(
-                  iconPath: 'assets/learning icons/Average.png',
-                  number: reportData?.averageGrade ?? 0,
-                  title: 'Avg_Grade',
-                  context: context,
-                  Color1: Color.fromARGB(255, 32, 247, 233),
-                ),
-              ],
+ @override
+Widget build(BuildContext context) {
+  return Consumer<ReportProvider>(
+    builder: (context, reportProvider, _) {
+      return Container(
+        padding: const EdgeInsets.only(left: 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(height: 18.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: <Widget>[
+                  buildSection(
+                    iconPath: 'assets/learning icons/total activity.png',
+                    number: reportProvider.reportData?.totalNoActivity ?? 0,
+                    title: 'Totalactivity',
+                    context: context,
+                    Color1: Color.fromARGB(255, 221, 218, 23),
+                  ),
+                  buildSection(
+                    iconPath: 'assets/learning icons/Completed Activity.png',
+                    number: reportProvider.reportData?.completedActivity ?? 0,
+                    title: 'Completed',
+                    context: context,
+                    Color1: Color.fromARGB(255, 61, 243, 37),
+                  ),
+                  buildSection(
+                    iconPath: 'assets/learning icons/Average.png',
+                    number: reportProvider.reportData?.averageGrade ?? 0,
+                    title: 'Avg_Grade',
+                    context: context,
+                    Color1: Color.fromARGB(255, 32, 247, 233),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 6.0),
-          isLoading ? _buildLoadingShimmer() : BuildCourseSections(token: token, searchQuery: searchQuery),
-        ],
-      ),
-    );
-            }
-    );
-  }
+            const SizedBox(height: 6.0),
+           BuildCourseSections(
+                    token: token,
+                    searchQuery: searchQuery,
+                      reportprovider: reportProvider.isLoading,
+                    
+                  )// Show actual course content when isLoading is false
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildLoadingShimmer() {
     return ListView.builder(

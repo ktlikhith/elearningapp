@@ -313,6 +313,7 @@ import 'package:shimmer/shimmer.dart';
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -320,33 +321,55 @@ import 'package:shimmer/shimmer.dart';
 class BuildCourseSections extends StatefulWidget {
   final String token;
   final String searchQuery;
+  final bool reportprovider;
+ 
 
-  const BuildCourseSections({Key? key, required this.token, required this.searchQuery}) : super(key: key);
+  const BuildCourseSections({Key? key, required this.token, required this.searchQuery,required this.reportprovider}) : super(key: key);
 
   @override
   _BuildCourseSectionsState createState() => _BuildCourseSectionsState();
 }
-
 class _BuildCourseSectionsState extends State<BuildCourseSections> {
+  late CourseProvider provider;
+  bool _isFetching = false;
+
   @override
   void initState() {
     super.initState();
-    // Set the token when the widget initializes
-    final provider = Provider.of<CourseProvider>(context, listen: false);
-    provider.setTokenAndFetch(widget.token);
+    print("Initializing BuildCourseSections...");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isFetching) {
+      provider = Provider.of<CourseProvider>(context, listen: false);
+      provider.setTokenAndFetch(widget.token);
+      _isFetching = true; // Ensure fetch is done only once
+    }
+  }
+
+  @override
+  void dispose() {
+    // Mark that we are no longer interested in fetching new data
+    _isFetching = false;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CourseProvider>(
       builder: (context, provider, _) {
-        // Fetch the filtered courses based on the search query
-        List<Course> filteredCourses = provider.course?.where((course) {
-          return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
-        }).toList() ?? [];
+        // If the search query is empty, display all courses
+        List<Course> filteredCourses = widget.searchQuery.isEmpty
+            ? provider.course ?? []  // Display all courses when no search query
+            : provider.course?.where((course) {
+                // Filter courses based on the search query
+                return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
+              }).toList() ?? [];
 
         return provider.isLoading
-            ? _buildShimmerEffect()
+            ? _buildShimmerEffect()  // Show shimmer while loading
             : filteredCourses.isNotEmpty
                 ? SingleChildScrollView(
                     child: Column(
@@ -355,10 +378,13 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
                           .toList(),
                     ),
                   )
-                : Center(child: Text('No courses found.'));
+                : Center(child: Text('No courses found.'));  // Handle empty list case
       },
     );
   }
+
+
+
 
   Widget _buildShimmerEffect() {
     return ListView.builder(
