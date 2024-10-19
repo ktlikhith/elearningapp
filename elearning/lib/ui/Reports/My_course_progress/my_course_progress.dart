@@ -432,22 +432,35 @@ class _CoursePageState extends State<Coursereport> {
     return courses.where((course) => course.courseProgress == 0).length;
   }
 
-  void _handlePieChartTap(String section) {
+  void _handlePieChartTap(String section) async{
     if (section == 'Completed') {
-      Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
+    await  Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
         'token': widget.token,
         'filter': 'completed',
       });
+       setState(() {
+     _homePageData = HomePageService.fetchHomePageData(widget.token);
+       });
+                          
+      
     } else if (section == 'In Progress') {
-      Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
+     await Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
         'token': widget.token,
         'filter': 'in progress',
       });
+        setState(() {
+     _homePageData = HomePageService.fetchHomePageData(widget.token);
+       });
+                  
     } else if (section == 'Not Started') {
-      Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
+     await Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
         'token': widget.token,
         'filter': 'not started',
       });
+        setState(() {
+     _homePageData = HomePageService.fetchHomePageData(widget.token);
+       });
+                  
     }
   }
 
@@ -690,10 +703,13 @@ OverlayEntry _createOverlayEntry(BuildContext context) {
                         width: double.infinity,
                         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
+                          onPressed: () async{
+                           await  Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
                               'token': widget.token,
                               'filter': 'all',
+                            });
+                            setState(() {
+                                _homePageData = HomePageService.fetchHomePageData(widget.token);
                             });
                           },
                           style: ElevatedButton.styleFrom(

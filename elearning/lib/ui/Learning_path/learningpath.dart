@@ -61,25 +61,31 @@ class _LearningPathPageState extends State<LearningPathPage> {
         ),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: learningPathData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildLoadingSkeleton();
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error loading data'),
-            );
-          } else if (snapshot.hasData && snapshot.data!['learningpathdetail'].isEmpty) {
-            return Center(
-              child: Text('No Data to Show'),
-            );
-          } else {
-            final learningPathDetails = snapshot.data!['learningpathdetail'];
-            final List<dynamic> courseProgress = snapshot.data!['learningpath_progress'];
-            return _buildLearningPathPage(context, learningPathDetails, courseProgress, _courses);
-          }
+      body: RefreshIndicator(
+        onRefresh: ()async{
+             learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
+    _fetchCourses(widget.token);
         },
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: learningPathData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildLoadingSkeleton();
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error loading data'),
+              );
+            } else if (snapshot.hasData && snapshot.data!['learningpathdetail'].isEmpty) {
+              return Center(
+                child: Text('No Data to Show'),
+              );
+            } else {
+              final learningPathDetails = snapshot.data!['learningpathdetail'];
+              final List<dynamic> courseProgress = snapshot.data!['learningpath_progress'];
+              return _buildLearningPathPage(context, learningPathDetails, courseProgress, _courses);
+            }
+          },
+        ),
       ),
     );
   }

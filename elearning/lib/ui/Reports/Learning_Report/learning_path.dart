@@ -67,13 +67,17 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
             itemBuilder: (context, index) {
         var learningPath = LearningPathDetail.fromJson(learningPaths[index], progressList);
         return GestureDetector(
-          onTap: () {
-            Navigator.push(
+          onTap: ()async {
+           await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => LearningPathDetailScreen(learningPath: learningPath,index:index,token: widget.token,),
               ),
             );
+            setState(() {
+              _learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
+            });
+             
           },
           child: Container(
         
@@ -322,8 +326,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                 
                             Center(
                               child: Text(
-                               // '${learningPath.progress}%',
-                               "100%",
+                                '${learningPath.progress}%',
+                               
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,

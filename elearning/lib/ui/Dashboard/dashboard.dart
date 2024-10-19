@@ -341,8 +341,9 @@ Future<void>  _refreshdata()async{
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
+                  onTap: () async{
+                   await Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
+                   _refreshdata();
                   },
                   child: CircleAvatar(
                     radius: 20,
