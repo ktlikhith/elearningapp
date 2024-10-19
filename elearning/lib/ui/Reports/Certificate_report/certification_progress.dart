@@ -317,8 +317,8 @@ class CourseCard extends StatelessWidget {
                                  child: Image.network(
                                                        
                                                            '${course.courseImg}?token=${token}',
-                                                           height: 45,
-                                                           width: 70,
+                                                           height: 40,
+                                                           width: MediaQuery.of(context).size.width*0.17,
                                                            fit: BoxFit.fill,
                                                          
                                                            
@@ -326,7 +326,7 @@ class CourseCard extends StatelessWidget {
                                                              return Image.asset(
                                   'assets/images/coursedefaultimg.jpg',
                                       height: 45,
-                                                           width: 70,
+                                                         width: MediaQuery.of(context).size.width*0.17,
                                   fit: BoxFit.fill,
                                                              );
                                                            },

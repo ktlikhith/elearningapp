@@ -96,7 +96,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
   return Padding(
     padding: const EdgeInsets.all(4.0),
     child: Container(
-       width: cardWidth,
+       width: MediaQuery.of(context).orientation==Orientation.portrait? cardWidth:cardWidth*0.5,
       // height: cardHeight,
       
        // Set the card height to a constant value
@@ -146,7 +146,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: cardHeight * 0.6, // Adjust image height
+                      height:MediaQuery.of(context).orientation==Orientation.portrait? cardHeight * 0.6:cardHeight*1.5, // Adjust image height
                       width: double.infinity,
                       decoration: BoxDecoration(
                         border:Border.all(color: Theme.of(context).cardColor),

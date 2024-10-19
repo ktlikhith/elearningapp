@@ -501,7 +501,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
   Widget buildCourseImage(BuildContext context, Course course) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
-      height: MediaQuery.of(context).size.height * 0.165,
+      height:MediaQuery.of(context).orientation!=Orientation.landscape? MediaQuery.of(context).size.height * 0.165:MediaQuery.of(context).size.height* .5,
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).cardColor),
         borderRadius: BorderRadius.circular(8.0),

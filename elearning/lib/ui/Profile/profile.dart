@@ -547,8 +547,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
   //color: const Color.fromARGB(255, 227, 241, 240),
 
-  height: screenHeight * 0.23,
-  width: MediaQuery.of(context).size.width * 0.83,
+  height:MediaQuery.of(context).orientation==Orientation.portrait? screenHeight * 0.23:screenHeight*0.5,
+  width:MediaQuery.of(context).orientation==Orientation.portrait?  MediaQuery.of(context).size.width * 0.83:MediaQuery.of(context).size.width * 0.5,
   
   decoration: BoxDecoration( borderRadius:
  BorderRadius.only(

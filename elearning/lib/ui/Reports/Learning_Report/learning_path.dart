@@ -132,23 +132,26 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           children: [
            
             // Image with error handling
-            Image.network(
-                        
-                            '${Constants.baseUrl}${learningPath.imageUrl}',
-                            height: 55,
-                            width: MediaQuery.of(context).size.width*0.25,
-                            fit: BoxFit.fill,
+            Container(
+              color: Colors.white,
+              child: Image.network(
                           
+                              '${Constants.baseUrl}${learningPath.imageUrl}',
+                              height: 55,
+                              width: MediaQuery.of(context).size.width*0.25,
+                              fit: BoxFit.fill,
                             
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/coursedefaultimg.jpg',
-                                    height: 55,
-                           width: MediaQuery.of(context).size.width*0.25,
-                                fit: BoxFit.fill,
-                              );
-                            },
-                          ),
+                              
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/coursedefaultimg.jpg',
+                                      height: 55,
+                             width: MediaQuery.of(context).size.width*0.25,
+                                  fit: BoxFit.fill,
+                                );
+                              },
+                            ),
+            ),
         
         
           ],
@@ -218,7 +221,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                             children: [
                                               Container(
                                                 height: 8,
-                                                width: MediaQuery.of(context).size.width * 0.2,
+                                                width: MediaQuery.of(context).size.width * 0.19,
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(10),
                                                   gradient: LinearGradient(
@@ -232,8 +235,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                               ),
                                               if(learningPath.progress>7)
                                               Container(
-                                                height: 15,
-                                                width: MediaQuery.of(context).size.width * 0.2 * (learningPath.progress / 100),
+                                                height: 8,
+                                                width: MediaQuery.of(context).size.width * 0.19 * (learningPath.progress / 100),
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(10),
                                                   gradient: LinearGradient(
@@ -248,10 +251,10 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                               ),
                                               if(learningPath.progress < 7 && learningPath.progress>0)
                                                 Positioned(
-                                                  left: MediaQuery.of(context).size.width * 0.22 *0.028-8,
+                                                  left: MediaQuery.of(context).size.width * 0.8 *0.028-8,
                                                   child: Container(
-                                                    width: 15,
-                                                    height: 15,
+                                                    width: 8,
+                                                    height: 8,
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       gradient: LinearGradient(
@@ -272,12 +275,12 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                              if (learningPath.progress >= 7)
+                                              if (learningPath.progress >= 7&&learningPath.progress!=100)
                                                 Positioned(
-                                                  left: MediaQuery.of(context).size.width * 0.2* (learningPath.progress / 100) - 8,
+                                                  left: MediaQuery.of(context).size.width * 0.2* (learningPath.progress/ 100) - 8,
                                                   child: Container(
-                                                    width: 16,
-                                                    height: 16,
+                                                    width: 8,
+                                                    height: 8,
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       gradient: LinearGradient(
@@ -319,7 +322,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                 
                             Center(
                               child: Text(
-                                '${learningPath.progress}%',
+                               // '${learningPath.progress}%',
+                               "100%",
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
