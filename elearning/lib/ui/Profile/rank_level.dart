@@ -37,6 +37,8 @@ class RankLevel extends StatelessWidget {
         }
 
         return Container(
+       //  height:MediaQuery.of(context).orientation==Orientation.portrait?  * 0.23:screenHeight*0.5,
+  width:MediaQuery.of(context).orientation==Orientation.portrait?  MediaQuery.of(context).size.width :MediaQuery.of(context).size.width * 0.55,
            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
           // decoration: BoxDecoration(
           //   color: Colors.grey[200],

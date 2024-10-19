@@ -104,6 +104,7 @@ late Future<Map<String, dynamic>> _learningPathData;
                                   for (Course c in _courses) {
                                     if (c.id == course.courseid) {
                                       coursedes = c;
+                                      
                                       break;
                                     }
                                   }
@@ -183,29 +184,32 @@ late Future<Map<String, dynamic>> _learningPathData;
                                                         borderRadius: BorderRadius.circular(8.0),
                                                         
                                                       child: 
-                                                              Image.network(
-                                                                
-                                                                    '${course.imageUrl}?token=${widget.token}',
-                                                                    height: 40,
-                                                                    width: MediaQuery.of(context).size.width*0.2,
-                                                                    fit: BoxFit.fill,
+                                                              Container(
+                                                                color: Colors.white,
+                                                                child: Image.network(
                                                                   
-                                                                    errorBuilder: (context, error, stackTrace) {
-                                                                      return Image.asset(
-                                                                        'assets/images/coursedefaultimg.jpg',
-                                                                    height: 40,
-                                                                   width: MediaQuery.of(context).size.width*0.2,
-                                                                        fit: BoxFit.fill,
-                                                                      );
-                                                                    },
-                                                                  ),
+                                                                      '${course.imageUrl}?token=${widget.token}',
+                                                                      height: 40,
+                                                                      width: MediaQuery.of(context).size.width*0.2,
+                                                                      fit: BoxFit.fill,
+                                                                    
+                                                                      errorBuilder: (context, error, stackTrace) {
+                                                                        return Image.asset(
+                                                                          'assets/images/coursedefaultimg.jpg',
+                                                                      height: 40,
+                                                                     width: MediaQuery.of(context).size.width*0.2,
+                                                                          fit: BoxFit.fill,
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                              ),
                                                               ),
                                         ),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                          width: MediaQuery.of(context).size.width*0.5,
+                                          width: MediaQuery.of(context).size.width*0.45,
                                           child: Text(
                                             course.name,
                                             maxLines: 1,
@@ -220,7 +224,7 @@ late Future<Map<String, dynamic>> _learningPathData;
                                               children: [
                                                 Container(
                                                   height: 15,
-                                                  width: MediaQuery.of(context).size.width * 0.5,
+                                                  width: MediaQuery.of(context).size.width * 0.45,
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(10),
                                                     gradient: LinearGradient(
@@ -235,7 +239,7 @@ late Future<Map<String, dynamic>> _learningPathData;
                                                 if(course.progress>7)
                                                 Container(
                                                   height: 15,
-                                                  width: MediaQuery.of(context).size.width * 0.5 * (course.progress / 100),
+                                                  width: MediaQuery.of(context).size.width * 0.45 * (course.progress / 100),
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(10),
                                                     gradient: LinearGradient(
@@ -249,8 +253,9 @@ late Future<Map<String, dynamic>> _learningPathData;
                                                   ),
                                                 ),
                                                 if (course.progress < 7 && course.progress>0)
+                                                
                                                   Positioned(
-                                                    left: MediaQuery.of(context).size.width * 0.55 *0.07-20,
+                                                    left: MediaQuery.of(context).size.width * 0.75 *0.07-20,
                                                     child: Container(
                                                       width: 15,
                                                       height: 15,
@@ -274,7 +279,7 @@ late Future<Map<String, dynamic>> _learningPathData;
                                                       ),
                                                     ),
                                                   ),
-                                                if (course.progress >= 7)
+                                                if (course.progress >= 7&&course.progress!=100)
                                                   Positioned(
                                                     left: MediaQuery.of(context).size.width * 0.51* (course.progress / 100) - 20,
                                                     child: Container(

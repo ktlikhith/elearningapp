@@ -260,11 +260,11 @@ class _MLPopupState extends State<MLPopup> {
           
          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(FontAwesomeIcons.play,size: 15,color:Theme.of(context).highlightColor ,),
-             Text(
+            Text(
               'Start',
               style: TextStyle(color: Theme.of(context).highlightColor,fontSize: 13.4),
             ),
+             Icon(FontAwesomeIcons.play,size: 15,color:Theme.of(context).highlightColor ,),
           ],
         ),
       ),
