@@ -57,7 +57,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   void initState() {
     super.initState();
       initConnectivity();
-
+    
       // Correct type for StreamSubscription<ConnectivityResult>
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
@@ -585,7 +585,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         
                                     ],
                                   ),
-                                  onTap: () {
+                                  onTap: () async{
                                      bool uservisible =
                                     module['uservisible'] ;
                                     bool availabilityinfo=module['availabilityinfo']!=null;
@@ -603,11 +603,21 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       //   MaterialPageRoute(
                                       //     builder: (context) => VideoPlayerScreen(vidurl: vidurl),
                                       //   ),
-                                      // );
-                                       Navigator.push(
+                                      // );   
+                      
+                              
+                                    await   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'],  module['url'], widget.token,))
                                   );
+                                    setState(() {
+              _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+     DownloadManager dm =DownloadManager();
+    _fetchCourseContent();
+    _courseImageUrlFuture = _fetchCourseImage();
+    _courseDescriptionFuture = _fetchCourseDescription();
+              });
                                     } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final content = module['contents'][0];
                                       String getpdfUrlWithToken(String filePath1, String Token) {
@@ -620,10 +630,18 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       //     builder: (context) => PDFViewScreen(pdfurl),
                                       //   ),
                                       // );
-                                       Navigator.push(
+                                     await  Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
                                   );
+                                    setState(() {
+              _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+     DownloadManager dm =DownloadManager();
+    _fetchCourseContent();
+    _courseImageUrlFuture = _fetchCourseImage();
+    _courseDescriptionFuture = _fetchCourseDescription();
+              });
                                     } else if (module['modname'] == 'customcert' ){
                                   // String certificateurl=module['url']+'&forcedownload=1';
                                 
@@ -634,63 +652,128 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   //         builder: (context) => WebViewPage(   module['name'] ?? 'customcert',  module['url'],widget.token, ),
                                   //       ),
                                   //     );
-                                  Navigator.push(
+                                await  Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'customcert',  module['url'], widget.token,))
                                   );
+                                    setState(() {
+              _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+     DownloadManager dm =DownloadManager();
+    _fetchCourseContent();
+    _courseImageUrlFuture = _fetchCourseImage();
+    _courseDescriptionFuture = _fetchCourseDescription();
+              });
                                     }
                                     else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
-                                      Navigator.push(
+                                    await  Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
                                         ),
                                       );
+                                        setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                     } else if (module['modname'] == 'forum') {
-                                      Navigator.push(
+                                     await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
                                         ),
                                       );
+                                        setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                     } else if (module['modname'] == 'quiz') {
-                                      Navigator.push(
+                                    await  Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
                                         ),
                                       );
+                                       setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
+
                                     } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final moduleContent = module['contents'][0];
-                                      Navigator.push(
+                                     await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                         ),
                                       );
+                                       setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                     } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final content = module['contents'][0];
-                                      Navigator.push(
+                                     await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
                                         ),
                                       );
+                                       setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                     } else if (module['modname'] == 'assign') {
-                                      Navigator.push(
+                                    await  Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                         ),
                                       );
+                                       setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                     } else {
                                       if (module['url'] != null && module['url'].isNotEmpty) {
-                                        Navigator.push(
+                                      await  Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
                                           ),
                                         );
+                                         setState(() {
+                                                         _connectivitySubscription =
+                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                                                DownloadManager dm =DownloadManager();
+                                               _fetchCourseContent();
+                                               _courseImageUrlFuture = _fetchCourseImage();
+                                               _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
                                       }
                                     }
                                   }
