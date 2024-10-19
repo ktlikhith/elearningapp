@@ -172,13 +172,16 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
                        
                           return GestureDetector(
                             
-                            onTap: () {
-                              Navigator.push(
+                            onTap: () async{
+                            await  Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ActivityDetailsPage(widget.token, course.id, course.name),
                                 ),
                               );
+                              setState(() {
+                                 _homePageData = HomePageService.fetchHomePageData(widget.token);
+                              });
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
