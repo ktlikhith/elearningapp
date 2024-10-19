@@ -33,7 +33,7 @@ late Future<Map<String, dynamic>> _learningPathData;
  Future<void>  refrseh()async{
     setState(() {
        _learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-       
+       _fetchCourses(widget.token);
     });
   }
   Future<void> _fetchCourses(String token) async {
