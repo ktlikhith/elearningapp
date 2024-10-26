@@ -286,6 +286,9 @@
 //     return htmlString.replaceAll(htmlTagRegExp, ''); // Remove HTML tags using replaceAll method
 //   }
 // }
+
+import 'dart:convert';
+
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/notification_service.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
@@ -314,22 +317,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
+   // _initializeNotifications();
 
   }
 
-  Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon'); // Ensure you have an app_icon in your drawable resources
+  // Future<void> _initializeNotifications() async {
+  //   const AndroidInitializationSettings initializationSettingsAndroid =
+  //       AndroidInitializationSettings('app_icon'); // Ensure you have an app_icon in your drawable resources
 
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
+  //   final InitializationSettings initializationSettings = InitializationSettings(
+  //     android: initializationSettingsAndroid,
+  //   );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
-  }
+  //   await flutterLocalNotificationsPlugin.initialize(
+  //     initializationSettings,
+  //   );
+  // }
 
   Future<void> _fetchNotifications(String token) async {
     try {
@@ -368,6 +371,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   }
 
+
   Future<void> _showNotification(Notifications notification) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -389,6 +393,34 @@ class _NotificationScreenState extends State<NotificationScreen> {
       payload: 'item x',
     );
   }
+
+// Future<void> _showNotification(Notifications notification) async {
+//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//       AndroidNotificationDetails(
+//     'your_channel_id',
+//     'your_channel_name',
+//     channelDescription: 'your_channel_description',
+//     importance: Importance.max,
+//     priority: Priority.high,
+//     showWhen: false,
+//   );
+  
+//   const NotificationDetails platformChannelSpecifics = NotificationDetails(
+//     android: androidPlatformChannelSpecifics,
+//   );
+
+//   // Optionally pass a simple payload if needed
+//   await flutterLocalNotificationsPlugin.show(
+//     notification.id,
+//     notification.subject,
+//     removeHtmlTags(notification.fullMessage), // You can choose to omit this
+//     platformChannelSpecifics,
+//     payload: jsonEncode({'type': 'notification'}), // Simple payload if needed
+//   );
+// }
+
+
+
 
   Future<void> _markNotificationAsRead(int notificationId) async {
     try {
@@ -489,7 +521,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               }
             
              if(snapshot==null){
-            return Center(child: Text('No notifications to read'));
+            return Center(child: Text('You dont have any Notifications.'));
             }
             else if(snapshot.hasData){
               _notifications=snapshot.data!;
