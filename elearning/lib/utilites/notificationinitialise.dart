@@ -104,7 +104,16 @@ class NotificationHandler {
   }
 
   Future<void> fetchNotifications(String token) async {
-    print('notifications');
+   
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? MetaToken=prefs.getString('token');
+    
+    List<String>? ids = prefs.getStringList('displayedNotificationIds');
+      if(MetaToken!=null)
+    if (ids != null) {
+      _displayedNotificationIds.addAll(ids.map(int.parse)); // Convert to Set<int>
+    }
     final NotificationService _notificationService = NotificationService();
     try {
       final List<Notifications> response = await _notificationService.getNotifications(token);

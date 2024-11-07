@@ -65,6 +65,12 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     _fetchCourseContent();
     _courseImageUrlFuture = _fetchCourseImage();
     _courseDescriptionFuture = _fetchCourseDescription();
+     SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
     @override
   void dispose() {
@@ -228,7 +234,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                   Stack(
                     children: [
                       Container(
-                        height: imageHeight,
+                        height:MediaQuery.of(context).orientation==Orientation.landscape?screenHeight * 0.6: imageHeight,
                         width: double.infinity,
                         child: CachedNetworkImage(
                           imageUrl: imageUrl,

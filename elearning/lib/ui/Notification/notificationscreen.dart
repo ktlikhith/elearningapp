@@ -575,7 +575,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ),
                                     child: Text(
                                       'View Full Notification',
-                                      style: TextStyle(color: Colors.blue),
+                                      style: TextStyle(color: Theme.of(context).primaryColor),
                                     ),
                                   ),
                                 ],
@@ -631,7 +631,7 @@ class NotificationDetailsScreen extends StatelessWidget {
                   placeholderBuilder: (context) => CircularProgressIndicator(),
                   width: 40,
                   height: 40,
-                  color: Colors.blue,
+                  color: Theme.of(context).cardColor,
                 ),
                 SizedBox(width: 8),
                 Expanded(
@@ -683,10 +683,7 @@ class NotificationDetailsScreen extends StatelessWidget {
     );
   }
 
-  String removeHtmlTags(String htmlString) {
-    RegExp htmlTagRegExp = RegExp(r'<[^>]*>');
-    return htmlString.replaceAll(htmlTagRegExp, '');
-  }
+  
 }
 
   String removeHtmlTags(String htmlString) {

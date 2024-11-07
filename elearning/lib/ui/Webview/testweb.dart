@@ -46,7 +46,8 @@ class _WebViewPageState extends State<WebViewPage> {
       // Correct type for StreamSubscription<ConnectivityResult>
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack,overlays: [SystemUiOverlay.top,]);
+        // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack,overlays: [SystemUiOverlay.top,]);
+           SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     _initializeWebViewController();
     addFileSelectionListener();
   }

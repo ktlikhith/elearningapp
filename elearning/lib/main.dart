@@ -94,10 +94,11 @@ class MyApp extends StatelessWidget {
       create: (context) => AuthBloc(context: context,authRepository: AuthRepository()),
       child: GetMaterialApp(
            navigatorKey: navigatorKey,
-        title: 'E learning',
+        title: 'RAP learning',
         theme: ThemeData(
          // primaryColor:Color.fromARGB(255, 10, 36, 114) ,
-         primaryColor: Color(0xFF0A2472),
+         //primaryColor: Color(0xFF0A2472),
+         primaryColor: Color(0xFF003152),
           //secondaryHeaderColor: Color.fromARGB(255, 26, 67, 191),
           secondaryHeaderColor:Color(0xFF0A2472) ,
           //cardColor:Color.fromARGB(255, 26, 67, 191),
