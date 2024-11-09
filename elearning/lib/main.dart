@@ -5,7 +5,6 @@ import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/notification_service.dart';
-import 'package:elearning/services/rewarddata_provider.dart';
 import 'package:elearning/ui/My_learning/course.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +101,8 @@ class MyApp extends StatelessWidget {
           //secondaryHeaderColor: Color.fromARGB(255, 26, 67, 191),
           secondaryHeaderColor:Color(0xFF0A2472) ,
           //cardColor:Color.fromARGB(255, 26, 67, 191),
-          cardColor: Color(0xFF1A43BF),
+         // cardColor: Color(0xFF1A43BF),
+         cardColor: Color(0xFF003152),//this is just for color comb testing !!!!?????
           highlightColor:Colors.white,
           hintColor: Colors.blue[200],
 

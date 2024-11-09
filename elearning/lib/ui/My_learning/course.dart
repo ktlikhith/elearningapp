@@ -484,7 +484,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Theme.of(context).cardColor,
+          color: Theme.of(context).primaryColor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -503,7 +503,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
       width: MediaQuery.of(context).size.width * 1.0,
       height:MediaQuery.of(context).orientation!=Orientation.landscape? MediaQuery.of(context).size.height * 0.165:MediaQuery.of(context).size.height* .5,
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).cardColor),
+        border: Border.all(color: Theme.of(context).primaryColor),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: ClipRRect(

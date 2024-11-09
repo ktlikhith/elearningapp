@@ -261,7 +261,6 @@ import 'package:confetti/confetti.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
-import 'package:elearning/services/rewarddata_provider.dart';
 import 'package:elearning/ui/Gamification/gameappbar.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
@@ -423,7 +422,7 @@ class _SpinWheelState extends State<SpinWheel> {
    return Container(
       width: widget.width,
       decoration: BoxDecoration(
-     color: Theme.of(context).cardColor,
+     color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: [
           BoxShadow(

@@ -550,7 +550,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 notification.subject,
                                 style: TextStyle(
                                   fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
-                                  color: notification.read ? Colors.black : Colors.blue,
+                                  color: notification.read ? Colors.black :Theme.of(context).cardColor,
                                 ),
                               ),
                               subtitle: Column(
