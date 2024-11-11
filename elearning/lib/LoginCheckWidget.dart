@@ -1,6 +1,8 @@
 
+import 'dart:async';
 import 'dart:io';
 
+import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
@@ -21,6 +23,7 @@ class LoginCheckWidget extends StatefulWidget {
 
 class _LoginCheckWidgetState extends State<LoginCheckWidget> {
   bool _isLoggedIn = false;
+   NotificationHandler notefy=new NotificationHandler();
 
   @override
   void initState() {
@@ -48,10 +51,24 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
     });
 
     if (_isLoggedIn) {
-      // Perform SSO login and store session data
+      // notifications initiliser
+       Future.delayed(Duration(seconds: 5),(){
+        print('kooooooooo');
+           
+  const duration = Duration(seconds: 10); // Adjust the interval as needed
+  Timer.periodic(duration, (timer) async {
+    if(token!=null)
+    await notefy.fetchNotifications(token);
+  });
+
+       });
+   
 
       // Navigate to HomeScreen
       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
+
+    
+
     } else {
       // No token, navigate to LandingPage
       Navigator.of(context).pushReplacementNamed(RouterManger.landingscreen);

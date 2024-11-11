@@ -410,6 +410,12 @@ class _MyMorePageState extends State<MyMorePage> {
     await prefs.clear();
     // Navigate back to the landing page or login screen if needed
   }
+   //  to reset displayed notifications, if needed
+  void resetDisplayedNotifications() async {
+    
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('displayedNotificationIds'); // Clear the stored IDs
+  }
 
   Future<void> _fetchProfileData(String token) async {
     try {

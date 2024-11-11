@@ -566,13 +566,7 @@ class _SpinWheelState extends State<SpinWheel> {
 
   Future<void> _addRewardPoints(String label) async {
     try {
-      final response = await RewardPointService().addReward(
-        token: widget.token,
-        type: 'spinwheel',
-        points: label,
-      );
-      
-      label=='00'?showMotivationalDialog(context,refresh):_showCongratsDialog(label,refresh);
+        label=='00'?showMotivationalDialog(context,refresh):_showCongratsDialog(label,refresh);
       if(!isconfettiplaying){
         confettiController.play();
         Future.delayed(Duration(seconds: 5),(){
@@ -580,6 +574,13 @@ class _SpinWheelState extends State<SpinWheel> {
 
         });
       }
+      final response = await RewardPointService().addReward(
+        token: widget.token,
+        type: 'spinwheel',
+        points: label,
+      );
+      
+    
     } catch (e) {
       print('Error adding reward points: $e');
     }

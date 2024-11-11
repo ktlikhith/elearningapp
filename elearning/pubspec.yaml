@@ -83,7 +83,7 @@ dependencies:
   clay_containers: ^0.3.4
   confetti: ^0.7.0
   circle_nav_bar: ^2.0.1+1
-  flutter_local_notifications: ^10.0.0
+  flutter_local_notifications: ^17.2.4
   package_info_plus: ^8.0.0
   animated_text_kit: ^4.2.1
   open_filex: ^4.2.1

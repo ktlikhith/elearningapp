@@ -7,11 +7,11 @@ import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:typed_data';
+
 import 'dart:convert';
 import 'dart:async';
 import 'dart:developer' as developer;

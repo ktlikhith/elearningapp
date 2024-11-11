@@ -1,5 +1,6 @@
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
+import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/widgets.dart';
@@ -19,27 +20,30 @@ class CustomDashboardWidget extends StatefulWidget {
 class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
   List<CourseData> _courses = [];
   bool _isLoading = true;
+  
 
   @override
   void initState() {
     super.initState();
     _checkAndLoadData();
+   
   }
 
   Future<void> _checkAndLoadData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('homepageData')) {
-      final homepageData = prefs.getString('homepageData');
-      final decodedData = jsonDecode(homepageData!);
-      final List<dynamic> courseList = decodedData['courses'];
-      final List<CourseData> courses = courseList.map((course) => CourseData.fromJson(course)).toList();
-      setState(() {
-        _courses = courses;
-        _isLoading = false;
-      });
-    } else {
-      _fetchHomePageData();
-    }
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // if (prefs.containsKey('homepageData')) {
+    //   final homepageData = prefs.getString('homepageData');
+    //   final decodedData = jsonDecode(homepageData!);
+    //   final List<dynamic> courseList = decodedData['courses'];
+    //   final List<CourseData> courses = courseList.map((course) => CourseData.fromJson(course)).toList();
+    //   setState(() {
+    //     _courses = courses;
+    //     _isLoading = false;
+    //   });
+    // } else {
+    //   _fetchHomePageData();
+    // }
+    _fetchHomePageData();
   }
 
   Future<void> _fetchHomePageData() async {
@@ -51,9 +55,9 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
         _isLoading = false;
       });
 
-      final encodedData = jsonEncode({'courses': courses});
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('homepageData', encodedData);
+      // final encodedData = jsonEncode({'courses': courses});
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // prefs.setString('homepageData', encodedData);
     } catch (e) {
       print('Error fetching homepage data: $e');
       setState(() {

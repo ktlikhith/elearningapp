@@ -36,17 +36,19 @@ _fetchCourses();
   Future<void> _fetchCourses() async {
     try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('homepageData')) {
-      final homepageData = prefs.getString('homepageData');
-      final decodedData = jsonDecode(homepageData!);
-      final List<dynamic> courseList = decodedData['courses'];
-      final List<CourseData> courses1 = courseList.map((course) => CourseData.fromJson(course)).toList();
-     setState(() {
-       courses=courses1;
-     });
-    }else{
-      _fetchHomePageData();
-    }} catch (e) {
+    // if (prefs.containsKey('homepageData')) {
+    //   final homepageData = prefs.getString('homepageData');
+    //   final decodedData = jsonDecode(homepageData!);
+    //   final List<dynamic> courseList = decodedData['courses'];
+    //   final List<CourseData> courses1 = courseList.map((course) => CourseData.fromJson(course)).toList();
+    //  setState(() {
+    //    courses=courses1;
+    //  });
+    // }else{
+    //   _fetchHomePageData();
+    // }
+    _fetchHomePageData();
+    } catch (e) {
       setState(() {
         isLoading = false;
       });
@@ -63,9 +65,9 @@ _fetchCourses();
         isLoading = false;
       });
 
-      final encodedData = jsonEncode({'courses': courses});
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('homepageData', encodedData);
+      // final encodedData = jsonEncode({'courses': courses});
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // prefs.setString('homepageData', encodedData);
     } catch (e) {
       print('Error fetching homepage data: $e');
       setState(() {

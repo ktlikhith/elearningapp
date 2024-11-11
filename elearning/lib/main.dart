@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/services/notification_service.dart';
 import 'package:elearning/services/rewarddata_provider.dart';
 import 'package:elearning/ui/My_learning/course.dart';
+import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +15,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,11 +27,32 @@ void main() async {
   
 
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  
+      AndroidInitializationSettings('@drawable/eapplogo_foreground');
+// Your app icon
+
+  const DarwinInitializationSettings initializationSettingsIOS = 
+      DarwinInitializationSettings(
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true,
+      );
+
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
   );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      // Handle the response when a notification is tapped
+      _onSelectNotification(response.payload);
+    },
+  );
+
+
+  
+  
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
    runApp(
@@ -43,16 +70,35 @@ void main() async {
  
 }
 
+
+Future<void> _onSelectNotification(String? payload) async {
+  // Navigate to the NotificationScreen directly
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = await prefs.getString('token');
+    if(token!=null)
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(
+      builder: (context) => NotificationScreen(
+        token: token,
+      ),
+    ),
+  );
+}
+
+
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AuthBloc(context: context,authRepository: AuthRepository()),
       child: GetMaterialApp(
-        title: 'E learning',
+           navigatorKey: navigatorKey,
+        title: 'RAP learning',
         theme: ThemeData(
          // primaryColor:Color.fromARGB(255, 10, 36, 114) ,
-         primaryColor: Color(0xFF0A2472),
+         //primaryColor: Color(0xFF0A2472),
+         primaryColor: Color(0xFF003152),
           //secondaryHeaderColor: Color.fromARGB(255, 26, 67, 191),
           secondaryHeaderColor:Color(0xFF0A2472) ,
           //cardColor:Color.fromARGB(255, 26, 67, 191),
