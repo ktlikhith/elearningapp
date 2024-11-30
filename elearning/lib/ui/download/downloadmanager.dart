@@ -313,6 +313,7 @@ print(metadata);
 
    Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,String imgurl,{String? expectedChecksum}) async {
     try {
+      print(url);
       final hasPermission = await requestStoragePermission(context);
       final hasnotificationpermistion=await requestNotificationPermission(context);
       if (!hasPermission&&!hasnotificationpermistion) {
@@ -362,7 +363,9 @@ print(metadata);
         ),
       );
     
- 
+  String Cimg = await downloadImage(imgurl,courseNmae,token);  
+    print('imgdownloded path $Cimg');
+      print('File downloaded to $filePath');
 
    
 
@@ -395,9 +398,7 @@ print(metadata);
           }
         },
       );
-    String Cimg = await downloadImage(imgurl,courseNmae,token);  
-    print('imgdownloded path $Cimg');
-      print('File downloaded to $filePath');
+   
 
       // Verify file checksum
       final downloadedFile = File(filePath);
@@ -427,7 +428,7 @@ print(metadata);
     
 
       // Navigator.of(context).pushReplacementNamed(RouterManger.downloads, arguments: token);
-  Navigator.of(context).pushNamed(RouterManger.downloads, arguments: token);
+   Navigator.of(context).pushNamed(RouterManger.downloads, arguments: token);
 
       // Example of post-download operation
       print('Download complete. Showing message to user.');
@@ -464,6 +465,9 @@ print(metadata);
       );
     } catch (e) {
       print('Error downloading file: $e');
+       final downloadDirectory = await getDownloadDirectory();
+      final filePath = '${downloadDirectory.path}$fileName';
+         await _cleanupFailedDownload(filePath, null);
       // Handle error scenarios here
       showDialog(
         context: context,
@@ -481,6 +485,26 @@ print(metadata);
     }
   }
 
+Future<void> _cleanupFailedDownload(String filePath, String? imgPath) async {
+  try {
+    final file = File(filePath);
+    if (await file.exists()) {
+      await file.delete();
+      print('Deleted failed file: $filePath');
+    }
+
+    if (imgPath != null) {
+      final imageFile = File(imgPath);
+      if (await imageFile.exists()) {
+        await imageFile.delete();
+        print('Deleted related image: $imgPath');
+      }
+    }
+  } catch (e) {
+    print('Error during cleanup: $e');
+  }
+}
+
   static Future<List<Map<String, dynamic>>> getDownloadedFiles() async {
     final metadata = await _loadMetadata();
     final directory = await getApplicationDocumentsDirectory();
@@ -494,48 +518,50 @@ print(metadata);
     
   }Future<String> downloadImage(String url, String coursename, String token) async {
   try {
-    String imgwithurl = '${url}';
-    print(imgwithurl);
+    String imgWithUrl = url;
+    print(imgWithUrl);
 
     // Send a GET request to the URL
-    final response = await http.get(Uri.parse(imgwithurl));
+    final response = await http.get(Uri.parse(imgWithUrl));
 
     // Check if the request was successful
     if (response.statusCode == 200) {
       // Get the directory to store the downloaded file
       Directory appDocDir = await getDownloadDirectory();
-      final filePath = '${appDocDir.path}cimges/';
-      final directory = Directory(filePath);
+      final baseFilePath = '${appDocDir.path}/cimges/';
+      final baseDirectory = Directory(baseFilePath);
+
+      // Ensure the base directory exists
+      if (!await baseDirectory.exists()) {
+        await baseDirectory.create(recursive: true);
+        print('Created base directory: $baseFilePath');
+      }
+
+      // Create the course-specific subdirectory
+      final imgPath = '$baseFilePath$coursename';
+      final courseDirectory = Directory(imgPath);
+
+      if (!await courseDirectory.exists()) {
+        await courseDirectory.create(recursive: true);
+        print('Created course directory: $imgPath');
+      }
+
+      // Define the full file path for the image
+      final filePath = '$imgPath/image.png'; // You can adjust the file name as needed.
 
       // Write the file to the specified path
-      if (await directory.exists()) {
-        final imgpath = '${filePath}$coursename';
-        final directory1 = Directory(imgpath);
-
-        if (await directory1.exists()) {
-          return imgpath;
-        } else {
-          File file = File(imgpath);
-          await file.create(recursive: true);
-
-          await file.writeAsBytes(response.bodyBytes);
-          print(imgpath);
-          print('img download path');
-          return imgpath;
-        }
-      } else {
-        throw Exception("Directory does not exist.");
-      }
+      File file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+      print('Image downloaded to: $filePath');
+      return filePath;
     } else {
       throw Exception("Failed to download image. Status code: ${response.statusCode}");
     }
   } catch (e) {
     throw Exception("Error downloading image: $e");
   }
-
-  // Add a throw or return statement at the end to handle all paths
-  throw Exception("An unknown error occurred during image download.");
 }
+
 
  static Future<Directory> getDownloadDirectoryforimg(String courseName) async {
     final directory = await getApplicationDocumentsDirectory();

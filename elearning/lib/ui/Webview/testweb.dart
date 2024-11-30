@@ -5,12 +5,13 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
+import 'package:elearning/ui/Webview/tempviewfiles.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'; // Import for iOS features
@@ -223,38 +224,83 @@ _controller.loadRequest(Uri.parse('about:blank'));
              _launchURL(request.url);
               return NavigationDecision.prevent;
             }
-            if(_ispdfURL!=false)
+            if(_ispdfURL(request.url))
             {
+              if(request.url.contains("webservice"))
+              {
+                String url=request.url+"?"+"token=${widget.token}";
+                         Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) =>PDFViewScreen( url,token:  widget.token,istemp: true,),
+  ),
+);
+                 return NavigationDecision.prevent;
+              }else{
+                String s1=request.url.split("pluginfile.php/")[0];
+                 print("s1="+s1);
+                String s2=request.url.split("https://lxp-demo2.raptechsolutions.com/")[1];
+                String url =s1+"webservice/"+s2+"?token=${widget.token}";
+               
+                
+                          Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) =>PDFViewScreen( url,token:  widget.token,istemp: true,),
+  ),
+);
+                 
+              }
+  //             String url=request.url+"?forcedownload=1&"+"token=${widget.token}";
+
+  //                           Navigator.push(
+  // context,
+  // MaterialPageRoute(
+  //   builder: (context) =>PDFViewScreen(url,)));
+              // final tmfv=new  tempfileviewManager();
+              // tmfv.downloadFile(context, request.url, widget.token,);
+//               Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) =>PdfViewerScreen(pdfUrl: request.url,token: widget.token,),
+//   ),
+// );
+              
+               return NavigationDecision.prevent;
                 //  String getdwnloadUrlWithToken(String filePath1, String Token) {
                 //                               return '$filePath1&token=$Token';
                 //                             }
                 // String? filename=getfilename(request.url);
-                if(widget.fileurl!=null){
-                String filename=widget.fileurl ?? "";
                 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PDFViewScreen(filename),
-                                    ),
-                                  );
-                                     return NavigationDecision.prevent;
+              //   if(widget.fileurl!=null){
+              //   String filename=widget.fileurl ?? "";
                 
-                }
+              //                     Navigator.push(
+              //                       context,
+              //                       MaterialPageRoute(
+              //                         builder: (context) => PDFViewScreen(request.url),
+              //                       ),
+              //                     );
+              //                        return NavigationDecision.prevent;
+                
+              //   }
               //  String getdwnloadUrlWithToken(String filePath1, String Token) {
               //                                 return '$filePath1&token=$Token';
               //                               }
               //   String? filename=getfilename(request.url);
               //   if(filename!=null){
               //  String url = getdwnloadUrlWithToken( request.url,widget.token);
-              //                               DownloadManager.downloadFile(
+              //  DownloadManager dm=new DownloadManager();
+              //                               dm.downloadFile(
               //                                 context,
               //                                 url,
               //                                 filename,
               //                                 widget.token,
+              //                                 "temp",
+              //                                 "temp"
               //                               );
               //                               Navigator.of(context).pop();
-                // }
+              //   }
             }
             return NavigationDecision.navigate;
           },
@@ -296,7 +342,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
       throw 'Could not launch $url';
     }
   }
-  static bool _ispdfURL(url){
+   bool _ispdfURL(url){
     return url.contains('.pdf');
 
   }

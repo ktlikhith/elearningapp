@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/services/reward_service.dart';
-import 'package:elearning/services/rewarddata_provider.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';

@@ -276,7 +276,7 @@ Widget _buildCard(String title, String subtitle, String info, String svgPath,dou
                topRight: Radius.circular(42),
                 bottomLeft: Radius.circular(42)
         ),
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).primaryColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,7 +329,7 @@ Widget _buildCard(String title, String subtitle, String info, String svgPath,dou
                 //topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).canvasColor,
             ),
             child: Text(
               title,

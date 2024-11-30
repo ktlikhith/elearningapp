@@ -414,7 +414,7 @@ class _MyMorePageState extends State<MyMorePage> {
   void resetDisplayedNotifications() async {
     
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('displayedNotificationIds'); // Clear the stored IDs
+    await prefs.remove('displayedNotificationIds'); 
   }
 
   Future<void> _fetchProfileData(String token) async {

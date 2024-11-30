@@ -133,7 +133,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
               borderRadius: BorderRadius.circular(8.0),
             
              // BoxDecoration(border: Border.all(color: Colors.black))
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).primaryColor,
               child: InkWell(
                 onTap: () => showMLPopup(
                   context,
@@ -153,7 +153,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
                       height:MediaQuery.of(context).orientation==Orientation.portrait? cardHeight * 0.6:cardHeight*1.5, // Adjust image height
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        border:Border.all(color: Theme.of(context).cardColor),
+                        border:Border.all(color: Theme.of(context).primaryColor),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8.0),
                           topRight: Radius.circular(8.0),
