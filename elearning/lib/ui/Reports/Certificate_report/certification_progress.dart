@@ -166,6 +166,7 @@
 
 
 // }
+
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/Reports/Certificate_report/certificateDetail.dart';
@@ -291,7 +292,7 @@ class CourseCard extends StatelessWidget {
         ),
         margin: EdgeInsets.all(10.0),
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(14.0),
           child: Column(
            // mainAxisAlignment: MainAxisAlignment.center,            
             crossAxisAlignment: CrossAxisAlignment.center,
