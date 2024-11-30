@@ -688,8 +688,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       decoration: BoxDecoration(
+        color: Theme.of(context).highlightColor,
         border: Border.all(color: Theme.of(context).cardColor),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -700,11 +701,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ],
       ),
       child: ListTile(
-        title: Text(
-          notification.subject,
-          style: TextStyle(
-            fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
-            color: notification.read ? Colors.black : Theme.of(context).cardColor,
+        title: Container(
+            
+           decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+              color: Colors.grey[200],
+           ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              notification.subject,
+              style: TextStyle(
+                fontWeight: notification.read ? FontWeight.normal : FontWeight.bold,
+                color: notification.read ? Colors.black : Theme.of(context).cardColor,
+              ),
+            ),
           ),
         ),
         subtitle: Column(
