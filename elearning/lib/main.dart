@@ -100,6 +100,7 @@ class MyApp extends StatelessWidget {
          primaryColor: Color(0xFF003152),
           //secondaryHeaderColor: Color.fromARGB(255, 26, 67, 191),
           secondaryHeaderColor:Color(0xFF0A2472) ,
+          canvasColor:Color(0xFF1A43BF),
           //cardColor:Color.fromARGB(255, 26, 67, 191),
          // cardColor: Color(0xFF1A43BF),
          cardColor: Color(0xFF003152),//this is just for color comb testing !!!!?????

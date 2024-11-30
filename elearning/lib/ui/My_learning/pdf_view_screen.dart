@@ -130,8 +130,9 @@ import 'dart:io';
 class PDFViewScreen extends StatefulWidget {
   final String filePath;
   final String? token;
+  final bool? istemp;
 
-  PDFViewScreen(this.filePath, {this.token});
+  PDFViewScreen(this.filePath, {this.token,this.istemp});
 
   @override
   _PDFViewScreenState createState() => _PDFViewScreenState();
@@ -140,13 +141,21 @@ class PDFViewScreen extends StatefulWidget {
 class _PDFViewScreenState extends State<PDFViewScreen> {
   bool _isLoading = true;
   String? _localFilePath;
+  String? tempFilePath;
 
   @override
   void initState() {
+    print(widget.filePath);
     super.initState();
     _loadPDF();
   }
-
+  @override
+  void dispose() {
+    if (_localFilePath != null && widget.istemp==true) {
+      File(_localFilePath!).deleteSync();
+    }
+    super.dispose();
+  }
   Future<void> _loadPDF() async {
     try {
       if (_isLocalFile(widget.filePath)) {
@@ -166,6 +175,7 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
 
           setState(() {
             _localFilePath = file.path;
+            tempFilePath=file.toString();
             _isLoading = false;
           });
         } else {

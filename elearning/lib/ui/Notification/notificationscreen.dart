@@ -444,24 +444,24 @@
 //             ),
 //             SizedBox(height: 16),
 //             Center(
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
-//                     String moduleUrl = notification.contextUrl;
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => WebViewPage('Insights', moduleUrl, token),
-//                       ),
-//                     );
-//                   }
-//                 },
-//                 style: ButtonStyle(
-//                   backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
-//                 ),
-//                 child: Text('View Insight', style: TextStyle(color: Colors.white)),
-//               ),
-//             ),
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
+            //         String moduleUrl = notification.contextUrl;
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => WebViewPage('Insights', moduleUrl, token),
+            //           ),
+            //         );
+            //       }
+            //     },
+            //     style: ButtonStyle(
+            //       backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
+            //     ),
+            //     child: Text('View Insight', style: TextStyle(color: Colors.white)),
+            //   ),
+            // ),
 //           ],
 //         ),
 //       ),
@@ -481,6 +481,7 @@ import 'dart:convert';
 
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/notification_service.dart';
+import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:elearning/ui/Webview/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -522,11 +523,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
         _notifications = response;
       });
 
-      for (var notification in response) {
-        if (!notification.read) {
-          _showNotification(notification);
-        }
-      }
+      // for (var notification in response) {
+      //   if (!notification.read) {
+      //     _showNotification(notification);
+      //   }
+      // }
     } catch (e) {
       print('Error fetching notifications: $e');
     } finally {
@@ -751,10 +752,38 @@ class NotificationDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Notification Details'),
+         leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Text(removeHtmlTags(notification.fullMessage)),
+        child: Column(
+          children: [
+            Text(removeHtmlTags(notification.fullMessage)),
+                           ElevatedButton(
+                onPressed: () {
+                  if (notification.contextUrl != null && notification.contextUrl.isNotEmpty) {
+                    String moduleUrl = notification.contextUrl;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WebViewPage('Insights', moduleUrl, token),
+                      ),
+                    );
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).secondaryHeaderColor),
+                ),
+                child: Text('View Insight', style: TextStyle(color: Colors.white)),
+              ),
+            
+          ],
+        ),
       ),
     );
   }
