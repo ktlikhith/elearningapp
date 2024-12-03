@@ -1,9 +1,14 @@
+
+
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/ui/Dashboard/continuescreen.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -67,24 +72,23 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
   }
 
   Widget _buildShimmerItem() {
-    return SizedBox(
-      width: 240,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.white,
-          ),
-          child: Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey[300],
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+         height : MediaQuery.of(context).size.height*0.25,// Define a constant height for the card
+       width : MediaQuery.of(context).size.width*0.8,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white,
+        ),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: Colors.grey[300],
             ),
           ),
         ),
@@ -194,7 +198,6 @@ Widget _buildSection(BuildContext context, CourseData course) {
                         children: [
                           Text(
                             course.name,
-                           //'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
                             maxLines: 2,
                             
                             overflow: TextOverflow.ellipsis,
@@ -330,18 +333,40 @@ Widget _buildSection(BuildContext context, CourseData course) {
           ],
         ),
         SizedBox(height: 16),
+        Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return ListView.builder(
+  itemCount:  15, // Use 5 shimmer items if courses list is empty
+  itemBuilder: (context, index) {return  _buildShimmerItem();
+  }
+                   );
+          }
+
+          if (provider.error != null) {
+            return Center(child: Text("Error: ${provider.error}"));
+          }
+       
+
+          if (provider.allCourses.isEmpty) {
+            return Center(child: Text("No courses available."));
+          }else 
+
+          
+     
+   
+    return
+   
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: _isLoading
-                ? List.generate(
-                    5,
-                    (index) => _buildShimmerItem(),
-                  )
-                : _courses.map((course) {
+            children:  provider.allCourses.map((course) {
                     return _buildSection(context, course);
                   }).toList(),
           ),
+        );
+        
+        }
         ),
       ],
     );

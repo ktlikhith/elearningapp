@@ -383,12 +383,15 @@
 //   }
 // }
 import 'dart:async';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'dart:math';
+
+import 'package:provider/provider.dart';
 
 class Coursereport extends StatefulWidget {
   final String token;
@@ -409,7 +412,7 @@ class _CoursePageState extends State<Coursereport> {
   @override
   void initState() {
     super.initState();
-    _homePageData = HomePageService.fetchHomePageData(widget.token);
+    // _homePageData = HomePageService.fetchHomePageData(widget.token);
   }
 
   @override
@@ -438,9 +441,7 @@ class _CoursePageState extends State<Coursereport> {
         'token': widget.token,
         'filter': 'completed',
       });
-       setState(() {
-     _homePageData = HomePageService.fetchHomePageData(widget.token);
-       });
+      // context.read<HomePageProvider>().fetchAllCourses();
                           
       
     } else if (section == 'In Progress') {
@@ -448,18 +449,14 @@ class _CoursePageState extends State<Coursereport> {
         'token': widget.token,
         'filter': 'in progress',
       });
-        setState(() {
-     _homePageData = HomePageService.fetchHomePageData(widget.token);
-       });
+        // context.read<HomePageProvider>().fetchAllCourses();
                   
     } else if (section == 'Not Started') {
      await Navigator.of(context).pushNamed(RouterManger.eachcourseprogress, arguments: {
         'token': widget.token,
         'filter': 'not started',
       });
-        setState(() {
-     _homePageData = HomePageService.fetchHomePageData(widget.token);
-       });
+      //  context.read<HomePageProvider>().fetchAllCourses();
                   
     }
   }
@@ -604,25 +601,41 @@ OverlayEntry _createOverlayEntry(BuildContext context) {
       ),
       body: RefreshIndicator(
         onRefresh: ()async{
-          setState(() {
-              _homePageData = HomePageService.fetchHomePageData(widget.token);
-          });
+          // setState(() {
+          //     _homePageData = HomePageService.fetchHomePageData(widget.token);
+          // });
+           context.read<HomePageProvider>().fetchAllCourses();
         },
-        child:FutureBuilder<HomePageData>(
-            future: _homePageData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child:Text('Something went wrong')); 
-                 //child: Text('Error: ${snapshot.error}')
-              }  if (snapshot.hasData) {
+        child:Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return
+                Center(child: CircularProgressIndicator());
+  
+                   
+          }
+
+          if (provider.error != null) {
+            return Center(child: Text("Error: ${provider.error}"));
+          }
+
+          if (provider.allCourses.isEmpty) {
+            return Center(child: Text("Something went wrong No/courses datais not available."));
+          }
+
+          
+       
+   
+    
+    final data = provider.allCourses;
+        
+      
                  
                   
-                final data = snapshot.data!;
-                final completedCount = getCompletedCoursesCount(data.allCourses);
-                final inProgressCount = getInProgressCoursesCount(data.allCourses);
-                final notStartedCount = getNotStartedCoursesCount(data.allCourses);
+               
+                final completedCount = getCompletedCoursesCount(data);
+                final inProgressCount = getInProgressCoursesCount(data);
+                final notStartedCount = getNotStartedCoursesCount(data);
                 final total=completedCount+inProgressCount+notStartedCount;
                 final complete__=(completedCount*100)/total.toDouble();
                  final progress__=(inProgressCount*100)/total.toDouble();
@@ -735,20 +748,23 @@ OverlayEntry _createOverlayEntry(BuildContext context) {
           ]
                  );
               
-              } 
+        
+        
+      
+  
               
-              else {
-                return Center(child: Text('No data available'));
-              }
+           
               
         
               
-            },
+        }
             
           ),
+  
+      ),
           
         
-      ),
+      
       
       
     );

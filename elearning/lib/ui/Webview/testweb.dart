@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/Webview/tempviewfiles.dart';
@@ -11,6 +12,7 @@ import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
@@ -53,9 +55,10 @@ class _WebViewPageState extends State<WebViewPage> {
     addFileSelectionListener();
   }
   @override
-  void dispose() {
+  void dispose() async{
      _connectivitySubscription.cancel(); 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
+     context.read<HomePageProvider>().fetchAllCourses();
 // to stop audio and video
 _controller.loadRequest(Uri.parse('about:blank'));
 
@@ -238,7 +241,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
                  return NavigationDecision.prevent;
               }else{
                 String s1=request.url.split("pluginfile.php/")[0];
-                 print("s1="+s1);
+                 
                 String s2=request.url.split("https://lxp-demo2.raptechsolutions.com/")[1];
                 String url =s1+"webservice/"+s2+"?token=${widget.token}";
                

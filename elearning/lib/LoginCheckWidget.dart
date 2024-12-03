@@ -2,11 +2,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -51,9 +55,15 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
     });
 
     if (_isLoggedIn) {
+       await context.read<HomePageProvider>().fetchAllCourses();
+          await Provider.of<ReportProvider>(context, listen: false).fetchData();
+  //      WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   context.read<HomePageProvider>().fetchAllCourses();
+   
+  // });
       // notifications initiliser
        Future.delayed(Duration(seconds: 5),(){
-        print('kooooooooo');
+       
            
   const duration = Duration(seconds: 10); // Adjust the interval as needed
   Timer.periodic(duration, (timer) async {

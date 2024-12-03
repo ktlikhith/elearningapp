@@ -240,6 +240,7 @@
 // }
 
 
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/report_service.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
@@ -250,6 +251,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart'; 
 import 'package:provider/provider.dart';
 
@@ -261,10 +263,7 @@ class LearningScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ReportProvider(token),
-      child: MyLearningPage(token: token),
-    );
+    return  MyLearningPage(token: token);
   }
 }
 
@@ -285,6 +284,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
   @override
   void initState() {
     // TODO: implement initState
+     
     super.initState();
     
   }
@@ -306,7 +306,7 @@ class _MyLearningPageState extends State<MyLearningPage> {
 
   @override
   Widget build(BuildContext context) {
-      final reportProvider = Provider.of<ReportProvider>(context, listen: false);
+      final reportProvider = Provider.of<ReportProvider>(context, listen: true);
      
     return WillPopScope(
       onWillPop: () async {
@@ -347,12 +347,14 @@ class _MyLearningPageState extends State<MyLearningPage> {
           onRefresh:
            () async {
           // Using pushReplacement to force a full screen rebuild
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => LearningScreen(token: widget.token),
-            ),
-          );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (BuildContext context) => LearningScreen(token: widget.token),
+          //   ),
+          // );
+            context.read<HomePageProvider>().fetchAllCourses();
+            Provider.of<ReportProvider>(context, listen: false).fetchData();
            
 
          
@@ -509,7 +511,7 @@ Widget build(BuildContext context) {
 }
 
 class ReportProvider with ChangeNotifier {
-  final String token;
+  
   final ReportService reportService = ReportService();
   Report? reportData;
   bool isLoading = true;
@@ -518,7 +520,7 @@ class ReportProvider with ChangeNotifier {
  
 
 
-  ReportProvider(this.token) {
+  ReportProvider() {
     fetchData();
   }
 
@@ -526,6 +528,11 @@ Future<void> fetchData() async {
   isLoading = true; // Set loading state
   notifyListeners(); // Notify listeners before fetching data
   try {
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+     if (token == null || token.isEmpty) {
+        throw Exception('Token not found. Please log in again.');
+      }
     final data = await reportService.fetchReport(token);
     reportData = data;
   } catch (e) {

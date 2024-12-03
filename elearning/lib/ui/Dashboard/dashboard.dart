@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/tanentlogo_service.dart';
@@ -9,6 +10,7 @@ import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -48,7 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
  
   
   late Future<void> _fetchUserInfoFuture;
-  late Future<void> _fetchOtherSectionsFuture;
+ 
   String _userName = '';
   String _userprofile = '';
   Uint8List? _tenantLogoBytes;
@@ -59,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-   _fetchOtherSectionsFuture = _fetchOtherSections();
+  
    
   initConnectivity();
 
@@ -75,7 +77,8 @@ Future<void>  _refreshdata()async{
 
      
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-   _fetchOtherSectionsFuture = _fetchOtherSections();
+   
+      context.read<HomePageProvider>().fetchAllCourses();
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
     // });
@@ -120,10 +123,7 @@ Future<void>  _refreshdata()async{
     }
   }
 
-  Future<void> _fetchOtherSections() async {
-    // This method can be used to load data for other sections if necessary
-    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
-  }
+ 
   // Stream<int> noticount() async*{
   //    try {
   //     Stream count = await NotificationCount().getUnreadNotificationCountStream(widget.token);
@@ -343,7 +343,7 @@ Future<void>  _refreshdata()async{
                 child: GestureDetector(
                   onTap: () async{
                    await Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
-                   _refreshdata();
+                   
                   },
                   child: CircleAvatar(
                     radius: 20,
@@ -419,7 +419,7 @@ Future<void>  _refreshdata()async{
           ),
           SizedBox(height: 12.0),
           FutureBuilder<void>(
-            future: _fetchOtherSectionsFuture,
+            future: _fetchUserInfoFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Column(
@@ -433,7 +433,18 @@ Future<void>  _refreshdata()async{
                 );
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error loading sections'));
-              } else {
+              } else if(snapshot.hasData){
+                return Column(
+                  children: [
+                    AutoScrollableSections(token: widget.token),
+                    SizedBox(height: 15.0),
+                    UpcomingEventsSection(token: widget.token),
+                    SizedBox(height: 15.0),
+                    CustomDashboardWidget(token: widget.token),
+                  ],
+                );
+              }
+              else {
                 return Column(
                   children: [
                     AutoScrollableSections(token: widget.token),
@@ -445,6 +456,7 @@ Future<void>  _refreshdata()async{
                 );
               }
             },
+            
           ),
         ],
               ),
@@ -457,41 +469,47 @@ Future<void>  _refreshdata()async{
   }
 
   Widget _buildUserInfoSkeleton() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 20.0,
-              width: 150.0,
-              color: Colors.white,
-            ),
-            const SizedBox(height: 10.0),
-            Container(
-              height: 20.0,
-              width: 250.0,
-              color: Colors.white,
-            ),
-          ],
+    return Container(
+     
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 20.0,
+                width: 150.0,
+                color: Colors.white,
+              ),
+              const SizedBox(height: 10.0),
+              Container(
+                height: 20.0,
+                width: 250.0,
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLoadingSkeleton() {
-    return Shimmer.fromColors(
+Widget _buildLoadingSkeleton() {
+  return SizedBox(
+    height: 200.0, // Ensure it has fixed constraints
+    child: Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Container(
-        height: 200.0,
         width: double.infinity,
         color: Colors.white,
-        margin: EdgeInsets.symmetric(horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
