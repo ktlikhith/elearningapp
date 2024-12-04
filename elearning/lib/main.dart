@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/notification_service.dart';
@@ -62,7 +63,8 @@ void main() async {
         // ChangeNotifierProvider(create: (_) => RewardNotifier()),
          ChangeNotifierProvider(create: (_) => HomePageProvider()),
           ChangeNotifierProvider(create: (_) => CourseProvider()),
-          ChangeNotifierProvider(create: (_)=> ReportProvider())
+          ChangeNotifierProvider(create: (_)=> ReportProvider()),
+          ChangeNotifierProvider(create: (_)=>ProfileProvider()),
         
       ],
       child: MyApp(),

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/Webview/tempviewfiles.dart';
@@ -59,6 +60,7 @@ class _WebViewPageState extends State<WebViewPage> {
      _connectivitySubscription.cancel(); 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
      context.read<HomePageProvider>().fetchAllCourses();
+     context.read<ProfileProvider>().fetchProfileData();
 // to stop audio and video
 _controller.loadRequest(Uri.parse('about:blank'));
 

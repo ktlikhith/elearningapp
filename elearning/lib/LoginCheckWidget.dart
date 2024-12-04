@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,6 +58,8 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
     if (_isLoggedIn) {
        await context.read<HomePageProvider>().fetchAllCourses();
           await Provider.of<ReportProvider>(context, listen: false).fetchData();
+          await context.read<ProfileProvider>().fetchProfileData();
+          await context.read<ReportProvider>().fetchData();
   //      WidgetsBinding.instance.addPostFrameCallback((_) {
   //   context.read<HomePageProvider>().fetchAllCourses();
    

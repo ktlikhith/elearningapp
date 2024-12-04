@@ -354,7 +354,8 @@ class _MyLearningPageState extends State<MyLearningPage> {
           //   ),
           // );
             context.read<HomePageProvider>().fetchAllCourses();
-            Provider.of<ReportProvider>(context, listen: false).fetchData();
+            context.read<ReportProvider>().fetchData();
+          
            
 
          
@@ -402,10 +403,12 @@ Widget build(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 18.0),
+             
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: <Widget>[
+               reportProvider.isLoading?  _buildShimmerEffect():
                   buildSection(
                     iconPath: 'assets/learning icons/total activity.png',
                     number: reportProvider.reportData?.totalNoActivity ?? 0,
@@ -413,14 +416,14 @@ Widget build(BuildContext context) {
                     context: context,
                     Color1: Color.fromARGB(255, 221, 218, 23),
                   ),
-                  buildSection(
+                   reportProvider.isLoading?  _buildShimmerEffect():buildSection(
                     iconPath: 'assets/learning icons/Completed Activity.png',
                     number: reportProvider.reportData?.completedActivity ?? 0,
                     title: 'Completed',
                     context: context,
                     Color1: Color.fromARGB(255, 61, 243, 37),
                   ),
-                  buildSection(
+                  reportProvider.isLoading?  _buildShimmerEffect(): buildSection(
                     iconPath: 'assets/learning icons/Average.png',
                     number: reportProvider.reportData?.averageGrade ?? 0,
                     title: 'Avg_Grade',
@@ -508,6 +511,27 @@ Widget build(BuildContext context) {
       },
     );
   }
+  Widget _buildShimmerEffect() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: 200,
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(
+            color: const Color.fromARGB(255, 227, 236, 227),
+            width: 2.0,
+          ),
+        ),
+      ),
+    ),
+  );
+}
 }
 
 class ReportProvider with ChangeNotifier {

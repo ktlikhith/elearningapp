@@ -620,7 +620,7 @@ OverlayEntry _createOverlayEntry(BuildContext context) {
           }
 
           if (provider.allCourses.isEmpty) {
-            return Center(child: Text("Something went wrong No/courses datais not available."));
+            return Center(child: Text("Something went wrong No/courses data is not available."));
           }
 
           
