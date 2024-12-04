@@ -1,4 +1,6 @@
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
 import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/services/auth.dart';
@@ -62,9 +64,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       //print(token);
       emit(AuthAuthenticated(token));// Emit authenticated state on successful login
         context.read<HomePageProvider>().fetchAllCourses();
-           Provider.of<ReportProvider>(context, listen: false).fetchData();
+          // Provider.of<ReportProvider>(context, listen: false).fetchData();
            context.read<ProfileProvider>().fetchProfileData();
            context.read<ReportProvider>().fetchData();
+           context.read<activityprovider>().fetchpastsoonlater();
+           context.read<EventProvider>().fetchEvent();
       Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: token);
     } catch (error) {
       emit(AuthFailure(message: 'Authentication failed')); // Emit failure state with error message

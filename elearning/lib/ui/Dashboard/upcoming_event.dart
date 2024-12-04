@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UpcomingEventsSection extends StatefulWidget {
@@ -65,16 +67,18 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<EventData>>(
-      future: _futureEventData,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return Consumer<EventProvider>(
+      builder: (context, provider, child) {
+        if (provider.isLoading) {
           return _buildShimmerEffect(context);
-        } else if (snapshot.hasError) {
+        } else if (provider.error != null) {
           return Center(
-            
+            child: Text(
+              'Error: ${provider.error}',
+              style: TextStyle(color: Colors.red),
+            ),
           );
-        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+        } else if (provider.Eventdata.isNotEmpty) {
           return Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -87,14 +91,16 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
-                    children: [ SizedBox(
-                                width: 35,
-                                height: 30,
-                                child: Image.asset(
-                                  'assets/upcoming and continue learning (1)/upc (2).png',
-                                  fit: BoxFit.fill,
-                                ),
-                              ),SizedBox(width: 10,),
+                    children: [
+                      SizedBox(
+                        width: 35,
+                        height: 30,
+                        child: Image.asset(
+                          'assets/upcoming and continue learning (1)/upc (2).png',
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      SizedBox(width: 10),
                       Text(
                         'Upcoming Events',
                         style: TextStyle(
@@ -110,9 +116,9 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                   height: 100,
                   child: PageView.builder(
                     controller: _pageController,
-                    itemCount: snapshot.data!.length,
+                    itemCount: provider.Eventdata.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final event = snapshot.data![index];
+                      final event = provider.Eventdata[index];
                       String svgPath = svgAssets[index % svgAssets.length];
                       return _buildEventCard(
                         dateTime: event.dueDate,

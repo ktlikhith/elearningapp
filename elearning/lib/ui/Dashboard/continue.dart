@@ -85,7 +85,8 @@ class _CustomDashboardWidgetState extends State<CustomDashboardWidget> {
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[100]!,
           child: Container(
-            height: 200,
+            width: 200,
+            height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               color: Colors.grey[300],
@@ -274,7 +275,10 @@ Widget _buildSection(BuildContext context, CourseData course) {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return   Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.allCourses.isNotEmpty) { 
+            return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
@@ -336,11 +340,11 @@ Widget _buildSection(BuildContext context, CourseData course) {
         Consumer<HomePageProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return ListView.builder(
-  itemCount:  15, // Use 5 shimmer items if courses list is empty
-  itemBuilder: (context, index) {return  _buildShimmerItem();
-  }
-                   );
+            return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [  _buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),
+          ]),
+       );
           }
 
           if (provider.error != null) {
@@ -370,6 +374,19 @@ Widget _buildSection(BuildContext context, CourseData course) {
         ),
       ],
     );
+          }
+          else{
+          return  SizedBox.shrink();
+          }
+          
+        }
+        
+        
+          
+    );
+    
+  
+  
   }
 
   void showMLPopup(

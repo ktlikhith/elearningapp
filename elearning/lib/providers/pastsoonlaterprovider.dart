@@ -1,20 +1,17 @@
-import 'package:elearning/services/homepage_service.dart';
-import 'package:flutter/foundation.dart';
+  import 'package:elearning/services/homepage_service.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePageProvider with ChangeNotifier {
-  List<CourseData> _allCourses = [];
- 
-  bool _isLoading = false;
+class activityprovider with ChangeNotifier {
+ List<int> _activity=[];
+ bool _isLoading = false;
   String? _error;
-
-  List<CourseData> get allCourses => _allCourses;
- 
-  bool get isLoading => _isLoading;
+  
+ List<int> get activity => _activity;
+ bool get isLoading => _isLoading;
   String? get error => _error;
-
-  Future<void> fetchAllCourses() async {
-    _isLoading = true;
+    Future<void> fetchpastsoonlater() async{
+     _isLoading = true;
     _error = null;
     notifyListeners();
 
@@ -26,13 +23,17 @@ class HomePageProvider with ChangeNotifier {
       }
 
       HomePageData homePageData = await HomePageService.fetchHomePageData(token);
-      _allCourses = homePageData.allCourses;
+      _activity.add(homePageData.countActivity);
+      _activity.add(homePageData.countSevenDays);
+      _activity.add(homePageData.countThirtyDays);
     } catch (e) {
       _error = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-  }
 
-}
+  }
+    
+  }
+  

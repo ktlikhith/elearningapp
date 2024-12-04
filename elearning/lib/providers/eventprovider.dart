@@ -2,18 +2,18 @@ import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePageProvider with ChangeNotifier {
-  List<CourseData> _allCourses = [];
+class EventProvider with ChangeNotifier {
+  List<EventData> _Eventdata = [];
  
   bool _isLoading = false;
   String? _error;
 
-  List<CourseData> get allCourses => _allCourses;
+  List<EventData> get Eventdata => _Eventdata;
  
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  Future<void> fetchAllCourses() async {
+  Future<void> fetchEvent() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -26,7 +26,7 @@ class HomePageProvider with ChangeNotifier {
       }
 
       HomePageData homePageData = await HomePageService.fetchHomePageData(token);
-      _allCourses = homePageData.allCourses;
+      _Eventdata = homePageData.evenData;
     } catch (e) {
       _error = e.toString();
     } finally {

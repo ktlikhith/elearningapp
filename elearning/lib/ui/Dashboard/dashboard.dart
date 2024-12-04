@@ -1,5 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/tanentlogo_service.dart';
@@ -13,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -79,6 +83,9 @@ Future<void>  _refreshdata()async{
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
    
       context.read<HomePageProvider>().fetchAllCourses();
+       context.read<ProfileProvider>().fetchProfileData();
+       context.read<EventProvider>().fetchEvent();
+       context.read<activityprovider>().fetchpastsoonlater();
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
     // });
@@ -345,10 +352,41 @@ Future<void>  _refreshdata()async{
                    await Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
                    
                   },
-                  child: CircleAvatar(
+                  child:  Consumer<ProfileProvider>(
+        builder: (context, profileProvider, child) {
+          if (profileProvider.isLoading) {
+           return Container();
+          }
+
+          if (profileProvider.errorMessage != null) {
+            return Center(child: Text(profileProvider.errorMessage!));
+          }
+
+          if (profileProvider.profileData != null) {
+ 
+             final data = profileProvider.profileData;
+                return  CircleAvatar(
                     radius: 20,
-                    backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
+                    backgroundImage: profileProvider.profileData!=null ? NetworkImage(data!['profilePictureUrl']
+                    )
+                     : null,
+                  );
+          }
+        final data = profileProvider.profileData;
+           return  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: profileProvider.profileData!=null ? NetworkImage(data!['profilePictureUrl']
+                    )
+                     : null,
+                  );
+        }
+        
                   ),
+            
+                  
+              
+       
+                
                 ),
               ),
             ],
@@ -365,14 +403,22 @@ Future<void>  _refreshdata()async{
               child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<void>(
-            future: _fetchUserInfoFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return _buildUserInfoSkeleton();
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading user info'));
-              } else {
+          Consumer<ProfileProvider>(
+        builder: (context, profileProvider, child) {
+          if (profileProvider.isLoading) {
+            return _buildUserInfoSkeleton();
+          }
+
+          if (profileProvider.errorMessage != null) {
+            return Center(child: Text(profileProvider.errorMessage!));
+          }
+
+          if (profileProvider.profileData != null) {
+            
+                  
+              
+       
+                 final data = profileProvider.profileData;
                 return Container(
                   width:MediaQuery.of(context).size.width,
                   color: Colors.grey[100],
@@ -392,7 +438,7 @@ Future<void>  _refreshdata()async{
                               ),
                             ),
                             TextSpan(
-                              text: '$_userName!',
+                              text:    data!['studentName'],
                               style: TextStyle(
                                 fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
                                 fontWeight: FontWeight.bold,
@@ -414,27 +460,14 @@ Future<void>  _refreshdata()async{
                     ],
                   ),
                 );
+              }else{
+                 context.read<ProfileProvider>().fetchProfileData();
+                 return _buildUserInfoSkeleton();
               }
             },
           ),
           SizedBox(height: 12.0),
-          FutureBuilder<void>(
-            future: _fetchUserInfoFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
-                  children: [
-                    _buildLoadingSkeleton(),
-                    SizedBox(height: 15.0),
-                    _buildLoadingSkeleton(),
-                    SizedBox(height: 15.0),
-                    _buildLoadingSkeleton(),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading sections'));
-              } else if(snapshot.hasData){
-                return Column(
+           Column(
                   children: [
                     AutoScrollableSections(token: widget.token),
                     SizedBox(height: 15.0),
@@ -442,22 +475,11 @@ Future<void>  _refreshdata()async{
                     SizedBox(height: 15.0),
                     CustomDashboardWidget(token: widget.token),
                   ],
-                );
-              }
-              else {
-                return Column(
-                  children: [
-                    AutoScrollableSections(token: widget.token),
-                    SizedBox(height: 15.0),
-                    UpcomingEventsSection(token: widget.token),
-                    SizedBox(height: 15.0),
-                    CustomDashboardWidget(token: widget.token),
-                  ],
-                );
-              }
-            },
+                ),
             
-          ),
+            
+            
+              
         ],
               ),
             ),

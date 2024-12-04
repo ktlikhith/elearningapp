@@ -4,8 +4,10 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/Webview/tempviewfiles.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
@@ -61,6 +63,8 @@ class _WebViewPageState extends State<WebViewPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
      context.read<HomePageProvider>().fetchAllCourses();
      context.read<ProfileProvider>().fetchProfileData();
+       context.read<ReportProvider>().fetchData();
+          context.read<EventProvider>().fetchEvent();
 // to stop audio and video
 _controller.loadRequest(Uri.parse('about:blank'));
 

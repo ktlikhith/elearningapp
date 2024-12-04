@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:clay_containers/widgets/clay_container.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:elearning/services/homepage_service.dart'; // Import the HomePageService class
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AutoScrollableSections extends StatefulWidget {
@@ -77,45 +79,73 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        controller: _scrollController,
-        child: Padding(
+    return Consumer<activityprovider>(
+      builder: (context, provider, child) {
+        if (provider.isLoading) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController,
+            child: Row(
+              children: [
+                _buildShimmerItem(),
+                  _buildShimmerItem(),
+                    _buildShimmerItem(),
+              ],
+            ),
+          );
+        }
+
+        if (provider.error != null) {
+          return Center(child: Text('Error: ${provider.error}'));
+        }
+
+        final activities = provider.activity;
+
+        return Padding(
           padding: const EdgeInsets.all(0.0),
-          child: Row(
-            children: [
-              _isLoading ? _buildShimmerItem() : buildSection("Past Due", '$_past', 
-                  'assets/dashboardicons/due past.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Soon", '$_soon',  
-                  'assets/dashboardicons/Due soon.png'),
-              _isLoading ? _buildShimmerItem() : buildSection("Due Later", '$_later',
-                  'assets/dashboardicons/due later.png'),
-            ],
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController,
+            child: Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Row(
+                children: [
+                  buildSection("Past Due", '${activities.isNotEmpty ? activities[0] : 0}', 
+                      'assets/dashboardicons/due past.png'),
+                  buildSection("Due Soon", '${activities.length > 1 ? activities[1] : 0}',  
+                      'assets/dashboardicons/Due soon.png'),
+                  buildSection("Due Later", '${activities.length > 2 ? activities[2] : 0}',
+                      'assets/dashboardicons/due later.png'),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildShimmerItem() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          width: 200,
-          height: 100,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.0),
-            border: Border.all(
-              color: const Color.fromARGB(255, 227, 236, 227),
-              width: 2.0,
+    return Container(
+      width: 200,
+            height: 100,
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            width: 200,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              border: Border.all(
+                color: const Color.fromARGB(255, 227, 236, 227),
+                width: 2.0,
+              ),
             ),
           ),
         ),
