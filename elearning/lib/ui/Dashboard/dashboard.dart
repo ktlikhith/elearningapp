@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/Companylogoprovider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/pastsoonlaterprovider.dart';
@@ -65,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-  
+  context.read<EventProvider>().fetchEvent();
    
   initConnectivity();
 
@@ -85,6 +86,7 @@ Future<void>  _refreshdata()async{
       context.read<HomePageProvider>().fetchAllCourses();
        context.read<ProfileProvider>().fetchProfileData();
        context.read<EventProvider>().fetchEvent();
+        context.read<TenantLogoProvider>().fetchTenantUserData();
        context.read<activityprovider>().fetchpastsoonlater();
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
@@ -247,53 +249,70 @@ Future<void>  _refreshdata()async{
             automaticallyImplyLeading: false,
             title:  Row(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10.0,left: 0),
-                  child: _tenantLogoBytes != null
-                      ? Container(
-                     
-                          width: 90,
-                          height: 40,
-                          color:Colors.white,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                              _tenantLogoBytes!,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        )
-                      : FutureBuilder(
-                          future: _fetchUserInfoFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: SizedBox(
-                                  width: 90,
-                                  height: 40,
-                                  child: Container(color: Colors.white),
-                                ),
-                              );
-                            } else {
-                              return Container(
-                                
-                                width: 90,
-                                height: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    'assets/logo/RAP_logo.jpeg',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                    
-                ),
+               Padding(
+  padding: EdgeInsets.only(right: 10.0, left: 0),
+  child: Consumer<TenantLogoProvider>(
+    builder: (context, provider, child) {
+      if (provider.isLoading) {
+        // Show shimmer loading effect while data is being fetched
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: SizedBox(
+            width: 90,
+            height: 40,
+            child: Container(color: Colors.white),
+          ),
+        );
+      } else if (provider.error != null) {
+        // Handle error state - fallback to default logo
+        return Container(
+          width: 90,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/RAP_logo.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+      } else if (provider.tenantData != null &&
+          provider.tenantData!['logoBytes'] != null) {
+        // Display fetched tenant logo
+        final Uint8List tenantLogoBytes =
+            provider.tenantData!['logoBytes'] as Uint8List;
+
+        return Container(
+          width: 90,
+          height: 40,
+          color: Colors.white,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.memory(
+              tenantLogoBytes,
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      } else {
+        // Default fallback if no data is available
+        return Container(
+          width: 90,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/RAP_logo.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+      }
+    },
+  ),
+),
+
                
               ],
             ),

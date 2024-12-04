@@ -376,7 +376,7 @@ class _ProfilePageState extends State<ProfilePage> {
    @override
   void dispose() {
       _connectivitySubscription.cancel();
-   
+   context.read<ProfileProvider>().fetchProfileData();
     super.dispose();
   }
   
