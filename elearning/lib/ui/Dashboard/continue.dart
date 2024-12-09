@@ -277,7 +277,7 @@ Widget _buildSection(BuildContext context, CourseData course) {
   Widget build(BuildContext context) {
     return   Consumer<HomePageProvider>(
         builder: (context, provider, child) {
-          if (provider.allCourses.isNotEmpty) { 
+          if (provider.allCourses.isNotEmpty || provider.isLoading) { 
             return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

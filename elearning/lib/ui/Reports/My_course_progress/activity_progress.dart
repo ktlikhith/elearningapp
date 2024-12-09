@@ -397,6 +397,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
   }
 
   Widget _buildProgressBar(String label, int value, int total, Color color) {
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -408,8 +409,14 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           ),
         ),
         SizedBox(height: 4),
+         total!=0?
         LinearProgressIndicator(
           value: value / total,
+          backgroundColor: Colors.grey[200],
+          color: color,
+          minHeight: 16,
+        ): LinearProgressIndicator(
+          value: 0,
           backgroundColor: Colors.grey[200],
           color: color,
           minHeight: 16,

@@ -1,6 +1,8 @@
 import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
+import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/alertdialog.dart';
@@ -30,23 +32,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
   @override
   void initState() {
     super.initState();
-    learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-    _fetchCourses(widget.token);
+  
   }
 
-  Future<void> _fetchCourses(String token) async {
-    try {
-      final List<Course> response = await _apiService.fetchCourses(token);
-      if (mounted) {
-        setState(() {
-          _courses = response;
-        });
-      }
-    } catch (e) {
-      print('Error fetching courses: $e');
-      // Handle error here
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +54,8 @@ class _LearningPathPageState extends State<LearningPathPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator(
         onRefresh: ()async{
-             learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-    _fetchCourses(widget.token);
+           context.read<LearningPathProvider>().fetchLearningPaths();
+            context.read<HomePageProvider>().fetchAllCourses();
         },
         child: Consumer<LearningPathProvider>(
         builder: (context, provider, child) {
@@ -263,15 +252,28 @@ class _LearningPathPageState extends State<LearningPathPage> {
                           separatorBuilder: (context, index) => SizedBox(height: 16.0),
                           itemBuilder: (context, index) {
                             final course = relevantCourses[index];
-                            Course? coursedes;
-                          
-
-                            for (Course c in _courses) {
+                              CourseData? coursedes;
+                            return Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(child: _buildLoadingSkeleton());
+          } else if (provider.error != null) {
+            return Center(child: Text(provider.error!));
+          } else if (provider.allCourses.isEmpty) {
+            return Center(child: Text('No courses available'));
+          }  else { 
+                var crs=provider.allCourses;
+                  for (CourseData c in crs) {
                               if (c.id == course['courseid']) {
                                 coursedes = c;
                                 break;
                               }
                             }
+         
+                          
+                          
+
+                           
                             return Container(
                                                             decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
@@ -386,6 +388,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
                             ),
                                                             ),
                                                           );
+                                                           }
+        
+                            }
+                            );
                           },
                         )
                       : Container(),
