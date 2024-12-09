@@ -1,4 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/services/tanentlogo_service.dart';
@@ -9,8 +14,10 @@ import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert';
 import 'dart:async';
@@ -48,7 +55,7 @@ class _DashboardPageState extends State<DashboardPage> {
  
   
   late Future<void> _fetchUserInfoFuture;
-  late Future<void> _fetchOtherSectionsFuture;
+ 
   String _userName = '';
   String _userprofile = '';
   Uint8List? _tenantLogoBytes;
@@ -59,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-   _fetchOtherSectionsFuture = _fetchOtherSections();
+  context.read<EventProvider>().fetchEvent();
    
   initConnectivity();
 
@@ -75,7 +82,12 @@ Future<void>  _refreshdata()async{
 
      
     _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-   _fetchOtherSectionsFuture = _fetchOtherSections();
+   
+      context.read<HomePageProvider>().fetchAllCourses();
+       context.read<ProfileProvider>().fetchProfileData();
+       context.read<EventProvider>().fetchEvent();
+        context.read<TenantLogoProvider>().fetchTenantUserData();
+       context.read<activityprovider>().fetchpastsoonlater();
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
     // });
@@ -120,10 +132,7 @@ Future<void>  _refreshdata()async{
     }
   }
 
-  Future<void> _fetchOtherSections() async {
-    // This method can be used to load data for other sections if necessary
-    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
-  }
+ 
   // Stream<int> noticount() async*{
   //    try {
   //     Stream count = await NotificationCount().getUnreadNotificationCountStream(widget.token);
@@ -240,53 +249,70 @@ Future<void>  _refreshdata()async{
             automaticallyImplyLeading: false,
             title:  Row(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10.0,left: 0),
-                  child: _tenantLogoBytes != null
-                      ? Container(
-                     
-                          width: 90,
-                          height: 40,
-                          color:Colors.white,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                              _tenantLogoBytes!,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        )
-                      : FutureBuilder(
-                          future: _fetchUserInfoFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: SizedBox(
-                                  width: 90,
-                                  height: 40,
-                                  child: Container(color: Colors.white),
-                                ),
-                              );
-                            } else {
-                              return Container(
-                                
-                                width: 90,
-                                height: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    'assets/logo/RAP_logo.jpeg',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                    
-                ),
+               Padding(
+  padding: EdgeInsets.only(right: 10.0, left: 0),
+  child: Consumer<TenantLogoProvider>(
+    builder: (context, provider, child) {
+      if (provider.isLoading) {
+        // Show shimmer loading effect while data is being fetched
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: SizedBox(
+            width: 90,
+            height: 40,
+            child: Container(color: Colors.white),
+          ),
+        );
+      } else if (provider.error != null) {
+        // Handle error state - fallback to default logo
+        return Container(
+          width: 90,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/RAP_logo.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+      } else if (provider.tenantData != null &&
+          provider.tenantData!['logoBytes'] != null) {
+        // Display fetched tenant logo
+        final Uint8List tenantLogoBytes =
+            provider.tenantData!['logoBytes'] as Uint8List;
+
+        return Container(
+          width: 90,
+          height: 40,
+          color: Colors.white,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.memory(
+              tenantLogoBytes,
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      } else {
+        // Default fallback if no data is available
+        return Container(
+          width: 90,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/RAP_logo.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+      }
+    },
+  ),
+),
+
                
               ],
             ),
@@ -343,12 +369,43 @@ Future<void>  _refreshdata()async{
                 child: GestureDetector(
                   onTap: () async{
                    await Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token);
-                   _refreshdata();
+                   
                   },
-                  child: CircleAvatar(
+                  child:  Consumer<ProfileProvider>(
+        builder: (context, profileProvider, child) {
+          if (profileProvider.isLoading) {
+           return Container();
+          }
+
+          if (profileProvider.errorMessage != null) {
+            return Center(child: Text(profileProvider.errorMessage!));
+          }
+
+          if (profileProvider.profileData != null) {
+ 
+             final data = profileProvider.profileData;
+                return  CircleAvatar(
                     radius: 20,
-                    backgroundImage: _userprofile.isNotEmpty ? NetworkImage(_userprofile) : null,
+                    backgroundImage: profileProvider.profileData!=null ? NetworkImage(data!['profilePictureUrl']
+                    )
+                     : null,
+                  );
+          }
+        final data = profileProvider.profileData;
+           return  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: profileProvider.profileData!=null ? NetworkImage(data!['profilePictureUrl']
+                    )
+                     : null,
+                  );
+        }
+        
                   ),
+            
+                  
+              
+       
+                
                 ),
               ),
             ],
@@ -365,14 +422,22 @@ Future<void>  _refreshdata()async{
               child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<void>(
-            future: _fetchUserInfoFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return _buildUserInfoSkeleton();
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading user info'));
-              } else {
+          Consumer<ProfileProvider>(
+        builder: (context, profileProvider, child) {
+          if (profileProvider.isLoading) {
+            return _buildUserInfoSkeleton();
+          }
+
+          if (profileProvider.errorMessage != null) {
+            return Center(child: Text(profileProvider.errorMessage!));
+          }
+
+          if (profileProvider.profileData != null) {
+            
+                  
+              
+       
+                 final data = profileProvider.profileData;
                 return Container(
                   width:MediaQuery.of(context).size.width,
                   color: Colors.grey[100],
@@ -392,7 +457,7 @@ Future<void>  _refreshdata()async{
                               ),
                             ),
                             TextSpan(
-                              text: '$_userName!',
+                              text:    data!['studentName'],
                               style: TextStyle(
                                 fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
                                 fontWeight: FontWeight.bold,
@@ -414,27 +479,14 @@ Future<void>  _refreshdata()async{
                     ],
                   ),
                 );
+              }else{
+                 context.read<ProfileProvider>().fetchProfileData();
+                 return _buildUserInfoSkeleton();
               }
             },
           ),
           SizedBox(height: 12.0),
-          FutureBuilder<void>(
-            future: _fetchOtherSectionsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
-                  children: [
-                    _buildLoadingSkeleton(),
-                    SizedBox(height: 15.0),
-                    _buildLoadingSkeleton(),
-                    SizedBox(height: 15.0),
-                    _buildLoadingSkeleton(),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading sections'));
-              } else {
-                return Column(
+           Column(
                   children: [
                     AutoScrollableSections(token: widget.token),
                     SizedBox(height: 15.0),
@@ -442,10 +494,11 @@ Future<void>  _refreshdata()async{
                     SizedBox(height: 15.0),
                     CustomDashboardWidget(token: widget.token),
                   ],
-                );
-              }
-            },
-          ),
+                ),
+            
+            
+            
+              
         ],
               ),
             ),
@@ -457,41 +510,47 @@ Future<void>  _refreshdata()async{
   }
 
   Widget _buildUserInfoSkeleton() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 20.0,
-              width: 150.0,
-              color: Colors.white,
-            ),
-            const SizedBox(height: 10.0),
-            Container(
-              height: 20.0,
-              width: 250.0,
-              color: Colors.white,
-            ),
-          ],
+    return Container(
+     
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 20.0,
+                width: 150.0,
+                color: Colors.white,
+              ),
+              const SizedBox(height: 10.0),
+              Container(
+                height: 20.0,
+                width: 250.0,
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLoadingSkeleton() {
-    return Shimmer.fromColors(
+Widget _buildLoadingSkeleton() {
+  return SizedBox(
+    height: 200.0, // Ensure it has fixed constraints
+    child: Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Container(
-        height: 200.0,
         width: double.infinity,
         color: Colors.white,
-        margin: EdgeInsets.symmetric(horizontal: 16.0),
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

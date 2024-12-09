@@ -1,35 +1,24 @@
 
-
-
 import 'dart:async';
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/course_content.dart';
-import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
-import 'package:elearning/ui/My_learning/video_player_screen.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
-import 'package:elearning/ui/Webview/webview.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
-import 'package:elearning/ui/download/test-courseimg-download.dart';
 import 'package:elearning/utilites/alertdialog.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/parse_route.dart';
-import 'package:get/get_state_manager/src/simple/list_notifier.dart';
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:developer' as developer;
-import 'package:elearning/services/auth.dart';
 
 class CourseDetailsPage extends StatefulWidget {
   final String token;
@@ -56,6 +45,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   @override
   void initState() {
     super.initState();
+   
       initConnectivity();
     
       // Correct type for StreamSubscription<ConnectivityResult>
@@ -72,6 +62,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
       DeviceOrientation.landscapeRight,
     ]);
   }
+  
     @override
   void dispose() {
       _connectivitySubscription.cancel(); 
@@ -616,14 +607,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'],  module['url'], widget.token,))
                                   );
-                                    setState(() {
-              _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-     DownloadManager dm =DownloadManager();
-    _fetchCourseContent();
-    _courseImageUrlFuture = _fetchCourseImage();
-    _courseDescriptionFuture = _fetchCourseDescription();
-              });
+                         updatedata();
                                     } else if ( module['modname'] == 'resource' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final content = module['contents'][0];
                                       String getpdfUrlWithToken(String filePath1, String Token) {
@@ -640,14 +624,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'resource',  module['url'], widget.token,pdfurl))
                                   );
-                                    setState(() {
-              _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-     DownloadManager dm =DownloadManager();
-    _fetchCourseContent();
-    _courseImageUrlFuture = _fetchCourseImage();
-    _courseDescriptionFuture = _fetchCourseDescription();
-              });
+                              updatedata();
                                     } else if (module['modname'] == 'customcert' ){
                                   // String certificateurl=module['url']+'&forcedownload=1';
                                 
@@ -662,14 +639,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     context,
                                     MaterialPageRoute(builder: (context)=>WebViewPage(module['name'] ?? 'customcert',  module['url'], widget.token,))
                                   );
-                                    setState(() {
-              _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-     DownloadManager dm =DownloadManager();
-    _fetchCourseContent();
-    _courseImageUrlFuture = _fetchCourseImage();
-    _courseDescriptionFuture = _fetchCourseDescription();
-              });
+                               updatedata();
                                     }
                                     else if (module['modname'] == 'zoom' || module['modname'] == 'googlemeet') {
                                     await  Navigator.push(
@@ -678,14 +648,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'Meeting', module['url'],widget.token),
                                         ),
                                       );
-                                        setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                        updatedata();
                                     } else if (module['modname'] == 'forum') {
                                      await Navigator.push(
                                         context,
@@ -693,14 +656,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'Forum', module['url'],widget.token),
                                         ),
                                       );
-                                        setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                        updatedata();
                                     } else if (module['modname'] == 'quiz') {
                                     await  Navigator.push(
                                         context,
@@ -708,14 +664,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'Quiz', module['url'],widget.token),
                                         ),
                                       );
-                                       setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                       updatedata();
 
                                     } else if (module['modname'] == 'assign' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final moduleContent = module['contents'][0];
@@ -725,14 +674,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                         ),
                                       );
-                                       setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                       updatedata();
                                     } else if (module['modname'] == 'scorm' && module['contents'] != null && module['contents'].isNotEmpty) {
                                       final content = module['contents'][0];
                                      await Navigator.push(
@@ -741,14 +683,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'SCORM', content['fileurl'],widget.token),
                                         ),
                                       );
-                                       setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                       updatedata();
                                     } else if (module['modname'] == 'assign') {
                                     await  Navigator.push(
                                         context,
@@ -756,14 +691,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                           builder: (context) => WebViewPage(module['name'] ?? 'Assignment', module['url'],widget.token),
                                         ),
                                       );
-                                       setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                      updatedata();
                                     } else {
                                       if (module['url'] != null && module['url'].isNotEmpty) {
                                       await  Navigator.push(
@@ -772,14 +700,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                             builder: (context) => WebViewPage(module['name'] ?? 'Module Name', module['url'],widget.token),
                                           ),
                                         );
-                                         setState(() {
-                                                         _connectivitySubscription =
-                                                   _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-                                                DownloadManager dm =DownloadManager();
-                                               _fetchCourseContent();
-                                               _courseImageUrlFuture = _fetchCourseImage();
-                                               _courseDescriptionFuture = _fetchCourseDescription();
-                                                         });
+                                        updatedata();
                                       }
                                     }
                                   }
@@ -909,5 +830,20 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
       height: 26,
       fit: BoxFit.cover,
     );
+  }
+   updatedata()async{
+      context.read<LearningPathProvider>().fetchLearningPaths();
+      context.read<HomePageProvider>().fetchAllCourses();
+     context.read<ProfileProvider>().fetchProfileData();
+       context.read<ReportProvider>().fetchData();
+          context.read<EventProvider>().fetchEvent();
+            setState(() {
+                       _connectivitySubscription =
+                      _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+                       DownloadManager dm =DownloadManager();
+                      _fetchCourseContent();
+                    _courseImageUrlFuture = _fetchCourseImage();
+                    _courseDescriptionFuture = _fetchCourseDescription();
+                                                         });
   }
 }

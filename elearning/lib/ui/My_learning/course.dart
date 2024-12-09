@@ -1,4 +1,6 @@
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/services/allcourse_service.dart';
+import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:flutter/material.dart';
@@ -358,15 +360,17 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CourseProvider>(
-      builder: (context, provider, _) {
+    return Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
         // If the search query is empty, display all courses
-        List<Course> filteredCourses = widget.searchQuery.isEmpty
-            ? provider.course ?? []  // Display all courses when no search query
-            : provider.course?.where((course) {
-                // Filter courses based on the search query
-                return course.name.toLowerCase().contains(widget.searchQuery.toLowerCase());
-              }).toList() ?? [];
+       List<CourseData> filteredCourses = widget.searchQuery.isEmpty
+          ? provider.allCourses // Use the provider's full list of courses
+          : provider.allCourses.where((course) {
+              // Filter courses based on the search query (case insensitive)
+              return course.name
+                  .toLowerCase()
+                  .contains(widget.searchQuery.toLowerCase());
+            }).toList();
 
         return provider.isLoading
             ? _buildShimmerEffect()  // Show shimmer while loading
@@ -450,7 +454,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildCourseContainer(BuildContext context, Course course, CourseProvider provider) {
+  Widget buildCourseContainer(BuildContext context, CourseData course, HomePageProvider provider) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
       decoration: BoxDecoration(
@@ -468,7 +472,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildSingleCourseSection(BuildContext context, Course course, CourseProvider provider) {
+  Widget buildSingleCourseSection(BuildContext context, CourseData course, HomePageProvider provider) {
     return GestureDetector(
       onTap: () => showMLPopup(
         context,
@@ -498,7 +502,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildCourseImage(BuildContext context, Course course) {
+  Widget buildCourseImage(BuildContext context, CourseData course) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
       height:MediaQuery.of(context).orientation!=Orientation.landscape? MediaQuery.of(context).size.height * 0.165:MediaQuery.of(context).size.height* .5,
@@ -534,7 +538,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildCourseDetails(BuildContext context, Course course, CourseProvider provider) {
+  Widget buildCourseDetails(BuildContext context, CourseData course, HomePageProvider provider) {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, top: 5, right: 10),
       child: Column(
@@ -562,7 +566,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildProgressSection(BuildContext context, Course course) {
+  Widget buildProgressSection(BuildContext context, CourseData course) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -615,7 +619,7 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
     );
   }
 
-  Widget buildDueDateSection(BuildContext context, Course course) {
+  Widget buildDueDateSection(BuildContext context, CourseData course) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
