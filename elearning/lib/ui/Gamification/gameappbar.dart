@@ -196,7 +196,7 @@ class _GamificationPageState extends State<GamificationPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.5),
                   child: Text(
                     pointsText,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, ),
                   ),
                 ),
               ],
