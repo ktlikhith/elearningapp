@@ -280,12 +280,19 @@
 
 import 'dart:io';
 
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/services/allcourse_service.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
 import 'package:elearning/ui/My_learning/video_player_screen.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:elearning/services/course_content.dart';
@@ -312,6 +319,13 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
   }
 
   Future<void> _fetchCourseContent() async {
+    context.read<LearningPathProvider>().fetchLearningPaths();
+      context.read<HomePageProvider>().fetchAllCourses();
+     context.read<ProfileProvider>().fetchProfileData();
+       context.read<ReportProvider>().fetchData();
+          context.read<EventProvider>().fetchEvent();
+           context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
     try {
       final courseContentResponse = await CourseContentApiService()
           .fetchCourseContentData(widget.token, widget.courseId);

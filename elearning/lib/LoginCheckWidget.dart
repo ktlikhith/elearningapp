@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:elearning/providers/Companylogoprovider.dart';
 import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/pastsoonlaterprovider.dart';
@@ -69,6 +70,9 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
           context.read<TenantLogoProvider>().fetchTenantUserData();
           context.read<LearningPathProvider>().fetchLearningPaths();
             context.read<HomePageProvider>().fetchAllCourses();
+            context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
+             
   //      WidgetsBinding.instance.addPostFrameCallback((_) {
   //   context.read<HomePageProvider>().fetchAllCourses();
    

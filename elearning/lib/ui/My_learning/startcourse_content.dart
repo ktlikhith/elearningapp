@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/profile_provider.dart';
@@ -837,6 +838,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
      context.read<ProfileProvider>().fetchProfileData();
        context.read<ReportProvider>().fetchData();
           context.read<EventProvider>().fetchEvent();
+           context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
             setState(() {
                        _connectivitySubscription =
                       _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);

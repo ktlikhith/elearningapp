@@ -2,6 +2,7 @@ import 'dart:async';
 
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/services/reward_service.dart';
 
 
@@ -147,11 +148,8 @@ class _GamificationPageState extends State<GamificationPage> {
   }
   Future<void> _refresh()async{
     
- setState(() {
-   _rewardDataFuture = rd.getUserRewardPoints(widget.token);
-       datas=_rewardDataFuture.asBroadcastStream();
-    
- });
+    context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
     // datas=_rewardDataFuture.asBroadcastStream();
   
     // _spinWheelKey.currentState?.refresh();
@@ -165,6 +163,7 @@ class _GamificationPageState extends State<GamificationPage> {
 
   @override
   Widget build(BuildContext context) {
+   
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacementNamed(RouterManger.homescreen, arguments: widget.token);
@@ -179,27 +178,32 @@ class _GamificationPageState extends State<GamificationPage> {
             child: Image.asset('assets/gamificatinn/crown.png',),
           ),
           leadingWidth: 40,
-          title: StreamBuilder<RewardData>(
-            stream: datas,
- builder: (context, snapshot) {
+          title: Consumer<RewardProvider>(
+          builder: (context, rewardProvider, child) {
             String pointsText = 'My Points : -';
-            if (snapshot.connectionState == ConnectionState.done) {
-              final totalPoints = snapshot.data?.totalPoints;
-              if (totalPoints != null) {
-                pointsText = 'My Points : $totalPoints';
-              }
+            if (rewardProvider.isLoading) {
+              pointsText = 'Loading Points...';
+            } else if (rewardProvider.errorMessage != null) {
+              pointsText = 'Error loading points';
+            } else if (rewardProvider.rewardData != null) {
+              pointsText = 'My Points : ${rewardProvider.rewardData?.totalPoints}';
             }
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 1.5),
-                  child: Text(pointsText),
+                  child: Text(
+                    pointsText,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               ],
             );
           },
-          ),
+        ),
+       
           centerTitle: false,
           automaticallyImplyLeading: false,
         ),
@@ -213,7 +217,7 @@ class _GamificationPageState extends State<GamificationPage> {
               child: Column(
                 children: [
                  
-                  RewardSection(token: widget.token, rewardDataFuture: datas),
+                  RewardSection(),
                  
                   SizedBox(height: 20),
                   Container(
