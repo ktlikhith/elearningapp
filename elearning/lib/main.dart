@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
 import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/LP_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/pastsoonlaterprovider.dart';
@@ -71,6 +72,7 @@ void main() async {
           ChangeNotifierProvider(create: (_)=>activityprovider()),
           ChangeNotifierProvider(create: (_)=>EventProvider()),
            ChangeNotifierProvider(create: (_) => TenantLogoProvider()),
+              ChangeNotifierProvider(create: (_) => LearningPathProvider()),
           
         
       ],

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/LP_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/pastsoonlaterprovider.dart';
@@ -66,7 +67,8 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
           context.read<ReportProvider>().fetchData();
           context.read<EventProvider>().fetchEvent();
           context.read<TenantLogoProvider>().fetchTenantUserData();
-          await  context.read<HomePageProvider>().fetchAllCourses();
+          context.read<LearningPathProvider>().fetchLearningPaths();
+            context.read<HomePageProvider>().fetchAllCourses();
   //      WidgetsBinding.instance.addPostFrameCallback((_) {
   //   context.read<HomePageProvider>().fetchAllCourses();
    

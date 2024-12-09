@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/LP_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/profile_provider.dart';
@@ -58,17 +59,14 @@ class _WebViewPageState extends State<WebViewPage> {
     addFileSelectionListener();
   }
   @override
-  void dispose() async{
+  void dispose() {
      _connectivitySubscription.cancel(); 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
-     context.read<HomePageProvider>().fetchAllCourses();
-     context.read<ProfileProvider>().fetchProfileData();
-       context.read<ReportProvider>().fetchData();
-          context.read<EventProvider>().fetchEvent();
-// to stop audio and video
+    
+    
 _controller.loadRequest(Uri.parse('about:blank'));
 
- setState(() {});
+ 
     super.dispose();
   }
      

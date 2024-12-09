@@ -18,8 +18,11 @@ class TenantLogoProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+         SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
+     if (token == null || token.isEmpty) {
+        throw Exception('Token not found. Please log in again.');
+      }
       final data = await TanentLogo.fetchTenantUserData(token!);
       _tenantData = data;
     } catch (e) {
