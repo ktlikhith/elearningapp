@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/services/reward_service.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:elearning/ui/Gamification/leaderboard.dart';
 import 'package:elearning/ui/Gamification/scratchscreen.dart';
 import 'package:elearning/ui/Gamification/spinwheel.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'dart:developer' as developer;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,10 +50,10 @@ class _GamificationPageState extends State<GamificationPage> {
   void initState() {
     super.initState();
     
-    _rewardDataFuture = rd.getUserRewardPoints(widget.token);
+   // _rewardDataFuture = rd.getUserRewardPoints(widget.token);
     // _rewardStreamController.sink.add(_rewardDataFuture);
     // datas= _rewardDataFuture.asBroadcast();
-     datas=_rewardDataFuture.asBroadcastStream();
+    // datas=_rewardDataFuture.asBroadcastStream();
       initConnectivity();
             
 
@@ -184,10 +186,24 @@ class _GamificationPageState extends State<GamificationPage> {
             if (rewardProvider.isLoading) {
               pointsText = 'Loading Points...';
             } else if (rewardProvider.errorMessage != null) {
-              pointsText = 'Error loading points';
-            } else if (rewardProvider.rewardData != null) {
+              pointsText = 'My Points : -';
+                                     // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (rewardProvider.errorMessage.toString().contains('Connection reset by peer')||rewardProvider.errorMessage.toString().contains('Connection timed out')||rewardProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  
+     showNetworkError(context);
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+  }
+            }else if (rewardProvider.rewardData != null) {
               pointsText = 'My Points : ${rewardProvider.rewardData?.totalPoints}';
             }
+            
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -228,7 +244,7 @@ class _GamificationPageState extends State<GamificationPage> {
                         SizedBox(
                           height: 400,
                           width: MediaQuery.of(context).size.width * 0.7,
-                          child: SpinWheel(token: widget.token, width: MediaQuery.of(context).size.width * 0.12,onRefresh: _refresh, rewardStreame: datas,),
+                          child: SpinWheel(token: widget.token, width: MediaQuery.of(context).size.width * 0.12,),
                         ),
                         SizedBox(height: 20),
                   //       ElevatedButton(

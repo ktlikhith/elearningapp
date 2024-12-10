@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/Reports/My_course_progress/activity_progress.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -154,7 +156,22 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
           }
 
           if (provider.error != null) {
-            return Center(child: Text("Error: ${provider.error}"));
+            if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+        return Center(child: CircularProgressIndicator());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+      
+  
+           return Center(child: CircularProgressIndicator());
+  }
           }
 
           if (provider.allCourses.isEmpty) {

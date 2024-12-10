@@ -339,8 +339,10 @@ import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:elearning/ui/Profile/rank_level.dart';
 import 'package:elearning/ui/Profile/updateProfile.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -517,12 +519,28 @@ class _ProfilePageState extends State<ProfilePage> {
           }
 
           if (profileProvider.errorMessage != null) {
-            return Center(child: Text(profileProvider.errorMessage!));
+        
+                                               // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+     showNetworkError(context);
+     return Center(child: _buildLoadingSkeleton());
+    
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+  }
           }
+          
 
-          if (profileProvider.profileData == null) {
+          else if (profileProvider.profileData == null) {
             
                   profileProvider.fetchProfileData();
+                    return Center(child: _buildLoadingSkeleton());
               
           }
 

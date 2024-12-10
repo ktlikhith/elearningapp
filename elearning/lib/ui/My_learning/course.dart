@@ -3,6 +3,7 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -372,8 +373,9 @@ class _BuildCourseSectionsState extends State<BuildCourseSections> {
                   .contains(widget.searchQuery.toLowerCase());
             }).toList();
 
-        return provider.isLoading
-            ? _buildShimmerEffect()  // Show shimmer while loading
+        return provider.isLoading ||provider.error!=null
+            ? _buildShimmerEffect()
+          // Show shimmer while loading
             : filteredCourses.isNotEmpty
                 ? SingleChildScrollView(
                     child: Column(

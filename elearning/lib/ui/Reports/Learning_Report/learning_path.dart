@@ -3,8 +3,10 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
 import 'package:elearning/utilites/alertdialog.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +59,22 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (provider.error != null) {
-            return Center(child: Text(provider.error!));
+              if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+        return Center(child: CircularProgressIndicator());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+      
+  
+           return Center(child: CircularProgressIndicator());
+  }
           } else if (provider.learningPaths.isEmpty) {
             return Center(child: Text('No learning paths available'));
           } else {

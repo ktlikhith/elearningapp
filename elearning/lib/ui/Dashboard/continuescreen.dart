@@ -62,7 +62,13 @@ class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
           }
 
           if (provider.error != null) {
-            return Center(child: Text("Error: ${provider.error}"));
+            print(provider.error);
+            return
+                   ListView.builder(
+  itemCount:  15, // Use 5 shimmer items if courses list is empty
+  itemBuilder: (context, index) {return  _buildShimmerItem();
+  }
+                   );
           }
 
           if (provider.allCourses.isEmpty) {

@@ -98,7 +98,19 @@ class _AutoScrollableSectionsState extends State<AutoScrollableSections> {
         }
 
         if (provider.error != null) {
-          return Center(child: Text('Error: ${provider.error}'));
+             print('Error: ${provider.error}');
+            return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController,
+            child: Row(
+              children: [
+                _buildShimmerItem(),
+                  _buildShimmerItem(),
+                    _buildShimmerItem(),
+              ],
+            ),
+          ); 
+        
         }
 
         final activities = provider.activity;

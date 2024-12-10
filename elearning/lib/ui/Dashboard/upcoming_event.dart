@@ -72,12 +72,8 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         if (provider.isLoading) {
           return _buildShimmerEffect(context);
         } else if (provider.error != null) {
-          return Center(
-            child: Text(
-              'Error: ${provider.error}',
-              style: TextStyle(color: Colors.red),
-            ),
-          );
+          print(provider.error);
+          return _buildShimmerEffect(context);
         } else if (provider.Eventdata.isNotEmpty) {
           return Container(
             padding: const EdgeInsets.all(8.0),

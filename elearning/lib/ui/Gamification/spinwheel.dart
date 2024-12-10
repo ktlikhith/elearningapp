@@ -258,6 +258,7 @@ import 'dart:ui';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:confetti/confetti.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/gamepoints_service.dart';
 import 'package:elearning/services/reward_service.dart';
@@ -278,18 +279,18 @@ import 'package:shimmer/shimmer.dart';
 
 class SpinWheel extends StatefulWidget {
   final String token;
- late Stream<RewardData> rewardStreame;
+ 
   final double width;
-    final Function onRefresh; // Accept a callback from the parent
+  
   
  
 
    SpinWheel({
     Key? key,
     required this.token,
-   required this.rewardStreame,
+   
     required this.width,
-    required this.onRefresh,
+  
   }) : super(key: key);
 
   @override
@@ -356,7 +357,8 @@ class _SpinWheelState extends State<SpinWheel> {
     //  datas=_rewardDataFuture.asBroadcastStream();
     // });
       
-       await  widget.onRefresh();
+     context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
       
     }
 

@@ -348,7 +348,12 @@ Widget _buildSection(BuildContext context, CourseData course) {
           }
 
           if (provider.error != null) {
-            return Center(child: Text("Error: ${provider.error}"));
+            print(provider.error);
+          return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [  _buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),_buildShimmerItem(),
+          ]),
+       );
           }
        
 

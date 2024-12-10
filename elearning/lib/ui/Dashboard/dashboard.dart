@@ -12,14 +12,16 @@ import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
+import 'package:elearning/ui/download/downloadmanager.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-
-import 'dart:convert';
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:shimmer/shimmer.dart';
@@ -60,12 +62,15 @@ class _DashboardPageState extends State<DashboardPage> {
   String _userprofile = '';
   Uint8List? _tenantLogoBytes;
   int _notificationCount = 0;
+  DownloadManager dm=new DownloadManager();
   // late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+   // _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+  
+   dm.userpermission(context);
   context.read<EventProvider>().fetchEvent();
    
   initConnectivity();
@@ -78,10 +83,11 @@ class _DashboardPageState extends State<DashboardPage> {
     // });
   }
 
+
 Future<void>  _refreshdata()async{
 
      
-    _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+   // _fetchUserInfoFuture = _fetchUserInfo(widget.token);
    
       context.read<HomePageProvider>().fetchAllCourses();
        context.read<ProfileProvider>().fetchProfileData();
@@ -95,42 +101,42 @@ Future<void>  _refreshdata()async{
         
       }
 
-  Future<void> _fetchUserInfo(String token) async {
+  // Future<void> _fetchUserInfo(String token) async {
   
-    try {
-      // Fetch data in parallel
-      final results = await Future.wait([
-        NotificationCount.getUnreadNotificationCount(token),
-        SiteConfigApiService.getUserId(token),
-        TanentLogo.fetchTenantUserData(token),
-      ]);
+  //   try {
+  //     // Fetch data in parallel
+  //     final results = await Future.wait([
+  //       NotificationCount.getUnreadNotificationCount(token),
+  //       SiteConfigApiService.getUserId(token),
+  //       TanentLogo.fetchTenantUserData(token),
+  //     ]);
 
-      final count = results[0] as int;
-      final userInfo = results[1] as Map<String, dynamic>;
-      final logoData = results[2] as Map<String, dynamic>;
+  //     final count = results[0] as int;
+  //     final userInfo = results[1] as Map<String, dynamic>;
+  //     final logoData = results[2] as Map<String, dynamic>;
 
-      final fullName = userInfo['fullname'];
-      final userprofile = userInfo['userpictureurl'];
+  //     final fullName = userInfo['fullname'];
+  //     final userprofile = userInfo['userpictureurl'];
 
-      Uint8List? tenantLogoBytes;
-      if (logoData['tenant'].isNotEmpty) {
-        final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
-        if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
-          tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
-        }
-      }
+  //     Uint8List? tenantLogoBytes;
+  //     if (logoData['tenant'].isNotEmpty) {
+  //       final tenantLogoBase64 = logoData['tenant'][6]['tenant_logo'];
+  //       if (tenantLogoBase64 != null && tenantLogoBase64.isNotEmpty) {
+  //         tenantLogoBytes = base64Decode(tenantLogoBase64.split(',').last);
+  //       }
+  //     }
       
 
-      setState(() {
-        _notificationCount = count;
-        _userName = fullName;
-        _userprofile = userprofile;
-        _tenantLogoBytes = tenantLogoBytes;
-      });
-    } catch (e) {
-      print('Error fetching user information: $e');
-    }
-  }
+  //     setState(() {
+  //       _notificationCount = count;
+  //       _userName = fullName;
+  //       _userprofile = userprofile;
+  //       _tenantLogoBytes = tenantLogoBytes;
+  //     });
+  //   } catch (e) {
+  //     print('Error fetching user information: $e');
+  //   }
+  // }
 
  
   // Stream<int> noticount() async*{
@@ -265,6 +271,30 @@ Future<void>  _refreshdata()async{
           ),
         );
       } else if (provider.error != null) {
+      
+  // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+    // Call your custom function to handle the error
+    showNetworkError(context);
+      return Container(
+          width: 90,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/RAP_logo.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
         // Handle error state - fallback to default logo
         return Container(
           width: 90,
@@ -277,6 +307,10 @@ Future<void>  _refreshdata()async{
             ),
           ),
         );
+  }
+
+
+    
       } else if (provider.tenantData != null &&
           provider.tenantData!['logoBytes'] != null) {
         // Display fetched tenant logo
@@ -378,8 +412,27 @@ Future<void>  _refreshdata()async{
           }
 
           if (profileProvider.errorMessage != null) {
-            return Center(child: Text(profileProvider.errorMessage!));
+            // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+    // Call your custom function to handle the error
+  showNetworkError(context);
+      return Container();
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        
+        return Container();
+  }
+
+
+    
           }
+          
 
           if (profileProvider.profileData != null) {
  
@@ -429,7 +482,22 @@ Future<void>  _refreshdata()async{
           }
 
           if (profileProvider.errorMessage != null) {
-            return Center(child: Text(profileProvider.errorMessage!));
+          
+                       // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  
+      return _buildUserInfoSkeleton();
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+        return _buildUserInfoSkeleton();
+  }
           }
 
           if (profileProvider.profileData != null) {

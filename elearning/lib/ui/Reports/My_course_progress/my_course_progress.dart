@@ -386,7 +386,9 @@ import 'dart:async';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'dart:math';
@@ -616,7 +618,22 @@ OverlayEntry _createOverlayEntry(BuildContext context) {
           }
 
           if (provider.error != null) {
-            return Center(child: Text("Error: ${provider.error}"));
+             if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+        return Center(child: CircularProgressIndicator());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+      
+  
+           return Center(child: CircularProgressIndicator());
+  }
           }
 
           if (provider.allCourses.isEmpty) {

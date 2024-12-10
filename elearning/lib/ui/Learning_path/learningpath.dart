@@ -6,8 +6,10 @@ import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/alertdialog.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +65,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
             return Center(child: _buildLoadingSkeleton());
           } else if (provider.error != null) {
             return Center(child: Text(provider.error!));
+            
           } else if (provider.learningPaths.isEmpty) {
             return Center(child: Text('No learning paths available'));
           }  else {
@@ -258,7 +261,20 @@ class _LearningPathPageState extends State<LearningPathPage> {
           if (provider.isLoading) {
             return Center(child: _buildLoadingSkeleton());
           } else if (provider.error != null) {
-            return Center(child: Text(provider.error!));
+                                  // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+       return Center(child: _buildLoadingSkeleton());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+         return Center(child: _buildLoadingSkeleton());
+  }
           } else if (provider.allCourses.isEmpty) {
             return Center(child: Text('No courses available'));
           }  else { 

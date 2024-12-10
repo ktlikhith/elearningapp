@@ -343,6 +343,10 @@ static Future<bool> requestStoragePermission(BuildContext context) async {
     final digest = md5.convert(bytes);
     return digest.toString();
   }
+  void userpermission(context)async{
+    await requestStoragePermission(context);
+      await requestNotificationPermission(context);
+  }
 
    Future<void> downloadFile(BuildContext context, String url, String fileName, String token, String courseNmae,String imgurl,{String? expectedChecksum}) async {
     try {
