@@ -28,5 +28,23 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+<string>We need access to your photo library to save or view files.</string>
+<key>UIBackgroundModes</key>
+<array>
+  <string>fetch</string>
+  <string>remote-notification</string>
+</array>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>This app uses notifications to alert you about downloads and updates.</string>
+<key>NSUserTrackingUsageDescription</key>
+<string>This app uses tracking to improve your experience.</string>
+<key>UIUserNotificationSettings</key>
+<true/>
+<key>UNAuthorizationOptionsAlert</key>
+<true/>
+
+
+
 </dict>
 </plist>

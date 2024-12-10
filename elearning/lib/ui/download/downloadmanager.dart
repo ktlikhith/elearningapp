@@ -270,40 +270,73 @@ print(metadata);
     return List<Map<String, dynamic>>.from(metadata);
   }
 
-  static Future<bool> requestStoragePermission(BuildContext context) async {
-    if (Platform.isAndroid) {
-      if (await Permission.manageExternalStorage.isGranted) {
-        return true; // Permission already granted
-      } else {
-        var status = await Permission.manageExternalStorage.request();
-        if (status.isGranted) {
-          return true; // Permission granted after request
-        } else {
-          // Show a dialog to inform the user about the importance of permission
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Permission Required'),
-              content: const Text('Storage permission is required to download files. Please grant the permission in the app settings.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    openAppSettings(); // Redirect to app settings
-                  },
-                  child: const Text('Go to Settings'),
-                ),
-              ],
-            ),
-          );
-          return false; // Permission denied after request
-        }
-      }
+static Future<bool> requestStoragePermission(BuildContext context) async {
+  if (Platform.isAndroid) {
+    // Handle Android-specific storage permission
+    if (await Permission.manageExternalStorage.isGranted) {
+      return true; // Permission already granted
     } else {
-      // Handle other platforms if needed
-      return true;
+      var status = await Permission.manageExternalStorage.request();
+      if (status.isGranted) {
+        return true; // Permission granted after request
+      } else {
+        // Show a dialog to inform the user about the importance of permission
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Permission Required'),
+            content: const Text(
+                'Storage permission is required to download files. Please grant the permission in the app settings.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  openAppSettings(); // Redirect to app settings
+                },
+                child: const Text('Go to Settings'),
+              ),
+            ],
+          ),
+        );
+        return false; // Permission denied after request
+      }
     }
+  } else if (Platform.isIOS) {
+    // Handle iOS-specific storage permission
+    if (await Permission.photos.isGranted) {
+      return true; // Permission already granted
+    } else {
+      var status = await Permission.photos.request();
+      if (status.isGranted) {
+        return true; // Permission granted after request
+      } else {
+        // Show a dialog to inform the user about the importance of permission
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Permission Required'),
+            content: const Text(
+                'Photos permission is required to download files. Please grant the permission in the app settings.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  openAppSettings(); // Redirect to app settings
+                },
+                child: const Text('Go to Settings'),
+              ),
+            ],
+          ),
+        );
+        return false; // Permission denied after request
+      }
+    }
+  } else {
+    // Handle other platforms if needed
+    return true;
   }
+}
+
 
   static Future<String> _calculateMD5(File file) async {
     final bytes = await file.readAsBytes();
