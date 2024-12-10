@@ -331,6 +331,7 @@ import 'dart:async';
 
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/profile_service.dart';
 import 'package:elearning/services/reward_service.dart';
@@ -338,9 +339,12 @@ import 'package:elearning/ui/Profile/achivement.dart';
 import 'package:elearning/ui/Profile/progressbar.dart';
 import 'package:elearning/ui/Profile/rank_level.dart';
 import 'package:elearning/ui/Profile/updateProfile.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:developer' as developer;
 
@@ -374,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
    @override
   void dispose() {
       _connectivitySubscription.cancel();
-   
+   context.read<ProfileProvider>().fetchProfileData();
     super.dispose();
   }
   
@@ -500,28 +504,51 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () async {
               // Navigate to the EditProfilePage and refresh data on return
               await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(token: widget.token)));
-              setState(() {
-                _profileDataFuture = _fetchProfileData(widget.token);
-              });
+             
+           context.read<ProfileProvider>().fetchProfileData();
+        
             },
           ),
         ],
       ),
       backgroundColor: Theme.of(context).highlightColor,
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: _profileDataFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildLoadingSkeleton();
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading profile data'));
-          } else if (snapshot.hasData) {
-            final data = snapshot.data!;
-            return _buildProfileContent(data);
-          } else {
-            return Center(child: Text('No profile data available'));
+      body: Consumer<ProfileProvider>(
+        builder: (context, profileProvider, child) {
+          if (profileProvider.isLoading) {
+            return Center(child: _buildLoadingSkeleton());
           }
-        },
+
+          if (profileProvider.errorMessage != null) {
+        
+                                               // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+     showNetworkError(context);
+     return Center(child: _buildLoadingSkeleton());
+    
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+  }
+          }
+          
+
+          else if (profileProvider.profileData == null) {
+            
+                  profileProvider.fetchProfileData();
+                    return Center(child: _buildLoadingSkeleton());
+              
+          }
+
+            final data = profileProvider.profileData;
+            return _buildProfileContent(data!);
+          
+        }
+      
       ),
     );
   }
@@ -530,9 +557,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final screenHeight = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() {
-          _profileDataFuture = _fetchProfileData(widget.token);
-        });
+        await context.read<ProfileProvider>().fetchProfileData();
       },
       child: Center(
         child: SingleChildScrollView(

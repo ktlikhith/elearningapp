@@ -1,11 +1,15 @@
+import 'package:elearning/providers/LP_provider.dart';
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
 import 'package:elearning/ui/Reports/Learning_Report/learning_detail.dart';
 import 'package:elearning/utilites/alertdialog.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/learninpath_service.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LearningPathScreen extends StatefulWidget {
@@ -26,6 +30,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
     _learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
   }
    Future<void>  refrseh()async{
+    context.read<LearningPathProvider>().fetchLearningPaths();
     setState(() {
        _learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
     });
@@ -48,37 +53,51 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator(
         onRefresh: refrseh,
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: _learningPathData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
-            } else if (snapshot.hasData && (snapshot.data!['learningpathdetail'] as List).isEmpty) {
-              return Center(child: Text('No learning paths available'));
-            } else {
-              List learningPaths = snapshot.data!['learningpathdetail'];
-              List progressList = snapshot.data!['learningpath_progress'];
-              return Container(
-         
-          child: ListView.builder(
-            itemCount: learningPaths.length,
-            itemBuilder: (context, index) {
-        var learningPath = LearningPathDetail.fromJson(learningPaths[index], progressList);
-        return GestureDetector(
-          onTap: ()async {
-           await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LearningPathDetailScreen(learningPath: learningPath,index:index,token: widget.token,),
-              ),
-            );
-            setState(() {
-              _learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-            });
-             
-          },
+        child: 
+         Consumer<LearningPathProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (provider.error != null) {
+              if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+        return Center(child: CircularProgressIndicator());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+      
+  
+           return Center(child: CircularProgressIndicator());
+  }
+          } else if (provider.learningPaths.isEmpty) {
+            return Center(child: Text('No learning paths available'));
+          } else {
+            print(provider.learningPaths);
+            return ListView.builder(
+              itemCount: provider.learningPaths.length,
+              itemBuilder: (context, index) {
+                final learningPath = provider.learningPaths[index];
+                return GestureDetector(
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LearningPathDetailScreen(
+                          learningPath: learningPath,
+                          index: index,
+                          token: widget.token,
+                        ),
+                      ),
+                    );
+                    // Refresh data after navigating back
+                   // await context.read<LearningPathProvider>().fetchLearningPaths();
+                  },
           child: Container(
         
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -348,10 +367,12 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           ),
         );
             },
-          ),
-        );
+          
+          );
+          }
         
-            }
+        
+            
           },
         ),
       ),

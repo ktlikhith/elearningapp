@@ -1,15 +1,16 @@
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/services/reward_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:async';
 
 class RewardSection extends StatefulWidget {
-  final String token;
-  final Stream<RewardData> rewardDataFuture;
+ 
 
-  RewardSection({Key? key, required this.token, required this.rewardDataFuture}) : super(key: key);
+  RewardSection({Key? key, }) : super(key: key);
 
   @override
   _RewardSectionState createState() => _RewardSectionState();
@@ -53,22 +54,29 @@ class _RewardSectionState extends State<RewardSection> {
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
-    return StreamBuilder<RewardData>(
-      stream: widget.rewardDataFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    // Trigger data fetching when this widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<RewardProvider>(context, listen: true).fetchRewardPoints();
+    });
+
+    return Consumer<RewardProvider>(
+      builder: (context, rewardProvider, child) {
+        if (rewardProvider.isLoading) {
           return _buildShimmerSkeleton();
-        } else if (snapshot.hasError) {
+        } else if (rewardProvider.errorMessage != null) {
           return _buildDefaultPointsCategories();
-        } else {
-          final _rewardData = snapshot.data;
+        } else if (rewardProvider.rewardData != null) {
+          final _rewardData = rewardProvider.rewardData;
           return _buildRewardPointsCategories(_rewardData);
+        } else {
+          return _buildDefaultPointsCategories(); // Fallback if no data is available.
         }
       },
     );
   }
+
 
   Widget _buildDefaultPointsCategories() {
     return _buildPointsCategories(

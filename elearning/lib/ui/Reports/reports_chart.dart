@@ -179,9 +179,8 @@ class _ReportPageState extends State<ReportPage> {
        
      
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+      body:
+           SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0,bottom: 10),
                 child: Column(

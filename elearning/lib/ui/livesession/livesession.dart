@@ -297,7 +297,7 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                                     ],
                                   ),
                                   style: TextButton.styleFrom(
-                                    backgroundColor: Theme.of(context).primaryColor, 
+                                    backgroundColor: Theme.of(context).canvasColor, 
                                     // Set button background color
                                   ),
                                 ),

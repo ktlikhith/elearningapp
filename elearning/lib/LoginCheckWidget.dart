@@ -2,11 +2,21 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/utilites/notificationinitialise.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -51,9 +61,25 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
     });
 
     if (_isLoggedIn) {
+      context.read<activityprovider>().fetchpastsoonlater();
+       
+          //  Provider.of<ReportProvider>(context, listen: false).fetchData();
+           context.read<ProfileProvider>().fetchProfileData();
+          context.read<ReportProvider>().fetchData();
+          context.read<EventProvider>().fetchEvent();
+          context.read<TenantLogoProvider>().fetchTenantUserData();
+          context.read<LearningPathProvider>().fetchLearningPaths();
+            context.read<HomePageProvider>().fetchAllCourses();
+            context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
+             
+  //      WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   context.read<HomePageProvider>().fetchAllCourses();
+   
+  // });
       // notifications initiliser
        Future.delayed(Duration(seconds: 5),(){
-        print('kooooooooo');
+       
            
   const duration = Duration(seconds: 10); // Adjust the interval as needed
   Timer.periodic(duration, (timer) async {

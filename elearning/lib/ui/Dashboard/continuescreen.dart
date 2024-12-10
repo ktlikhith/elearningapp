@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,66 +20,21 @@ class ContinueWatchingScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ContinueWatchingScreenState createState() => _ContinueWatchingScreenState();
+  State<ContinueWatchingScreen> createState() => _ContinueWatchingScreenState();
 }
 
 class _ContinueWatchingScreenState extends State<ContinueWatchingScreen> {
-     List<CourseData> courses=[];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-_fetchCourses();
-   
   
+     List<CourseData> courses=[];
+
+  bool isLoading = true;
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
   }
-
-  Future<void> _fetchCourses() async {
-    try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // if (prefs.containsKey('homepageData')) {
-    //   final homepageData = prefs.getString('homepageData');
-    //   final decodedData = jsonDecode(homepageData!);
-    //   final List<dynamic> courseList = decodedData['courses'];
-    //   final List<CourseData> courses1 = courseList.map((course) => CourseData.fromJson(course)).toList();
-    //  setState(() {
-    //    courses=courses1;
-    //  });
-    // }else{
-    //   _fetchHomePageData();
-    // }
-    _fetchHomePageData();
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      // Handle errors appropriately
-      print('Failed to load courses: $e');
-    }
-  }
-   Future<void> _fetchHomePageData() async {
-    try {
-      final HomePageData response = await HomePageService.fetchHomePageData(widget.token);
-      final List<CourseData> courses1 = response.allCourses;
-      setState(() {
-        courses = courses1;
-        isLoading = false;
-      });
-
-      // final encodedData = jsonEncode({'courses': courses});
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // prefs.setString('homepageData', encodedData);
-    } catch (e) {
-      print('Error fetching homepage data: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
- 
-
+  // Future<void> _fetchCourses() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,15 +50,38 @@ _fetchCourses();
         ),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: ListView.builder(
-  itemCount: courses.isEmpty ? 10 : courses.length, // Use 5 shimmer items if courses list is empty
+      body:Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return
+                   ListView.builder(
+  itemCount:  15, // Use 5 shimmer items if courses list is empty
+  itemBuilder: (context, index) {return  _buildShimmerItem();
+  }
+                   );
+          }
+
+          if (provider.error != null) {
+            print(provider.error);
+            return
+                   ListView.builder(
+  itemCount:  15, // Use 5 shimmer items if courses list is empty
+  itemBuilder: (context, index) {return  _buildShimmerItem();
+  }
+                   );
+          }
+
+          if (provider.allCourses.isEmpty) {
+            return Center(child: Text("No courses available."));
+          }
+
+          return
+       ListView.builder(
+  itemCount:  provider.allCourses.length, // Use 5 shimmer items if courses list is empty
   itemBuilder: (context, index) {
-    if (courses.isEmpty||isLoading) {
-     
-      return _buildShimmerItem();
-    }
+   
     
-    final CourseData course = courses[index];
+    final CourseData course = provider.allCourses[index];
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(
@@ -220,7 +200,10 @@ _fetchCourses();
       ),
     );
   },
-),
+);
+        }
+      ),  
+  
  bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
             );
         

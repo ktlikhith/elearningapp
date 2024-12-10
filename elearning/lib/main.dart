@@ -2,10 +2,18 @@ import 'dart:convert';
 
 import 'package:elearning/LoginCheckWidget.dart';
 import 'package:elearning/bloc/authbloc.dart';
+import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
+import 'package:elearning/providers/eventprovider.dart';
+import 'package:elearning/providers/pastsoonlaterprovider.dart';
+import 'package:elearning/providers/profile_provider.dart';
 import 'package:elearning/repositories/authrepository.dart';
 import 'package:elearning/routes/routes.dart';
 import 'package:elearning/services/notification_service.dart';
 import 'package:elearning/ui/My_learning/course.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +66,16 @@ void main() async {
     MultiProvider(
       providers: [
         // ChangeNotifierProvider(create: (_) => RewardNotifier()),
+         ChangeNotifierProvider(create: (_) => HomePageProvider()),
           ChangeNotifierProvider(create: (_) => CourseProvider()),
+          ChangeNotifierProvider(create: (_)=> ReportProvider()),
+          ChangeNotifierProvider(create: (_)=>ProfileProvider()),
+          ChangeNotifierProvider(create: (_)=>activityprovider()),
+          ChangeNotifierProvider(create: (_)=>EventProvider()),
+          ChangeNotifierProvider(create: (_) => TenantLogoProvider()),
+          ChangeNotifierProvider(create: (_) => LearningPathProvider()),
+          ChangeNotifierProvider(create: (_) => RewardProvider()),
+          
         
       ],
       child: MyApp(),

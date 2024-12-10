@@ -244,13 +244,16 @@ class _MLPopupState extends State<MLPopup> {
     SizedBox(width: 8.0), // Space between buttons
     Expanded(
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: ()async{
+              Navigator.pop(context);  
+        await  Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => CourseDetailsPage(widget.token, widget.course_id, widget.course_name),
             ),
           );
+       
+         
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).secondaryHeaderColor,

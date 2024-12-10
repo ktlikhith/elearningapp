@@ -457,6 +457,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:elearning/services/leaderboardservice.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -496,7 +497,14 @@ class LeaderboardState extends State<Leaderboard> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return _buildShimmerSkeleton();
               } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
+            
+             SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong in leaderboard data please try again.'
+)),
+    );
+    });
+        return _buildShimmerSkeleton();
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(child: Text('Leaderboard is empty'));
               } else {

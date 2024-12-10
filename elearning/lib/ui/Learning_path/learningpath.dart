@@ -1,12 +1,18 @@
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/auth.dart';
+import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/services/learninpath_service.dart';
 import 'package:elearning/ui/My_learning/ml_popup.dart';
 import 'package:elearning/utilites/alertdialog.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LearningPathPage extends StatefulWidget {
@@ -28,23 +34,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
   @override
   void initState() {
     super.initState();
-    learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-    _fetchCourses(widget.token);
+  
   }
 
-  Future<void> _fetchCourses(String token) async {
-    try {
-      final List<Course> response = await _apiService.fetchCourses(token);
-      if (mounted) {
-        setState(() {
-          _courses = response;
-        });
-      }
-    } catch (e) {
-      print('Error fetching courses: $e');
-      // Handle error here
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -63,25 +56,22 @@ class _LearningPathPageState extends State<LearningPathPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator(
         onRefresh: ()async{
-             learningPathData = LearningPathApiService.fetchLearningPathData(widget.token);
-    _fetchCourses(widget.token);
+           context.read<LearningPathProvider>().fetchLearningPaths();
+            context.read<HomePageProvider>().fetchAllCourses();
         },
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: learningPathData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _buildLoadingSkeleton();
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error loading data'),
-              );
-            } else if (snapshot.hasData && snapshot.data!['learningpathdetail'].isEmpty) {
-              return Center(
-                child: Text('No Data to Show'),
-              );
-            } else {
-              final learningPathDetails = snapshot.data!['learningpathdetail'];
-              final List<dynamic> courseProgress = snapshot.data!['learningpath_progress'];
+        child: Consumer<LearningPathProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(child: _buildLoadingSkeleton());
+          } else if (provider.error != null) {
+            return Center(child: Text(provider.error!));
+            
+          } else if (provider.learningPaths.isEmpty) {
+            return Center(child: Text('No learning paths available'));
+          }  else {
+              final learningPathDetails = provider.learningPaths;
+              final  courseProgress = provider.progressList;
+        
               return _buildLearningPathPage(context, learningPathDetails, courseProgress, _courses);
             }
           },
@@ -145,7 +135,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
         children: learningPathDetails.asMap().entries.map<Widget>((entry) {
           final index = entry.key;
           final learningPathDetail = entry.value;
-          final relevantCourses = courseProgress.where((course) => course['learningpath'] == learningPathDetail['learningpathid']).toList();
+          final relevantCourses = courseProgress.where((course) => course['learningpath'] == learningPathDetail.id).toList();
           return Container(
             margin: EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
@@ -162,7 +152,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        '${Constants.baseUrl}${learningPathDetail['learningpathimage']}',
+                        '${Constants.baseUrl}${learningPathDetail.imageUrl}',
                         height: 200,
                         fit: BoxFit.fill,
                         errorBuilder: (context, error, stackTrace) {
@@ -177,13 +167,13 @@ class _LearningPathPageState extends State<LearningPathPage> {
                   ),
                   SizedBox(height: 16.0),
                   Text(
-                    learningPathDetail['learningpathname'],
+                    learningPathDetail.name,
                     style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
                   ),
                   SizedBox(height: 4.0),
                   Text(
                     removeHtmlTags(
-                     learningPathDetail['discriotion']
+                     learningPathDetail.description
                     ),
                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.grey[600]),
                   ),
@@ -200,7 +190,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                         SizedBox(width: 8.0),
                         Expanded(
                           child: Text(
-                            'Duration: ${learningPathDetail['duration']}',
+                            'Duration: ${learningPathDetail.duration}',
                             style: TextStyle(fontSize: 16.0),
                           ),
                         ),
@@ -212,7 +202,7 @@ class _LearningPathPageState extends State<LearningPathPage> {
                         ),
                         SizedBox(width: 8.0),
                         Text(
-                          'No.Courses: ${learningPathDetail['nocourses']}',
+                          'No.Courses: ${learningPathDetail.nocourses}',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ],
@@ -223,11 +213,11 @@ class _LearningPathPageState extends State<LearningPathPage> {
                     barRadius: Radius.circular(30),
                     lineHeight: 18.0,
                     linearStrokeCap: LinearStrokeCap.roundAll,
-                    percent: learningPathDetail['progress'] / 100,
+                    percent: learningPathDetail.progress / 100,
                     backgroundColor: Color.fromARGB(255, 204, 205, 205),
-                    progressColor: getProgressBarColor(learningPathDetail['progress']),
+                    progressColor: getProgressBarColor(learningPathDetail.progress),
                     center: Text(
-                      "${learningPathDetail['progress']}%",
+                      "${learningPathDetail.progress}%",
                       style: TextStyle(fontSize: 12, color: Colors.black),
                     ),
                   ),
@@ -265,15 +255,41 @@ class _LearningPathPageState extends State<LearningPathPage> {
                           separatorBuilder: (context, index) => SizedBox(height: 16.0),
                           itemBuilder: (context, index) {
                             final course = relevantCourses[index];
-                            Course? coursedes;
-                          
-
-                            for (Course c in _courses) {
+                              CourseData? coursedes;
+                            return Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return Center(child: _buildLoadingSkeleton());
+          } else if (provider.error != null) {
+                                  // Check if the error is ClientException and contains 'Connection reset by peer'
+  if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+       return Center(child: _buildLoadingSkeleton());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+         return Center(child: _buildLoadingSkeleton());
+  }
+          } else if (provider.allCourses.isEmpty) {
+            return Center(child: Text('No courses available'));
+          }  else { 
+                var crs=provider.allCourses;
+                  for (CourseData c in crs) {
                               if (c.id == course['courseid']) {
                                 coursedes = c;
                                 break;
                               }
                             }
+         
+                          
+                          
+
+                           
                             return Container(
                                                             decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
@@ -388,6 +404,10 @@ class _LearningPathPageState extends State<LearningPathPage> {
                             ),
                                                             ),
                                                           );
+                                                           }
+        
+                            }
+                            );
                           },
                         )
                       : Container(),

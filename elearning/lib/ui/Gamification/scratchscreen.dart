@@ -104,8 +104,8 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
           children: [
             // Scratch Card
             Scratcher(
-              brushSize: 30,
-              threshold: 50,
+              brushSize: 35,
+              threshold:25 ,
               image: Image.network(card.scratchImage), // Set the scratch image directly
               onChange: (value) {
                 // Handle scratch progress change
@@ -170,6 +170,7 @@ class _ScratchCardScreenState extends State<ScratchCardScreen> {
           children: [
             // Scratch Card
             Scratcher(
+              enabled:false,
               brushSize: 30,
               threshold: 100,
               image: Image.network(card.scratchImage), // Set the scratch image directly

@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:elearning/ui/Reports/My_course_progress/activity_progress.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class CourseProgressPage extends StatefulWidget {
   final String token;
@@ -140,19 +144,40 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
       ),
       body: RefreshIndicator(
         onRefresh: ()async{
-          setState(() {
-             _homePageData = HomePageService.fetchHomePageData(widget.token);
-             
-          });
+           context.read<HomePageProvider>().fetchAllCourses();
         },
-        child:  FutureBuilder<HomePageData>(
-            future: _homePageData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: Something went wrong'));//child: Text('Error: ${snapshot.error}')
-              } else if (snapshot.hasData) {
+        child:  Consumer<HomePageProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return
+                Center(child: CircularProgressIndicator());
+  
+                   
+          }
+
+          if (provider.error != null) {
+            if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+  showNetworkError(context);
+        return Center(child: CircularProgressIndicator());
+  } else{
+    // Show the general error message to the user
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Something went wrong please try again.'
+)),
+    );
+    });
+        // Handle error state - fallback to default logo
+      
+  
+           return Center(child: CircularProgressIndicator());
+  }
+          }
+
+          if (provider.allCourses.isEmpty) {
+            return Center(child: Text("Something went wrong No / courses data is not available."));
+          }
+
                  if(timertoshowhint!=true)
                   
                    Future.delayed(Duration(seconds: 1),(){
@@ -162,7 +187,7 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
                  
           
             });
-                final filteredCourses = filterCourses(snapshot.data!.allCourses, widget.filter);
+                final filteredCourses = filterCourses(provider.allCourses, widget.filter);
                  if( filteredCourses.length!=0){
                 return ListView.builder(
                   physics:AlwaysScrollableScrollPhysics(),
@@ -199,11 +224,8 @@ class _CourseProgressPageState extends State<CourseProgressPage> {
             
               }
               
-               else {
-                return Center(child: Text('No data found'));
-              }
-              
-            },
+             
+            
             
           ),
         ),

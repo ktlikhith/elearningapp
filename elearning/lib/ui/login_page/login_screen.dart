@@ -14,6 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthRepository authRepository = AuthRepository();
+    
     return BlocProvider(
       create: (context) => AuthBloc(context: context, authRepository: authRepository),
       child: _LoginScreenContent(),
@@ -29,6 +30,7 @@ class _LoginScreenContent extends StatefulWidget {
 class _LoginScreenContentState extends State<_LoginScreenContent> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
+  bool isloading=false;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -98,7 +100,17 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) {
+           setState(() {
+             isloading=false;
+          });
+         
           _showErrorDialog(context, 'Authentication failed. Please check your credentials or internet connection.');
+        }
+        if(state is AuthLoading){
+          setState(() {
+             isloading=true;
+          });
+         
         }
       },
       child: Scaffold(
@@ -261,11 +273,19 @@ class _LoginScreenContentState extends State<_LoginScreenContent> {
                   ).copyWith(
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                   ),
-                  child: Text(
+                  child:!isloading? Text(
                     'Sign In',
                     style: TextStyle(
                       color: Colors.white,
                     ),
+                  ):CircularProgressIndicator(
+                    strokeWidth: 4,
+                    
+                    
+                    //lucas
+                    //Trial@123
+                    
+                    
                   ),
                 ),
               ),
