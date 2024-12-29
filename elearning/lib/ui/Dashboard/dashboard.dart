@@ -1,5 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:elearning/providers/Companylogoprovider.dart';
+import 'package:elearning/providers/LP_provider.dart';
+import 'package:elearning/providers/Reward_data_provider.dart';
 import 'package:elearning/providers/courseprovider.dart';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/providers/pastsoonlaterprovider.dart';
@@ -10,6 +12,7 @@ import 'package:elearning/services/tanentlogo_service.dart';
 import 'package:elearning/ui/Dashboard/dues.dart';
 import 'package:elearning/ui/Dashboard/continue.dart';
 import 'package:elearning/ui/Dashboard/upcoming_event.dart';
+import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Navigation%20Bar/navigationanimation.dart';
 import 'package:elearning/ui/Notification/notificationscreen.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
@@ -89,11 +92,17 @@ Future<void>  _refreshdata()async{
      
    // _fetchUserInfoFuture = _fetchUserInfo(widget.token);
    
-      context.read<HomePageProvider>().fetchAllCourses();
-       context.read<ProfileProvider>().fetchProfileData();
-       context.read<EventProvider>().fetchEvent();
-        context.read<TenantLogoProvider>().fetchTenantUserData();
        context.read<activityprovider>().fetchpastsoonlater();
+       
+          //  Provider.of<ReportProvider>(context, listen: false).fetchData();
+           context.read<ProfileProvider>().fetchProfileData();
+          context.read<ReportProvider>().fetchData();
+          context.read<EventProvider>().fetchEvent();
+          context.read<TenantLogoProvider>().fetchTenantUserData();
+          context.read<LearningPathProvider>().fetchLearningPaths();
+            context.read<HomePageProvider>().fetchAllCourses();
+            context.read<RewardProvider>().fetchRewardPoints();
+              context.read<RewardProvider>().fetchSpinWheelData();
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
     // });
