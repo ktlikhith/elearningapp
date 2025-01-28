@@ -25,16 +25,17 @@ class ProfileService {
         'wstoken': token,
         'wsfunction': 'core_user_update_users',
         'users[0][id]': userId.toString(),
-        'users[0][username]': username,
-        'users[0][firstname]': firstname,
+        'users[0][username]': username.toString(),
+        'users[0][firstname]': firstname.toString(),
         
-        'users[0][lastname]': lastname,
+        'users[0][lastname]': lastname.toString(),
         //'users[0][gmail]': gmail,
         // 'users[0][customfields][1][type]': schoolType,
         // 'users[0][customfields][1][value]': schoolName,
-        'users[0][phone1]': phone,
+        'users[0][phone1]': phone.toString(),
         
       };
+       var encodedBody = body.entries.map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
        //print('Request Body: $body');
 
       // Make the POST request

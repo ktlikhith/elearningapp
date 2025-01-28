@@ -467,64 +467,28 @@ class _MyMorePageState extends State<MyMorePage> {
           ],
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: ListView(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          children: <Widget>[
-              _buildCard(
-             color:Color(0xFF3ACBE8),
-           icon: Icons.person,
-              text: 'My Profile',
-              onTap: () => Navigator.of(context).pushNamed(RouterManger.myprofile, arguments: widget.token),
-            ),
-         
-            _buildCard(
-             color:Color(0xFF1CA3DE),
-           icon: FontAwesomeIcons.graduationCap,
-              text: 'Learning Path',
-              onTap: () => Navigator.of(context).pushNamed(RouterManger.learningpath, arguments: widget.token),
-            ),
-        
-            _buildCard(
-               color:Color(0xFF0D85D8),
-                          icon: FontAwesomeIcons.download,
-              text: 'Downloads',
-              onTap: () {
-                Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
-              
-              },
-            ),
-             _buildCard(
-               color:Color(0xFF0160C9),
-                          icon: FontAwesomeIcons.chartSimple,
-              text: 'Reports',
-              onTap: () {
-                 Navigator.of(context).pushNamed(RouterManger.Report, arguments: widget.token);
-              
-              },
-            ),
-              _buildCard(
-               color:Color.fromARGB(255, 16, 79, 204),
-                          icon: FontAwesomeIcons.certificate,
-              text: 'Certificates',
-              onTap: 
-                 () {
-                            Navigator.of(context).pushNamed(RouterManger.certificatereport, arguments: widget.token);
-                          
-              
-              },
-            ),
-            _buildCard(
-               color:Color(0xFF0041C7),
-             icon: FontAwesomeIcons.rightFromBracket,
-              text: 'Logout',
-              onTap: () {
-            
-                ShowLogoutDialog(context);
-              
-              }
-            ),
-          ],
+        body:   Stack(
+    children: [
+
+      for (var i = 0; i < 6; i++)
+        Positioned(
+          top: i * 70.0, // Adjust top position to control the sliding effect
+          left: 0,
+          right: 0,
+          child: _buildCard(
+            color: _getShade(Theme.of(context).primaryColor, i, 6),
+            icon: _getIcon(i),
+            text: _getText(i),
+            onTap: _getOnTap(context, i, widget.token),
+          ),
         ),
+    ]
+        ),
+    
+  
+
+
+
          bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 5, token: widget.token),
       ),
     );
@@ -558,30 +522,100 @@ class _MyMorePageState extends State<MyMorePage> {
    
 //   );
 // }
-
-Widget _buildCard({required Color color, required IconData icon, required String text, required VoidCallback onTap}) {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 0),
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
-    ),
-    child:SizedBox( height: 80,
-    child: ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-      onTap: onTap,
-      leading: Container(
-        padding: EdgeInsets.all(10),
+Widget _buildCard({
+  required Color color,
+  required IconData icon,
+  required String text,
+  required VoidCallback onTap,
+}) {
+  return Padding(
+    padding: const EdgeInsets.all(15.0),
+    child: GestureDetector(
+      onTap: onTap, // Ensures responsiveness
+      child: Container(
+       
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10),
+          color: color,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
         ),
-        child: Icon(icon, color: Colors.white),
+        child: SizedBox(
+          height: 80,
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            leading: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: Colors.white),
+            ),
+            title: Text(
+              text,
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            trailing: Icon(Icons.more_horiz, color: Colors.white),
+          ),
+        ),
       ),
-      title: Text(text, style: TextStyle(fontSize: 16, color: Colors.white)),
-      trailing: Icon(Icons.more_horiz, color: Colors.white),
-    ),
     ),
   );
+}
+
+
+Color _getShade(Color baseColor, int index, int total) {
+  final hslColor = HSLColor.fromColor(baseColor);
+  final step = 0.035; // The difference in lightness between each shade
+  final maxLightness = 0.8; // Maximum lightness for the lightest shade
+  final minLightness = 0.14; // Minimum lightness for the darkest shade
+
+  // Reverse the lightness calculation: Darker at the bottom, lighter at the top
+  final lightness = minLightness + ((total - 1 - index) * step);
+  return hslColor.withLightness(lightness.clamp(minLightness, maxLightness)).toColor();
+}
+
+
+IconData _getIcon(int index) {
+  const icons = [
+    Icons.person,
+    FontAwesomeIcons.graduationCap,
+    FontAwesomeIcons.download,
+    FontAwesomeIcons.chartSimple,
+    FontAwesomeIcons.certificate,
+    FontAwesomeIcons.rightFromBracket,
+  ];
+  return icons[index];
+}
+
+String _getText(int index) {
+  const texts = [
+    'My Profile',
+    'Learning Path',
+    'Downloads',
+    'Reports',
+    'Certificates',
+    'Logout',
+  ];
+  return texts[index];
+}
+
+VoidCallback _getOnTap(BuildContext context, int index, String token) {
+  final routes = [
+    RouterManger.myprofile,
+    RouterManger.learningpath,
+    RouterManger.downloads,
+    RouterManger.Report,
+    RouterManger.certificatereport,
+   
+  ];
+
+  if (index == 5) {
+    return () => ShowLogoutDialog(context);
+  } else {
+    return () => Navigator.of(context).pushNamed(routes[index], arguments: token);
+  }
 }
 }

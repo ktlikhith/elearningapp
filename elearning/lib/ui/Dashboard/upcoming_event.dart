@@ -129,7 +129,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
             ),
           );
         } else {
-          return SizedBox.shrink();
+          return Container();
         }
       },
     );
@@ -169,6 +169,8 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     required String svgPath,
     required BuildContext context,
   }) {
+     final baseColor = Theme.of(context).primaryColor; // Base color from theme
+  final gradientColors = generateGradientColors(baseColor);
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushReplacementNamed(RouterManger.livesession, arguments: widget.token);
@@ -178,14 +180,11 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
         child: Container(
           decoration: BoxDecoration(
             //color:Theme.of(context).cardColor,
-             gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF0041C7), // Start color with opacity
-                          Color(0xFF0D85D8), // Mid color with opacity
-                          Color(0xFF3ACBE8), // End color with opacity
-                        ],
-                     
-                      ),
+           gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: gradientColors, // Dynamic gradient colors
+      ),
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
@@ -236,4 +235,15 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       ),
     );
   }
+  List<Color> generateGradientColors(Color baseColor) {
+  final hslBase = HSLColor.fromColor(baseColor);
+
+  // Generate three shades: base, mid, and light
+  return [
+    hslBase.withLightness((hslBase.lightness * 1).clamp(0.0, 1.0)).toColor(),
+    hslBase.withLightness((hslBase.lightness * 1.5).clamp(0.0, 1.0)).toColor(),
+    hslBase.withLightness((hslBase.lightness * 2.2).clamp(0.0, 1.0)).toColor(),
+  ];
+}
+
 }

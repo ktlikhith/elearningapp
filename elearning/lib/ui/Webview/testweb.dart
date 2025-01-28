@@ -3,20 +3,18 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:elearning/providers/LP_provider.dart';
-import 'package:elearning/providers/courseprovider.dart';
-import 'package:elearning/providers/eventprovider.dart';
-import 'package:elearning/providers/profile_provider.dart';
+
 import 'package:elearning/routes/routes.dart';
-import 'package:elearning/ui/My_learning/mylearning.dart';
+
 import 'package:elearning/ui/My_learning/pdf_view_screen.dart';
-import 'package:elearning/ui/Webview/tempviewfiles.dart';
-import 'package:elearning/ui/download/downloadmanager.dart';
+
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:shimmer/shimmer.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart'; // Import for Android features
@@ -40,6 +38,7 @@ class _WebViewPageState extends State<WebViewPage> {
   late WebViewController _controller;
   bool _isSSOLoaded = false;
   bool _isMainUrlLoaded = false;
+  bool _isloading =true;
        ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -199,6 +198,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
 
     _controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+   
       ..setBackgroundColor(const Color(0x00000000))
       
       ..setNavigationDelegate(
@@ -216,10 +216,24 @@ _controller.loadRequest(Uri.parse('about:blank'));
                 _loadMainUrl();
               }
             }
+         
+
           },
-          onWebResourceError: (WebResourceError error) {
+          onWebResourceError: (error) {
+              
             print("Web resource error: ${error.description}");
-            if (error.errorType == WebResourceErrorType.unsupportedScheme) {
+              if (error.errorType == WebResourceErrorType.timeout ||error.errorType == WebResourceErrorType.hostLookup||error.errorType == WebResourceErrorType.badUrl||
+                error.description.contains('Connection reset by peer') ||
+                error.description.contains('Connection timed out') ||
+                error.description.contains('Failed host lookup')) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Something went wrong. Please try again / refresh .')),
+                );
+              });
+            }
+        
+           else if (error.errorType == WebResourceErrorType.unsupportedScheme) {
               print('google one unsupportedscheme ${error.url}');
               _handleUnknownUrlScheme(error.url);
             } 
@@ -231,6 +245,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
              _launchURL(request.url);
               return NavigationDecision.prevent;
             }
+            //if pdf url then some url will not open becouse missing "webservice" in the notification onsight navigation link 
             if(_ispdfURL(request.url))
             {
               if(request.url.contains("webservice"))
@@ -326,10 +341,16 @@ _controller.loadRequest(Uri.parse('about:blank'));
     await _controller.loadRequest(Uri.parse(ssoUrl));
   }
 
-  void _loadMainUrl() {
+  void _loadMainUrl()async {
+  
+  
     print('Loading main URL: ${widget.url}');
-    _controller.loadRequest(Uri.parse(widget.url));
+   await _controller.loadRequest(Uri.parse(widget.url));
     _isMainUrlLoaded = true;
+   setState(() {
+        _isloading=false;
+    });
+
   }
 
    _isSSOUrl(String url) {
@@ -370,7 +391,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
   return null;
 
   }
-
+//check the navigation url is trying to access the google meet or something else 
   void _handleUnknownUrlScheme(String? url) {
     if (url != null) {
       Uri uri = Uri.parse(url);
@@ -390,6 +411,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
       }
     }
   }
+  //this will extract the google meet link from navigation request *******
 String? _extractWebUrlFromIntent(String intentUrl) {
   final Uri uri = Uri.parse(intentUrl);
   // Split the URI at the '#Intent;' part
@@ -418,7 +440,87 @@ String? _extractWebUrlFromIntent(String intentUrl) {
             },
           ),),
       
-      body: WebViewWidget(controller: _controller),
+      body: RefreshIndicator(
+       onRefresh: () async {
+        
+          setState(() {
+           _isSSOLoaded = false;
+  _isMainUrlLoaded = false;
+   _isloading =true;
+          });
+        _initializeWebViewController();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height:  MediaQuery.of(context).size.height,
+            child: Stack(children:[ 
+              WebViewWidget(controller: _controller),
+                 if (_isloading)
+                  Center(child:   
+     Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8),
+             Container(
+                    height: 200,
+                   // width: 40,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 8),
+                   Container(
+                    height: 20,
+                    width: 100,
+                    color: Colors.grey,
+                  ),
+                    SizedBox(height: 8),
+                   Container(
+                    height: 15,
+                    color: Colors.grey,
+                  ),
+                    SizedBox(height: 8),
+                   Container(
+                    height: 15,
+                    color: Colors.grey,
+                  ),
+                    SizedBox(height: 8),
+                   Container(
+                    height: 15,
+                    color: Colors.grey,
+                  ),
+                    SizedBox(height: 8),
+                   Container(
+                    height: 15,
+                    color: Colors.grey,
+                  ),
+            for (int i = 0; i < 10; i++)
+              Column(
+                children: [
+                  Container(
+                    height: 40,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    height: 40,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    ),
+  ),
+              ]),
+          ),
+        )),
     );
   }
 }

@@ -575,7 +575,7 @@ class _SpinWheelState extends State<SpinWheel> {
 
         });
       }
-      final response = await RewardPointService().addReward(
+      await RewardPointService().addReward(
         token: widget.token,
         type: 'spinwheel',
         points: label,
@@ -676,7 +676,7 @@ void _showCongratsDialog(String label,Function refresh) {
                           ),
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        padding: EdgeInsets.all(20.0), // Adjust padding as needed
+                        padding: EdgeInsets.all(20.0), 
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [

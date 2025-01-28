@@ -41,6 +41,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   bool isDialogOpen = false;
+  bool _iscontentloading=true;
    int? _expandedIndex;
 
   @override
@@ -144,10 +145,13 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
 
 
  Future<void> _refreshContent() async {
-    await _fetchCourseContent();
+    // await _fetchCourseContent();
+    _iscontentloading=true;
     _courseImageUrlFuture = _fetchCourseImage();
     _courseDescriptionFuture = _fetchCourseDescription();
-    setState(() {});
+    setState(() {
+        _fetchCourseContent();
+    });
   }
 
   Future<void> _fetchCourseContent() async {
@@ -158,6 +162,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
         if (mounted) {
           setState(() {
             _courseContentData = List<Map<String, dynamic>>.from(courseContent);
+            _iscontentloading=false;
           });
         }
       } else {
@@ -205,25 +210,26 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
 
         triggerMode:   RefreshIndicatorTriggerMode.anywhere,
        onRefresh: _refreshContent, // Add this line
-      child:FutureBuilder<String>(
-        
-        future: _courseImageUrlFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildShimmerImage(imageHeight);
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Smething went wrong try Again!!'));//Error: ${snapshot.error}
-          } else {
-            final imageUrl = snapshot.data!;
-            
-              imgurl=imageUrl;
-            
-            return SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Stack(
+      child:
+      SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+           crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FutureBuilder<String>(
+              
+              future: _courseImageUrlFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildShimmerImage(imageHeight);
+                } else if (snapshot.hasError) {
+                  return _buildShimmerImage(imageHeight);//Error: ${snapshot.error}
+                } else {
+                  final imageUrl = snapshot.data!;
+                  
+                    imgurl=imageUrl;
+                  
+                  return Stack(
                     children: [
                       Container(
                         height:MediaQuery.of(context).orientation==Orientation.landscape?screenHeight * 0.6: imageHeight,
@@ -239,63 +245,65 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                         ),
                       ),
                     ],
+                  );
+                }
+              }),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: 8),
+                            Text(
+                              widget.courseName,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            FutureBuilder<String>(
+                              future: _courseDescriptionFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return _buildShimmerDescription();
+                                } else if (snapshot.hasError) {
+                                  return Center(child: Text('No description available'));
+                                } else {
+                                  final description = snapshot.data!;
+                                  return Text(
+                                    description.isNotEmpty ? removeHtmlTags(description) : 'No description available',
+                                    style:  TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.5,
+                                      color: Theme.of(context).cardColor,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            Divider(),
+                            SizedBox(height: 8),
+                            Text(
+                              'Course Content',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Color.fromARGB(255, 12, 12, 12),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            _iscontentloading != true ? _buildCourseContent() : _buildShimmerCourseContent(),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: 8),
-                        Text(
-                          widget.courseName,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        FutureBuilder<String>(
-                          future: _courseDescriptionFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return _buildShimmerDescription();
-                            } else if (snapshot.hasError) {
-                              return Center(child: Text('No description available'));
-                            } else {
-                              final description = snapshot.data!;
-                              return Text(
-                                description.isNotEmpty ? removeHtmlTags(description) : 'No description available',
-                                style:  TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14.5,
-                                  color: Theme.of(context).cardColor,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        Divider(),
-                        SizedBox(height: 8),
-                        Text(
-                          'Course Content',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Color.fromARGB(255, 12, 12, 12),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        _courseContentData != null ? _buildCourseContent() : _buildShimmerCourseContent(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
+               
+          
+        ),
       ),
-    ),
+    
     );
   }
 

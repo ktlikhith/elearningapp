@@ -58,7 +58,7 @@ class _RewardSectionState extends State<RewardSection> {
   Widget build(BuildContext context) {
     // Trigger data fetching when this widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<RewardProvider>(context, listen: true).fetchRewardPoints();
+      Provider.of<RewardProvider>(context, listen: false).fetchRewardPoints();
     });
 
     return Consumer<RewardProvider>(
