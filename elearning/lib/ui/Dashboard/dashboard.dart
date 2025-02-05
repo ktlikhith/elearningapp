@@ -66,13 +66,27 @@ class _DashboardPageState extends State<DashboardPage> {
   Uint8List? _tenantLogoBytes;
   int _notificationCount = 0;
   DownloadManager dm=new DownloadManager();
+   final FocusNode _focusNode = FocusNode();
   // late Timer _timer;
 
   @override
   void initState() {
     super.initState();
    // _fetchUserInfoFuture = _fetchUserInfo(widget.token);
-  
+  _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+         print("auto fetch");
+        Future.microtask(() {
+      final eventProvider = Provider.of<EventProvider>(context, listen: false);
+      eventProvider.fetchEvent(); 
+      eventProvider.startAutoFetch();
+     
+    });
+      }else{
+        print("hi");
+        Provider.of<EventProvider>(context, listen: false).stopAutoFetch(); 
+      }
+    });
    dm.userpermission(context);
   context.read<EventProvider>().fetchEvent();
    
@@ -86,23 +100,32 @@ class _DashboardPageState extends State<DashboardPage> {
     // });
   }
 
+  
+     
+
 
 Future<void>  _refreshdata()async{
 
      
    // _fetchUserInfoFuture = _fetchUserInfo(widget.token);
+
+
    
        context.read<activityprovider>().fetchpastsoonlater();
        
           //  Provider.of<ReportProvider>(context, listen: false).fetchData();
            context.read<ProfileProvider>().fetchProfileData();
           context.read<ReportProvider>().fetchData();
-          context.read<EventProvider>().fetchEvent();
+         
+         context.read<EventProvider>().fetchEvent(isHomeRefresh:true);
           context.read<TenantLogoProvider>().fetchTenantUserData();
           context.read<LearningPathProvider>().fetchLearningPaths();
             context.read<HomePageProvider>().fetchAllCourses();
             context.read<RewardProvider>().fetchRewardPoints();
               context.read<RewardProvider>().fetchSpinWheelData();
+
+
+
     // _timer = Timer.periodic(Duration(seconds: 10), (timer) {
     //   _refreshNotificationCount();
     // });
@@ -158,6 +181,7 @@ Future<void>  _refreshdata()async{
 
   // }
 
+
   Future<void> _refreshNotificationCount() async {
     try {
       final count = await NotificationCount.getUnreadNotificationCount(widget.token);
@@ -172,7 +196,9 @@ Future<void>  _refreshdata()async{
   @override
   void dispose() {
     // _timer.cancel();
+     _focusNode.dispose();
         _connectivitySubscription.cancel();
+        Provider.of<EventProvider>(context, listen: false).stopAutoFetch();
     super.dispose();
   }  
   // Initialize connectivity
@@ -474,113 +500,116 @@ Future<void>  _refreshdata()async{
             ],
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-         body: RefreshIndicator(
-
-        triggerMode:RefreshIndicatorTriggerMode.anywhere,
-       onRefresh:_refreshdata,
-      child:
-        SingleChildScrollView(
-           physics: const AlwaysScrollableScrollPhysics(),
-              controller: _scrollController,
-              child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Consumer<ProfileProvider>(
-        builder: (context, profileProvider, child) {
-          if (profileProvider.isLoading) {
-            return _buildUserInfoSkeleton();
-          }
-
-          if (profileProvider.errorMessage != null) {
-          
-                       // Check if the error is ClientException and contains 'Connection reset by peer'
-  if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
-  
-      return _buildUserInfoSkeleton();
-  } 
-  else{
-    // Show the general error message to the user
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Something went wrong please try again.'
-)),
-    );
-    });
-        // Handle error state - fallback to default logo
-        return _buildUserInfoSkeleton();
-  }
-          }
-
-         else if (profileProvider.profileData != null) {
+         body: Focus(
+          focusNode: _focusNode,
+           child: RefreshIndicator(
+           
+                   triggerMode:RefreshIndicatorTriggerMode.anywhere,
+                  onRefresh:_refreshdata,
+                 child:
+                   SingleChildScrollView(
+             physics: const AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
+                child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+            Consumer<ProfileProvider>(
+                   builder: (context, profileProvider, child) {
+            if (profileProvider.isLoading) {
+              return _buildUserInfoSkeleton();
+            }
+           
+            if (profileProvider.errorMessage != null) {
             
-                  
+                         // Check if the error is ClientException and contains 'Connection reset by peer'
+             if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
+             
+                 return _buildUserInfoSkeleton();
+             } 
+             else{
+               // Show the general error message to the user
+               SchedulerBinding.instance.addPostFrameCallback((_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(content: Text('Something went wrong please try again.'
+           )),
+               );
+               });
+                   // Handle error state - fallback to default logo
+                   return _buildUserInfoSkeleton();
+             }
+            }
+           
+           else if (profileProvider.profileData != null) {
               
-       
-                 final data = profileProvider.profileData;
-                return Container(
-                  width:MediaQuery.of(context).size.width,
-                  color: Colors.grey[100],
-                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    
+                
+                  
+                   final data = profileProvider.profileData;
+                  return Container(
+                    width:MediaQuery.of(context).size.width,
+                    color: Colors.grey[100],
+                    padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Welcome, ',
+                                style: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text:    data!['studentName'],
+                                style: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          'Explore your courses and start learning.',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.04, // Responsive font size
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }else{
+                   context.read<ProfileProvider>().fetchProfileData();
+                   return _buildUserInfoSkeleton();
+                }
+              },
+            ),
+            SizedBox(height: 12.0),
+             Column(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Welcome, ',
-                              style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            TextSpan(
-                              text:    data!['studentName'],
-                              style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * 0.05, // Responsive font size
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        'Explore your courses and start learning.',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.04, // Responsive font size
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
-                        ),
-                      ),
+                      AutoScrollableSections(token: widget.token),
+                      SizedBox(height: 15.0),
+                      UpcomingEventsSection(token: widget.token),
+                      SizedBox(height: 15.0),
+                      CustomDashboardWidget(token: widget.token),
                     ],
                   ),
-                );
-              }else{
-                 context.read<ProfileProvider>().fetchProfileData();
-                 return _buildUserInfoSkeleton();
-              }
-            },
-          ),
-          SizedBox(height: 12.0),
-           Column(
-                  children: [
-                    AutoScrollableSections(token: widget.token),
-                    SizedBox(height: 15.0),
-                    UpcomingEventsSection(token: widget.token),
-                    SizedBox(height: 15.0),
-                    CustomDashboardWidget(token: widget.token),
-                  ],
-                ),
-            
-            
-            
               
-        ],
+              
+              
+                
+                   ],
+                ),
               ),
-            ),
+           ),
          ),
   bottomNavigationBar: CustomBottomNavigationBar(initialIndex: 0, token: widget.token),
         ),

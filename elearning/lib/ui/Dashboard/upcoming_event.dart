@@ -71,10 +71,11 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       builder: (context, provider, child) {
         if (provider.isLoading) {
           return _buildShimmerEffect(context);
-        } else if (provider.error != null) {
+        } else 
+        if (provider.error != null) {
           print(provider.error);
           return _buildShimmerEffect(context);
-        } else if (provider.Eventdata.isNotEmpty) {
+        } else if (provider.eventData.isNotEmpty) {
           return Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -112,9 +113,9 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
                   height: 100,
                   child: PageView.builder(
                     controller: _pageController,
-                    itemCount: provider.Eventdata.length,
+                    itemCount: provider.eventData.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final event = provider.Eventdata[index];
+                      final event = provider.eventData[index];
                       String svgPath = svgAssets[index % svgAssets.length];
                       return _buildEventCard(
                         dateTime: event.dueDate,

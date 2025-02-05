@@ -66,7 +66,7 @@ class _LoginCheckWidgetState extends State<LoginCheckWidget> {
           //  Provider.of<ReportProvider>(context, listen: false).fetchData();
            context.read<ProfileProvider>().fetchProfileData();
           context.read<ReportProvider>().fetchData();
-          context.read<EventProvider>().fetchEvent();
+        context.read<EventProvider>().fetchEvent(isHomeRefresh:true);
           context.read<TenantLogoProvider>().fetchTenantUserData();
           context.read<LearningPathProvider>().fetchLearningPaths();
             context.read<HomePageProvider>().fetchAllCourses();
