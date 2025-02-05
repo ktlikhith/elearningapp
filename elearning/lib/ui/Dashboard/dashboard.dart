@@ -426,7 +426,8 @@ Future<void>  _refreshdata()async{
     // Call your custom function to handle the error
   showNetworkError(context);
       return Container();
-  } else{
+  } 
+  else{
     // Show the general error message to the user
     SchedulerBinding.instance.addPostFrameCallback((_) {
        ScaffoldMessenger.of(context).showSnackBar(
@@ -496,7 +497,8 @@ Future<void>  _refreshdata()async{
   if (profileProvider.errorMessage.toString().contains('Connection reset by peer')||profileProvider.errorMessage.toString().contains('Connection timed out')||profileProvider.errorMessage.toString().contains('ClientException with SocketException: Failed host lookup')) {
   
       return _buildUserInfoSkeleton();
-  } else{
+  } 
+  else{
     // Show the general error message to the user
     SchedulerBinding.instance.addPostFrameCallback((_) {
        ScaffoldMessenger.of(context).showSnackBar(
@@ -509,7 +511,7 @@ Future<void>  _refreshdata()async{
   }
           }
 
-          if (profileProvider.profileData != null) {
+         else if (profileProvider.profileData != null) {
             
                   
               
