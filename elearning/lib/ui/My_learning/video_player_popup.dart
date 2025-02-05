@@ -1,5 +1,6 @@
 import 'package:elearning/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class YouTubePlayerScreen extends StatefulWidget {
@@ -29,7 +30,13 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
   
 
   @override
-  void dispose() {
+  void dispose() async{
+      await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     _controller.close();
     super.dispose();
   }
@@ -69,6 +76,8 @@ Widget build(BuildContext context) {
               right: 10,
               child: GestureDetector(
                 onTap: () {
+                  
+  
                   Navigator.of(context).pop();
                 },
                 child: Container(
