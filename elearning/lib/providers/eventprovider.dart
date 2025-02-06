@@ -31,6 +31,7 @@ class EventProvider with ChangeNotifier {
       
       if (_eventData.isEmpty || _eventData != homePageData.evenData) {
         _eventData = homePageData.evenData;
+        
         notifyListeners(); // Notify only if data changes
       }
     } catch (e) {

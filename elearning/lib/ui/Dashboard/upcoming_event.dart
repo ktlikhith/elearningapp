@@ -19,9 +19,8 @@ class UpcomingEventsSection extends StatefulWidget {
 
 class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
   late PageController _pageController;
-  late Timer _timer;
+  Timer? _timer; // Nullable to handle proper cancellation
   int _currentPage = 0;
-  Future<List<EventData>>? _futureEventData;
   List<String> svgAssets = [
     'assets/liveeventsvg/b (2).png',
     'assets/liveeventsvg/-books-96 (1).png',
@@ -33,34 +32,42 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
     'assets/liveeventsvg/books-96.png',
     'assets/liveeventsvg/calander1.png',
   
-  ]; // Add your SVG asset paths here
+  ]; 
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0);
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) async {
-      final eventData = await _futureEventData;
-      if (eventData != null && eventData.isNotEmpty) {
+    // Start auto-scroll after widget is fully built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startAutoScroll();
+    });
+  }
+
+  void startAutoScroll() {
+    _timer?.cancel(); // Prevent multiple timers
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (!mounted) return;
+      
+      final provider = Provider.of<EventProvider>(context, listen: false);
+      if (provider.eventData.isNotEmpty) {
         setState(() {
-          _currentPage = (_currentPage + 1) % eventData.length;
-          _pageController.animateToPage(
-            _currentPage,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
+          _currentPage = (_currentPage + 1) % provider.eventData.length;
+          if (_pageController.hasClients) {
+            _pageController.animateToPage(
+              _currentPage,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          }
         });
       }
     });
-
-    // Initialize _futureEventData here
-    _futureEventData = HomePageService.fetchHomePageData(widget.token)
-        .then((homePageData) => homePageData.evenData);
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -71,8 +78,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       builder: (context, provider, child) {
         if (provider.isLoading) {
           return _buildShimmerEffect(context);
-        } else 
-        if (provider.error != null) {
+        } else if (provider.error != null) {
           print(provider.error);
           return _buildShimmerEffect(context);
         } else if (provider.eventData.isNotEmpty) {
@@ -135,6 +141,8 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       },
     );
   }
+
+
 
   Widget _buildShimmerEffect(BuildContext context) {
     final cardWidth = MediaQuery.of(context).size.width * 0.8;
