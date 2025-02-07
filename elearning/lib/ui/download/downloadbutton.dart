@@ -54,10 +54,12 @@ class _DownloadButtonState extends State<DownloadButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (isDownloaded) {
+    if (isDownloaded&&!isDownloading) {
       return IconButton(
-        onPressed: (){
-        Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
+        onPressed: ()async{
+
+       await Navigator.of(context).pushNamed(RouterManger.downloads, arguments: widget.token);
+       _checkIfFileExists();
         },
         icon:   Icon(
           

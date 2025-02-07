@@ -50,7 +50,7 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
       if (!mounted) return;
       
       final provider = Provider.of<EventProvider>(context, listen: false);
-      if (provider.eventData.isNotEmpty) {
+      if (provider.eventData.isNotEmpty||provider.isLoading) {
         setState(() {
           _currentPage = (_currentPage + 1) % provider.eventData.length;
           if (_pageController.hasClients) {
@@ -135,8 +135,8 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
               ],
             ),
           );
-        } else {
-          return Container();
+        }  else{
+         return Container();
         }
       },
     );

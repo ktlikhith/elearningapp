@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EventProvider with ChangeNotifier {
   List<EventData> _eventData = [];
-  bool _isLoading = false;
+  bool _isLoading = true;
   String? _error;
   Timer? _timer; // Timer for auto-fetching
 

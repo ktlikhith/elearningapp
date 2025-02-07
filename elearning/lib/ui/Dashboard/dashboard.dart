@@ -78,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
          print("auto fetch");
         Future.microtask(() {
       final eventProvider = Provider.of<EventProvider>(context, listen: false);
-      eventProvider.fetchEvent(); 
+     
       eventProvider.startAutoFetch();
      
     });
@@ -88,7 +88,7 @@ class _DashboardPageState extends State<DashboardPage> {
       }
     });
    dm.userpermission(context);
-  context.read<EventProvider>().fetchEvent();
+  
    
   initConnectivity();
 
