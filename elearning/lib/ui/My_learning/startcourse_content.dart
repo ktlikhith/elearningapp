@@ -11,6 +11,7 @@ import 'package:elearning/services/allcourse_service.dart';
 import 'package:elearning/services/course_content.dart';
 import 'package:elearning/ui/My_learning/mylearning.dart';
 import 'package:elearning/ui/Webview/testweb.dart';
+import 'package:elearning/ui/download/downloadbutton.dart';
 import 'package:elearning/ui/download/downloadmanager.dart';
 import 'package:elearning/utilites/alertdialog.dart';
 import 'package:flutter/material.dart';
@@ -559,35 +560,41 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       if (module['contents'] != null )
-                                        IconButton(
-                                          icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
-                                          onPressed: () {
-                                            if (module['contents'] != null && module['contents'].isNotEmpty) {
-                                              final content = module['contents'][0];
-                                              if (content['fileurl'] != null && content['filename'] != null) {
-                                                String getdwnloadUrlWithToken(String filePath1, String Token) {
-                                                  return '$filePath1&token=$Token';
-                                                }
-                                                String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
-                                                DownloadManager dm =DownloadManager();
-                                                dm.downloadFile(
-                                                  context,
-                                                  fileurl,
-                                                  content['filename'],
-                                                  widget.token,
-                                                  widget.courseName,
-                                                  imgurl
-                                                );
-                                  //                 Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context)=>ImageDisplayExample())
-                                  // );
+                                      DownloadButton(
+                                        courseName:  widget.courseName,
+                                        imgurl:   imgurl,
+                                        module: module,
+                                        token:    widget.token,
+                                      ),
+                                  //       IconButton(
+                                  //         icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
+                                  //         onPressed: () {
+                                  //           if (module['contents'] != null && module['contents'].isNotEmpty) {
+                                  //             final content = module['contents'][0];
+                                  //             if (content['fileurl'] != null && content['filename'] != null) {
+                                  //               String getdwnloadUrlWithToken(String filePath1, String Token) {
+                                  //                 return '$filePath1&token=$Token';
+                                  //               }
+                                  //               String fileurl = getdwnloadUrlWithToken(content['fileurl'], widget.token);
+                                  //               DownloadManager dm =DownloadManager();
+                                  //               dm.downloadFile(
+                                  //                 context,
+                                  //                 fileurl,
+                                  //                 content['filename'],
+                                  //                 widget.token,
+                                  //                 widget.courseName,
+                                  //                 imgurl
+                                  //               );
+                                  // //                 Navigator.push(
+                                  // //   context,
+                                  // //   MaterialPageRoute(builder: (context)=>ImageDisplayExample())
+                                  // // );
                                              
-                                              }
+                                  //             }
                                          
-                                            }
-                                          },
-                                        ),
+                                  //           }
+                                  //         },
+                                  //       ),
                                         
                                     ],
                                   ),

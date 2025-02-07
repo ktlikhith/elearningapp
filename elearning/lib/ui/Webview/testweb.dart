@@ -428,99 +428,72 @@ String? _extractWebUrlFromIntent(String intentUrl) {
   return null;
 }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title),backgroundColor: Theme.of(context).primaryColor,
-       leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),),
-      
-      body: RefreshIndicator(
-       onRefresh: () async {
-        
-          setState(() {
-           _isSSOLoaded = false;
-  _isMainUrlLoaded = false;
-   _isloading =true;
-          });
-        _initializeWebViewController();
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(widget.title),
+      backgroundColor: Theme.of(context).primaryColor,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.of(context).pop();
         },
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height:  MediaQuery.of(context).size.height,
-            child: Stack(children:[ 
-              WebViewWidget(controller: _controller),
-                 if (_isloading)
-                  Center(child:   
-     Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-             Container(
-                    height: 200,
-                   // width: 40,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: 8),
-                   Container(
-                    height: 20,
-                    width: 100,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-            for (int i = 0; i < 10; i++)
-              Column(
-                children: [
-                  Container(
-                    height: 40,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: 8),
-                  Container(
-                    height: 40,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-          ],
-        ),
       ),
     ),
-  ),
-              ]),
+    body: RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _isSSOLoaded = false;
+          _isMainUrlLoaded = false;
+          _isloading = true;
+        });
+        _initializeWebViewController();
+      },
+      child: Column(  
+        children: [
+          Expanded(  
+            child: Stack(
+              children: [
+                WebViewWidget(controller: _controller),  
+                if (_isloading)
+                  Center(
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 8),
+                            Container(height: 200, color: Colors.grey),
+                            SizedBox(height: 8),
+                            Container(height: 20, width: 100, color: Colors.grey),
+                            SizedBox(height: 8),
+                            Container(height: 15, color: Colors.grey),
+                            SizedBox(height: 8),
+                            Container(height: 15, color: Colors.grey),
+                            SizedBox(height: 8),
+                            for (int i = 0; i < 10; i++)
+                              Column(
+                                children: [
+                                  Container(height: 40, color: Colors.grey),
+                                  SizedBox(height: 8),
+                                  Container(height: 40, color: Colors.grey),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-        )),
-    );
-  }
+        ],
+      ),
+    ),
+  );
+}
 }

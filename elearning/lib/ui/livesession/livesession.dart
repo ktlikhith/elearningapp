@@ -242,21 +242,21 @@ class _LiveSessionPageState extends State<LiveSessionPage> {
                           TextSpan(
                             children: [
                                TextSpan(
-                                text: 'Speaker: ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.w700),
+                                text: 'Speaker: ',style: TextStyle(color:Color.fromARGB(255, 52, 236, 208),fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
-                                text: '${sessions[index].username}\n',
+                                text: ' ${sessions[index].username}\n',
                                 style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
                               ),
                                TextSpan(
-                                text: 'Start Time: ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.w700),
+                                text: 'Start Time: ',style: TextStyle(color:Color.fromARGB(255, 52, 236, 208) ,fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
                                 text: '${sessions[index].startTime}\n',
                                 style: TextStyle(color: Theme.of(context).highlightColor,fontWeight: FontWeight.bold),
                               ),
                                TextSpan(
-                                text: 'Mode: ',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700),
+                                text: 'Mode: ',style: TextStyle(color: Color.fromARGB(255, 52, 236, 208),fontWeight: FontWeight.w700),
                               ),
                               TextSpan(
                                 text: '${sessions[index].sessionMod}',
