@@ -530,13 +530,13 @@ Future<void> _cleanupFailedDownload(String filePath, String? imgPath) async {
       print('Deleted failed file: $filePath');
     }
 
-    if (imgPath != null) {
-      final imageFile = File(imgPath);
-      if (await imageFile.exists()) {
-        await imageFile.delete();
-        print('Deleted related image: $imgPath');
-      }
-    }
+    // if (imgPath != null) {
+    //   final imageFile = File(imgPath);
+    //   if (await imageFile.exists()) {
+    //     await imageFile.delete();
+    //     print('Deleted related image: $imgPath');
+    //   }
+    // }
   } catch (e) {
     print('Error during cleanup: $e');
   }

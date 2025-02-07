@@ -39,6 +39,7 @@ class _WebViewPageState extends State<WebViewPage> {
   bool _isSSOLoaded = false;
   bool _isMainUrlLoaded = false;
   bool _isloading =true;
+  bool _isloadprogress=true;
        ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -231,6 +232,7 @@ _controller.loadRequest(Uri.parse('about:blank'));
                   SnackBar(content: Text('Something went wrong. Please try again / refresh .')),
                 );
               });
+              showNetworkErrorDialog(context);
             }
         
            else if (error.errorType == WebResourceErrorType.unsupportedScheme) {
@@ -333,6 +335,35 @@ _controller.loadRequest(Uri.parse('about:blank'));
     // Load SSO after _controller is fully initialized
     await _loadSSO();
   }
+  void showNetworkErrorDialog(BuildContext context,) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, // Prevent dismissing by tapping outside
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Network Error", style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text("Something went wrong. Please try again refreshing or check internet connectivity."),
+        actions: [
+          TextButton(
+            onPressed: ()async {
+              Navigator.of(context).pop(); // Close dialog
+               
+        setState(() {
+          _isSSOLoaded = false;
+          _isMainUrlLoaded = false;
+          _isloading = true;
+        });
+        _initializeWebViewController();
+      // Call the refresh function
+            },
+            child: Text("Refresh", style: TextStyle(color: Colors.blue)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   Future<void> _loadSSO() async {
     final ssoUrl =
@@ -347,6 +378,12 @@ _controller.loadRequest(Uri.parse('about:blank'));
     print('Loading main URL: ${widget.url}');
    await _controller.loadRequest(Uri.parse(widget.url));
     _isMainUrlLoaded = true;
+     await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+        _isloadprogress=false;
+    });
+  
+    await Future.delayed(const Duration(seconds: 2));
    setState(() {
         _isloading=false;
     });
@@ -428,99 +465,77 @@ String? _extractWebUrlFromIntent(String intentUrl) {
   return null;
 }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title),backgroundColor: Theme.of(context).primaryColor,
-       leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),),
-      
-      body: RefreshIndicator(
-       onRefresh: () async {
-        
-          setState(() {
-           _isSSOLoaded = false;
-  _isMainUrlLoaded = false;
-   _isloading =true;
-          });
-        _initializeWebViewController();
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(widget.title),
+      backgroundColor: Theme.of(context).primaryColor,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.of(context).pop();
         },
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height:  MediaQuery.of(context).size.height,
-            child: Stack(children:[ 
-              WebViewWidget(controller: _controller),
-                 if (_isloading)
-                  Center(child:   
-     Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-             Container(
-                    height: 200,
-                   // width: 40,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: 8),
-                   Container(
-                    height: 20,
-                    width: 100,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-                    SizedBox(height: 8),
-                   Container(
-                    height: 15,
-                    color: Colors.grey,
-                  ),
-            for (int i = 0; i < 10; i++)
-              Column(
-                children: [
-                  Container(
-                    height: 40,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: 8),
-                  Container(
-                    height: 40,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-          ],
-        ),
       ),
     ),
-  ),
-              ]),
+    body: RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _isSSOLoaded = false;
+          _isMainUrlLoaded = false;
+          _isloading = true;
+        });
+        _initializeWebViewController();
+      },
+      child: Column(  
+        children: [
+          Expanded(  
+            child: Stack(
+              children: [
+                WebViewWidget(controller: _controller),  
+                if (_isloading)
+                  Center(
+                    child: Container(
+                      color: Colors.white,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 8),
+                              Container(height: 200, color: Colors.grey),
+                              SizedBox(height: 8),
+                              Container(height: 20, width: 100, color: Colors.grey),
+                              SizedBox(height: 8),
+                              Container(height: 15, color: Colors.grey),
+                              SizedBox(height: 8),
+                              Container(height: 15, color: Colors.grey),
+                              SizedBox(height: 8),
+                              for (int i = 0; i < 10; i++)
+                                Column(
+                                  children: [
+                                    Container(height: 40, color: Colors.grey),
+                                    SizedBox(height: 8),
+                                    Container(height: 40, color: Colors.grey),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if(_isloadprogress)
+                  Center(child: CircularProgressIndicator())
+              ],
+            ),
           ),
-        )),
-    );
-  }
+        ],
+      ),
+    ),
+  );
+}
 }

@@ -71,7 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
            context.read<ProfileProvider>().fetchProfileData();
            context.read<ReportProvider>().fetchData();
            context.read<activityprovider>().fetchpastsoonlater();
-           context.read<EventProvider>().fetchEvent();
+           context.read<EventProvider>().fetchEvent(isHomeRefresh:true);
             context.read<TenantLogoProvider>().fetchTenantUserData();
             context.read<LearningPathProvider>().fetchLearningPaths();
               context.read<RewardProvider>().fetchRewardPoints();

@@ -31,6 +31,7 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
 
   @override
   void dispose() async{
+     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: [SystemUiOverlay.top,SystemUiOverlay.bottom]);
       await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
