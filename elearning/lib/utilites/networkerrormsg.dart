@@ -3,13 +3,16 @@ import 'package:flutter/scheduler.dart';
 
 void showNetworkError(BuildContext context) {
   SchedulerBinding.instance.addPostFrameCallback((_) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Network issue: No Internet connection or the request timed out. Please check your connection and try again.',
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Network issue: No Internet connection or the request timed out. Please check your connection and try again.',
+          ),
+          duration: Duration(seconds: 5),
         ),
-        duration: Duration(seconds: 5),
-      ),
-    );
+      );
+    }
   });
 }
+

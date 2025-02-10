@@ -101,7 +101,7 @@ class EventData {
 
   factory EventData.fromJson(Map<String, dynamic> json) {
     return EventData(
-      id: json['id'] ?? '',
+      id: json['id'] ?.toString() ?? "",
       name: json['name'] ?? '',
       eventType: json['eventtype'] ?? '',
       dueDate: json['duedate '] ?? '',
@@ -144,7 +144,7 @@ class CourseData {
 
   factory CourseData.fromJson(Map<String, dynamic> json) {
   return CourseData(
-    id: json['id'] ?? '',
+    id: json['id'] ?.toString() ?? "",
     name: json['name'] ?? '',
     courseImg: json['courseimg'] ?? '',
     courseProgress: json['courseprogress'] ?? 0,

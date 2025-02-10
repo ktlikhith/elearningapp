@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:elearning/providers/eventprovider.dart';
 import 'package:elearning/routes/routes.dart';
+import 'package:elearning/utilites/networkerrormsg.dart';
 import 'package:flutter/material.dart';
 import 'package:elearning/services/homepage_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -80,7 +81,12 @@ class _UpcomingEventsSectionState extends State<UpcomingEventsSection> {
           return _buildShimmerEffect(context);
         } else if (provider.error != null) {
           print(provider.error);
+          if (provider.error.toString().contains('Connection reset by peer')||provider.error.toString().contains('Connection timed out')||provider.error.toString().contains('ClientException with SocketException: Failed host lookup')) {
+    // Call your custom function to handle the error
+    showNetworkError(context);
           return _buildShimmerEffect(context);
+          }
+           return _buildShimmerEffect(context);
         } else if (provider.eventData.isNotEmpty) {
           return Container(
             padding: const EdgeInsets.all(8.0),

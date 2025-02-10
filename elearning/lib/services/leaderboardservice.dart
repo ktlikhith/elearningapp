@@ -107,12 +107,12 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      image: json['image'],
-      name: json['name'],
-      department: json['department'],
-      rank: json['user_rank'],
-      points: json['available_points'],
-      rank_icon: json['rank_icon'],
+      image: json['image']??"",
+      name: json['name']??"",
+      department: json['department']??"",
+      rank: json['user_rank']??"",
+      points: json['available_points']??"",
+      rank_icon: json['rank_icon']??"",
     );
   }
 }

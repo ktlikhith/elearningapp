@@ -48,12 +48,12 @@ class LiveSession {
 
   factory LiveSession.fromJson(Map<String, dynamic> json) {
     return LiveSession(
-      activityName: json['activityname'],
-      startTime: json['starttime'],
-      url: json['url'],
-      username: json['username'],
-      sessionMod: json['sessionmod'],
-      imgUrl: json['imgurl'],
+      activityName: json['activityname']??"",
+      startTime: json['starttime']??"",
+      url: json['url']??"",
+      username: json['username']??"",
+      sessionMod: json['sessionmod']??"",
+      imgUrl: json['imgurl']??"",
     );
   }
 }

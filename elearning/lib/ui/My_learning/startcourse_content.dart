@@ -560,11 +560,13 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       if (module['contents'] != null )
+                                      
                                       DownloadButton(
                                         courseName:  widget.courseName,
                                         imgurl:   imgurl,
                                         module: module,
                                         token:    widget.token,
+                                        
                                       ),
                                   //       IconButton(
                                   //         icon: const FaIcon(FontAwesomeIcons.download, color: Colors.black, size: 16.5),
