@@ -40,11 +40,11 @@ class Report {
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(
       id: json['id'] ?? 0,
-      studentName: json['studentname'] ,
-      studentImage: json['studentimage'] ,
+      studentName: json['studentname']??"-" ,
+      studentImage: json['studentimage'] ??" ",
       averageGrade: json['avragegrade'] ,
-      totalNoActivity: json['totalnoactivity'] ,
-      completedActivity: json['completedactivity'] ,
+      totalNoActivity: json['totalnoactivity'] ??0,
+      completedActivity: json['completedactivity']??0 ,
     );
   }
 }

@@ -60,16 +60,16 @@ class LearningPathDetail {
         .toList();
 
     return LearningPathDetail(
-      id: json['learningpathid'],
-      name: json['learningpathname'],
-      imageUrl: json['learningpathimage'],
-      description: json['discriotion'],
-      progress: json['progress'],
-      url: json['urllink'],
-      startdate: json['startdate'],
-      enddate: json['enddate'],
-      duration: json['duration'],
-      nocourses: json['nocourses'].toString(),
+      id: json['learningpathid']?.toString() ?? "",
+      name: json['learningpathname'] ?? "",
+      imageUrl: json['learningpathimage']?? "",
+      description: json['discriotion']?? "",
+      progress: json['progress']?? 0,
+      url: json['urllink']?? "",
+      startdate: json['startdate']?? "",
+      enddate: json['enddate']?? "",
+      duration: json['duration'] ?? "",
+      nocourses: json['nocourses']?.toString() ?? "",
       learningpathProgress: learningpathProgress,
     );
   }
@@ -97,12 +97,12 @@ class LearningPathProgress {
 
   factory LearningPathProgress.fromJson(Map<String, dynamic> json) {
     return LearningPathProgress(
-      learningPathId: json['learningpath'],
-      name: json['coursename'],
-      description: json['coursedec'],
-      imageUrl: json['courseimg'],
-      progress: json['courseprogressbar'],
-      courseid: json['courseid'],
+      learningPathId: json['learningpath']?? "",
+      name: json['coursename']?? "",
+      description: json['coursedec']??"",
+      imageUrl: json['courseimg']??"",
+      progress: json['courseprogressbar'] ?? 0,
+      courseid: json['courseid']?? " ",
       courseprerequisite: json['courseprerequisite']??'NULL',
     );
   }

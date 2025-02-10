@@ -103,15 +103,15 @@ class Course {
 
   factory Course.fromJson(Map<String, dynamic> json) {
     return Course(
-      id: json['id'],
-      name: json['name'],
-      courseImg: json['courseimg'],
+      id: json['id']?.toString() ?? "",
+      name: json['name']??"",
+      courseImg: json['courseimg']??" ",
       courseProgress: json['courseprogress'] ?? 0,
-      courseDescription: json['coursedescription']??'',
-      courseStartDate: json['coursestartdate']??'',
-      courseEndDate: json['courseendate']??'',
-      courseVideoUrl: json['course_videourl'] ?? '',
-      courseDuration: json['course_duration'] ?? '',
+      courseDescription: json['coursedescription']??"",
+      courseStartDate: json['coursestartdate']??"",
+      courseEndDate: json['courseendate']??"",
+      courseVideoUrl: json['course_videourl'] ?? "",
+      courseDuration: json['course_duration'] ?? "",
     );
   }
 
